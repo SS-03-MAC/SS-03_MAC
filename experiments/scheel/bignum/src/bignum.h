@@ -21,8 +21,10 @@ private:
   size_t length;
   struct BigIntLLNode *head;
   struct BigIntLLNode *tail;
+
 public:
   BigIntLL() {
+    struct BigIntLLNode* curr;
     this->length = 1;
 
     // Setup dummy head
@@ -37,13 +39,17 @@ public:
     tail->prev = NULL;
     tail->next = NULL;
 
-    head->next = malloc(sizeof(BigIntLLNode) * 1);
-    ((struct BigIntLLNode*) head->next)->prev = (void *)head;
-    ((struct BigIntLLNode*) head->next)->next = (void *)tail;
-    ((struct BigIntLLNode*) head->next)->data = 0;
+    curr = (BigIntLLNode*) head->next;
+
+    curr = (struct BigIntLLNode*) malloc(sizeof(struct BigIntLLNode) * 1);
+    curr->prev = (void *)head;
+    curr->next = (void *)tail;
+    curr->data = 0;
   };
 
   BigIntLL(uint64_t val) {
+    size_t i = 0;
+    struct BigIntLLNode* curr;
     this->length = 8;
 
     // Setup dummy head
@@ -58,8 +64,7 @@ public:
     tail->prev = NULL;
     tail->next = NULL;
 
-    size_t i = 0;
-    struct BigIntLLNode* curr;
+    curr = head;
 
     for (i = 8; i > 0; i--) {
       curr->next = malloc(sizeof(BigIntLLNode) * 1);
@@ -76,7 +81,7 @@ public:
     struct BigIntLLNode* curr;
     struct BigIntLLNode* val_curr;
 
-    this->length = 1;
+    this->length = val.length;
 
     // Setup dummy head
     head = (BigIntLLNode*) malloc(sizeof(BigIntLLNode) * 1);
@@ -97,7 +102,7 @@ public:
       curr->next = malloc(sizeof(BigIntLLNode) * 1);
       ((struct BigIntLLNode*) curr->next)->prev = (void *)curr;
       ((struct BigIntLLNode*) curr->next)->next = (void *)tail;
-      ((struct BigIntLLNode*) curr->next)->data = 0;
+      ((struct BigIntLLNode*) curr->next)->data = val_curr->data;
 
       curr =     (struct BigIntLLNode*) curr->next;
       val_curr = (struct BigIntLLNode*) val_curr->next;
@@ -107,31 +112,63 @@ public:
   void print() {
     size_t i = 0;
     struct BigIntLLNode* curr;
-    curr = (struct BigIntLLNode*) this->head->next;
+    curr = (struct BigIntLLNode*) (this->head)->next;
 
-    for (i = 0; i < this->length; i++) {
+    // Ingore leading zeros
+    while (curr != tail) {
+      if (curr->data != 0x00) {
+        break;
+      }
+
+      curr = (struct BigIntLLNode*) curr->next;
+    }
+
+    while (curr != tail) {
       printf("%02x", curr->data);
 
       curr = (struct BigIntLLNode*) curr->next;
     }
+
+    printf("\n");
   };
 };
 
 class BigInt {
 private:
-  bool sign;
+  bool negative;
   BigIntLL data;
 
 public:
   BigInt() {
     data = BigIntLL();
-  };
+    this->negative = false;
+  }
 
   BigInt(uint64_t val) {
+    this->negative = false;
     data = BigIntLL(val);
-  };
+  }
+
+  BigInt(const BigInt& val) {
+    this->negative = val.negative;
+    this->data = BigIntLL(val.data);
+  }
 
   void print() {
-    data.print();
+    if (!this->negative) {
+      printf("+");
+    } else {
+      printf("-");
+    }
+
+    this->data.print();
+  }
+
+  void add(const BigInt& val) {
+
+  }
+
+  void shift(uint64_t bits) {
+
   }
 };
