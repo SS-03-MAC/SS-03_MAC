@@ -4,7 +4,7 @@
  * Copyright (C) 2016 Alexander Scheel
 */
 
-#include "bignum.h"
+#include "bigint.h"
 
 int main() {
   BigInt a = BigInt(10);

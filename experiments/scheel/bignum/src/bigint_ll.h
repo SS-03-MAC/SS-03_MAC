@@ -1,5 +1,5 @@
 /*
- * Bignum library
+ * Bignum library -- linked list implementation
  *
  * Copyright (C) 2016 Alexander Scheel
 */
@@ -128,43 +128,26 @@ public:
 
       curr = (struct BigIntLLNode *)curr->next;
     }
-
-    printf("\n");
   };
-};
 
-class BigInt {
-private:
-  bool negative;
-  BigIntLL data;
+  void rev_print() {
+    size_t i = 0;
+    struct BigIntLLNode *curr;
+    curr = (struct BigIntLLNode *)(this->tail)->prev;
 
-public:
-  BigInt() {
-    data = BigIntLL();
-    this->negative = false;
-  }
+    // Ingore leading zeros
+    while (curr != head) {
+      if (curr->data != 0x00) {
+        break;
+      }
 
-  BigInt(uint64_t val) {
-    this->negative = false;
-    data = BigIntLL(val);
-  }
-
-  BigInt(const BigInt &val) {
-    this->negative = val.negative;
-    this->data = BigIntLL(val.data);
-  }
-
-  void print() {
-    if (!this->negative) {
-      printf("+");
-    } else {
-      printf("-");
+      curr = (struct BigIntLLNode *)curr->prev;
     }
 
-    this->data.print();
-  }
+    while (curr != head) {
+      printf("%02x", curr->data);
 
-  void add(const BigInt &val) {}
-
-  void shift(uint64_t bits) {}
+      curr = (struct BigIntLLNode *)curr->prev;
+    }
+  };
 };
