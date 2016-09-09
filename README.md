@@ -34,5 +34,5 @@ After completion, MAC will be used to create a replacement AccessPlus. This
 application will fall along the standard CRUD lines, which MAC facilitates.
 
 ## Team
-Matthew Burket
-Joel May
+-Matthew Burket
+-Joel May
