@@ -142,3 +142,10 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
+
+## VIM SWAP FILES ##
+# swap
+[._]*.s[a-w][a-z]
+[._]s[a-w][a-z]
+# session
+Session.vim
