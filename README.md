@@ -36,3 +36,4 @@ application will fall along the standard CRUD lines, which MAC facilitates.
 ## Team
 - Matthew Burket
 - Joel May
+- Alexander Scheel
