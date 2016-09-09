@@ -9,4 +9,10 @@
 int main() {
   BigInt a = BigInt(10);
   a.print();
+
+  BigInt b = BigInt(a);
+  b.print();
+
+  b.add(a);
+  b.print();
 }
