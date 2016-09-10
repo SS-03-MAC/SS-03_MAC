@@ -78,21 +78,38 @@ public:
     struct BigIntLLNode *b_curr = (struct BigIntLLNode *)val.data.tail;
 
     uint64_t carry = 0;
-    uint64_t a_val = 0;
-    uint64_t b_val = 0;
+    int64_t add_result = 0;
+    int64_t a_val = 0;
+    int64_t b_val = 0;
     uint8_t len = 0;
 
     while (a_curr->prev != this->data.head && b_curr->prev != val.data.head) {
       a_curr = (struct BigIntLLNode *)a_curr->prev;
       b_curr = (struct BigIntLLNode *)b_curr->prev;
 
-      a_val += ((uint64_t)a_curr->data) << (len * 8);
-      b_val += ((uint64_t)b_curr->data) << (len * 8);
+      a_val += ((uint32_t)a_curr->data) << (len * 8);
+      b_val += ((uint32_t)b_curr->data) << (len * 8);
 
       len += 1;
 
       if (len == 4) {
-        carry = carry + a_val + b_val;
+        if (this->negative) {
+          a_val *= -1;
+        }
+
+        if (val.negative) {
+          b_val *= -1;
+        }
+
+        add_result = ((int64_t)carry) + a_val + b_val;
+        if (add_result < 0) {
+          add_result *= -1;
+          carry = (uint64_t)add_result;
+          result.negative = true;
+        } else if (add_result > 0) {
+          result.negative = false;
+        }
+
         for (; len > 0; len--) {
           result.data.prepend((uint8_t)carry);
           carry = carry >> 8;
@@ -112,7 +129,23 @@ public:
       len += 1;
 
       if (len == 4) {
-        carry = carry + a_val + b_val;
+        if (this->negative) {
+          a_val *= -1;
+        }
+
+        if (val.negative) {
+          b_val *= -1;
+        }
+
+        add_result = ((int64_t)carry) + a_val + b_val;
+        if (add_result < 0) {
+          add_result *= -1;
+          carry = (uint64_t)add_result;
+          result.negative = true;
+        } else if (add_result > 0) {
+          result.negative = false;
+        }
+
         for (; len > 0; len--) {
           result.data.prepend((uint8_t)carry);
           carry = carry >> 8;
@@ -132,7 +165,23 @@ public:
       len += 1;
 
       if (len == 4) {
-        carry = carry + a_val + b_val;
+        if (this->negative) {
+          a_val *= -1;
+        }
+
+        if (val.negative) {
+          b_val *= -1;
+        }
+
+        add_result = ((int64_t)carry) + a_val + b_val;
+        if (add_result < 0) {
+          add_result *= -1;
+          carry = (uint64_t)add_result;
+          result.negative = true;
+        } else if (add_result > 0) {
+          result.negative = false;
+        }
+
         for (; len > 0; len--) {
           result.data.prepend((uint8_t)carry);
           carry = carry >> 8;
@@ -144,7 +193,23 @@ public:
     }
 
     if (len != 0) {
-      carry = carry + a_val + b_val;
+      if (this->negative) {
+        a_val *= -1;
+      }
+
+      if (val.negative) {
+        b_val *= -1;
+      }
+
+      add_result = ((int64_t)carry) + a_val + b_val;
+      if (add_result < 0) {
+        add_result *= -1;
+        carry = (uint64_t)add_result;
+        result.negative = true;
+      } else if (add_result > 0) {
+        result.negative = false;
+      }
+
       for (; len > 0; len--) {
         result.data.prepend((uint8_t)carry);
         carry = carry >> 8;
@@ -159,10 +224,22 @@ public:
       carry = carry >> 8;
     }
 
+    printf("Result length: %zu\n", result.data.length);
+
     return result;
   }
 
-  void subtract() { this->data.prepend(0x40); }
+  void negate() { this->negative = !this->negative; }
+
+  BigInt subtract(const BigInt &val) {
+    BigInt result;
+
+    val.negate();
+    result = this.add(val);
+    val.negate();
+
+    return result;
+  }
 
   // void add(const BigInt &val) {}
 

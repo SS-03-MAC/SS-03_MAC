@@ -106,6 +106,8 @@ public:
     struct BigIntLLNode *curr;
     curr = (struct BigIntLLNode *)(this->head)->next;
 
+    printf("0x");
+
     // Ingore leading zeros
     while (curr != tail) {
       if (curr->data != 0x00) {
@@ -113,6 +115,10 @@ public:
       }
 
       curr = (struct BigIntLLNode *)curr->next;
+    }
+
+    if (curr == tail) {
+      printf("00");
     }
 
     while (curr != tail) {
