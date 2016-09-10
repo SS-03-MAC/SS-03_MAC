@@ -17,34 +17,25 @@ struct BigIntLLNode {
 };
 
 class BigIntLL {
-private:
+public:
   size_t length;
   struct BigIntLLNode *head;
   struct BigIntLLNode *tail;
 
-public:
   BigIntLL() {
-    struct BigIntLLNode *curr;
-    this->length = 1;
+    this->length = 0;
 
     // Setup dummy head
     head = (BigIntLLNode *)malloc(sizeof(BigIntLLNode) * 1);
     head->data = 0xFF;
     head->prev = NULL;
-    head->next = NULL;
 
     // Setup dummy tail
     tail = (BigIntLLNode *)malloc(sizeof(BigIntLLNode) * 1);
     tail->data = 0xFF;
-    tail->prev = NULL;
+    tail->prev = (void *)head;
     tail->next = NULL;
-
-    curr = (BigIntLLNode *)head->next;
-
-    curr = (struct BigIntLLNode *)malloc(sizeof(struct BigIntLLNode) * 1);
-    curr->prev = (void *)head;
-    curr->next = (void *)tail;
-    curr->data = 0;
+    head->next = (void *)tail;
   };
 
   BigIntLL(uint64_t val) {
@@ -71,6 +62,7 @@ public:
       ((struct BigIntLLNode *)curr->next)->prev = (void *)curr;
       ((struct BigIntLLNode *)curr->next)->next = (void *)tail;
       ((struct BigIntLLNode *)curr->next)->data = (uint8_t)(val >> (i - 1) * 8);
+      tail->prev = curr->next;
 
       curr = (struct BigIntLLNode *)curr->next;
     }
@@ -103,6 +95,7 @@ public:
       ((struct BigIntLLNode *)curr->next)->prev = (void *)curr;
       ((struct BigIntLLNode *)curr->next)->next = (void *)tail;
       ((struct BigIntLLNode *)curr->next)->data = val_curr->data;
+      tail->prev = curr->next;
 
       curr = (struct BigIntLLNode *)curr->next;
       val_curr = (struct BigIntLLNode *)val_curr->next;
@@ -110,7 +103,6 @@ public:
   };
 
   void print() {
-    size_t i = 0;
     struct BigIntLLNode *curr;
     curr = (struct BigIntLLNode *)(this->head)->next;
 
@@ -131,7 +123,6 @@ public:
   };
 
   void rev_print() {
-    size_t i = 0;
     struct BigIntLLNode *curr;
     curr = (struct BigIntLLNode *)(this->tail)->prev;
 
@@ -150,4 +141,84 @@ public:
       curr = (struct BigIntLLNode *)curr->prev;
     }
   };
+
+  void prepend(const uint8_t val) {
+    struct BigIntLLNode *curr;
+
+    curr = (struct BigIntLLNode *)malloc(sizeof(struct BigIntLLNode) * 1);
+    curr->data = val;
+
+    curr->prev = (void *)head;
+    curr->next = head->next;
+    ((struct BigIntLLNode *)head->next)->prev = (void *)curr;
+    head->next = (void *)curr;
+
+    this->length += 1;
+  };
+
+  void append(const uint8_t val) {
+    struct BigIntLLNode *curr;
+
+    curr = (struct BigIntLLNode *)malloc(sizeof(struct BigIntLLNode) * 1);
+    curr->data = val;
+
+    curr->next = (void *)tail;
+    curr->prev = tail->prev;
+    ((struct BigIntLLNode *)tail->prev)->next = (void *)curr;
+    tail->prev = (void *)curr;
+
+    this->length += 1;
+  };
+
+  uint8_t msb() { return ((struct BigIntLLNode *)head->next)->data; }
+
+  uint8_t lsb() { return ((struct BigIntLLNode *)tail->prev)->data; }
+
+  void rotl_one(struct BigIntLLNode *pos, uint8_t amount) {
+    pos->data = (pos->data << amount) | (pos->data >> (8 - amount));
+  }
+
+  void rotl_each(uint8_t amount) {
+    struct BigIntLLNode *curr;
+    curr = (struct BigIntLLNode *)(this->head)->next;
+
+    // Ingore leading zeros
+    while (curr != tail) {
+      if (curr->data != 0x00) {
+        break;
+      }
+
+      curr = (struct BigIntLLNode *)curr->next;
+    }
+
+    while (curr != tail) {
+      rotl_one(curr, amount);
+
+      curr = (struct BigIntLLNode *)curr->next;
+    }
+  }
+
+  void rotr_one(struct BigIntLLNode *pos, uint8_t amount) {
+    pos->data = (pos->data << (8 - amount)) | (pos->data >> amount);
+  }
+
+  void rotr_each(uint8_t amount) {
+    struct BigIntLLNode *curr;
+    curr = (struct BigIntLLNode *)(this->head)->next;
+
+    // Ingore leading zeros
+    while (curr != tail) {
+      if (curr->data != 0x00) {
+        break;
+      }
+
+      curr = (struct BigIntLLNode *)curr->next;
+    }
+
+    while (curr != tail) {
+      rotr_one(curr, amount);
+
+      curr = (struct BigIntLLNode *)curr->next;
+    }
+  }
 };
