@@ -26,12 +26,12 @@ public:
     this->length = 0;
 
     // Setup dummy head
-    head = (BigIntLLNode *)malloc(sizeof(BigIntLLNode) * 1);
+    head = (struct BigIntLLNode *)malloc(sizeof(BigIntLLNode) * 1);
     head->data = 0xFF;
     head->prev = NULL;
 
     // Setup dummy tail
-    tail = (BigIntLLNode *)malloc(sizeof(BigIntLLNode) * 1);
+    tail = (struct BigIntLLNode *)malloc(sizeof(BigIntLLNode) * 1);
     tail->data = 0xFF;
     tail->prev = (void *)head;
     tail->next = NULL;
@@ -41,16 +41,17 @@ public:
   BigIntLL(uint64_t val) {
     size_t i = 0;
     struct BigIntLLNode *curr;
+    struct BigIntLLNode *new_node;
     this->length = 8;
 
     // Setup dummy head
-    head = (BigIntLLNode *)malloc(sizeof(BigIntLLNode) * 1);
+    head = (struct BigIntLLNode *)malloc(sizeof(BigIntLLNode) * 1);
     head->data = 0xFF;
     head->prev = NULL;
     head->next = NULL;
 
     // Setup dummy tail
-    tail = (BigIntLLNode *)malloc(sizeof(BigIntLLNode) * 1);
+    tail = (struct BigIntLLNode *)malloc(sizeof(BigIntLLNode) * 1);
     tail->data = 0xFF;
     tail->prev = NULL;
     tail->next = NULL;
@@ -58,7 +59,8 @@ public:
     curr = head;
 
     for (i = 8; i > 0; i--) {
-      curr->next = malloc(sizeof(BigIntLLNode) * 1);
+      new_node = (struct BigIntLLNode *)malloc(sizeof(BigIntLLNode) * 1);
+      curr->next = (void *)new_node;
       ((struct BigIntLLNode *)curr->next)->prev = (void *)curr;
       ((struct BigIntLLNode *)curr->next)->next = (void *)tail;
       ((struct BigIntLLNode *)curr->next)->data = (uint8_t)(val >> (i - 1) * 8);
@@ -68,30 +70,32 @@ public:
     }
   };
 
-  BigIntLL(const BigIntLL &val) {
+  BigIntLL(const BigIntLL *val) {
     size_t i = 0;
     struct BigIntLLNode *curr;
+    struct BigIntLLNode *new_node;
     struct BigIntLLNode *val_curr;
 
-    this->length = val.length;
+    this->length = val->length;
 
     // Setup dummy head
-    head = (BigIntLLNode *)malloc(sizeof(BigIntLLNode) * 1);
+    head = (struct BigIntLLNode *)malloc(sizeof(BigIntLLNode) * 1);
     head->data = 0xFF;
     head->prev = NULL;
     head->next = NULL;
 
     // Setup dummy tail
-    tail = (BigIntLLNode *)malloc(sizeof(BigIntLLNode) * 1);
+    tail = (struct BigIntLLNode *)malloc(sizeof(BigIntLLNode) * 1);
     tail->data = 0xFF;
     tail->prev = NULL;
     tail->next = NULL;
 
     curr = head;
-    val_curr = (struct BigIntLLNode *)(val.head->next);
+    val_curr = (struct BigIntLLNode *)(val->head->next);
 
-    for (i = 0; i < val.length; i++) {
-      curr->next = malloc(sizeof(BigIntLLNode) * 1);
+    for (i = 0; i < val->length; i++) {
+      new_node = (struct BigIntLLNode *)malloc(sizeof(BigIntLLNode) * 1);
+      curr->next = (void *)new_node;
       ((struct BigIntLLNode *)curr->next)->prev = (void *)curr;
       ((struct BigIntLLNode *)curr->next)->next = (void *)tail;
       ((struct BigIntLLNode *)curr->next)->data = val_curr->data;
@@ -101,6 +105,19 @@ public:
       val_curr = (struct BigIntLLNode *)val_curr->next;
     }
   };
+
+  ~BigIntLL() {
+    struct BigIntLLNode *curr;
+    struct BigIntLLNode *next;
+    curr = head;
+
+    while (curr != tail) {
+      next = (struct BigIntLLNode *)curr->next;
+      free(curr);
+      curr = next;
+    }
+    free(tail);
+  }
 
   void print() {
     struct BigIntLLNode *curr;
