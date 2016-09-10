@@ -7,12 +7,18 @@
 #include "bigint.h"
 
 int main() {
-  BigInt a = BigInt(10);
+  BigInt a = BigInt(0xFFFFFFFFFFFFFFFF);
   a.print();
 
-  BigInt b = BigInt(a);
+  BigInt b = BigInt(0x10);
   b.print();
 
-  b.add(a);
-  b.print();
+  // Appending:
+  BigInt c = b.add(a);
+  c.print();
+
+  for (size_t i = 0; i < 1; i++) {
+    c = c.add(c);
+  }
+  c.print();
 }
