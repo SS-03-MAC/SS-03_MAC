@@ -29,8 +29,3 @@ user:
       acl:
         read: self, admin
         write: self, admin
-
-roles:
-  - Public
-  - Admin
-  -
