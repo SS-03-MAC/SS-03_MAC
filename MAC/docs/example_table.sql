@@ -1,0 +1,11 @@
+#example table generated from using example_models.yaml
+
+CREATE TABLE USERS(
+  ID        INT         NOT NULL,
+  PASSWORD  VARCHAR(64) NOT NULL,
+  CITY      VARCHAR(30) NOT NULL,
+  FULLNAME  VARCHAR(30) NOT NULL,
+  CREATEDAT DATETIME    NOT NULL,
+  UPDATEDAT DATETIME    NOT NULL,
+  PRIMARY KEY (ID)
+)
