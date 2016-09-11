@@ -1,0 +1,12 @@
+> GET /users/5 HTTP/1.1
+> Host: example.com
+> Cookie: Token=abc1337
+> 
+< HTTP/1.1 200 OK
+< Cache-Control: max-age=0
+< Last-Modified: Thu, 08 Sep 2016 12:00:00 GMT
+< Server: MAC 1.0
+< Date: Sun, 11 Sep 2016 01:00:00 GMT
+< Content-Length: 44
+<
+< { "FullName": "John Smith", "City": "Ames" }
