@@ -14,7 +14,7 @@ user:
       name: Password
       type: MAC.user.password
     -
-      name: Full name
+      name: FullName
       type: string
       validations:
         required: true
@@ -29,8 +29,3 @@ user:
       acl:
         read: self, admin
         write: self, admin
-
-roles:
-  - Public
-  - Admin
-  -
