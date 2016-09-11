@@ -1,6 +1,10 @@
 using System;
 using System.Collections;
 
+/// <summary>
+///   This is an example model class.
+///   I have subbed out the methods that will created in this file by the automatic system.
+/// </summary> 
 public class User {
   public long Id {get;}
   public string Email {get; set;}
