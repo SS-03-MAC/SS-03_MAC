@@ -13,9 +13,19 @@ site: # (2)
   port:
     - 80
     - 8080
-  secure: # (4)
+  TLS: # (4)
     port: 443
-    #TODO
+    hsts: true
+    rsaPubKey: '/keys/rsa.cert'
+    psaPrivKey: '/keys/rsa'
+    dhparam: '/keys/param.pem'
+    supportedCipherSuites:
+      - 'EECDH'
+      - 'AESGCM:EDH'
+      - 'AESGCM:AES256'
+      - 'EECDH:AES256'
+      - 'EDH'
+    minVersion: 1.2
   path: '/var/www/site2' # (3)
 
 # Purpose of File
