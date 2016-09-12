@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 
 /// <summary>
+///   Screensketch: Matthew Burket
 ///   This is an example model class.
 ///   I have subbed out the methods that will created in this file by the automatic system.
 /// </summary>
