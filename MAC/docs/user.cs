@@ -11,7 +11,7 @@ public class User {
   /// </summary>
   public long Id {get;}
   /// <summary>
-  /// A basic string attribute
+  /// A basic string field
   /// </summary>
   /// <returns></returns>
   public string Email {get; set;}
