@@ -1,0 +1,31 @@
+#ehttp.conf
+# Screen 2
+# Joel May
+
+site: # (1)
+  host: 'example.com'
+  path: '/var/www/site1' # (3)
+  directoryBrowsing: true
+site: # (2)
+  ip: # (5)
+    - '127.0.0.1'
+    - '[2610:130:112:100:9dd5:6c4e:8088:8ce0]'
+  port:
+    - 80
+    - 8080
+  secure: # (4)
+    port: 443
+    #TODO
+  path: '/var/www/site2' # (3)
+
+# Purpose of File
+# This is the configuration file for the eHTTP web server.  It contains fairly
+# standard configuration information for HTTP servers.  The eHTTP server allows
+# for hosting multiple sites on one IP address through "virtual hosts".  (1) and
+# (2) show two sites that happen to be sharing port 80 on two IP addresses.
+# eHTTP will fully support IPv6 as shown in (5) with the IPs that (2) is
+# configured to listen on.
+# Each site must have a path on the filesystem as shown in (3).  This is where
+# eHTTP will find the static content to serve and cgi files to execute and
+# serve.
+# The config file also allows configuration of HTTPS settings as shown in (4).
