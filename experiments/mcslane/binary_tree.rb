@@ -65,6 +65,23 @@ module BinarySearchTree
     def to_s
       return @root.to_s
     end
+
+    def contains(data)
+      if root.nil?
+        return false
+      end
+      node = root
+      while !node.nil?
+        if node.data == data
+          return true
+        elsif node.data < data
+          node = node.right
+        else
+          node = node.left
+        end
+      end
+      return false
+    end
   end
 end
 
@@ -74,4 +91,5 @@ tree.insert(15)
 tree.insert(5)
 puts tree
 
-puts tree.root.left.parent.data
+puts tree.contains(5)
+puts tree.contains(2)
