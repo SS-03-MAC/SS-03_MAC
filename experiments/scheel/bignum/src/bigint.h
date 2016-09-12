@@ -34,7 +34,7 @@ public:
 
   ~BigInt() { delete data; }
 
-  void print() {
+  void print() const {
     if (!this->negative) {
       printf("+");
     } else {
@@ -46,7 +46,7 @@ public:
     printf("\n");
   }
 
-  void rev_print() {
+  void rev_print() const {
     this->data->rev_print();
 
     if (!this->negative) {
@@ -62,15 +62,61 @@ public:
     uint64_t times = 0;
     uint64_t bytes = amount / 8;
     uint64_t shift = amount % 8;
+    struct BigIntLLNode *curr = (struct BigIntLLNode *)(this->data->head->next);
+    struct BigIntLLNode *next = (struct BigIntLLNode *)(curr->next);
+    uint8_t next_mask = ((1 << amount) - 1);
+    uint8_t data_mask = (0xFF << amount);
+
+    this->data->trim();
 
     this->data->prepend(0x00);
 
     for (times = 0; times < bytes; times++) {
+      printf("Adding 8 bits...\n");
+      this->print();
+      this->rev_print();
       this->data->append(0x00);
+      this->rev_print();
+      this->print();
     }
 
-    // TODO, finish shift
     this->data->rotl_each(shift);
+    while (curr->next != data->tail) {
+      curr->data = (curr->data & data_mask) ^ next->data & next_mask;
+
+      curr = next;
+      next = (struct BigIntLLNode *)(curr->next);
+    }
+    curr->data = (curr->data & data_mask);
+
+    this->data->trim();
+  }
+
+  void right_shift(uint64_t amount) {
+    uint64_t times = 0;
+    uint64_t bytes = amount / 8;
+    uint64_t shift = amount % 8;
+
+    struct BigIntLLNode *curr = (struct BigIntLLNode *)(this->data->tail->prev);
+    struct BigIntLLNode *next = (struct BigIntLLNode *)(curr->prev);
+
+    uint8_t next_mask = (0xFF << amount);
+    uint8_t data_mask = ((1 << amount) - 1);
+
+    for (times = 0; times < bytes; times++) {
+      this->data->remove_last();
+    }
+
+    this->data->rotr_each(shift);
+    while (curr->prev != data->head) {
+      curr->data = (curr->data & data_mask) ^ next->data & next_mask;
+
+      curr = next;
+      next = (struct BigIntLLNode *)(curr->prev);
+    }
+    curr->data = (curr->data & data_mask);
+
+    this->data->trim();
   }
 
   BigInt *add(const BigInt *val) {
@@ -241,7 +287,5 @@ public:
     return result;
   }
 
-  // void add(const BigInt &val) {}
-
-  // void shift(uint64_t bits) {}
+  void trim() { this->data->trim(); }
 };
