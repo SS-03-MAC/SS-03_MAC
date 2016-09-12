@@ -1,6 +1,12 @@
 # Non-Functional Requirements
 - Secure
-- Fast
-- Lightweight
+  - TLS
+  - Session tracking
+- Performance
+  - Fast
+  - Lightweight
 - Easy on developers and webmasters
 - Cutting-edge technology
+- Portable
+  - Builds & runs on many platforms
+  - Few dependencies
