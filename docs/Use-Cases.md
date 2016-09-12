@@ -1,16 +1,18 @@
 # Use Cases
 ## Actors
 - Developers
-- Web masters
+- Webmasters
 - Users
 - Admins
 
 ## Functionality
 ### Developers
 - Generate template code from models
-- Configure aspects of web/MAC server
+  - Developers write models in YAML, which MAC translates into C# and JavaScript.
+- Configure aspects of web server
+  - Developers can edit the provided configuration files to change aspects of how the web server behaves.
 
-### Web masters
+### Webmasters
 - Configure server
 - Control server
 
