@@ -26,6 +26,7 @@ module BinarySearchTree
         left.insert(v)
       else
         self.left = BinaryTreeNode.new(v)
+        self.left.parent = self
       end
     end
 
@@ -34,6 +35,7 @@ module BinarySearchTree
         right.insert(v)
       else
         self.right = BinaryTreeNode.new(v)
+        self.right.parent = self
       end
     end
   end
@@ -54,10 +56,8 @@ module BinarySearchTree
       if data.nil?
         return false
       elsif @root.nil?
-        puts "new root"
         @root = BinaryTreeNode.new(data)
       else
-        puts "inserting data"
         @root.insert(data)
       end
     end
@@ -73,3 +73,5 @@ tree.insert(10)
 tree.insert(15)
 tree.insert(5)
 puts tree
+
+puts tree.root.left.parent.data
