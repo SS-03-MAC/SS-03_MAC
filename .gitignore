@@ -42,6 +42,8 @@
 /test/version_tmp/
 /tmp/
 
+*.dSYM
+
 # Used by dotenv library to load environment variables.
 # .env
 
