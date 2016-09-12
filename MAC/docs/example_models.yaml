@@ -1,0 +1,32 @@
+# Screen sketch: Matthew Burket
+roles:
+  using:
+    - MAC.roles
+  - admin
+  - it_n00b
+  - intern
+
+user:
+  uses:
+    MAC.user
+    MAC.location
+  fields:
+    -
+      name: Password
+      type: MAC.user.password
+    -
+      name: FullName
+      type: string
+      validations:
+        required: true
+      acl:
+        read: MAC.self, admin, MAC.signed, MAC.Public
+        write: self, admin
+    -
+      name: City
+      Type: MAC.city
+      validations:
+        required: false
+      acl:
+        read: self, admin
+        write: self, admin
