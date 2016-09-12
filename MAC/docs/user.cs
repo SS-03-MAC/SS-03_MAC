@@ -4,21 +4,49 @@ using System.Collections;
 /// <summary>
 ///   This is an example model class.
 ///   I have subbed out the methods that will created in this file by the automatic system.
-/// </summary> 
+/// </summary>
 public class User {
+  /// <summary>
+  Database id
+  /// </summary>
   public long Id {get;}
+  /// <summary>
+  /// A basic string attribute
+  /// </summary>
+  /// <returns></returns>
   public string Email {get; set;}
   /// <summary>
   /// On set will set PasswordDigest to the BCrypt Password
   /// </summary>
   public virtual strng Password {get; set;}
+  /// <summary>
+  /// How the Password is stored in the database
+  /// </summary>
+  /// <returns></returns>
   public string PasswordDigest {get; set;}
+  /// <summary>
+  /// Built-in field
+  /// </summary>
+  /// <returns></returns>
+  public DateTime CreatedAt {get; set;}
+  /// <summary>
+  /// Built-in field
+  /// </summary>
+  /// <returns></returns>
+  public DateTime CreatedAt
+  public DateTime UpdatedAt {get; set;}
 
-  public User Get(long id) {
+
+  /// <summary>
+  ///  Get a user given a Id
+  /// </summary>
+  /// <param name="id"></param>
+  /// <returns>Users</returns>
+  public static User Get(long id) {
     // SELECT
   }
 
-  public List<Users> GetAll() {
+  public static List<Users> GetAll() {
     // SELECT
   }
 
@@ -37,9 +65,12 @@ public class User {
     // DELETE
   }
 
-  public List<string> Valid() {
+  public bool Valid() {
     // Runs Validations
     // Returns if all vaildtions passed
-    // Add errors to the list
+  }
+
+  public List<string> GetValidationsErrors() {
+    // Gets Validation Errors
   }
 }
