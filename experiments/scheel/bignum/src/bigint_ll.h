@@ -68,6 +68,8 @@ public:
 
       curr = (struct BigIntLLNode *)curr->next;
     }
+
+    trim();
   };
 
   BigIntLL(const BigIntLL *val) {
@@ -104,6 +106,8 @@ public:
       curr = (struct BigIntLLNode *)curr->next;
       val_curr = (struct BigIntLLNode *)val_curr->next;
     }
+
+    trim();
   };
 
   ~BigIntLL() {
@@ -125,17 +129,9 @@ public:
 
     printf("0x");
 
-    // Ingore leading zeros
-    while (curr != tail) {
-      if (curr->data != 0x00) {
-        break;
-      }
-
-      curr = (struct BigIntLLNode *)curr->next;
-    }
-
     if (curr == tail) {
       printf("00");
+      return;
     }
 
     while (curr != tail) {
@@ -149,13 +145,9 @@ public:
     struct BigIntLLNode *curr;
     curr = (struct BigIntLLNode *)(this->tail)->prev;
 
-    // Ingore leading zeros
-    while (curr != head) {
-      if (curr->data != 0x00) {
-        break;
-      }
-
-      curr = (struct BigIntLLNode *)curr->prev;
+    if (curr == head) {
+      printf("00");
+      return;
     }
 
     while (curr != head) {
@@ -164,6 +156,40 @@ public:
       curr = (struct BigIntLLNode *)curr->prev;
     }
   };
+
+  void trim() {
+    struct BigIntLLNode *curr;
+    curr = (struct BigIntLLNode *)(this->head)->next;
+
+    while (curr->data == 0) {
+      curr = (struct BigIntLLNode *)(curr->next);
+      remove_first();
+    }
+  }
+
+  void remove_first() {
+    if (this->length != 0) {
+      this->length -= 1;
+
+      struct BigIntLLNode *del = (struct BigIntLLNode *)(this->head->next);
+      struct BigIntLLNode *next = (struct BigIntLLNode *)(del->next);
+      head->next = next;
+      next->prev = head;
+      free(del);
+    }
+  }
+
+  void remove_last() {
+    if (this->length != 0) {
+      this->length -= 1;
+
+      struct BigIntLLNode *del = (struct BigIntLLNode *)(this->tail)->prev;
+      struct BigIntLLNode *prev = (struct BigIntLLNode *)(del->prev);
+      tail->prev = prev;
+      prev->next = tail;
+      free(del);
+    }
+  }
 
   void prepend(const uint8_t val) {
     struct BigIntLLNode *curr;

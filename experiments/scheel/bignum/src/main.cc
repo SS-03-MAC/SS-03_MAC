@@ -32,9 +32,25 @@ int main() {
   BigInt *j = d->add(c);
   j->print();
 
+  printf("j trim();\n");
+  j->trim();
+  j->print();
+
+  printf("j trim();\n");
+  j->trim();
+  j->print();
+
   printf("e = -2\n");
   BigInt *e = new BigInt(0x02);
   e->negate();
+  e->print();
+
+  printf("e trim();\n");
+  e->trim();
+  e->print();
+
+  printf("e trim();\n");
+  e->trim();
   e->print();
 
   printf("f = 1\n");
@@ -53,6 +69,23 @@ int main() {
   BigInt *i = e->subtract(f);
   i->print();
 
+  printf("k = 1 << 1\n");
+  BigInt *k = new BigInt(0x01);
+  k->left_shift(0x01);
+  k->print();
+  printf("k = 2 << 4\n");
+  k->left_shift(0x04);
+  k->print();
+  printf("k = 32 >> 4\n");
+  k->right_shift(0x04);
+  k->print();
+  printf("k = 2 >> 1\n");
+  k->right_shift(0x01);
+  k->print();
+  printf("k = 1 << 100\n");
+  k->left_shift(100);
+  k->print();
+
   delete a;
   delete b;
   delete c;
@@ -63,4 +96,5 @@ int main() {
   delete h;
   delete i;
   delete j;
+  delete k;
 }
