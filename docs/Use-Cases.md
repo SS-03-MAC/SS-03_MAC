@@ -20,6 +20,16 @@
 
 ### Users
 - CRUD
+  - JSON endpoints
+  - JavaScript Functions
+  - UI features created by the developers
+- ACLs
+  - Per field Access controls
 
 ### Admins
 - CRUD
+  - JSON endpoints
+  - JavaScript Functions
+- ACLs
+  - Per field Access controls
+  - Admin should be read/edit all fields
