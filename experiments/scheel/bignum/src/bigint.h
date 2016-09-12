@@ -61,11 +61,11 @@ public:
   void left_shift(uint64_t amount) {
     uint64_t times = 0;
     uint64_t bytes = amount / 8;
-    uint8_t shift = (uint8_t) (amount % 8);
-    struct BigIntLLNode* curr;
-    struct BigIntLLNode* next;
-    uint8_t next_mask = ((1 << amount) - 1);
-    uint8_t data_mask = (0xFF << amount);
+    uint8_t shift = (uint8_t)(amount % 8);
+    struct BigIntLLNode *curr;
+    struct BigIntLLNode *next;
+    uint8_t next_mask = ((1 << shift) - 1);
+    uint8_t data_mask = (0xFF << shift);
 
     this->data->trim();
 
@@ -78,13 +78,13 @@ public:
     curr = (struct BigIntLLNode *)(this->data->head->next);
     next = (struct BigIntLLNode *)(curr->next);
 
-    if (curr == this->data->tail) {
+    if (curr == this->data->tail || shift == 0) {
       return;
     }
 
     this->data->rotl_each(shift);
 
-    while (next != (struct BigIntLLNode *) data->tail) {
+    while (next != (struct BigIntLLNode *)data->tail) {
       curr->data = (curr->data & data_mask) ^ (next->data & next_mask);
 
       curr = next;
@@ -115,7 +115,7 @@ public:
     }
 
     this->data->rotr_each(shift);
-    while (next != (struct BigIntLLNode *) data->head) {
+    while (next != (struct BigIntLLNode *)data->head) {
       curr->data = (curr->data & data_mask) ^ (next->data & next_mask);
 
       curr = next;
@@ -295,7 +295,7 @@ public:
     return result;
   }
 
-  BigInt* mul(BigInt *v) {
+  BigInt *mul(BigInt *v) {
     BigInt *result = new BigInt(uint64_t(0x00));
     BigInt *tmp = new BigInt(uint64_t(0x00));
     BigInt *mul = new BigInt(*this);
