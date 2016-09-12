@@ -22,11 +22,11 @@ usage text:
         mac-cli v0.1.0
         Copyright (C) 2016 mac-cli Authors
         Licensed under the MIT License
-        
+
         Usage:
         init         -- Create a new project in the current directory
         build        -- Builds the project
-	    --no-js      -- Does not update JavaScript models
+            --no-js      -- Does not update JavaScript models
             --no-cs      -- Does not update C# models
             --no-api     -- Does not update API definitions
         run          -- Launch the project
@@ -41,7 +41,7 @@ To set up a new project:
     proj="name_of_project"
     mkdir $proj
     cd $proj
-    mac-cli init $proj 
+    mac-cli init $proj
 
 This will create a mac/ folder for FMDs and a build/ folder for generated code.
 
@@ -59,9 +59,8 @@ To run the web server:
 
     mac-cli run
 
-This will start the server against the current code base. 
+This will start the server against the current code base.
 
 
 Screen sketch: By Alex Scheel
 Screen name: mac-cli usage
-
