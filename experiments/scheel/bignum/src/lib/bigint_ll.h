@@ -9,6 +9,10 @@
 #include <cstdio>
 #include <cstdlib>
 
+#pragma once
+#ifndef BIGNUM_SRC_LIB_BIGINT_LL_H__
+#define BIGNUM_SRC_LIB_BIGINT_LL_H__
+
 struct BigIntLLNode {
   void *prev;
   void *next;
@@ -303,3 +307,5 @@ public:
     return length;
   }
 };
+
+#endif /* end of include guard: BIGNUM_SRC_LIB_BIGINT_H__ */

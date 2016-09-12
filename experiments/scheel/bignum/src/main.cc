@@ -4,42 +4,30 @@
  * Copyright (C) 2016 Alexander Scheel
 */
 
-#include "bigint.h"
+#include "tests/tests.h"
+#include <cstdio>
 
 int main() {
-  printf("a = 0xFFFFFFFFFFFFFFFF:\n");
-  BigInt *a = new BigInt(0xFFFFFFFFFFFFFFFF);
-  a->print();
+  int (*func)();
+  int results = 0;
+  int current = 0;
 
-  printf("b = 0x10:\n");
-  BigInt *b = new BigInt(0x10);
-  b->print();
+  void *element = tests_f[current];
 
-  printf("c = b+a\n");
-  // Appending:
-  BigInt *c = b->add(a);
-  c->print();
+  while (element != NULL) {
+    printf("[%i] %s", current, tests_n[current].c_str());
+    func = (int (*)())element;
+    results = func();
+    if (results != 0) {
+      return results;
+    }
+    printf(" ok\n");
+    current += 1;
+    element = tests_f[current];
+  }
 
-  printf("c = -c: \n");
-  c->negate();
-  c->print();
-
-  printf("d = ba\n");
-  BigInt *d = b->add(a);
-  d->print();
-
-  printf("j = d + c\n");
-  BigInt *j = d->add(c);
-  j->print();
-
-  printf("j trim();\n");
-  j->trim();
-  j->print();
-
-  printf("j trim();\n");
-  j->trim();
-  j->print();
-
+  return 0;
+  /*
   printf("e = -2\n");
   BigInt *e = new BigInt(0x02);
   e->negate();
@@ -114,5 +102,5 @@ int main() {
   delete l;
   delete m;
   delete n;
-  delete o;
+  delete o;*/
 }
