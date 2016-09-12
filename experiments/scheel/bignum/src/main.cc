@@ -66,7 +66,7 @@ int main() {
   h->print();
 
   printf("i = e - f\n");
-  BigInt *i = e->subtract(f);
+  BigInt *i = e->sub(f);
   i->print();
 
   printf("k = 1 << 1\n");
@@ -82,9 +82,23 @@ int main() {
   printf("k = 2 >> 1\n");
   k->right_shift(0x01);
   k->print();
-  printf("k = 1 << 100\n");
-  k->left_shift(100);
+  printf("k = 1 << 20\n");
+  k->left_shift(20);
   k->print();
+
+  printf("l = 2\n");
+  BigInt *l = new BigInt(0x02);
+  printf("m = 3\n");
+  BigInt *m = new BigInt(0x03);
+  printf("n = m*l\n");
+  BigInt *n = m->mul(l);
+  n->print();
+  printf("o = n*n\n");
+  BigInt *o = n->mul(n);
+  o->print();
+  printf("p = o*e\n");
+  BigInt *p = o->mul(e);
+  p->print();
 
   delete a;
   delete b;
@@ -97,4 +111,8 @@ int main() {
   delete i;
   delete j;
   delete k;
+  delete l;
+  delete m;
+  delete n;
+  delete o;
 }
