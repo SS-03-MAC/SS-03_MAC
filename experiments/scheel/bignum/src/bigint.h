@@ -61,9 +61,9 @@ public:
   void left_shift(uint64_t amount) {
     uint64_t times = 0;
     uint64_t bytes = amount / 8;
-    uint64_t shift = amount % 8;
-    struct BigIntLLNode *curr = (struct BigIntLLNode *)(this->data->head->next);
-    struct BigIntLLNode *next = (struct BigIntLLNode *)(curr->next);
+    uint8_t shift = (uint8_t) (amount % 8);
+    struct BigIntLLNode* curr;
+    struct BigIntLLNode* next;
     uint8_t next_mask = ((1 << amount) - 1);
     uint8_t data_mask = (0xFF << amount);
 
@@ -72,17 +72,20 @@ public:
     this->data->prepend(0x00);
 
     for (times = 0; times < bytes; times++) {
-      printf("Adding 8 bits...\n");
-      this->print();
-      this->rev_print();
       this->data->append(0x00);
-      this->rev_print();
-      this->print();
+    }
+
+    curr = (struct BigIntLLNode *)(this->data->head->next);
+    next = (struct BigIntLLNode *)(curr->next);
+
+    if (curr == this->data->tail) {
+      return;
     }
 
     this->data->rotl_each(shift);
-    while (curr->next != data->tail) {
-      curr->data = (curr->data & data_mask) ^ next->data & next_mask;
+
+    while (next != (struct BigIntLLNode *) data->tail) {
+      curr->data = (curr->data & data_mask) ^ (next->data & next_mask);
 
       curr = next;
       next = (struct BigIntLLNode *)(curr->next);
@@ -100,6 +103,10 @@ public:
     struct BigIntLLNode *curr = (struct BigIntLLNode *)(this->data->tail->prev);
     struct BigIntLLNode *next = (struct BigIntLLNode *)(curr->prev);
 
+    if (curr == this->data->head) {
+      return;
+    }
+
     uint8_t next_mask = (0xFF << amount);
     uint8_t data_mask = ((1 << amount) - 1);
 
@@ -108,8 +115,8 @@ public:
     }
 
     this->data->rotr_each(shift);
-    while (curr->prev != data->head) {
-      curr->data = (curr->data & data_mask) ^ next->data & next_mask;
+    while (next != (struct BigIntLLNode *) data->head) {
+      curr->data = (curr->data & data_mask) ^ (next->data & next_mask);
 
       curr = next;
       next = (struct BigIntLLNode *)(curr->prev);
@@ -277,12 +284,44 @@ public:
 
   void negate() { this->negative = !this->negative; }
 
-  BigInt *subtract(BigInt *val) {
+  BigInt *sub(const BigInt *v) {
     BigInt *result;
+    BigInt *val = new BigInt(v);
 
     val->negate();
     result = this->add(val);
     val->negate();
+
+    return result;
+  }
+
+  BigInt* mul(BigInt *v) {
+    BigInt *result = new BigInt(uint64_t(0x00));
+    BigInt *tmp = new BigInt(uint64_t(0x00));
+    BigInt *mul = new BigInt(*this);
+    BigInt *val = new BigInt(v);
+    uint8_t i = 0;
+    uint8_t lsb = 0;
+    bool negative = (mul->negative != val->negative);
+    mul->negative = false;
+    val->negative = false;
+
+    while (val->data->length != 0) {
+      lsb = val->data->lsb();
+      for (i = 0; i < 8; i++) {
+        if ((lsb & 1) == 1) {
+          delete result;
+          result = tmp->add(mul);
+          delete tmp;
+          tmp = new BigInt(result);
+        }
+        lsb = lsb >> 1;
+        mul->left_shift(1);
+      }
+      val->right_shift(8);
+    }
+
+    result->negative = negative;
 
     return result;
   }

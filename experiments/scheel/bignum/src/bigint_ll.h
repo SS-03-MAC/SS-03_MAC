@@ -161,6 +161,10 @@ public:
     struct BigIntLLNode *curr;
     curr = (struct BigIntLLNode *)(this->head)->next;
 
+    if (this->length == 0) {
+      return;
+    }
+
     while (curr->data == 0) {
       curr = (struct BigIntLLNode *)(curr->next);
       remove_first();
@@ -219,9 +223,21 @@ public:
     this->length += 1;
   };
 
-  uint8_t msb() { return ((struct BigIntLLNode *)head->next)->data; }
+  uint8_t msb() {
+    if (head->next != tail) {
+      return ((struct BigIntLLNode *)head->next)->data;
+    } else {
+      return 0;
+    }
+  }
 
-  uint8_t lsb() { return ((struct BigIntLLNode *)tail->prev)->data; }
+  uint8_t lsb() {
+    if (head->next != tail) {
+      return ((struct BigIntLLNode *)tail->prev)->data;
+    } else {
+      return 0;
+    }
+  }
 
   void rotl_one(struct BigIntLLNode *pos, uint8_t amount) {
     pos->data = (pos->data << amount) | (pos->data >> (8 - amount));
@@ -231,17 +247,10 @@ public:
     struct BigIntLLNode *curr;
     curr = (struct BigIntLLNode *)(this->head)->next;
 
-    // Ingore leading zeros
     while (curr != tail) {
       if (curr->data != 0x00) {
-        break;
+        rotl_one(curr, amount);
       }
-
-      curr = (struct BigIntLLNode *)curr->next;
-    }
-
-    while (curr != tail) {
-      rotl_one(curr, amount);
 
       curr = (struct BigIntLLNode *)curr->next;
     }
