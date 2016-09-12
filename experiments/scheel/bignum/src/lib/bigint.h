@@ -11,6 +11,10 @@
 
 #include "bigint_ll.h"
 
+#pragma once
+#ifndef BIGNUM_SRC_LIB_BIGINT_H__
+#define BIGNUM_SRC_LIB_BIGINT_H__
+
 class BigInt {
 private:
   bool negative;
@@ -379,3 +383,5 @@ public:
 
   void trim() { this->data->trim(); }
 };
+
+#endif /* end of include guard: BIGNUM_SRC_LIB_BIGINT_H__ */
