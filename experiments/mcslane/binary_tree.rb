@@ -1,7 +1,7 @@
 module BinarySearchTree
   class BinaryTreeNode
     attr_reader :data
-    attr_accessor :left, :right, :parent
+    attr_accessor :left, :right, :parent, :data
 
     def initialize(data)
       @data = data
@@ -82,6 +82,52 @@ module BinarySearchTree
       end
       return false
     end
+
+    def delete(data, node=self.root)
+      if node.nil? #data is not in subtree
+        return false
+      end
+      if data < node.data
+        return delete(data, node.left)
+      elsif data > node.data
+        return delete(data, node.right)
+      else #found our data to delete
+        if node.left && node.right #both children present
+          successor = find_min(node.right)
+          node.data = successor.data
+          delete(successor.data, successor)
+        elsif node.left #only a left child
+          replace(node, node.left)
+        elsif node.right #only a right child
+          replace(node, node.right)
+        else #no children
+          replace(node, nil)
+        end
+        return true
+      end
+    end
+
+    private
+
+    def find_min(node)
+      while node.left
+        node = node.left
+      end
+      return node
+    end
+
+    def replace(node, new_value=nil)
+      if node.parent
+        if node == node.parent.left
+          node.parent.left = new_value
+        else
+          node.parent.right = new_value
+        end
+      end
+      if new_value
+        new_value.parent = nil
+      end
+    end
   end
 end
 
@@ -93,3 +139,6 @@ puts tree
 
 puts tree.contains(5)
 puts tree.contains(2)
+
+puts tree.delete(10)
+puts tree
