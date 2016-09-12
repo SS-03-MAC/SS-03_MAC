@@ -1,4 +1,9 @@
-//Outline of javascript class generated from example_models.yaml
+/*
+ * Purpose of this file:
+ * this file is an example of a javascript class that would be generated
+ * by the MAC using a ruby program to parse the file titled example_models.yaml
+ * a SQL table is also generted from by the same program
+ */
 
 var User = fucntion(password, fullName, city){
   this.password = password;//encrypted elsewhere
