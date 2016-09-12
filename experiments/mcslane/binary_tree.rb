@@ -11,7 +11,7 @@ module BinarySearchTree
       case data <=> v
       when 1 then insert_left(v)
       when -1 then insert_right(v)
-      when 0 then false
+      when 0 then data = v #replaces old version with new one (used for updating dictionary)
       end
     end
 
@@ -66,21 +66,21 @@ module BinarySearchTree
       return @root.to_s
     end
 
-    def contains(data)
+    def contains(data) #returns nil if item is not in set, and the item if it is
       if root.nil?
-        return false
+        return nil
       end
       node = root
       while !node.nil?
         if node.data == data
-          return true
+          return data
         elsif node.data < data
           node = node.right
         else
           node = node.left
         end
       end
-      return false
+      return nil
     end
 
     def delete(data, node=self.root)
