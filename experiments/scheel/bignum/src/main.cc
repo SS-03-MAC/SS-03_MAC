@@ -71,7 +71,7 @@ int main() {
 
   printf("k = 1 << 1\n");
   BigInt *k = new BigInt(0x01);
-  k->left_shift(0x01);
+  k->left_shift(1);
   k->print();
   printf("k = 2 << 4\n");
   k->left_shift(0x04);
