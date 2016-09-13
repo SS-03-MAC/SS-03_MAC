@@ -1,5 +1,6 @@
 #include "../lib/bigint.h"
 #include "tests_addition.h"
+#include "tests_bitshift.h"
 #include "tests_equality.h"
 #include "tests_multiplication.h"
 #include <cassert>
@@ -9,6 +10,7 @@ std::string tests_n[] = {"Testing equality of zeros...",      "Testing equality 
                          "Testing inequality of +/- one...",  "Testing equality ignores padding...",
                          "Testing comparison greater...",     "Testing comparison less...",
                          "Testing addition (small)...",       "Testing addition (overflows)...",
+                         "Testing left shift (small)...",     "Testing right shift (small)...",
                          "Testing multiplication (small)...", "Testing multiplication (overflows)..."};
 
 void *tests_f[] = {(void *)&test_equality_zeros,
@@ -19,6 +21,8 @@ void *tests_f[] = {(void *)&test_equality_zeros,
                    (void *)&test_compare_less,
                    (void *)&test_addition_small,
                    (void *)&test_addition_overflow,
+                   (void *)&test_left_shift_small,
+                   (void *)&test_right_shift_small,
                    (void *)&test_multiplication_small,
                    (void *)&test_multiplication_overflow,
                    NULL};
