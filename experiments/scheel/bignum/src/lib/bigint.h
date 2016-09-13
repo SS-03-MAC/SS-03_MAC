@@ -85,6 +85,14 @@ public:
       return -1;
     }
 
+    while (t_c != this->data->tail && t_c->data == 0x00) {
+      t_c = (struct BigIntLLNode *)t_c->next;
+    }
+
+    while (v_c != this->data->tail && v_c->data == 0x00) {
+      v_c = (struct BigIntLLNode *)v_c->next;
+    }
+
     while (t_c != this->data->tail && v_c != val->data->tail) {
       if (t_c->data > v_c->data) {
         return 1;
@@ -153,24 +161,36 @@ public:
   void right_shift(uint64_t amount) {
     uint64_t times = 0;
     uint64_t bytes = amount / 8;
-    uint64_t shift = amount % 8;
+    uint8_t shift = (uint8_t)(amount % 8);
 
-    struct BigIntLLNode *curr = (struct BigIntLLNode *)(this->data->tail->prev);
-    struct BigIntLLNode *next = (struct BigIntLLNode *)(curr->prev);
+    struct BigIntLLNode *curr;
+    struct BigIntLLNode *next;
 
-    if (curr == this->data->head) {
+    if (((struct BigIntLLNode *)this->data->tail->prev) == this->data->head || amount == 0) {
       return;
     }
 
-    uint8_t next_mask = (0xFF << amount);
-    uint8_t data_mask = ((1 << amount) - 1);
+    uint8_t data_mask = (0xFF >> shift);
+    uint8_t next_mask = 0xFF - data_mask;
+
+    this->data->trim();
 
     for (times = 0; times < bytes; times++) {
       this->data->remove_last();
     }
 
+    if (shift == 0) {
+      return;
+    }
+
+    this->data->prepend(0x00);
+
+    curr = (struct BigIntLLNode *)(this->data->tail->prev);
+    next = (struct BigIntLLNode *)(curr->prev);
+
     this->data->rotr_each(shift);
-    while (next != (struct BigIntLLNode *)data->head) {
+
+    while (next != data->head) {
       curr->data = (curr->data & data_mask) ^ (next->data & next_mask);
 
       curr = next;
