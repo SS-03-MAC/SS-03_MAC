@@ -12,3 +12,5 @@ CREATE TABLE USERS(
   UPDATEDAT DATETIME    NOT NULL,
   PRIMARY KEY (ID)
 )
+
+#screensketch by Matthew Slane
