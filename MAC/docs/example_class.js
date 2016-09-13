@@ -24,6 +24,8 @@ var User = fucntion(password, fullName, city){
   this.Update(){
     //HTTP PATCH request to users/:id
   }
+  
+  //screensketch by Matt Slane
 
   this.Delete(){
     //HTTP DELETE request to users/:id
