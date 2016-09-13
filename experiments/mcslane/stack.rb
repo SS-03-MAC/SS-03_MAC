@@ -41,7 +41,7 @@ module Stack
         return nil
       else
         data = top.data
-        top = top.n
+        @top = top.next
         return data
       end
     end
@@ -50,21 +50,12 @@ module Stack
       if data.nil?
         return false
       elsif top.nil?
-        top = StackNode.new(data)
+        @top = StackNode.new(data)
       else
         temp = StackNode.new(data)
         temp.next = top
-        top = temp
+        @top = temp
       end
     end
+  end
 end 
-
-stack = Stack::LinkedStack()
-
-i = 0
-while i < 10
-  stack.push(i)
-end
-
-while !stack.empty?
-  puts stack.pop
