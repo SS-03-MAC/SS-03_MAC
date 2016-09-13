@@ -1,4 +1,4 @@
-require "binary_tree"
+require "./binary_tree"
 
 module TreeDict
   class KeyValuePair
@@ -13,6 +13,11 @@ module TreeDict
 
     def <=>(other)
       key <=> other.key
+    end
+
+    def to_s
+      return "{#{key}:#{value}}"
+    end
   end
 
   class Dictionary
@@ -23,7 +28,7 @@ module TreeDict
     end
 
     def add(key, value)
-      set.add(KeyValuePair.new(key, value))
+      set.insert(KeyValuePair.new(key, value))
     end
 
     def contains(key)
@@ -39,8 +44,13 @@ module TreeDict
       if pair.nil?
         return nil
       else
+        puts pair
         return pair.value
       end
+    end
+
+    def to_s
+      return set.to_s
     end
   end
 end
