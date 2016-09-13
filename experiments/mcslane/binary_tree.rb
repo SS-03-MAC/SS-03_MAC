@@ -73,7 +73,7 @@ module BinarySearchTree
       node = root
       while !node.nil?
         if node.data == data
-          return data
+          return node.data
         elsif node.data < data
           node = node.right
         else
