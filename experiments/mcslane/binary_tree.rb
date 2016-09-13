@@ -41,6 +41,7 @@ module BinarySearchTree
   end
 
   class BinaryTree
+    include Enumerable
     attr_reader :root
     attr_accessor :root
 
@@ -49,6 +50,14 @@ module BinarySearchTree
         @root = nil
       else
         @root = BinaryTreeNode.new(data)
+      end
+    end
+
+    def each
+      node = find_min(root)
+      while node
+        yield node.data
+        node = successor(node)
       end
     end
 
@@ -114,6 +123,27 @@ module BinarySearchTree
         node = node.left
       end
       return node
+    end
+
+    def successor(node)
+      if node.nil?
+        return nil
+      end
+      if node.right
+        p = node.right
+        while p.left
+          p = p.left
+        end
+        return p
+      else
+        p = node.parent
+        child = node
+        while p && p.right==child
+          child = p
+          p = p.parent
+        end
+        return p
+      end
     end
 
     def replace(node, new_value=nil)

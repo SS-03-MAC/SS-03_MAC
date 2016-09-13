@@ -1,13 +1,14 @@
 require "./binary_tree"
 
+rng = Random.new()
 tree = BinarySearchTree::BinaryTree.new()
-tree.insert(10)
-tree.insert(15)
-tree.insert(5)
-puts tree
 
-puts tree.contains(5)
-puts tree.contains(2)
+i = 0
+while i < 10
+  tree.insert(rng.rand(256))
+  i += 1
+end
 
-puts tree.delete(10)
-puts tree
+tree.each do |i|
+  puts i
+end
