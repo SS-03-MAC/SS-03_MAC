@@ -7,3 +7,4 @@ set(SOURCE_FILES Execute/executer.cpp)
 
 add_executable(executer ${SOURCE_FILES})
 add_executable(executee Execute/executee.cpp)
+add_executable(fork Execute/fork.cpp)
