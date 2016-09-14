@@ -15,6 +15,8 @@ namespace ConsoleApplication
            Console.WriteLine("</head>");
            Console.WriteLine("<body>");
            Console.WriteLine("<h1>Hello World</h1>");
+           Console.WriteLine("<p>Cookies: " + contentLength + "</p>");
+           Console.WriteLine("<p>Cookies length: " + contentLength.Length + "</p>");
            Console.WriteLine("</body>");
            Console.WriteLine("</html>");
         }
