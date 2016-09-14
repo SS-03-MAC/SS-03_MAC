@@ -50,6 +50,28 @@ int test_inequality_one() {
 }
 
 int test_compare_greater() {
+  BigInt *a = new BigInt(0x09ull);
+  BigInt *b = new BigInt(0x01ull);
+  assert(a->cmp(b) == 1);
+
+  delete a;
+  delete b;
+
+  return 0;
+}
+
+int test_compare_less() {
+  BigInt *a = new BigInt(0x01ull);
+  BigInt *b = new BigInt(0x09ull);
+  assert(a->cmp(b) == -1);
+
+  delete a;
+  delete b;
+
+  return 0;
+}
+
+int test_compare_greater_negative() {
   BigInt *a = new BigInt(0x01ull);
   BigInt *b = new BigInt(0x01ull);
   b->negate();
@@ -61,7 +83,7 @@ int test_compare_greater() {
   return 0;
 }
 
-int test_compare_less() {
+int test_compare_less_negative() {
   BigInt *a = new BigInt(0x01ull);
   BigInt *b = new BigInt(0x01ull);
   a->negate();

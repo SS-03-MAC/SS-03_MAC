@@ -370,7 +370,7 @@ public:
     return result;
   }
 
-  BigInt *mul(BigInt *v) {
+  BigInt *mul(const BigInt *v) {
     BigInt *result = new BigInt(uint64_t(0x00));
     BigInt *tmp = new BigInt(uint64_t(0x00));
     BigInt *mul = new BigInt(*this);
@@ -397,6 +397,87 @@ public:
     }
 
     result->negative = negative;
+
+    return result;
+  }
+
+  BigInt *div(const BigInt *v) {
+    BigInt *result = new BigInt(uint64_t(0x00));
+    BigInt *tmp = new BigInt(uint64_t(0x01));
+    BigInt *num_tmp = new BigInt(uint64_t(0x00));
+    BigInt *num = new BigInt(this);
+    BigInt *den = new BigInt(v);
+    uint64_t shift = 0;
+    bool negative = (num->negative != den->negative);
+    num->negative = false;
+    den->negative = false;
+
+    if (den->cmp(num_tmp) == 0) {
+      return result;
+    }
+
+    if (den->cmp(tmp) == 0) {
+      delete result;
+      result = new BigInt(num);
+
+      return result;
+    }
+
+    if (den->cmp(num) == 0) {
+      delete result;
+      result = new BigInt(0x01);
+
+      return result;
+    }
+
+    while (num->cmp(den) != -1) {
+      shift = 0;
+      delete tmp;
+      tmp = new BigInt(den);
+
+      while (num->cmp(tmp) == 1) {
+        tmp->left_shift(1);
+        shift += 1;
+      }
+
+      if (num->cmp(tmp) == -1) {
+        shift -= 1;
+        tmp->right_shift(1);
+      }
+
+      delete num_tmp;
+      num_tmp = num->sub(tmp);
+
+      delete num;
+      num = new BigInt(num_tmp);
+
+      delete tmp;
+      tmp = new BigInt(1);
+      tmp->left_shift(shift);
+
+      delete num_tmp;
+      num_tmp = result->add(tmp);
+
+      delete result;
+      result = new BigInt(num_tmp);
+    }
+
+    result->negative = negative;
+
+    return result;
+  }
+
+  BigInt *mod(const BigInt *v) {
+    BigInt *result = new BigInt(v);
+    BigInt *num = new BigInt(this);
+    BigInt *den = new BigInt(v);
+    BigInt *m = num->div(den);
+    BigInt *tmp = m->mul(den);
+    result = num->sub(tmp);
+    delete m;
+    delete tmp;
+    delete num;
+    delete den;
 
     return result;
   }
