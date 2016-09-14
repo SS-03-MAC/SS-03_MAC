@@ -9,6 +9,10 @@
 #include <cstdio>
 #include <cstdlib>
 
+#pragma once
+#ifndef BIGNUM_SRC_LIB_BIGINT_LL_H__
+#define BIGNUM_SRC_LIB_BIGINT_LL_H__
+
 struct BigIntLLNode {
   void *prev;
   void *next;
@@ -279,4 +283,29 @@ public:
       curr = (struct BigIntLLNode *)curr->next;
     }
   }
+
+  uint64_t non_zero_length() const {
+    uint64_t length = 0;
+    struct BigIntLLNode *curr;
+    curr = (struct BigIntLLNode *)(this->head)->next;
+
+    // Ingore leading zeros
+    while (curr != tail) {
+      if (curr->data != 0x00) {
+        break;
+      }
+
+      curr = (struct BigIntLLNode *)curr->next;
+    }
+
+    while (curr != tail) {
+      length += 1;
+
+      curr = (struct BigIntLLNode *)curr->next;
+    }
+
+    return length;
+  }
 };
+
+#endif /* end of include guard: BIGNUM_SRC_LIB_BIGINT_H__ */
