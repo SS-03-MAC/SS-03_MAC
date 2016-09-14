@@ -2,5 +2,5 @@
 
 
 int main(void) {
- system("cd cSharpExamples && dotnet run");
+ system("cd cSharpPost && dotnet run");
 }

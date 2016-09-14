@@ -17,6 +17,10 @@ namespace ConsoleApplication
            Console.WriteLine("<h1>Hello World</h1>");
            Console.WriteLine("<p>Cookies: " + contentLength + "</p>");
            Console.WriteLine("<p>Cookies length: " + contentLength.Length + "</p>");
+           Console.WriteLine("<form action=\"d.out\" method=\"post\">");
+           Console.WriteLine("<input type=\"text\" name=\"appel\"/>");
+           Console.WriteLine("<input type=\"submit\" />");
+           Console.WriteLine("</form>");
            Console.WriteLine("</body>");
            Console.WriteLine("</html>");
         }
