@@ -41,6 +41,10 @@
 /test/tmp/
 /test/version_tmp/
 /tmp/
+bin/
+!.keep
+!*.keep
+!bin/.keep
 
 # Used by dotenv library to load environment variables.
 # .env
