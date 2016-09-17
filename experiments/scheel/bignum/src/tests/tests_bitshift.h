@@ -9,6 +9,9 @@ int test_left_shift_small() {
     BigInt *e = new BigInt((((uint64_t)1) << i), false);
 
     assert(e->equals(a));
+
+    delete a;
+    delete e;
   }
 
   return 0;
@@ -23,6 +26,9 @@ int test_right_shift_small() {
     BigInt *e = new BigInt(base >> i, false);
 
     assert(e->equals(a));
+
+    delete a;
+    delete e;
   }
 
   return 0;

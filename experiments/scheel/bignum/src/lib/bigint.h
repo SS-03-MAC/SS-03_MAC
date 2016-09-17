@@ -377,7 +377,7 @@ public:
   BigInt *mul(const BigInt *v) {
     BigInt *result = new BigInt(0x00, false);
     BigInt *tmp = new BigInt(0x00, false);
-    BigInt *mul = new BigInt(*this);
+    BigInt *mul = new BigInt(this);
     BigInt *val = new BigInt(v);
     uint8_t i = 0;
     uint8_t lsb = 0;
@@ -402,6 +402,10 @@ public:
 
     result->negative = negative;
 
+    delete tmp;
+    delete mul;
+    delete val;
+
     return result;
   }
 
@@ -417,12 +421,20 @@ public:
     den->negative = false;
 
     if (den->cmp(num_tmp) == 0) {
+      delete tmp;
+      delete num_tmp;
+      delete num;
+      delete den;
       return result;
     }
 
     if (den->cmp(tmp) == 0) {
       delete result;
       result = new BigInt(num);
+      delete tmp;
+      delete num_tmp;
+      delete num;
+      delete den;
 
       return result;
     }
@@ -430,6 +442,10 @@ public:
     if (den->cmp(num) == 0) {
       delete result;
       result = new BigInt(0x01, false);
+      delete tmp;
+      delete num_tmp;
+      delete num;
+      delete den;
 
       return result;
     }
@@ -468,17 +484,21 @@ public:
 
     result->negative = negative;
 
+    delete tmp;
+    delete num_tmp;
+    delete num;
+    delete den;
+
     return result;
   }
 
   BigInt *mod(const BigInt *v) {
-    BigInt *result = new BigInt(v);
+    BigInt *result;
     BigInt *num = new BigInt(this);
-    BigInt *num2 = new BigInt(this);
     BigInt *den = new BigInt(v);
     BigInt *m = num->div(den);
     BigInt *tmp = m->mul(den);
-    result = num2->sub(tmp);
+    result = num->sub(tmp);
     delete m;
     delete tmp;
     delete num;

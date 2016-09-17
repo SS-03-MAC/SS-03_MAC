@@ -38,5 +38,10 @@ int test_multiplication_overflow() {
 
   assert(e->equals(c));
 
+  delete a;
+  delete b;
+  delete c;
+  delete e;
+
   return 0;
 }
