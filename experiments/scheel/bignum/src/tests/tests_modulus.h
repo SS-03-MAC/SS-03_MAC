@@ -9,10 +9,10 @@ int test_modulus_small() {
   for (a_i = 1; a_i < 100; a_i++) {
     for (b_i = 1; b_i < 100; b_i++) {
       r_i = a_i % b_i;
-      BigInt *a = new BigInt(a_i);
-      BigInt *b = new BigInt(b_i);
+      BigInt *a = new BigInt(a_i, false);
+      BigInt *b = new BigInt(b_i, false);
       BigInt *c = a->mod(b);
-      BigInt *e = new BigInt(r_i);
+      BigInt *e = new BigInt(r_i, false);
 
       assert(e->equals(c));
 

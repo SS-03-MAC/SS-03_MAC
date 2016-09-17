@@ -26,8 +26,8 @@ public:
     this->negative = false;
   }
 
-  BigInt(uint64_t val) {
-    this->negative = false;
+  BigInt(uint64_t val, bool negative) {
+    this->negative = negative;
     data = new BigIntLL(val);
   }
 
@@ -362,17 +362,21 @@ public:
   BigInt *sub(const BigInt *v) {
     BigInt *result;
     BigInt *val = new BigInt(v);
+    BigInt *t = new BigInt(this);
 
     val->negate();
-    result = this->add(val);
+    result = t->add(val);
     val->negate();
+
+    delete val;
+    delete t;
 
     return result;
   }
 
   BigInt *mul(const BigInt *v) {
-    BigInt *result = new BigInt(uint64_t(0x00));
-    BigInt *tmp = new BigInt(uint64_t(0x00));
+    BigInt *result = new BigInt(0x00, false);
+    BigInt *tmp = new BigInt(0x00, false);
     BigInt *mul = new BigInt(*this);
     BigInt *val = new BigInt(v);
     uint8_t i = 0;
@@ -402,9 +406,9 @@ public:
   }
 
   BigInt *div(const BigInt *v) {
-    BigInt *result = new BigInt(uint64_t(0x00));
-    BigInt *tmp = new BigInt(uint64_t(0x01));
-    BigInt *num_tmp = new BigInt(uint64_t(0x00));
+    BigInt *result = new BigInt(0x00, false);
+    BigInt *tmp = new BigInt(0x01, false);
+    BigInt *num_tmp = new BigInt(0x00, false);
     BigInt *num = new BigInt(this);
     BigInt *den = new BigInt(v);
     uint64_t shift = 0;
@@ -425,7 +429,7 @@ public:
 
     if (den->cmp(num) == 0) {
       delete result;
-      result = new BigInt(0x01);
+      result = new BigInt(0x01, false);
 
       return result;
     }
@@ -452,7 +456,7 @@ public:
       num = new BigInt(num_tmp);
 
       delete tmp;
-      tmp = new BigInt(1);
+      tmp = new BigInt(0x01, false);
       tmp->left_shift(shift);
 
       delete num_tmp;
@@ -470,10 +474,11 @@ public:
   BigInt *mod(const BigInt *v) {
     BigInt *result = new BigInt(v);
     BigInt *num = new BigInt(this);
+    BigInt *num2 = new BigInt(this);
     BigInt *den = new BigInt(v);
     BigInt *m = num->div(den);
     BigInt *tmp = m->mul(den);
-    result = num->sub(tmp);
+    result = num2->sub(tmp);
     delete m;
     delete tmp;
     delete num;

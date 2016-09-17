@@ -96,6 +96,9 @@ public:
     tail->prev = NULL;
     tail->next = NULL;
 
+    head->next = tail;
+    tail->prev = head;
+
     curr = head;
     val_curr = (struct BigIntLLNode *)(val->head->next);
 

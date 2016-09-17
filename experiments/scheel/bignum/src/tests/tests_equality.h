@@ -2,8 +2,8 @@
 #include <cassert>
 
 int test_equality_zeros() {
-  BigInt *a = new BigInt(0x00ull);
-  BigInt *b = new BigInt(0x00ull);
+  BigInt *a = new BigInt(0x00, false);
+  BigInt *b = new BigInt(0x00, false);
   b->negate();
   assert(a->equals(b));
 
@@ -27,8 +27,8 @@ int test_equality_padding() {
 }
 
 int test_equality_one() {
-  BigInt *a = new BigInt(0x01ull);
-  BigInt *b = new BigInt(0x01ull);
+  BigInt *a = new BigInt(0x01, false);
+  BigInt *b = new BigInt(0x01, false);
   assert(a->equals(b));
 
   delete a;
@@ -38,8 +38,8 @@ int test_equality_one() {
 }
 
 int test_inequality_one() {
-  BigInt *a = new BigInt(0x01ull);
-  BigInt *b = new BigInt(0x01ull);
+  BigInt *a = new BigInt(0x01, false);
+  BigInt *b = new BigInt(0x01, false);
   b->negate();
   assert(!a->equals(b));
 
@@ -50,8 +50,8 @@ int test_inequality_one() {
 }
 
 int test_compare_greater() {
-  BigInt *a = new BigInt(0x09ull);
-  BigInt *b = new BigInt(0x01ull);
+  BigInt *a = new BigInt(0x09, false);
+  BigInt *b = new BigInt(0x01, false);
   assert(a->cmp(b) == 1);
 
   delete a;
@@ -61,8 +61,8 @@ int test_compare_greater() {
 }
 
 int test_compare_less() {
-  BigInt *a = new BigInt(0x01ull);
-  BigInt *b = new BigInt(0x09ull);
+  BigInt *a = new BigInt(0x01, false);
+  BigInt *b = new BigInt(0x09, false);
   assert(a->cmp(b) == -1);
 
   delete a;
@@ -72,8 +72,8 @@ int test_compare_less() {
 }
 
 int test_compare_greater_negative() {
-  BigInt *a = new BigInt(0x01ull);
-  BigInt *b = new BigInt(0x01ull);
+  BigInt *a = new BigInt(0x01, false);
+  BigInt *b = new BigInt(0x01, false);
   b->negate();
   assert(a->cmp(b) == 1);
 
@@ -84,8 +84,8 @@ int test_compare_greater_negative() {
 }
 
 int test_compare_less_negative() {
-  BigInt *a = new BigInt(0x01ull);
-  BigInt *b = new BigInt(0x01ull);
+  BigInt *a = new BigInt(0x01, false);
+  BigInt *b = new BigInt(0x01, false);
   a->negate();
   assert(a->cmp(b) == -1);
 
