@@ -5,120 +5,169 @@
 #include <cstdio>
 #include <cstdlib>
 
-BigInt *BigInt::mul(const BigInt *v) {
-	BigInt *result = new BigInt(0x00, false);
-	BigInt *tmp = new BigInt(0x00, false);
-	BigInt *mul = new BigInt(this);
-	BigInt *val = new BigInt(v);
-	uint8_t i = 0;
-	uint8_t lsb = 0;
-	bool negative = (mul->negative != val->negative);
-	mul->negative = false;
-	val->negative = false;
+BigInt *BigInt::mul(const BigInt *v) const {
+  BigInt *result = new BigInt(0x00, false);
+  BigInt *tmp = new BigInt(0x00, false);
+  BigInt *mul = new BigInt(this);
+  BigInt *val = new BigInt(v);
+  uint8_t i = 0;
+  uint8_t lsb = 0;
+  bool negative = (mul->negative != val->negative);
+  mul->negative = false;
+  val->negative = false;
 
-	while (val->data->length != 0) {
-		lsb = val->data->lsb();
-		for (i = 0; i < 8; i++) {
-			if ((lsb & 1) == 1) {
-				delete result;
-				result = tmp->add(mul);
-				delete tmp;
-				tmp = new BigInt(result);
-			}
-			lsb = lsb >> 1;
-			mul->left_shift(1);
-		}
-		val->right_shift(8);
-	}
+  while (val->data->length != 0) {
+    lsb = val->data->lsb();
+    for (i = 0; i < 8; i++) {
+      if ((lsb & 1) == 1) {
+        delete result;
+        result = tmp->add(mul);
+        delete tmp;
+        tmp = new BigInt(result);
+      }
+      lsb = lsb >> 1;
+      mul->left_shift(1);
+    }
+    val->right_shift(8);
+  }
 
-	result->negative = negative;
+  result->negative = negative;
 
-	delete tmp;
-	delete mul;
-	delete val;
+  delete tmp;
+  delete mul;
+  delete val;
 
-	return result;
+  return result;
 }
 
-BigInt *BigInt::div(const BigInt *v) {
-	BigInt *result = new BigInt(0x00, false);
-	BigInt *tmp = new BigInt(0x01, false);
-	BigInt *num_tmp = new BigInt(0x00, false);
-	BigInt *num = new BigInt(this);
-	BigInt *den = new BigInt(v);
-	uint64_t shift = 0;
-	bool negative = (num->negative != den->negative);
-	num->negative = false;
-	den->negative = false;
+BigInt *BigInt::div(const BigInt *v) const {
+  BigInt *result = new BigInt(0x00, false);
+  BigInt *tmp = new BigInt(0x01, false);
+  BigInt *num_tmp = new BigInt(0x00, false);
+  BigInt *num = new BigInt(this);
+  BigInt *den = new BigInt(v);
+  uint64_t shift = 0;
+  bool negative = (num->negative != den->negative);
+  num->negative = false;
+  den->negative = false;
 
-	if (den->cmp(num_tmp) == 0) {
-		delete tmp;
-		delete num_tmp;
-		delete num;
-		delete den;
-		return result;
-	}
+  if (den->cmp(num_tmp) == 0) {
+    delete tmp;
+    delete num_tmp;
+    delete num;
+    delete den;
+    return result;
+  }
 
-	if (den->cmp(tmp) == 0) {
-		delete result;
-		result = new BigInt(num);
-		delete tmp;
-		delete num_tmp;
-		delete num;
-		delete den;
+  if (den->cmp(tmp) == 0) {
+    delete result;
+    result = new BigInt(num);
+    delete tmp;
+    delete num_tmp;
+    delete num;
+    delete den;
 
-		return result;
-	}
+    return result;
+  }
 
-	if (den->cmp(num) == 0) {
-		delete result;
-		result = new BigInt(0x01, false);
-		delete tmp;
-		delete num_tmp;
-		delete num;
-		delete den;
+  if (den->cmp(num) == 0) {
+    delete result;
+    result = new BigInt(0x01, false);
+    delete tmp;
+    delete num_tmp;
+    delete num;
+    delete den;
 
-		return result;
-	}
+    return result;
+  }
 
-	while (num->cmp(den) != -1) {
-		shift = 0;
-		delete tmp;
-		tmp = new BigInt(den);
+  while (num->cmp(den) != -1) {
+    shift = 0;
+    delete tmp;
+    tmp = new BigInt(den);
 
-		while (num->cmp(tmp) == 1) {
-			tmp->left_shift(1);
-			shift += 1;
-		}
+    while (num->cmp(tmp) == 1) {
+      tmp->left_shift(1);
+      shift += 1;
+    }
 
-		if (num->cmp(tmp) == -1) {
-			shift -= 1;
-			tmp->right_shift(1);
-		}
+    if (num->cmp(tmp) == -1) {
+      shift -= 1;
+      tmp->right_shift(1);
+    }
 
-		delete num_tmp;
-		num_tmp = num->sub(tmp);
+    delete num_tmp;
+    num_tmp = num->sub(tmp);
 
-		delete num;
-		num = new BigInt(num_tmp);
+    delete num;
+    num = new BigInt(num_tmp);
 
-		delete tmp;
-		tmp = new BigInt(0x01, false);
-		tmp->left_shift(shift);
+    delete tmp;
+    tmp = new BigInt(0x01, false);
+    tmp->left_shift(shift);
 
-		delete num_tmp;
-		num_tmp = result->add(tmp);
+    delete num_tmp;
+    num_tmp = result->add(tmp);
 
-		delete result;
-		result = new BigInt(num_tmp);
-	}
+    delete result;
+    result = new BigInt(num_tmp);
+  }
 
-	result->negative = negative;
+  result->negative = negative;
 
-	delete tmp;
-	delete num_tmp;
-	delete num;
-	delete den;
+  delete tmp;
+  delete num_tmp;
+  delete num;
+  delete den;
 
-	return result;
+  return result;
+}
+
+BigInt *BigInt::egcd(const BigInt *y, BigInt *a, BigInt *b) const {
+  if (b == 0) {
+    a = new BigInt(1, false);
+    b = new BigInt(0, false);
+    return new BigInt(this);
+  } else {
+    BigInt *n = this->div(y);
+    BigInt *c = this->mod(y);
+    BigInt *A = NULL;
+    BigInt *B = NULL;
+    BigInt *mul;
+
+    BigInt *r = y->egcd(c, A, B);
+
+    a = new BigInt(B);
+    mul = B->mul(n);
+    b = c->sub(mul);
+
+    delete n;
+    delete c;
+    delete A;
+    delete B;
+    delete mul;
+
+    return r;
+  }
+}
+
+BigInt *BigInt::modinv(const BigInt *m) {
+  BigInt *val = this->mod(m);
+  BigInt *mod = new BigInt(m);
+
+  BigInt *a = NULL;
+  BigInt *b = NULL;
+
+  BigInt *r = mod->egcd(val, a, b);
+  BigInt *tmp = r->add(b);
+  BigInt *result = tmp->mod(mod);
+
+  delete val;
+  delete mod;
+  delete a;
+  delete b;
+  delete r;
+  delete tmp;
+
+  return result;
 }

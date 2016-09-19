@@ -6,81 +6,81 @@
 #include <cstdlib>
 
 void BigInt::left_shift(uint64_t amount) {
-	uint64_t times = 0;
-	uint64_t bytes = amount / 8;
-	uint8_t shift = (uint8_t)(amount % 8);
-	struct BigIntLLNode *curr;
-	struct BigIntLLNode *next;
-	uint8_t next_mask = ((1 << shift) - 1);
-	uint8_t data_mask = (0xFF << shift);
+  uint64_t times = 0;
+  uint64_t bytes = amount / 8;
+  uint8_t shift = (uint8_t)(amount % 8);
+  struct BigIntLLNode *curr;
+  struct BigIntLLNode *next;
+  uint8_t next_mask = ((1 << shift) - 1);
+  uint8_t data_mask = (0xFF << shift);
 
-	this->data->trim();
+  this->data->trim();
 
-	this->data->prepend(0x00);
+  this->data->prepend(0x00);
 
-	for (times = 0; times < bytes; times++) {
-		this->data->append(0x00);
-	}
+  for (times = 0; times < bytes; times++) {
+    this->data->append(0x00);
+  }
 
-	curr = (struct BigIntLLNode *)(this->data->head->next);
-	next = (struct BigIntLLNode *)(curr->next);
+  curr = (struct BigIntLLNode *)(this->data->head->next);
+  next = (struct BigIntLLNode *)(curr->next);
 
-	if (curr == this->data->tail || shift == 0) {
-		return;
-	}
+  if (curr == this->data->tail || shift == 0) {
+    return;
+  }
 
-	this->data->rotl_each(shift);
+  this->data->rotl_each(shift);
 
-	while (next != (struct BigIntLLNode *)data->tail) {
-		curr->data = (curr->data & data_mask) ^ (next->data & next_mask);
+  while (next != (struct BigIntLLNode *)data->tail) {
+    curr->data = (curr->data & data_mask) ^ (next->data & next_mask);
 
-		curr = next;
-		next = (struct BigIntLLNode *)(curr->next);
-	}
-	curr->data = (curr->data & data_mask);
+    curr = next;
+    next = (struct BigIntLLNode *)(curr->next);
+  }
+  curr->data = (curr->data & data_mask);
 
-	this->data->trim();
+  this->data->trim();
 }
 
 void BigInt::right_shift(uint64_t amount) {
-	uint64_t times = 0;
-	uint64_t bytes = amount / 8;
-	uint8_t shift = (uint8_t)(amount % 8);
+  uint64_t times = 0;
+  uint64_t bytes = amount / 8;
+  uint8_t shift = (uint8_t)(amount % 8);
 
-	struct BigIntLLNode *curr;
-	struct BigIntLLNode *next;
+  struct BigIntLLNode *curr;
+  struct BigIntLLNode *next;
 
-	if (((struct BigIntLLNode *)this->data->tail->prev) == this->data->head || amount == 0) {
-		return;
-	}
+  if (((struct BigIntLLNode *)this->data->tail->prev) == this->data->head || amount == 0) {
+    return;
+  }
 
-	uint8_t data_mask = (0xFF >> shift);
-	uint8_t next_mask = 0xFF - data_mask;
+  uint8_t data_mask = (0xFF >> shift);
+  uint8_t next_mask = 0xFF - data_mask;
 
-	this->data->trim();
+  this->data->trim();
 
-	for (times = 0; times < bytes; times++) {
-		this->data->remove_last();
-	}
+  for (times = 0; times < bytes; times++) {
+    this->data->remove_last();
+  }
 
-	if (shift == 0) {
-		return;
-	}
+  if (shift == 0) {
+    return;
+  }
 
-	this->data->prepend(0x00);
+  this->data->prepend(0x00);
 
-	curr = (struct BigIntLLNode *)(this->data->tail->prev);
-	next = (struct BigIntLLNode *)(curr->prev);
+  curr = (struct BigIntLLNode *)(this->data->tail->prev);
+  next = (struct BigIntLLNode *)(curr->prev);
 
-	this->data->rotr_each(shift);
+  this->data->rotr_each(shift);
 
-	while (next != data->head) {
-		curr->data = (curr->data & data_mask) ^ (next->data & next_mask);
+  while (next != data->head) {
+    curr->data = (curr->data & data_mask) ^ (next->data & next_mask);
 
-		curr = next;
-		next = (struct BigIntLLNode *)(curr->prev);
-	}
-	curr->data = (curr->data & data_mask);
+    curr = next;
+    next = (struct BigIntLLNode *)(curr->prev);
+  }
+  curr->data = (curr->data & data_mask);
 
-	this->data->trim();
+  this->data->trim();
 }
