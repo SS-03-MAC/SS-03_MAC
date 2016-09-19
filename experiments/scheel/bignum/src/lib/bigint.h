@@ -49,15 +49,21 @@ public:
 
   BigInt *sub(const BigInt *v);
 
-  BigInt *mul(const BigInt *v);
+  BigInt *mul(const BigInt *v) const;
 
-  BigInt *div(const BigInt *v);
+  BigInt *div(const BigInt *v) const;
 
-  BigInt *mod(const BigInt *v);
+  BigInt *egcd(const BigInt *y, BigInt *a, BigInt *b) const;
+
+  BigInt *modinv(const BigInt *m);
+
+  BigInt *mod(const BigInt *v) const;
 
   BigInt *exp(const BigInt *v);
 
   BigInt *modexp(const BigInt *v, const BigInt *m);
+
+  BigInt *gcd(const BigInt *b, const BigInt *r, const BigInt *s);
 
   void trim() { this->data->trim(); }
 };

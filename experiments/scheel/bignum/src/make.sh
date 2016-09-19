@@ -1,6 +1,6 @@
 #!/bin/bash
 
-clang-format -style="{BasedOnStyle: llvm, ColumnLimit: 120}" -i ./*.cc ./*/*.h
+clang-format -style="{BasedOnStyle: llvm, ColumnLimit: 120}" -i ./*.cc ./*/*.h ./*/*.cc
 
 rm -rf ./a.out.dSYM ./a.out
 
