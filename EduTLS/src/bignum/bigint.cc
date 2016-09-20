@@ -1,3 +1,17 @@
+//===-- EduTLS/src/bignum/bigint.cc                       -------*- C++ -*-===//
+//
+//                     EduTLS - Transport Layer Security
+//
+// This file is distributed under the MIT License. See LICENSE.TXT for details.
+//
+//===----------------------------------------------------------------------===//
+///
+/// \file
+/// This file contains the implementations of the BigInt constructors and other
+/// utility functions which are non-mathematical in nature.
+///
+//===----------------------------------------------------------------------===//
+
 #include "bigint.h"
 
 #include <cstddef>

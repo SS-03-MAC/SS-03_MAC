@@ -1,8 +1,16 @@
-/*
- * Bignum library
- *
- * Copyright (C) 2016 Alexander Scheel
-*/
+//===-- EduTLS/src/bignum/bigint.h                        -------*- C++ -*-===//
+//
+//                     EduTLS - Transport Layer Security
+//
+// This file is distributed under the MIT License. See LICENSE.TXT for details.
+//
+//===----------------------------------------------------------------------===//
+///
+/// \file
+/// This file contains the declaration of the BigInt class for use with
+/// number theoretic cryptography such as RSA and ECC.
+///
+//===----------------------------------------------------------------------===//
 
 #pragma once
 #ifndef BIGNUM_SRC_LIB_BIGINT_H__

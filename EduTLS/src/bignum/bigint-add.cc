@@ -1,3 +1,18 @@
+//===-- EduTLS/src/bignum/bigint-add.cc                   -------*- C++ -*-===//
+//
+//                     EduTLS - Transport Layer Security
+//
+// This file is distributed under the MIT License. See LICENSE.TXT for details.
+//
+//===----------------------------------------------------------------------===//
+///
+/// \file
+/// This file contains the implementations of the BigInt addition and
+/// subtraction methods. Subtraction is addition with a negated second
+/// parameter.
+///
+//===----------------------------------------------------------------------===//
+
 #include "bigint.h"
 
 #include <cstddef>

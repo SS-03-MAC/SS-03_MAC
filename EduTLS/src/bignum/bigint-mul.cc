@@ -1,3 +1,17 @@
+//===-- EduTLS/src/bignum/bigint-mul.cc                   -------*- C++ -*-===//
+//
+//                     EduTLS - Transport Layer Security
+//
+// This file is distributed under the MIT License. See LICENSE.TXT for details.
+//
+//===----------------------------------------------------------------------===//
+///
+/// \file
+/// This file contains the implementations of the BigInt multiplication,
+/// division, Extended-Euclidean GCD, and modular inverse functions.
+///
+//===----------------------------------------------------------------------===//
+
 #include "bigint.h"
 
 #include <cstddef>

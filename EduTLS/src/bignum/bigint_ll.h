@@ -1,8 +1,17 @@
-/*
- * Bignum library -- linked list implementation
- *
- * Copyright (C) 2016 Alexander Scheel
-*/
+//===-- EduTLS/src/bignum/bigint_ll.h                     -------*- C++ -*-===//
+//
+//                     EduTLS - Transport Layer Security
+//
+// This file is distributed under the MIT License. See LICENSE.TXT for details.
+//
+//===----------------------------------------------------------------------===//
+///
+/// \file
+/// This file contains an implementation of a doubly linked list with head and
+/// tail pointers for use in the BigInt class. Underlying data storage unit
+/// are 8bit integers.
+///
+//===----------------------------------------------------------------------===//
 
 #include <cstddef>
 #include <cstdint>

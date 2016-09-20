@@ -1,3 +1,17 @@
+//===-- EduTLS/src/bignum/bigint-exp.cc                   -------*- C++ -*-===//
+//
+//                     EduTLS - Transport Layer Security
+//
+// This file is distributed under the MIT License. See LICENSE.TXT for details.
+//
+//===----------------------------------------------------------------------===//
+///
+/// \file
+/// This file contains the implementations of the BigInt modulus, exponentation
+/// and modular exponentation functions.
+///
+//===----------------------------------------------------------------------===//
+
 #include "bigint.h"
 
 #include <cstddef>
