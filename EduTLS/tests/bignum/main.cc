@@ -4,7 +4,7 @@
  * Copyright (C) 2016 Alexander Scheel
 */
 
-#include "tests/tests.h"
+#include "tests.h"
 #include <cstdio>
 
 int main() {
