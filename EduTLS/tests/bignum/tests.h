@@ -1,4 +1,4 @@
-#include "../lib/bigint.h"
+#include "../../src/bignum/bigint.h"
 #include "tests_addition.h"
 #include "tests_bitshift.h"
 #include "tests_division.h"

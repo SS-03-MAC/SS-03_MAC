@@ -1,4 +1,4 @@
-#include "../lib/bigint.h"
+#include "../../src/bignum/bigint.h"
 #include <cassert>
 
 int test_modulus_small() {

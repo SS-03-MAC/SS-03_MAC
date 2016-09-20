@@ -1,7 +1,7 @@
 #!/bin/bash
 
-clang-format -style="{BasedOnStyle: llvm, ColumnLimit: 120}" -i ./*.cc ./*/*.h ./*/*.cc
+clang-format -style="{BasedOnStyle: llvm, ColumnLimit: 120}" -i ./*.cc ./*.h
 
 rm -rf ./a.out.dSYM ./a.out
 
-g++ ./main.cc ./lib/bignum*.cc -Werror -Wall -Wextra -O0 -ggdb
+g++ ./main.cc ../../src/bignum/*.cc -Werror -Wall -Wextra -O0 -ggdb
