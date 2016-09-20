@@ -20,6 +20,11 @@ private:
   bool negative;
   BigIntLL *data;
 
+  struct pairResult {
+    BigInt *a;
+    BigInt *b;
+  };
+
 public:
   BigInt();
 
@@ -31,13 +36,15 @@ public:
 
   ~BigInt() { delete data; }
 
+  void copy(const BigInt *val);
+
   void print() const;
 
   void rev_print() const;
 
-  int cmp(const BigInt *val);
+  int cmp(const BigInt *val) const;
 
-  bool equals(const BigInt *val) { return (this->cmp(val) == 0); }
+  bool equals(const BigInt *val) const { return (this->cmp(val) == 0); }
 
   void left_shift(uint64_t amount);
 
@@ -62,8 +69,6 @@ public:
   BigInt *exp(const BigInt *v);
 
   BigInt *modexp(const BigInt *v, const BigInt *m);
-
-  BigInt *gcd(const BigInt *b, const BigInt *r, const BigInt *s);
 
   void trim() { this->data->trim(); }
 };

@@ -29,6 +29,12 @@ BigInt::BigInt(const BigInt *val) {
   this->data = new BigIntLL(val->data);
 }
 
+void BigInt::copy(const BigInt *val) {
+  this->negative = val->negative;
+  delete this->data;
+  this->data = new BigIntLL(val->data);
+}
+
 void BigInt::print() const {
   if (!this->negative) {
     printf("+");
@@ -53,7 +59,7 @@ void BigInt::rev_print() const {
   printf("\n");
 }
 
-int BigInt::cmp(const BigInt *val) {
+int BigInt::cmp(const BigInt *val) const {
   uint64_t t_l = this->data->non_zero_length();
   uint64_t v_l = val->data->non_zero_length();
   struct BigIntLLNode *t_c;
