@@ -32,6 +32,13 @@ BigInt *BigInt::add(const BigInt *val) {
   int64_t b_val = 0;
   uint8_t len = 0;
 
+  // Starting at the LSB, group into sets of 7 bytes and perform addition,
+  // saving the carry bit. Perform addition as signed integers, allowing the
+  // sign of the result to be determined during calculations.
+  //
+  // Once finished, the remaining number can be added verbatim, keeping the
+  // previous carry as necessary.
+
   while (a_curr->prev != this->data->head && b_curr->prev != val->data->head) {
     a_curr = (struct BigIntLLNode *)a_curr->prev;
     b_curr = (struct BigIntLLNode *)b_curr->prev;
@@ -141,6 +148,7 @@ BigInt *BigInt::add(const BigInt *val) {
     }
   }
 
+  // At the end, deal with any remaining data.
   if (len != 0) {
     if (this->negative) {
       a_val *= -1;
@@ -181,9 +189,9 @@ BigInt *BigInt::sub(const BigInt *v) {
   BigInt *val = new BigInt(v);
   BigInt *t = new BigInt(this);
 
+  // Negate and then add.
   val->negate();
   result = t->add(val);
-  val->negate();
 
   delete val;
   delete t;

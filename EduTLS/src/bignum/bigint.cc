@@ -33,6 +33,8 @@ BigInt::BigInt(bool negative, const uint8_t *val, uint64_t length) {
   uint64_t i = 0;
   this->negative = negative;
   this->data = new BigIntLL();
+
+  // Least index is first.
   for (i = 0; i < length; i++) {
     this->data->append(val[i]);
   }
@@ -81,6 +83,7 @@ int BigInt::cmp(const BigInt *val) const {
   t_c = (struct BigIntLLNode *)(this->data->head)->next;
   v_c = (struct BigIntLLNode *)(val->data->head)->next;
 
+  /// If both lengths are zero, both values must be zero.
   if (t_l == v_l && t_l == 0) {
     return 0;
   }
@@ -99,14 +102,17 @@ int BigInt::cmp(const BigInt *val) const {
     return -1;
   }
 
+  // Find the first non-zero element in this.
   while (t_c != this->data->tail && t_c->data == 0x00) {
     t_c = (struct BigIntLLNode *)t_c->next;
   }
 
-  while (v_c != this->data->tail && v_c->data == 0x00) {
+  // Find the first non-zero element in val.
+  while (v_c != val->data->tail && v_c->data == 0x00) {
     v_c = (struct BigIntLLNode *)v_c->next;
   }
 
+  // Starting at the MSB, find first differing element and return.
   while (t_c != this->data->tail && v_c != val->data->tail) {
     if (t_c->data > v_c->data) {
       return 1;

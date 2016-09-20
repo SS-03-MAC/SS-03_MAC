@@ -30,6 +30,7 @@ BigInt *BigInt::mul(const BigInt *v) const {
   mul->negative = false;
   val->negative = false;
 
+  // Shift and add. Simple, basic, slow.
   while (val->data->length != 0) {
     lsb = val->data->lsb();
     for (i = 0; i < 8; i++) {
@@ -94,6 +95,8 @@ BigInt *BigInt::div(const BigInt *v) const {
 
     return result;
   }
+
+  // Shift and subtract. Simple, basic, slow.
 
   while (num->cmp(den) != -1) {
     shift = 0;

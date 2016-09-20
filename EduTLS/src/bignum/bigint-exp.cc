@@ -20,6 +20,8 @@
 #include <cstdlib>
 
 BigInt *BigInt::mod(const BigInt *v) const {
+  // Compute the modulus via integer division:
+  // m = n - ((n/d)*d)
   BigInt *result;
   BigInt *num = new BigInt(this);
   BigInt *den = new BigInt(v);
@@ -35,6 +37,11 @@ BigInt *BigInt::mod(const BigInt *v) const {
 }
 
 BigInt *BigInt::exp(const BigInt *v) {
+  // Recursive exponentation:
+  //    If even, compute (this^2)^(v/2)
+  //    If odd, compute  this(this^2)^((v-1)/2).
+  // Edge cases for zero and one.
+
   BigInt *result;
   BigInt *t = new BigInt(this);
   BigInt *val = new BigInt(v);
@@ -94,6 +101,12 @@ BigInt *BigInt::exp(const BigInt *v) {
 }
 
 BigInt *BigInt::modexp(const BigInt *v, const BigInt *m) {
+  // Recursive exponentation:
+  //    If even, compute (this^2)^(v/2)
+  //    If odd, compute  this(this^2)^((v-1)/2).
+  // Edge cases for zero and one.
+  // Same as exp except with internal moduli.
+
   BigInt *result;
   BigInt *t = new BigInt(this);
   BigInt *val = new BigInt(v);
@@ -131,7 +144,7 @@ BigInt *BigInt::modexp(const BigInt *v, const BigInt *m) {
     BigInt *val2 = tmp->div(two);
 
     delete tmp;
-    tmp = t2->exp(val2);
+    tmp = t2->modexp(val2, mod);
 
     result = tmp->mul(t);
 
@@ -142,7 +155,7 @@ BigInt *BigInt::modexp(const BigInt *v, const BigInt *m) {
     BigInt *t2 = t->mul(t);
     BigInt *val2 = val->div(two);
 
-    result = t2->exp(val2);
+    result = t2->modexp(val2, mod);
 
     delete t2;
     delete val2;
