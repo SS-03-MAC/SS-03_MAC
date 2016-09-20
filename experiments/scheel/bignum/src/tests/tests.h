@@ -4,19 +4,23 @@
 #include "tests_division.h"
 #include "tests_equality.h"
 #include "tests_exponentiation.h"
+#include "tests_modinv.h"
 #include "tests_modulus.h"
 #include "tests_multiplication.h"
 #include <cassert>
 #include <string>
 
-std::string tests_n[] = {"Testing equality of zeros...",      "Testing equality of one...",
-                         "Testing inequality of +/- one...",  "Testing equality ignores padding...",
-                         "Testing comparison greater...",     "Testing comparison less...",
-                         "Testing addition (small)...",       "Testing addition (overflows)...",
-                         "Testing left shift (small)...",     "Testing right shift (small)...",
-                         "Testing multiplication (small)...", "Testing multiplication (overflows)...",
-                         "Testing division (small)...",       "Testing modulus (small)...",
-                         "Testing exponentiation (small)...", "Testing modular exponentiation (small)..."};
+std::string tests_n[] = {
+    "Testing equality of zeros...",      "Testing equality of one...",
+    "Testing inequality of +/- one...",  "Testing equality ignores padding...",
+    "Testing comparison greater...",     "Testing comparison less...",
+    "Testing addition (small)...",       "Testing addition (overflows)...",
+    "Testing left shift (small)...",     "Testing right shift (small)...",
+    "Testing multiplication (small)...", "Testing multiplication (overflows)...",
+    "Testing division (small)...",       "Testing modulus (small)...",
+    "Testing exponentiation (small)...", "Testing modular exponentiation (small)...",
+    "Testing modular inverse...",
+};
 
 void *tests_f[] = {(void *)&test_equality_zeros,
                    (void *)&test_equality_one,
@@ -34,4 +38,5 @@ void *tests_f[] = {(void *)&test_equality_zeros,
                    (void *)&test_modulus_small,
                    (void *)&test_exponentiation_small,
                    (void *)&test_modexp_small,
+                   (void *)&test_modinv,
                    NULL};

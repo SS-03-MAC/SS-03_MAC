@@ -124,43 +124,53 @@ BigInt *BigInt::div(const BigInt *v) const {
 }
 
 BigInt *BigInt::egcd(const BigInt *y, BigInt *a, BigInt *b) const {
-  if (b == 0) {
-    a = new BigInt(1, false);
-    b = new BigInt(0, false);
+  BigInt *zero = new BigInt(0, false);
+  BigInt *one = new BigInt(1, false);
+  if (y->equals(zero)) {
+    a->copy(one);
+    b->copy(zero);
+    delete zero;
+    delete one;
+
     return new BigInt(this);
-  } else {
-    BigInt *n = this->div(y);
-    BigInt *c = this->mod(y);
-    BigInt *A = NULL;
-    BigInt *B = NULL;
-    BigInt *mul;
-
-    BigInt *r = y->egcd(c, A, B);
-
-    a = new BigInt(B);
-    mul = B->mul(n);
-    b = c->sub(mul);
-
-    delete n;
-    delete c;
-    delete A;
-    delete B;
-    delete mul;
-
-    return r;
   }
+
+  BigInt *n = this->div(y);
+  BigInt *z = this->mod(y);
+  BigInt *A = new BigInt(0, false);
+  BigInt *B = new BigInt(0, false);
+  BigInt *mul;
+
+  BigInt *r = y->egcd(z, A, B);
+  a->copy(B);
+  mul = B->mul(n);
+  delete z;
+  z = A->sub(mul);
+  b->copy(z);
+
+  delete n;
+  delete z;
+  delete A;
+  delete B;
+  delete mul;
+  delete zero;
+  delete one;
+
+  return r;
 }
 
 BigInt *BigInt::modinv(const BigInt *m) {
   BigInt *val = this->mod(m);
   BigInt *mod = new BigInt(m);
 
-  BigInt *a = NULL;
-  BigInt *b = NULL;
+  BigInt *a = new BigInt(0, false);
+  BigInt *b = new BigInt(0, false);
 
   BigInt *r = mod->egcd(val, a, b);
-  BigInt *tmp = r->add(b);
+  BigInt *tmp = mod->add(b);
   BigInt *result = tmp->mod(mod);
+  delete tmp;
+  tmp = r->add(a);
 
   delete val;
   delete mod;
