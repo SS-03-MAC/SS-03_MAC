@@ -7,5 +7,7 @@ module Parser
     rescue ArgumentError => e
       puts "Could nor parse YAML: #{e.message}" 
     end
+
+    return parsed
   end
 end
