@@ -20,19 +20,19 @@ class TestParser < Test::Unit::TestCase
 
   def test_empty_dir
     path = './data/empty_dir'
-    all_parsed = Parser.parse_directory(path)
+    all_parsed = Parser.parse_dir(path)
     assert_equal(all_parsed.length, 0)
   end
 
   def test_full_dir
     path = './data/yaml_dir/'
-    all_parsed = Parser.parse_directory(path)
+    all_parsed = Parser.parse_dir(path)
     assert_equal(all_parsed.length, 2)
   end
 
   def test_recusive_dir
     path = './data'
-    all_parsed = Parser.parse_directory(path)
+    all_parsed = Parser.parse_dir(path)
     assert_equal(all_parsed.length, 3)
     assert(all_parsed.key?('example_yaml.yml'))
     assert(all_parsed.key?('yaml_dir/teammates.yml'))

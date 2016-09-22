@@ -1,7 +1,7 @@
 require 'yaml'
 
 # This module allows for us to recusively check thorugh a directory and
-# all its children, parsing all documents that are valid YAML (includeing JSON)
+# all its chlidren, parsing all documents that are valid YAML (includeing JSON)
 module Parser
   # checks if a file could be YAML and parses it
   def parse_file(path)
@@ -19,30 +19,32 @@ module Parser
     end
   end
 
+  def parse_dir(path)
+    path += '/' unless path[-1] == '/'
+    parse_dir_recursive(path, '')
+  end
+
+  def add_dir_to_hash(base, path, hash)
+    cur_dir_hash = parse_dir_recursive(base, path)
+    hash.merge(cur_dir_hash)
+  end
+
   # finds all YAML files in a directory and parses them into a hash of Objects,
   # keys are file names, values are parsed YAML objects.
   # can and should initially be called with no second argument
-  def parse_directory(base_dir, child = '')
+  def parse_dir_recursive(base_dir, cur_dir = '')
     result = {}
 
-    base_dir += '/' unless base_dir[-1] == '/'
-    child += '/' unless child == '' || child[-1] == '/'
-
-    dir_path = base_dir + child
-    Dir.foreach(dir_path) do |item|
-      # adds the proper file location to item
-      full_name = dir_path + item
-      pretty_name = child + item
+    Dir.foreach(base_dir + cur_dir) do |item|
       # skips any other directories found, including '.' and '..'
       next if item == '.' || item == '..'
-      if File.directory?(full_name)
+      if File.directory?(base_dir + cur_dir + item)
         # recursively calls parse_directory, adding more YAML to our hash
-        child_hash = parse_directory(base_dir, pretty_name)
-        result = result.merge(child_hash)
+        result = add_dir_to_hash(base_dir, cur_dir + item + '/', result)
       else
         # tries to parse file, don't include if nil is returned
-        parsed_yaml = parse_file(full_name)
-        presult[pretty_name] = parsed_yaml unless parsed_yaml.nil?
+        parsed_yaml = parse_file(base_dir + cur_dir + item)
+        result[cur_dir + item] = parsed_yaml unless parsed_yaml.nil?
       end
     end
 
