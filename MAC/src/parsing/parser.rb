@@ -27,13 +27,23 @@ module Parser
     result = {}
 
     Dir.foreach(dir_path) do |item|
+      #adds the proper file location to item
+      fixed_name = dir_path + item
       #skips any other directories found, including '.' and '..'
       next if item == '.' or item == '..'
       if File.directory?(item)
         #recursively calls parse_directory, adding more YAML to our hash
+        child_hash = parse_directory(item)
+        result = result.merge(child_hash)
       else
         #tries to parse file, if parse_file(item) returns nil, don't include value
+        parsed_yaml = parse_file(item)
+        if !parsed_file.nil?
+          result[item] = parsed_yaml
+        end
       end
     end
+
+    return result
   end
 end
