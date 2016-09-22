@@ -1,1 +1,0 @@
-require 'mac-cli/commands'
