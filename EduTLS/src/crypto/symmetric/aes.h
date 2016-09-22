@@ -37,14 +37,16 @@ private:
   void inverse_shift_rows();
   void inverse_mix_columns();
 
+  void map(uint8_t *output, uint8_t *input);
+
 public:
   aes *aes_128(uint8_t key[16]);
   aes *aes_192(uint8_t key[24]);
   aes *aes_256(uint8_t key[32]);
 
   symmetric *init(uint8_t *key, uint8_t key_size);
-  int encrypt(uint8_t *output, uint8_t input);
-  int decrypt(uint8_t *output, uint8_t input);
+  int encrypt(uint8_t *output, uint8_t *input, size_t count);
+  int decrypt(uint8_t *output, uint8_t *input, size_t count);
 
   aes(uint8_t *key, size_t size);
   ~aes();

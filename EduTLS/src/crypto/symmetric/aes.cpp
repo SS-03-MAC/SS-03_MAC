@@ -14,6 +14,7 @@
 #include "aes.h"
 #include "../constants/aes.h"
 #include "symmetric.h"
+#include <cstddef>
 #include <cstdint>
 #include <exception>
 #include <iostream>
@@ -37,13 +38,13 @@ aes::aes(uint8_t *key, size_t size) {
   case 24:
     this->key[5] = (key[20] << 24) + (key[21] << 16) + (key[22] << 8) + (key[23] << 0);
     this->key[4] = (key[16] << 24) + (key[17] << 16) + (key[18] << 8) + (key[19] << 0);
-    this->rounds = (this->rounds == 0) ? this->rounds : 12;
+    this->rounds = (this->rounds == 0) ? 12 : this->rounds;
   case 16:
     this->key[3] = (key[12] << 24) + (key[13] << 16) + (key[14] << 8) + (key[15] << 0);
     this->key[2] = (key[8] << 24) + (key[9] << 16) + (key[10] << 8) + (key[11] << 0);
     this->key[1] = (key[4] << 24) + (key[5] << 16) + (key[6] << 8) + (key[7] << 0);
     this->key[0] = (key[0] << 24) + (key[1] << 16) + (key[2] << 8) + (key[3] << 0);
-    this->rounds = (this->rounds == 0) ? this->rounds : 10;
+    this->rounds = (this->rounds == 0) ? 10 : this->rounds;
     break;
   default:
     throw new std::invalid_argument("Invalid key_size for AES.");
@@ -57,6 +58,7 @@ aes::aes(uint8_t *key, size_t size) {
     } else if (this->key_size == 8 && (block % this->key_size) == 4) {
       temp = this->sub_word(temp);
     }
+
     this->key[block] = this->key[block - 4] ^ temp;
   }
 }
@@ -71,6 +73,69 @@ aes *aes::aes_256(uint8_t key[32]) { return new aes(key, 32); }
 
 symmetric *aes::init(uint8_t *key, uint8_t key_size) { return new aes(key, key_size); }
 
-int aes::encrypt(uint8_t *output, uint8_t input) { return 0; }
+int aes::encrypt(uint8_t *output, uint8_t *input, size_t count) {
+  size_t i = 0;
 
-int aes::decrypt(uint8_t *output, uint8_t input) { return 0; }
+  if (count * 8 != block_size) {
+    return 1;
+  }
+
+  this->map(this->block, input);
+
+  this->add_round_key(0);
+
+  for (i = 1; i < 14; i++) {
+    this->sub_bytes();
+    this->shift_rows();
+    this->mix_columns();
+    this->add_round_key(i);
+  }
+
+  this->sub_bytes();
+  this->shift_rows();
+  this->add_round_key(14);
+
+  this->map(output, this->block);
+
+  return 0;
+}
+
+int aes::decrypt(uint8_t *output, uint8_t *input, size_t count) {
+  size_t i = 0;
+
+  if (count * 8 != block_size) {
+    return 1;
+  }
+
+  this->map(this->block, input);
+
+  this->add_round_key(14);
+
+  for (i = 13; i > 0; i--) {
+    this->inverse_shift_rows();
+    this->inverse_sub_bytes();
+    this->add_round_key(i);
+    this->inverse_mix_columns();
+  }
+
+  this->inverse_shift_rows();
+  this->inverse_sub_bytes();
+  this->add_round_key(0);
+
+  this->map(output, this->block);
+
+  return 0;
+}
+
+uint32_t aes::sub_word(uint32_t input) {
+  return ((edutls_aes_sbox[(uint8_t)(input >> 24)]) << 24) + ((edutls_aes_sbox[(uint8_t)(input >> 16)]) << 16) +
+         ((edutls_aes_sbox[(uint8_t)(input >> 8)]) << 8) + (edutls_aes_sbox[(uint8_t)(input >> 24)]);
+}
+void aes::map(uint8_t *output, uint8_t *input) {
+  size_t i = 0;
+  uint8_t map[16] = {0, 4, 8, 12, 1, 5, 9, 13, 2, 6, 10, 14, 3, 7, 11, 15};
+
+  for (i = 0; i < 16; i++) {
+    output[i] = input[map[i]];
+  }
+}

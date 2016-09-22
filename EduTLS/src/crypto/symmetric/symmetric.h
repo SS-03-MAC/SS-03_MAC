@@ -11,6 +11,7 @@
 ///
 //===----------------------------------------------------------------------===//
 
+#include <cstddef>
 #include <cstdint>
 
 #pragma once
@@ -22,6 +23,6 @@ protected:
 
 public:
   virtual symmetric *init(uint8_t *key, uint8_t key_size);
-  virtual int encrypt(uint8_t *output, uint8_t input);
-  virtual int decrypt(uint8_t *output, uint8_t input);
+  virtual int encrypt(uint8_t *output, uint8_t *input, size_t count);
+  virtual int decrypt(uint8_t *output, uint8_t *input, size_t count);
 };
