@@ -1,4 +1,4 @@
-//===-- EduTLS/src/crypto/symmetric/aes.h                 -------*- C++ -*-===//
+//===-- EduTLS/src/crypto/symmetric/aes.cpp               -------*- C++ -*-===//
 //
 //                     EduTLS - Transport Layer Security
 //
@@ -7,13 +7,14 @@
 //===----------------------------------------------------------------------===//
 ///
 /// \file
-/// This file contains the implementation of the AES class methods.
+/// This file contains the implementation of the AES class core methods.
 ///
 //===----------------------------------------------------------------------===//
 
 #include "aes.h"
 #include "../constants/aes.h"
 #include "symmetric.h"
+
 #include <cstddef>
 #include <cstdint>
 #include <exception>
@@ -84,7 +85,7 @@ int aes::encrypt(uint8_t *output, uint8_t *input, size_t count) {
 
   this->add_round_key(0);
 
-  for (i = 1; i < 14; i++) {
+  for (i = 1; i < this->rounds; i++) {
     this->sub_bytes();
     this->shift_rows();
     this->mix_columns();
@@ -93,7 +94,7 @@ int aes::encrypt(uint8_t *output, uint8_t *input, size_t count) {
 
   this->sub_bytes();
   this->shift_rows();
-  this->add_round_key(14);
+  this->add_round_key(this->rounds);
 
   this->map(output, this->block);
 
@@ -109,9 +110,9 @@ int aes::decrypt(uint8_t *output, uint8_t *input, size_t count) {
 
   this->map(this->block, input);
 
-  this->add_round_key(14);
+  this->add_round_key(this->rounds);
 
-  for (i = 13; i > 0; i--) {
+  for (i = this->rounds - 1; i > 0; i--) {
     this->inverse_shift_rows();
     this->inverse_sub_bytes();
     this->add_round_key(i);
@@ -125,17 +126,4 @@ int aes::decrypt(uint8_t *output, uint8_t *input, size_t count) {
   this->map(output, this->block);
 
   return 0;
-}
-
-uint32_t aes::sub_word(uint32_t input) {
-  return ((edutls_aes_sbox[(uint8_t)(input >> 24)]) << 24) + ((edutls_aes_sbox[(uint8_t)(input >> 16)]) << 16) +
-         ((edutls_aes_sbox[(uint8_t)(input >> 8)]) << 8) + (edutls_aes_sbox[(uint8_t)(input >> 24)]);
-}
-void aes::map(uint8_t *output, uint8_t *input) {
-  size_t i = 0;
-  uint8_t map[16] = {0, 4, 8, 12, 1, 5, 9, 13, 2, 6, 10, 14, 3, 7, 11, 15};
-
-  for (i = 0; i < 16; i++) {
-    output[i] = input[map[i]];
-  }
 }

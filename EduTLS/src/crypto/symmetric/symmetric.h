@@ -22,7 +22,7 @@ protected:
   uint8_t block_size;
 
 public:
-  virtual symmetric *init(uint8_t *key, uint8_t key_size);
-  virtual int encrypt(uint8_t *output, uint8_t *input, size_t count);
-  virtual int decrypt(uint8_t *output, uint8_t *input, size_t count);
+  virtual symmetric *init(uint8_t *key, uint8_t key_size) = 0;
+  virtual int encrypt(uint8_t *output, uint8_t *input, size_t count) = 0;
+  virtual int decrypt(uint8_t *output, uint8_t *input, size_t count) = 0;
 };
