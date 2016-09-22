@@ -22,24 +22,30 @@ module Parser
   end
 
   #finds all YAML files in a directory and parses them into a hash of Objects,
-  #keys are file names, values are parsed YAML objects
-  def parse_directory dir_path
+  #keys are file names, values are parsed YAML objects.
+  #can and should initially be called with no second argument
+  def parse_directory base_dir, child=""
     result = {}
 
+    if base_dir[-1] != '/'
+      base_dir += '/'
+    end
+    dir_path = base_dir+child
     Dir.foreach(dir_path) do |item|
       #adds the proper file location to item
-      fixed_name = dir_path + item
+      full_name = dir_path + item
+      pretty_name = child + item
       #skips any other directories found, including '.' and '..'
       next if item == '.' or item == '..'
-      if File.directory?(fixed_name)
+      if File.directory?(full_name)
         #recursively calls parse_directory, adding more YAML to our hash
-        child_hash = parse_directory(fixed_name)
+        child_hash = parse_directory(base_dir, pretty_name)
         result = result.merge(child_hash)
       else
         #tries to parse file, if parse_file(item) returns nil, don't include value
-        parsed_yaml = parse_file(fixed_name)
+        parsed_yaml = parse_file(full_name)
         if !parsed_yaml.nil?
-          result[item] = parsed_yaml
+          result[pretty_name] = parsed_yaml
         end
       end
     end
