@@ -13,8 +13,7 @@
 
 #include <cstdint>
 
-#ifndef EDUTLS_SRC_CRYPTO_SYMMETRIC_SYMMETRIC_H__
-#define EDUTLS_SRC_CRYPTO_SYMMETRIC_SYMMETRIC_H__
+#pragma once
 
 class symmetric {
 private:
@@ -26,5 +25,3 @@ public:
   virtual int encrypt(uint8_t *output, uint8_t input);
   virtual int decrypt(uint8_t *output, uint8_t input);
 };
-
-#endif /* end of include guard: EDUTLS_SRC_CRYPTO_SYMMETRIC_SYMMETRIC_H__ */

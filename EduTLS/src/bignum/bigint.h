@@ -13,8 +13,6 @@
 //===----------------------------------------------------------------------===//
 
 #pragma once
-#ifndef BIGNUM_SRC_LIB_BIGINT_H__
-#define BIGNUM_SRC_LIB_BIGINT_H__
 
 #include <cstddef>
 #include <cstdint>
@@ -98,5 +96,3 @@ public:
   /// Remove leading zero bytes.
   void trim() { this->data->trim(); }
 };
-
-#endif /* end of include guard: BIGNUM_SRC_LIB_BIGINT_H__ */

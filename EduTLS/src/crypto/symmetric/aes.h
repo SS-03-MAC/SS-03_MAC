@@ -14,8 +14,7 @@
 
 #include "symmetric.h"
 
-#ifndef EDUTLS_SRC_CRYPTO_SYMMETRIC_AES_H__
-#define EDUTLS_SRC_CRYPTO_SYMMETRIC_AES_H__
+#pragma once
 
 const uint32_t edutls_aes_round_constants[30] = {
     0x00000000, 0x01000000, 0x02000000, 0x04000000, 0x08000000, 0x10000000, 0x20000000, 0x40000000,
@@ -160,5 +159,3 @@ private:
 public:
   aes();
 };
-
-#endif /* end of include guard: EDUTLS_SRC_CRYPTO_SYMMETRIC_AES_H__ */
