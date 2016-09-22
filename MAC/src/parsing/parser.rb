@@ -6,7 +6,7 @@ module Parser
     #checks if the file is valid YAML (includes JSON), if not, returns nil
     accepted_formats = [".yml", ".yaml", ".json"]
     ext = File.extname(path)
-    if !accepted_formats.contains? ext
+    if !accepted_formats.include? ext
       return nil
     end
 
