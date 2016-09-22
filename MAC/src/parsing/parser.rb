@@ -29,6 +29,12 @@ module Parser
     hash.merge(cur_dir_hash)
   end
 
+  def add_file_to_hash(base, path, hash)
+    parsed_yaml = parse_file(base + path)
+    hash[path] = parsed_yaml unless parsed_yaml.nil?
+    hash
+  end
+
   # finds all YAML files in a directory and parses them into a hash of Objects,
   # keys are file names, values are parsed YAML objects.
   # can and should initially be called with no second argument
@@ -43,8 +49,7 @@ module Parser
         result = add_dir_to_hash(base_dir, cur_dir + item + '/', result)
       else
         # tries to parse file, don't include if nil is returned
-        parsed_yaml = parse_file(base_dir + cur_dir + item)
-        result[cur_dir + item] = parsed_yaml unless parsed_yaml.nil?
+        result = add_file_to_hash(base_dir, cur_dir + item, result)
       end
     end
 
