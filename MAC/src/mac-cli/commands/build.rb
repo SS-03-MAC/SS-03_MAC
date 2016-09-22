@@ -11,11 +11,15 @@ module MacCLI
                                                       JavaScript models')
         parser.on('--no-cs', 'Does not update C# models')
         parser.on('--no-api', 'Does not update API definitions')
-        parser.on('-h', '--help', 'Shows this help message.') do
-          puts parser
-          exit
-        end
+        parser.on('-h', '--help', 'Shows this help message.') { run_help }
       end.parse!
+    end
+
+    private
+
+    def run_help
+      puts parser
+      exit
     end
   end
 end
