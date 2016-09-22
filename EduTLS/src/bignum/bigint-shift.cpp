@@ -29,7 +29,8 @@ void BigInt::left_shift(uint64_t amount) {
   uint8_t data_mask = (0xFF << shift);
 
   // Shifting by a multiple of 8 is linear in magnitude of multiple.
-  // Anything else requires iterating over the linked list using masks and shifting.
+  // Anything else requires iterating over the linked list using masks and
+  // shifting.
 
   this->data->trim();
 
@@ -75,7 +76,8 @@ void BigInt::right_shift(uint64_t amount) {
   uint8_t next_mask = 0xFF - data_mask;
 
   // Shifting by a multiple of 8 is linear in magnitude of multiple.
-  // Anything else requires iterating over the linked list using masks and shifting.
+  // Anything else requires iterating over the linked list using masks and
+  // shifting.
 
   this->data->trim();
 

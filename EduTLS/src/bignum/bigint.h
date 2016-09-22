@@ -33,7 +33,8 @@ public:
   /// Constructor initializes to a uint64_t value, setting negative if true.
   BigInt(uint64_t val, bool negative);
 
-  /// Constructor from a set of uint8_t data chunks; lowest index is most significant byte.
+  /// Constructor from a set of uint8_t data chunks; lowest index is most
+  /// significant byte.
   BigInt(bool negative, const uint8_t *val, uint64_t length);
 
   /// Copy constructor duplicates data from *val.
@@ -78,7 +79,8 @@ public:
   /// Performs division of $this / v$.
   BigInt *div(const BigInt *v) const;
 
-  /// Performs r = GCD(this, y), where r is the return value and a and b are Bezout's constants.
+  /// Performs r = GCD(this, y), where r is the return value and a and b are
+  /// Bezout's constants.
   BigInt *egcd(const BigInt *y, BigInt *a, BigInt *b) const;
 
   /// Modular inverse of this over the field m.
