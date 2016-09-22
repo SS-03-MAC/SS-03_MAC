@@ -6,4 +6,4 @@ done
 
 mkdir ../bin
 
-g++ ./client/main.cpp -Werror -Wall -Wextra -O0 -ggdb -o ../bin/edutls-client
+g++ ./client/main.cpp ./crypto/symmetric/aes.cpp -Werror -Wall -Wextra -O0 -ggdb -o ../bin/edutls-client
