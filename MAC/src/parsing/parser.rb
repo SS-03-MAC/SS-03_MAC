@@ -1,6 +1,6 @@
 require 'yaml'
 
-# This module allows for us to recusively check thorugh a directory and 
+# This module allows for us to recusively check thorugh a directory and
 # all its children, parsing all documents that are valid YAML (includeing JSON)
 module Parser
   # checks if a file could be YAML and parses it
@@ -42,9 +42,7 @@ module Parser
       else
         # tries to parse file, don't include if nil is returned
         parsed_yaml = parse_file(full_name)
-        unless parsed_yaml.nil?
-          result[pretty_name] = parsed_yaml
-        end
+        presult[pretty_name] = parsed_yaml unless parsed_yaml.nil?
       end
     end
 
