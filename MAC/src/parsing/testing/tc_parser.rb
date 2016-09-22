@@ -35,7 +35,7 @@ class TestParser < Test::Unit::TestCase
     all_parsed = Parser::parse_directory(path)
     assert_equal(all_parsed.length, 3)
     assert(all_parsed.has_key?("example_yaml.yml"))
-    assert(all_parsed.has_key?("yaml_dir/teammates.yaml"))
+    assert(all_parsed.has_key?("yaml_dir/teammates.yml"))
     assert(all_parsed.has_key?("yaml_dir/example_yaml.yml"))
   end
 

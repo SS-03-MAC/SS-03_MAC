@@ -30,6 +30,9 @@ module Parser
     if base_dir[-1] != '/'
       base_dir += '/'
     end
+    if child != "" and child[-1] != '/'
+      child += '/'
+    end
     dir_path = base_dir+child
     Dir.foreach(dir_path) do |item|
       #adds the proper file location to item
