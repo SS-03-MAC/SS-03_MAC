@@ -23,9 +23,10 @@
 
 class aes : public symmetric {
 private:
-  uint8_t size;
-  uint32_t *s_key;
+  uint32_t *key;
   uint8_t block[16];
+
+  size_t rounds;
 
   uint32_t sub_word(uint32_t input);
   void add_round_key(uint8_t round);
@@ -36,10 +37,15 @@ private:
   void inverse_shift_rows();
   void inverse_mix_columns();
 
-  aes(uint8_t *key, size_t size);
-
 public:
   aes *aes_128(uint8_t key[16]);
   aes *aes_192(uint8_t key[24]);
   aes *aes_256(uint8_t key[32]);
+
+  symmetric *init(uint8_t *key, uint8_t key_size);
+  int encrypt(uint8_t *output, uint8_t input);
+  int decrypt(uint8_t *output, uint8_t input);
+
+  aes(uint8_t *key, size_t size);
+  ~aes();
 };
