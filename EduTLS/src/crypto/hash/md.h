@@ -37,4 +37,6 @@ public:
   void finalize(uint8_t *output);
 
   virtual void init() = 0;
+
+  ~md() { delete[] this->block; };
 };
