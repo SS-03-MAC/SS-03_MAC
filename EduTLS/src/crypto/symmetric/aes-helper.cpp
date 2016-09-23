@@ -22,7 +22,7 @@
 
 uint32_t aes::sub_word(uint32_t input) {
   return ((edutls_aes_sbox[(uint8_t)(input >> 24)]) << 24) + ((edutls_aes_sbox[(uint8_t)(input >> 16)]) << 16) +
-         ((edutls_aes_sbox[(uint8_t)(input >> 8)]) << 8) + (edutls_aes_sbox[(uint8_t)(input >> 24)]);
+         ((edutls_aes_sbox[(uint8_t)(input >> 8)]) << 8) + (edutls_aes_sbox[(uint8_t)(input >> 0)]);
 }
 
 void aes::add_round_key(uint8_t round) {
@@ -130,4 +130,14 @@ void aes::map(uint8_t *output, uint8_t *input) {
   for (i = 0; i < 16; i++) {
     output[i] = input[map[i]];
   }
+}
+
+uint32_t* aes::__testing_copy_key() {
+  uint32_t *result = new uint32_t[4*(this->rounds+1)];
+  size_t block = 0;
+  for (block = 0; block < 4 * (this->rounds + 1); block++) {
+    result[block] = this->key[block];
+  }
+
+  return result;
 }

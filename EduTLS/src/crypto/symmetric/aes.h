@@ -21,7 +21,7 @@
 
 #pragma once
 
-class aes : public symmetric {
+class aes final : public symmetric {
 private:
   uint32_t *key;
   uint8_t block[16];
@@ -40,14 +40,15 @@ private:
   void map(uint8_t *output, uint8_t *input);
 
 public:
-  aes *aes_128(uint8_t key[16]);
-  aes *aes_192(uint8_t key[24]);
-  aes *aes_256(uint8_t key[32]);
+  static aes *aes_128(uint8_t key[16]);
+  static aes *aes_192(uint8_t key[24]);
+  static aes *aes_256(uint8_t key[32]);
 
-  symmetric *init(uint8_t *key, uint8_t key_size);
   int encrypt(uint8_t *output, uint8_t *input, size_t count);
   int decrypt(uint8_t *output, uint8_t *input, size_t count);
 
   aes(uint8_t *key, size_t size);
   ~aes();
+
+  uint32_t *__testing_copy_key();
 };
