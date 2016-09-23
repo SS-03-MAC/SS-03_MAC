@@ -1,7 +1,7 @@
 #!/bin/bash
 
 if [ "$(which clang-format)" != "" ]; then
-	clang-format -style="{BasedOnStyle: llvm, ColumnLimit: 120}" -i ./*.cc ./*.h
+	clang-format -style="{BasedOnStyle: llvm, ColumnLimit: 120}" -i ./*.cpp ./*.h
 fi
 
 rm -rf ./a.out.dSYM ./a.out
