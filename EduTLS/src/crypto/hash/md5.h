@@ -18,7 +18,7 @@
 #include <cstddef>
 #include <cstdint>
 
-class md5 final : md {
+class md5 final : public md {
 private:
   uint32_t s[4];
 

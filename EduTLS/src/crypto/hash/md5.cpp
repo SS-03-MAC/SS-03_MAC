@@ -131,7 +131,7 @@ void md5::digest(uint8_t *output) {
 }
 
 void md5::init() {
-  this->output_size = 32;
+  this->output_size = 16;
   this->le_padding = true;
   this->t_len = 0;
   this->b_len = 0;
