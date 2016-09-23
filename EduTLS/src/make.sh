@@ -8,4 +8,4 @@ if [ ! -d ../bin ]; then
 	mkdir ../bin
 fi
 
-g++ ./client/main.cpp ./crypto/symmetric/*.cpp -Werror -Wall -Wextra  -std=c++11 -O0 -ggdb -o ../bin/edutls-client
+g++ ./client/main.cpp ./crypto/*/*.cpp -Werror -Wall -Wextra  -std=c++11 -O0 -ggdb -o ../bin/edutls-client

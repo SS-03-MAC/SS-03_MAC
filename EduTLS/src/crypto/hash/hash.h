@@ -18,7 +18,6 @@
 
 class hash {
 public:
-  uint8_t input_size;
   uint8_t output_size;
 
   virtual void init() = 0;
