@@ -12,17 +12,17 @@ int pexec(const char *file_name, int pipefd[3], char **argv, char **envp) {
   int pipe_to_child[2];
   int pipe_from_child[2];
   int pipe_err_from_child[2];
-  if(pipe(pipe_to_child) || pipe(pipe_from_child) || pipe(pipe_err_from_child)) {
+  if (pipe(pipe_to_child) || pipe(pipe_from_child) || pipe(pipe_err_from_child)) {
     // Pipe failed
     return -1;
   }
 
   fork_status = fork();
-  if(fork_status == -1) {
+  if (fork_status == -1) {
     // Fork failed
     return -1;
   }
-  if(fork_status != 0) {
+  if (fork_status != 0) {
     // Parent
     close(pipe_to_child[0]);
     close(pipe_from_child[1]);
