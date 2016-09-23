@@ -17,11 +17,10 @@
 #pragma once
 
 class symmetric {
-protected:
+public:
   uint8_t key_size;
   uint8_t block_size;
 
-public:
   virtual int encrypt(uint8_t *output, uint8_t *input, size_t count) = 0;
   virtual int decrypt(uint8_t *output, uint8_t *input, size_t count) = 0;
 };

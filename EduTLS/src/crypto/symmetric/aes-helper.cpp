@@ -132,8 +132,8 @@ void aes::map(uint8_t *output, uint8_t *input) {
   }
 }
 
-uint32_t* aes::__testing_copy_key() {
-  uint32_t *result = new uint32_t[4*(this->rounds+1)];
+uint32_t *aes::__testing_copy_key() {
+  uint32_t *result = new uint32_t[4 * (this->rounds + 1)];
   size_t block = 0;
   for (block = 0; block < 4 * (this->rounds + 1); block++) {
     result[block] = this->key[block];

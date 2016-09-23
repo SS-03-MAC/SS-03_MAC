@@ -17,9 +17,9 @@
 
 #include <cstddef>
 #include <cstdint>
+#include <cstdio>
 #include <exception>
 #include <iostream>
-#include <cstdio>
 
 aes::aes(uint8_t *key, size_t size) {
   size_t block;
@@ -27,9 +27,9 @@ aes::aes(uint8_t *key, size_t size) {
 
   this->block_size = 128;
   this->key_size = size / 4;
-  this->rounds = 12 + ((int)(size - 24))/4;
+  this->rounds = 12 + ((int)(size - 24)) / 4;
 
-  this->key = new uint32_t[4*(this->rounds + 1)];
+  this->key = new uint32_t[4 * (this->rounds + 1)];
 
   // Loop unrolled, switch variant of Figure 11
   switch (size) {
