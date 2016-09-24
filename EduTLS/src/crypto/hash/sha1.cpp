@@ -100,6 +100,8 @@ void sha1::init() {
   this->b_len = 0;
   this->b_max = 64;
 
+  this->block = new uint8_t[this->b_max];
+
   for (this->b_len = 0; this->b_len < this->b_max; this->b_len++) {
     this->block[this->b_len] = 0;
   }

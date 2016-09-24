@@ -1,5 +1,5 @@
 /*
- * MD5 test cases
+ * SHA1 test cases
  *
  * Copyright (C) 2016 Alexander Scheel
 */
