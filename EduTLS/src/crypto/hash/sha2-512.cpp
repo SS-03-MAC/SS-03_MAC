@@ -104,14 +104,14 @@ void sha2_512::core() {
 
 void sha2_512::digest(uint8_t *output) {
   for (this->b_len = 0; this->b_len < 8; this->b_len++) {
-    this->digest[(this->b_len * 8) + 0] = (uint8_t)(this->h[this->b_len] >> 56);
-    this->digest[(this->b_len * 8) + 1] = (uint8_t)(this->h[this->b_len] >> 48);
-    this->digest[(this->b_len * 8) + 2] = (uint8_t)(this->h[this->b_len] >> 42);
-    this->digest[(this->b_len * 8) + 3] = (uint8_t)(this->h[this->b_len] >> 32);
-    this->digest[(this->b_len * 8) + 4] = (uint8_t)(this->h[this->b_len] >> 24);
-    this->digest[(this->b_len * 8) + 5] = (uint8_t)(this->h[this->b_len] >> 16);
-    this->digest[(this->b_len * 8) + 6] = (uint8_t)(this->h[this->b_len] >> 8);
-    this->digest[(this->b_len * 8) + 7] = (uint8_t)(this->h[this->b_len] >> 0);
+    output[(this->b_len * 8) + 0] = (uint8_t)(this->h[this->b_len] >> 56);
+    output[(this->b_len * 8) + 1] = (uint8_t)(this->h[this->b_len] >> 48);
+    output[(this->b_len * 8) + 2] = (uint8_t)(this->h[this->b_len] >> 42);
+    output[(this->b_len * 8) + 3] = (uint8_t)(this->h[this->b_len] >> 32);
+    output[(this->b_len * 8) + 4] = (uint8_t)(this->h[this->b_len] >> 24);
+    output[(this->b_len * 8) + 5] = (uint8_t)(this->h[this->b_len] >> 16);
+    output[(this->b_len * 8) + 6] = (uint8_t)(this->h[this->b_len] >> 8);
+    output[(this->b_len * 8) + 7] = (uint8_t)(this->h[this->b_len] >> 0);
   }
 }
 

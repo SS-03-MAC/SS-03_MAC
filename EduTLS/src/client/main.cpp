@@ -4,6 +4,7 @@
 #include "../crypto/hash/sha1.h"
 #include "../crypto/hash/sha2-224.h"
 #include "../crypto/hash/sha2-256.h"
+#include "../crypto/hash/sha2-384.h"
 #include "../crypto/hash/sha2-512.h"
 #include "../crypto/symmetric/aes.h"
 #include "../crypto/symmetric/symmetric.h"
