@@ -1,4 +1,4 @@
-//===-- EduTLS/src/crypto/symmetric/aes.h                 -------*- C++ -*-===//
+//===-- EduTLS/src/crypto/constants/aes.h                 -------*- C++ -*-===//
 //
 //                     EduTLS - Transport Layer Security
 //
@@ -7,8 +7,7 @@
 //===----------------------------------------------------------------------===//
 ///
 /// \file
-/// This file contains the declaration of the AES class which is a specific
-/// implementation of the symmetric cipher class.
+/// This file contains the declaration of the AES cipher suite.
 ///
 //===----------------------------------------------------------------------===//
 
