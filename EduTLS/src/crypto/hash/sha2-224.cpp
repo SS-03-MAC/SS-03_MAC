@@ -7,7 +7,7 @@
 //===----------------------------------------------------------------------===//
 ///
 /// \file
-/// This file contains the implementation of sha2-224, an instance of a
+/// This file contains the implementation of SHA2-224, an instance of a
 /// Merkle–Damgård hash function.
 ///
 //===----------------------------------------------------------------------===//
