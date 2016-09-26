@@ -24,13 +24,13 @@ uint64_t sha2_512::ch(uint64_t x, uint64_t y, uint64_t z) { return (x & y) ^ ((~
 
 uint64_t sha2_512::mj(uint64_t x, uint64_t y, uint64_t z) { return (x & y) ^ (x & z) ^ (y & z); }
 
-uint64_t sha2_512::bsig0(uint64_t x) { return edutls_rotr32(x, 2) ^ edutls_rotr32(x, 13) ^ edutls_rotr32(x, 22); }
+uint64_t sha2_512::bsig0(uint64_t x) { return edutls_rotr64(x, 28) ^ edutls_rotr64(x, 34) ^ edutls_rotr64(x, 39); }
 
-uint64_t sha2_512::bsig1(uint64_t x) { return edutls_rotr32(x, 6) ^ edutls_rotr32(x, 11) ^ edutls_rotr32(x, 25); }
+uint64_t sha2_512::bsig1(uint64_t x) { return edutls_rotr64(x, 14) ^ edutls_rotr64(x, 18) ^ edutls_rotr64(x, 41); }
 
-uint64_t sha2_512::ssig0(uint64_t x) { return edutls_rotr32(x, 7) ^ edutls_rotr32(x, 18) ^ (x >> 3); }
+uint64_t sha2_512::ssig0(uint64_t x) { return edutls_rotr64(x, 1) ^ edutls_rotr64(x, 8) ^ (x >> 7); }
 
-uint64_t sha2_512::ssig1(uint64_t x) { return edutls_rotr32(x, 17) ^ edutls_rotr32(x, 19) ^ (x >> 10); }
+uint64_t sha2_512::ssig1(uint64_t x) { return edutls_rotr64(x, 19) ^ edutls_rotr64(x, 61) ^ (x >> 6); }
 
 void sha2_512::core() {
 
@@ -106,7 +106,7 @@ void sha2_512::digest(uint8_t *output) {
   for (this->b_len = 0; this->b_len < 8; this->b_len++) {
     output[(this->b_len * 8) + 0] = (uint8_t)(this->h[this->b_len] >> 56);
     output[(this->b_len * 8) + 1] = (uint8_t)(this->h[this->b_len] >> 48);
-    output[(this->b_len * 8) + 2] = (uint8_t)(this->h[this->b_len] >> 42);
+    output[(this->b_len * 8) + 2] = (uint8_t)(this->h[this->b_len] >> 40);
     output[(this->b_len * 8) + 3] = (uint8_t)(this->h[this->b_len] >> 32);
     output[(this->b_len * 8) + 4] = (uint8_t)(this->h[this->b_len] >> 24);
     output[(this->b_len * 8) + 5] = (uint8_t)(this->h[this->b_len] >> 16);
