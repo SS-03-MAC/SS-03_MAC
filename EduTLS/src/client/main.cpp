@@ -7,6 +7,7 @@
 #include "../crypto/hash/sha2-384.h"
 #include "../crypto/hash/sha2-512.h"
 #include "../crypto/symmetric/aes.h"
+#include "../crypto/symmetric/des.h"
 #include "../crypto/symmetric/symmetric.h"
 
 #include <cstdio>
