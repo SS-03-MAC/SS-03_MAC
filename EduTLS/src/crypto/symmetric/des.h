@@ -32,6 +32,9 @@ private:
   uint32_t f(uint32_t input, uint64_t key);
 
 public:
+  uint64_t encrypt(uint64_t input);
+  uint64_t decrypt(uint64_t input);
+
   int encrypt(uint8_t *output, uint8_t *input, size_t count);
   int decrypt(uint8_t *output, uint8_t *input, size_t count);
 
