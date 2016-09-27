@@ -38,6 +38,6 @@ public:
   int encrypt(uint8_t *output, uint8_t *input, size_t count);
   int decrypt(uint8_t *output, uint8_t *input, size_t count);
 
+  des(uint8_t *input, size_t count);
   des(uint64_t key);
-  ~des();
 };

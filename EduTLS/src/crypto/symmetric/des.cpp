@@ -44,6 +44,36 @@ des::des(uint64_t key) {
   this->choice_2_permute(&(this->skey[15]), C, D);
 }
 
+des::des(uint8_t* input, size_t count) {
+  if (count != 8) {
+    throw new std::invalid_argument("Invalid key size for DES.");
+  }
+
+  uint64_t key = (((uint64_t)input[0]) << 56) | (((uint64_t)input[1]) << 48) | (((uint64_t)input[2]) << 40) |
+                     (((uint64_t)input[3]) << 32) | (((uint64_t)input[4]) << 24) | (((uint64_t)input[5]) << 16) |
+                     (((uint64_t)input[6]) << 8) | (((uint64_t)input[7]) << 0);
+
+  size_t n = 0;
+  uint32_t C = 0;
+  uint32_t D = 0;
+
+  this->block_size = 64;
+
+  this->choice_1_permute(&C, &D, key);
+
+  C = edutls_rotl28(C, edutls_des_shift_sizes[0]);
+  D = edutls_rotl28(D, edutls_des_shift_sizes[0]);
+
+  for (n = 0; n < 15; n++) {
+    this->choice_2_permute(&(this->skey[n]), C, D);
+
+    C = edutls_rotl28(C, edutls_des_shift_sizes[n + 1]);
+    D = edutls_rotl28(D, edutls_des_shift_sizes[n + 1]);
+  }
+
+  this->choice_2_permute(&(this->skey[15]), C, D);
+}
+
 uint64_t des::encrypt(uint64_t input) {
   uint32_t left;
   uint32_t right;
@@ -109,7 +139,7 @@ int des::encrypt(uint8_t *output, uint8_t *input, size_t count) {
 
 int des::decrypt(uint8_t *output, uint8_t *input, size_t count) {
   if (count * 8 != block_size) {
-    throw new std::invalid_argument("Invalid input size for DES encryption.");
+    throw new std::invalid_argument("Invalid input size for DES decryption.");
   }
 
   uint64_t input64 = (((uint64_t)input[0]) << 56) | (((uint64_t)input[1]) << 48) | (((uint64_t)input[2]) << 40) |
