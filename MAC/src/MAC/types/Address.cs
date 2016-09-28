@@ -4,7 +4,7 @@ using System.Runtime.Serialization;
 
  namespace MAC.Types.User {
      /// <summary>
-     /// Stores and vaildates 
+     /// Stores and vaildates Phyiscal Address
      /// </summary>
      public class Address : BaseType {
         /// <summary>
