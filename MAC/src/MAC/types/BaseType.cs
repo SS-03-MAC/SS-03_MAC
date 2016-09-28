@@ -12,6 +12,11 @@ using System.Runtime.Serialization;
     public abstract class BaseType : IComparable<BaseType>, IEquitable<BaseType>,
                                      ISerializable
     {
+        /// <summary>
+        /// Stores what type of field in that database is need store the data
+        /// </summary>
+        public DatabaseFieldTypes DatabaseFieldType;
+        
     	public BaseType() { }
 
         //function to validate data for the given object is in the correct format
