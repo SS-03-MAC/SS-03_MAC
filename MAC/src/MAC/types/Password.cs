@@ -15,7 +15,7 @@ using System.Runtime.Serialization;
      /// </summary>
      /// <returns></returns>
      public bool Validate() {
-       return false;
+       throw new NotImplementedException();
      }
 
      /// <summary>
@@ -24,7 +24,7 @@ using System.Runtime.Serialization;
      /// <param name="other"></param>
      /// <returns></returns>
      public int CompareTo(BaseType other) {
-       return 0;
+       throw new NotImplementedException();
      }
 
      /// <summary>
@@ -32,7 +32,7 @@ using System.Runtime.Serialization;
      /// </summary>
      /// <returns></returns>
      public string ToString() {
-       return "";
+       throw new NotImplementedException();;
      }
 
      /// <summary>
@@ -41,7 +41,15 @@ using System.Runtime.Serialization;
      /// <param name="other"></param>
      /// <returns></returns>
      public int Equals(BaseType other) {
-       return 0;
+      throw new NotImplementedException();
      }
+
+    /// <summary>
+    /// Should a password be Serializatiable?
+    /// </summary>
+    /// <returns></returns>
+    public void GetObjectData(SerializationInfo info, StreamingContext cont {
+      throw new NotImplementedException();
+    }
    }
  }
