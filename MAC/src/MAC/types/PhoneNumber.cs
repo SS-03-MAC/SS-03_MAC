@@ -6,6 +6,7 @@ using System.Runtime.Serialization;
         /// <summary>
         /// Validates format of the number 
         /// Possiblely based on country code (e.g +1 for US)
+        /// Will stored as SQL date type varchar or char type
         /// </summary>
         /// <returns>If the phone number is valid</returns>
         public bool Validate() {
@@ -13,7 +14,7 @@ using System.Runtime.Serialization;
         }
 
         /// <summary>
-        /// Compare
+        /// Compare the phone nnumbers
         /// </summary>
         /// <param name="other"></param>
         /// <returns></returns>
@@ -31,7 +32,7 @@ using System.Runtime.Serialization;
         }
 
         /// <summary>
-        ///  Full phone number
+        ///  Full phone number as a string
         /// </summary>
         /// <returns></returns>
         public void GetObjectData(SerializationInfo info, StreamingContext cont {
