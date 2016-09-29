@@ -32,7 +32,7 @@ using System.Runtime.Serialization;
      /// </summary>
      /// <returns></returns>
      public string ToString() {
-       throw new NotImplementedException();;
+       throw new NotImplementedException();
      }
 
      /// <summary>
@@ -48,7 +48,7 @@ using System.Runtime.Serialization;
     /// Should a password be Serializatiable?
     /// </summary>
     /// <returns></returns>
-    public void GetObjectData(SerializationInfo info, StreamingContext cont {
+    public void GetObjectData(SerializationInfo info, StreamingContext cont) {
       throw new NotImplementedException();
     }
    }
