@@ -6,7 +6,7 @@ using System.Runtime.Serialization;
      /// <summary>
      /// Stores and vaildates 
      /// </summary>
-     public class User : BaseType {
+     public class Email : BaseType {
         /// <summary>
         /// This will check for:
         /// - Vaild email address (a simple regex will work here)
