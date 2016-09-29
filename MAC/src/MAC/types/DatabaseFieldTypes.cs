@@ -1,9 +1,9 @@
 namespace MAC.Types {
-    public DatabaseFieldTypes enum {
+    public enum DatabaseFieldTypes {
         nvarchar,
         date,
         datetime,
         time,
 
-    }
+    };
 }
