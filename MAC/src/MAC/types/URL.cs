@@ -2,7 +2,7 @@ using System;
 using System.Runtime.Serialization;
 
 
- namespace MAC.Types.User {
+ namespace MAC.Types.Internet {
      /// <summary>
      /// Stores and vaildates URLs
      /// Stored as SQL type varchar
