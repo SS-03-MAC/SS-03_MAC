@@ -9,7 +9,7 @@ using System.Runtime.Serialization;
         /// Will stored as SQL date type varchar or char type
         /// </summary>
         /// <returns>If the phone number is valid</returns>
-        public bool Validate() {
+        public override bool Validate() {
             throw new NotImplementedException();
         }
 
@@ -18,7 +18,7 @@ using System.Runtime.Serialization;
         /// </summary>
         /// <param name="other"></param>
         /// <returns></returns>
-        public int CompareTo(BaseType other) {
+        public override int CompareTo(BaseType other) {
             throw new NotImplementedException();
         }
 
@@ -27,7 +27,7 @@ using System.Runtime.Serialization;
         /// </summary>
         /// <param name="other"></param>
         /// <returns></returns>
-        public int Equals(BaseType other) {
+        public override int Equals(BaseType other) {
            throw new NotImplementedException();
         }
 
@@ -35,7 +35,7 @@ using System.Runtime.Serialization;
         ///  Full phone number as a string
         /// </summary>
         /// <returns></returns>
-        public void GetObjectData(SerializationInfo info, StreamingContext cont {
+        public override void GetObjectData(SerializationInfo info, StreamingContext cont) {
             throw new NotImplementedException();
         }
      }
