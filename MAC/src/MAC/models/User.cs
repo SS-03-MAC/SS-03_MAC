@@ -8,35 +8,35 @@ using System.Collections;
 /// </summary>
 public class User {
   /// <summary>
-  Database id
+  /// Database id
   /// </summary>
-  public long Id {get;}
+  public long Id { get; }
   /// <summary>
   /// A basic string field
   /// </summary>
   /// <returns></returns>
   [Required]
-  public string Email {get; set;}
+  public string Email { get; set; }
   /// <summary>
   /// On set will set PasswordDigest to the BCrypt Password
   /// </summary>
-  public virtual strng Password {get; set;}
+  public virtual strng Password { get; set; }
   /// <summary>
   /// How the Password is stored in the database
   /// </summary>
   /// <returns></returns>
-  public string PasswordDigest {get; set;}
+  public string PasswordDigest { get; set; }
   /// <summary>
   /// Built-in field
   /// </summary>
   /// <returns></returns>
-  public DateTime CreatedAt {get; set;}
+  public DateTime CreatedAt { get; set; }
   /// <summary>
   /// Built-in field
   /// </summary>
   /// <returns></returns>
-  public DateTime CreatedAt
-  public DateTime UpdatedAt {get; set;}
+  public DateTime CreatedAt { get; }
+  public DateTime UpdatedAt { get; }
 
 
   /// <summary>
