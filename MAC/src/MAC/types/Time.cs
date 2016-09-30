@@ -14,7 +14,7 @@ using System.Runtime.Serialization;
         /// Will check if the time is format can interpered as a time
         /// </summary>
         /// <returns></returns>
-        public bool Validate() {
+        public override bool Validate() {
             throw new NotImplementedException();
         }
 
@@ -23,7 +23,7 @@ using System.Runtime.Serialization;
         /// </summary>
         /// <param name="other"></param>
         /// <returns></returns>
-        public int CompareTo(BaseType other) {
+        public override int CompareTo(BaseType other) {
             throw new NotImplementedException();
         }
 
@@ -32,7 +32,7 @@ using System.Runtime.Serialization;
         /// </summary>
         /// <param name="other"></param>
         /// <returns></returns>
-        public int Equals(BaseType other) {
+        public override bool Equals(BaseType other) {
             throw new NotImplementedException();
         }
 
@@ -41,7 +41,7 @@ using System.Runtime.Serialization;
         /// </summary>
         /// <param name="info"></param>
         /// <param name="context"></param>
-        public void GetObjectData(SerializationInfo info, StreamingContext context) {
+        public override void GetObjectData(SerializationInfo info, StreamingContext context) {
             throw new NotImplementedException();
         }
      }
