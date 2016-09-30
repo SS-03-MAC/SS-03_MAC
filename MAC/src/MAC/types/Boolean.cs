@@ -30,7 +30,7 @@ using System.Runtime.Serialization;
         /// </summary>
         /// <param name="other"></param>
         /// <returns></returns>
-        public override int Equals(BaseType other) {
+        public override bool Equals(BaseType other) {
             throw new NotImplementedException();
         }
 
@@ -39,8 +39,9 @@ using System.Runtime.Serialization;
         /// </summary>
         /// <param name="info"></param>
         /// <param name="context"></param>
-        public override void GetObjectData(SerializationInfo info, StreamingContext context) {
+        public override void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
             throw new NotImplementedException();
         }
-     }
+    }
  }
