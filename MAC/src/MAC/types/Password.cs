@@ -14,7 +14,7 @@ using System.Runtime.Serialization;
      /// - Not blank
      /// </summary>
      /// <returns></returns>
-     public bool Validate() {
+     public override bool Validate() {
        throw new NotImplementedException();
      }
 
@@ -23,7 +23,7 @@ using System.Runtime.Serialization;
      /// </summary>
      /// <param name="other"></param>
      /// <returns></returns>
-     public int CompareTo(BaseType other) {
+     public override int CompareTo(BaseType other) {
        throw new NotImplementedException();
      }
 
@@ -31,7 +31,7 @@ using System.Runtime.Serialization;
      /// Returns the hashed password
      /// </summary>
      /// <returns></returns>
-     public string ToString() {
+     public override string ToString() {
        throw new NotImplementedException();
      }
 
@@ -40,7 +40,7 @@ using System.Runtime.Serialization;
      /// </summary>
      /// <param name="other"></param>
      /// <returns></returns>
-     public int Equals(BaseType other) {
+     public override bool Equals(BaseType other) {
       throw new NotImplementedException();
      }
 
@@ -48,7 +48,7 @@ using System.Runtime.Serialization;
     /// Should a password be Serializatiable?
     /// </summary>
     /// <returns></returns>
-    public void GetObjectData(SerializationInfo info, StreamingContext cont) {
+    public override void GetObjectData(SerializationInfo info, StreamingContext cont) {
       throw new NotImplementedException();
     }
    }
