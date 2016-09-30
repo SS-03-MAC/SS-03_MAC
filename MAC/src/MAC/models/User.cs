@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 
 /// <summary>
 ///   Screensketch: Matthew Burket
@@ -10,17 +11,17 @@ public class User {
   /// <summary>
   /// Database id
   /// </summary>
-  public long Id { get; }
+  public long? Id { get; }
   /// <summary>
   /// A basic string field
   /// </summary>
   /// <returns></returns>
-  [Required]
+  //[Required]
   public string Email { get; set; }
   /// <summary>
   /// On set will set PasswordDigest to the BCrypt Password
   /// </summary>
-  public virtual strng Password { get; set; }
+  public virtual string Password { get; set; }
   /// <summary>
   /// How the Password is stored in the database
   /// </summary>
@@ -35,7 +36,6 @@ public class User {
   /// Built-in field
   /// </summary>
   /// <returns></returns>
-  public DateTime CreatedAt { get; }
   public DateTime UpdatedAt { get; }
 
 
@@ -45,34 +45,44 @@ public class User {
   /// <param name="id"></param>
   /// <returns>Users</returns>
   public static User Get(long id) {
-    // SELECT
+        return null;
   }
 
-  public static List<Users> GetAll() {
-    // SELECT
+  public static List<User> GetAll() {
+        return null;
   }
 
-  public bool Save() {
-    if (Id == null) {
-      // INSERT
-      // Validate
-      // If Valid will update Id on model
-    } else {
-      // Valid
-      // UPDATE
+    public bool Save()
+    {
+        if (Id == null)
+        {
+            // INSERT
+            // Validate
+            // If Valid will update Id on model
+            return false;
+        }
+        else
+        {
+            // Valid
+            // UPDATE
+            return true;
+
+        }
     }
-  }
 
   public bool Delete() {
+        return false;
     // DELETE
   }
 
   public bool Valid() {
+        return false;
     // Runs Validations
     // Returns if all vaildtions passed
   }
 
   public List<string> GetValidationsErrors() {
-    // Gets Validation Errors
+        // Gets Validation Errors
+        return new List<string>();
   }
 }
