@@ -7,7 +7,7 @@ public abstract class BaseModel {
 
   }
 
-  public bool Save();
+  public abstract bool Save();
 
-  public bool Update();
+  public abstract bool Update();
 }
