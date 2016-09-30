@@ -27,7 +27,7 @@ using System.Runtime.Serialization;
         /// </summary>
         /// <param name="other"></param>
         /// <returns></returns>
-        public override int Equals(BaseType other) {
+        public override bool Equals(BaseType other) {
            throw new NotImplementedException();
         }
 
