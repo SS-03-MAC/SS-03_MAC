@@ -8,8 +8,8 @@ using System.Runtime.Serialization;
  * equitable, and serializable
  */
 
- namespace MAC.Types {
-    public abstract class BaseType : IComparable<BaseType>, IEquitable<BaseType>,
+namespace MAC.Types {
+    public abstract class BaseType : IComparable<BaseType>, IEquatable<BaseType>,
                                      ISerializable
     {
         /// <summary>
@@ -21,15 +21,15 @@ using System.Runtime.Serialization;
 
         //function to validate data for the given object is in the correct format
         //independantly inplemented by each child class
-        public bool Validate();
+        public abstract bool Validate();
 
         //function inherited from IComparable
-        public int CompareTo(BaseType other);
+        public abstract int CompareTo(BaseType other);
 
         //function inherited from IEquitable
-        public int Equals(BaseType other);
+        public abstract bool Equals(BaseType other);
 
         //function inherited from ISerializable
-        public void GetObjectData(SerializationInfo info, StreamingContext context);
+        public abstract void GetObjectData(SerializationInfo info, StreamingContext context);
     }
 }
