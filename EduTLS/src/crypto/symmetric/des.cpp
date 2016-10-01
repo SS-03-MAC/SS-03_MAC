@@ -44,14 +44,14 @@ des::des(uint64_t key) {
   this->choice_2_permute(&(this->skey[15]), C, D);
 }
 
-des::des(uint8_t* input, size_t count) {
+des::des(uint8_t *input, size_t count) {
   if (count != 8) {
     throw new std::invalid_argument("Invalid key size for DES.");
   }
 
   uint64_t key = (((uint64_t)input[0]) << 56) | (((uint64_t)input[1]) << 48) | (((uint64_t)input[2]) << 40) |
-                     (((uint64_t)input[3]) << 32) | (((uint64_t)input[4]) << 24) | (((uint64_t)input[5]) << 16) |
-                     (((uint64_t)input[6]) << 8) | (((uint64_t)input[7]) << 0);
+                 (((uint64_t)input[3]) << 32) | (((uint64_t)input[4]) << 24) | (((uint64_t)input[5]) << 16) |
+                 (((uint64_t)input[6]) << 8) | (((uint64_t)input[7]) << 0);
 
   size_t n = 0;
   uint32_t C = 0;
