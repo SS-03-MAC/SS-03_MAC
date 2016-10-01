@@ -47,3 +47,10 @@ static inline uint32_t edutls_rotr32(uint32_t input, uint8_t shift) {
 static inline uint64_t edutls_rotr64(uint64_t input, uint8_t shift) {
   return ((input << (64 - shift)) | (input >> shift));
 }
+
+static inline void edutls_xor(uint8_t *output, uint8_t *input, uint8_t *key, size_t input_length) {
+  size_t i = 0;
+  for (i = 0; i < input_length; i++) {
+    output[i] = input[i] ^ key[i];
+  }
+}
