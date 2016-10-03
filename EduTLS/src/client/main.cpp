@@ -1,3 +1,4 @@
+#include "../crypto/entropy.h"
 #include "../crypto/hash/hash.h"
 #include "../crypto/hash/md.h"
 #include "../crypto/hash/md5.h"
@@ -15,4 +16,43 @@
 
 #include <cstdio>
 
-int main() { printf("EOF\n"); }
+int main() {
+  uint8_t buffer[10];
+  uint8_t padded[15];
+  edutls_rand_bytes(buffer, 10);
+
+  printf("Entropy: ");
+  for (int i = 0; i < 10; i++) {
+    printf("%02x", buffer[i]);
+  }
+  printf("\n");
+
+  edutls_pad_pkcs1(padded, 15, buffer, 10, PKCS1_BT1);
+  printf("PKCS1.1: ");
+  for (int i = 0; i < 15; i++) {
+    printf("%02x", padded[i]);
+  }
+  printf("\n");
+
+  edutls_pad_pkcs1(padded, 15, buffer, 10, PKCS1_BT2);
+  printf("PKCS1.2: ");
+  for (int i = 0; i < 15; i++) {
+    printf("%02x", padded[i]);
+  }
+  printf("\n");
+
+  edutls_pad_pkcs7(padded, 15, buffer, 10);
+  printf("PKCS7:   ");
+  for (int i = 0; i < 15; i++) {
+    printf("%02x", padded[i]);
+  }
+  printf("\n");
+
+  bool result = edutls_unpad_pkcs7(buffer, 10, padded, 15);
+  printf("Valid? %d\n", result);
+  printf("UNPKCS7: ");
+  for (int i = 0; i < 10; i++) {
+    printf("%02x", buffer[i]);
+  }
+  printf("\n");
+}

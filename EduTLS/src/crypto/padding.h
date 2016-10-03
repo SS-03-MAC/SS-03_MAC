@@ -15,12 +15,16 @@
 #pragma once
 
 #include <cstdint>
+#include <cstdio>
+
+#define PKCS1_BT1 1
+#define PKCS1_BT2 2
 
 static inline size_t edutls_pad_pkcs7_size(size_t input_length, size_t pad_length) {
   return ((input_length / pad_length) + 1) * pad_length;
 }
 
-static inline void edutls_pad_pkcs7(uint8_t *output, uint8_t *input, size_t input_length, size_t pad_length) {
+static inline void edutls_pad_pkcs7(uint8_t *output, size_t pad_length, uint8_t *input, size_t input_length) {
   size_t i = 0;
   uint8_t pad_character = (uint8_t)(pad_length - (input_length % pad_length));
 
@@ -33,7 +37,7 @@ static inline void edutls_pad_pkcs7(uint8_t *output, uint8_t *input, size_t inpu
   }
 }
 
-static inline bool edutls_unpad_pkcs7(uint8_t *output, uint8_t *input, size_t input_length, size_t pad_length) {
+static inline bool edutls_unpad_pkcs7(uint8_t *output, size_t pad_length, uint8_t *input, size_t input_length) {
   size_t i = 0;
   uint8_t pad_character = input[input_length - 1];
   bool valid_padding = pad_character <= pad_length;
@@ -47,4 +51,38 @@ static inline bool edutls_unpad_pkcs7(uint8_t *output, uint8_t *input, size_t in
   }
 
   return valid_padding;
+}
+
+static inline void edutls_pad_pkcs1(uint8_t *output, size_t output_length, uint8_t *input, size_t input_length,
+                                    int pad_type) {
+  size_t i = 0;
+  size_t i_p = 0;
+
+  switch (pad_type) {
+  case PKCS1_BT1:
+    for (i = 0; i < output_length; i++) {
+      output[i] = 0xFF;
+    }
+    break;
+  case PKCS1_BT2:
+    edutls_rand_bytes(output, output_length);
+    for (i = 0; i < output_length; i++) {
+      if (output[i] == 0) {
+        output[i] = 1;
+      }
+    }
+    break;
+  default:
+    throw - 1;
+    break;
+  }
+
+  output[0] = 0;
+  output[1] = pad_type;
+  output[output_length - input_length - 1] = 0;
+  i = output_length - input_length;
+  for (i_p = 0; i_p < input_length && i < output_length; i_p++) {
+    output[i] = input[i_p];
+    i += 1;
+  }
 }
