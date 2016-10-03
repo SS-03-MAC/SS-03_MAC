@@ -2,27 +2,36 @@ using System;
 using System.Runtime.Serialization;
 
 
- namespace MAC.Types {
+ namespace MAC.Types {    
      /// <summary>
-     /// Stores and vaildates Phyiscal Address
+     /// Stores and vaildates Integers
      /// </summary>
      public class Integer : BaseType {
+        private int Data;
+
+
+        public Integer(int input) {
+            Data = input;
+        }
         /// <summary>
         /// This will check for:
-        /// - if is an intger
+        /// - if is an integer
         /// </summary>
         /// <returns></returns>
         public override bool Validate() {
-            throw new NotImplementedException();
+            return true;
         }
 
         /// <summary>
-        /// Compare the interger
+        /// Compare the integer
         /// </summary>
         /// <param name="other"></param>
         /// <returns></returns>
         public override int CompareTo(BaseType other) {
-            throw new NotImplementedException();
+            if(other is Integer) {
+                return this.Data - ((Integer)(other)).Data;
+            }
+            throw new ArgumentException();
         }
 
         /// <summary>
@@ -31,16 +40,18 @@ using System.Runtime.Serialization;
         /// <param name="other"></param>
         /// <returns></returns>
         public override bool Equals(BaseType other) {
-            throw new NotImplementedException();
+            return this.CompareTo(other) == 0;
         }
 
         /// <summary>
-        /// Should return the interger
+        /// Should return the integer
         /// </summary>
         /// <param name="info"></param>
         /// <param name="context"></param>
         public override void GetObjectData(SerializationInfo info, StreamingContext context) {
-            throw new NotImplementedException();
+            if (info == null)
+                throw new ArgumentNullException("info");
+            info.AddValue("Data", Data);
         }
      }
  }
