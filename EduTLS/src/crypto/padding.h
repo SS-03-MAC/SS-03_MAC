@@ -24,7 +24,7 @@ static inline size_t edutls_pad_pkcs7_size(size_t input_length, size_t pad_lengt
   return ((input_length / pad_length) + 1) * pad_length;
 }
 
-static inline void edutls_pad_pkcs7(uint8_t *output, size_t pad_length, uint8_t *input, size_t input_length) {
+static inline void edutls_pad_pkcs7(uint8_t *output, uint8_t *input, size_t input_length, size_t pad_length) {
   size_t i = 0;
   uint8_t pad_character = (uint8_t)(pad_length - (input_length % pad_length));
 
@@ -37,7 +37,7 @@ static inline void edutls_pad_pkcs7(uint8_t *output, size_t pad_length, uint8_t 
   }
 }
 
-static inline bool edutls_unpad_pkcs7(uint8_t *output, size_t pad_length, uint8_t *input, size_t input_length) {
+static inline bool edutls_unpad_pkcs7(uint8_t *output, uint8_t *input, size_t input_length, size_t pad_length) {
   size_t i = 0;
   uint8_t pad_character = input[input_length - 1];
   bool valid_padding = pad_character <= pad_length;
@@ -85,4 +85,48 @@ static inline void edutls_pad_pkcs1(uint8_t *output, size_t output_length, uint8
     output[i] = input[i_p];
     i += 1;
   }
+}
+
+static inline bool edutls_unpad_pkcs1(uint8_t *output, uint8_t *input, size_t input_length) {
+  bool valid_padding = true;
+  size_t i = 0;
+  size_t i_p = 0;
+
+  valid_padding = valid_padding && (input[0] == 0);
+  switch (input[1]) {
+  case PKCS1_BT1:
+    for (i = 2; i < input_length; i++) {
+      if (input[i] == 0) {
+        i_p = i + 1;
+        break;
+      }
+      valid_padding = valid_padding && (input[i] == 0xff);
+    }
+    break;
+  case PKCS1_BT2:
+    for (i = 2; i < input_length; i++) {
+      if (input[i] == 0) {
+        i_p = i + 1;
+        break;
+      }
+    }
+    break;
+  default:
+    valid_padding = false;
+    for (i = 2; i < input_length; i++) {
+      if (input[i] == 0) {
+        i_p = i + 1;
+        break;
+      }
+    }
+  }
+
+  i = 0;
+  while (i_p < input_length) {
+    output[i] = input[i_p];
+    i += 1;
+    i_p += 1;
+  }
+
+  return valid_padding;
 }

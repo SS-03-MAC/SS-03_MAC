@@ -34,6 +34,14 @@ int main() {
   }
   printf("\n");
 
+  bool result = edutls_unpad_pkcs1(buffer, padded, 15);
+  printf("UNPKCS1: ");
+  for (int i = 0; i < 10; i++) {
+    printf("%02x", buffer[i]);
+  }
+  printf("\n");
+  printf("Valid? %d\n\n", result);
+
   edutls_pad_pkcs1(padded, 15, buffer, 10, PKCS1_BT2);
   printf("PKCS1.2: ");
   for (int i = 0; i < 15; i++) {
@@ -41,18 +49,26 @@ int main() {
   }
   printf("\n");
 
-  edutls_pad_pkcs7(padded, 15, buffer, 10);
+  result = edutls_unpad_pkcs1(buffer, padded, 15);
+  printf("UNPKCS1: ");
+  for (int i = 0; i < 10; i++) {
+    printf("%02x", buffer[i]);
+  }
+  printf("\n");
+  printf("Valid? %d\n\n", result);
+
+  edutls_pad_pkcs7(padded, buffer, 10, 15);
   printf("PKCS7:   ");
   for (int i = 0; i < 15; i++) {
     printf("%02x", padded[i]);
   }
-  printf("\n");
+  printf("\n\n");
 
-  bool result = edutls_unpad_pkcs7(buffer, 10, padded, 15);
-  printf("Valid? %d\n", result);
+  result = edutls_unpad_pkcs7(buffer, padded, 15, 15);
   printf("UNPKCS7: ");
   for (int i = 0; i < 10; i++) {
     printf("%02x", buffer[i]);
   }
   printf("\n");
+  printf("Valid? %d\n\n", result);
 }
