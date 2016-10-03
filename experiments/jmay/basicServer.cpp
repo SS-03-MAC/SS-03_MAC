@@ -5,6 +5,7 @@
 #include <iostream>
 #include <unistd.h>
 #include <cstring>
+#include <sys/socket.h>
 #include "pexec.h"
 #include "TcpServer.h"
 
@@ -27,12 +28,28 @@ int main(int argc, char *argv[]) {
 #pragma clang diagnostic pop
 
 int connectClient(int clientFd) {
-  char buf[1024];
-  ssize_t r;
-  r = read(clientFd, buf, sizeof(buf));
-  buf[r] = '\0';
-  std::cout << buf << std::endl;
-  const char *out = "HTTP/1.1 200 OK\r\n\r\nHello world\r\n";
-  write(clientFd, out, strlen(out));
-  close(clientFd);
+  int f = fork();
+  if (f == 0) {
+    char buf[10240];
+    int cgiPipes[3];
+    char *argv[] = {(char *) "echo", (char *) "<h1>Hello from <b>\"CGI\"</b></h1>", NULL};
+    ssize_t r;
+    // tcp in
+    r = read(clientFd, buf, sizeof(buf));
+    buf[r] = '\0';
+    std::cout << buf << std::endl;
+
+    // cgi out
+    pexec("echo", cgiPipes, argv, environ);
+    // cgi in
+    r = read(cgiPipes[0], buf, sizeof(buf) - 1);
+    buf[r] = '\0';
+
+    // tcp out
+    char const *header = "HTTP/1.1 200 OK\r\nContent-Type: text/html\r\n\r\n";
+    write(clientFd, header, strlen(header));
+    write(clientFd, buf, strlen(buf));
+    shutdown(clientFd, SHUT_RDWR);
+    exit(0);
+  }
 }
