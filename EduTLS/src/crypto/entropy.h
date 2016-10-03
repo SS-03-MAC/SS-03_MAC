@@ -63,7 +63,6 @@ static inline void edutls_rand_bytes(uint8_t *output, size_t count) {
 #endif
 
 #ifdef __linux__
-#include <cstdio.h>
 #include <errno.h>
 #include <exception>
 #include <linux/random.h>
