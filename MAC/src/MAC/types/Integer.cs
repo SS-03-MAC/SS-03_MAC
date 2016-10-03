@@ -2,22 +2,30 @@ using System;
 using System.Runtime.Serialization;
 
 
- namespace MAC.Types {    
-     /// <summary>
-     /// Stores and vaildates Integers
-     /// </summary>
-     public class Integer : BaseType {
-        private int Data;
+ namespace MAC.Types {
+    /// <summary>
+    /// Stores and vaildates Integers
+    /// </summary>
+    public class Integer : BaseType {
+        private int data;
 
-
+        /// <summary>
+        /// Constructs Integer from an int type
+        /// </summary>
+        /// <param name="input">the int to be stored</param>
         public Integer(int input) {
-            Data = input;
+            data = input;
         }
 
+        /// <summary>
+        /// Constructs Integer from SerializationInfo
+        /// </summary>
+        /// <param name="info"></param>
+        /// <param name="context"></param>
         public Integer(SerializationInfo info, StreamingContext context) {
             if (info == null)
                 throw new ArgumentNullException("info");
-            Data = (int)info.GetValue("Data", typeof(int));
+            data = (int)info.GetValue("data", typeof(int));
         }
         /// <summary>
         /// This will check for:
@@ -32,10 +40,11 @@ using System.Runtime.Serialization;
         /// Compare the integer
         /// </summary>
         /// <param name="other"></param>
-        /// <returns></returns>
+        /// <returns> A positive number if this > other, 0 if this == other, 
+        /// and a negative number if this < other.</returns>
         public override int CompareTo(BaseType other) {
             if(other is Integer) {
-                return this.Data - ((Integer)(other)).Data;
+                return this.data - ((Integer)(other)).data;
             }
             throw new ArgumentException();
         }
@@ -43,21 +52,30 @@ using System.Runtime.Serialization;
         /// <summary>
         /// Checks equality of the interger
         /// </summary>
-        /// <param name="other"></param>
-        /// <returns></returns>
+        /// <param name="other">another BaseType</param>
+        /// <returns>true if equal. Otherwise, false</returns>
         public override bool Equals(BaseType other) {
-            return this.CompareTo(other) == 0;
+            try {
+                return this.CompareTo(other) == 0;
+            } catch (ArgumentException e){
+                return false;
+            }
         }
 
         /// <summary>
-        /// Should return the integer
+        /// Serializes the Integer
         /// </summary>
         /// <param name="info"></param>
         /// <param name="context"></param>
         public override void GetObjectData(SerializationInfo info, StreamingContext context) {
             if (info == null)
                 throw new ArgumentNullException("info");
-            info.AddValue("Data", Data);
+            info.AddValue("data", data);
+        }
+
+        public int Value {
+            get { return data; }
+            set { data = value; }
         }
      }
  }
