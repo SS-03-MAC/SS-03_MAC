@@ -7,14 +7,15 @@ using System.Runtime.Serialization;
     /// Stores and vaildates Integers
     /// </summary>
     public class Integer : BaseType {
-        private int data;
+        private int Data;
 
         /// <summary>
         /// Constructs Integer from an int type
         /// </summary>
         /// <param name="input">the int to be stored</param>
         public Integer(int input) {
-            data = input;
+            DatabaseFieldType = DatabaseFieldTypes.int_t;
+            Data = input;
         }
 
         /// <summary>
@@ -25,7 +26,8 @@ using System.Runtime.Serialization;
         public Integer(SerializationInfo info, StreamingContext context) {
             if (info == null)
                 throw new ArgumentNullException("info");
-            data = (int)info.GetValue("data", typeof(int));
+            DatabaseFieldType = DatabaseFieldTypes.int_t;
+            Data = (int)info.GetValue("Data", typeof(int));
         }
         /// <summary>
         /// This will check for:
@@ -44,7 +46,7 @@ using System.Runtime.Serialization;
         /// and a negative number if this < other.</returns>
         public override int CompareTo(BaseType other) {
             if(other is Integer) {
-                return this.data - ((Integer)(other)).data;
+                return this.Data - ((Integer)(other)).Data;
             }
             throw new ArgumentException();
         }
@@ -70,12 +72,12 @@ using System.Runtime.Serialization;
         public override void GetObjectData(SerializationInfo info, StreamingContext context) {
             if (info == null)
                 throw new ArgumentNullException("info");
-            info.AddValue("data", data);
+            info.AddValue("Data", Data);
         }
 
         public int Value {
-            get { return data; }
-            set { data = value; }
+            get { return Data; }
+            set { Data = value; }
         }
      }
  }
