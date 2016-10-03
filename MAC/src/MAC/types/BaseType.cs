@@ -19,6 +19,8 @@ namespace MAC.Types {
         
     	public BaseType() { }
 
+        public BaseType(SerializationInfo info, StreamingContext context) { }
+
         //function to validate data for the given object is in the correct format
         //independantly inplemented by each child class
         public abstract bool Validate();

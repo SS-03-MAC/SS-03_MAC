@@ -13,6 +13,12 @@ using System.Runtime.Serialization;
         public Integer(int input) {
             Data = input;
         }
+
+        public Integer(SerializationInfo info, StreamingContext context) {
+            if (info == null)
+                throw new ArgumentNullException("info");
+            Data = (int)info.GetValue("Data", typeof(int));
+        }
         /// <summary>
         /// This will check for:
         /// - if is an integer
