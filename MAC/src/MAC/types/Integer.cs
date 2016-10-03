@@ -39,7 +39,7 @@ using System.Runtime.Serialization;
         /// <summary>
         /// Compare the integer
         /// </summary>
-        /// <param name="other"></param>
+        /// <param name="other">the BaseType object to compare with</param>
         /// <returns> A positive number if this > other, 0 if this == other, 
         /// and a negative number if this < other.</returns>
         public override int CompareTo(BaseType other) {
@@ -52,7 +52,7 @@ using System.Runtime.Serialization;
         /// <summary>
         /// Checks equality of the interger
         /// </summary>
-        /// <param name="other">another BaseType</param>
+        /// <param name="other">the BaseType object to check equality with</param>
         /// <returns>true if equal. Otherwise, false</returns>
         public override bool Equals(BaseType other) {
             try {
