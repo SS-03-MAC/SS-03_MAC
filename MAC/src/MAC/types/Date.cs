@@ -19,7 +19,7 @@ using System.Runtime.Serialization;
         /// <param name="input">the DateTime to be stored</param>
         public Date(System.DateTime input)
         {
-            Data = input;
+            Data = input.Date;
             DatabaseFieldType = DatabaseFieldTypes.time;
         }
 
@@ -32,7 +32,7 @@ using System.Runtime.Serialization;
         {
             if (info == null)
                 throw new ArgumentNullException("info");
-            Data = (System.DateTime)info.GetValue("Data", typeof(System.DateTime));
+            Data = ((System.DateTime)info.GetValue("Data", typeof(System.DateTime))).Date;
             DatabaseFieldType = DatabaseFieldTypes.time;
         }
 
