@@ -10,13 +10,25 @@ namespace MAC.Types
     /// </summary>
     public class Float : BaseType
     {
+        private double Data;
+
+        public Float(double input) {
+            Data = input;
+            DatabaseFieldType = DatabaseFieldTypes.float_t;
+        }
+
+        public Float(SerializationInfo info, StreamingContext context) {
+            if (info == null)
+                throw new ArgumentNullException("info");
+            Data = (double)info.GetValue("Data", typeof(double));
+            DatabaseFieldType = DatabaseFieldTypes.float_t;
+        }
         /// <summary>
         /// This will check if is a float
         /// </summary>
         /// <returns></returns>
-        public override bool Validate()
-        {
-            throw new NotImplementedException();
+        public override bool Validate() {
+            return true;
         }
 
         /// <summary>
@@ -24,9 +36,10 @@ namespace MAC.Types
         /// </summary>
         /// <param name="other"></param>
         /// <returns></returns>
-        public override int CompareTo(BaseType other)
-        {
-            throw new NotImplementedException();
+        public override int CompareTo(BaseType other) {
+            if (other is Float)
+                return (int)(this.Data - ((Float)other).Data);
+            throw new ArgumentException();
         }
 
         /// <summary>
@@ -34,9 +47,12 @@ namespace MAC.Types
         /// </summary>
         /// <param name="other"></param>
         /// <returns></returns>
-        public override bool Equals(BaseType other)
-        {
-            throw new NotImplementedException();
+        public override bool Equals(BaseType other) {
+            try {
+                return this.CompareTo(other) == 0;
+            } catch(ArgumentException) {
+                return false;
+            }
         }
 
         /// <summary>
@@ -46,7 +62,14 @@ namespace MAC.Types
         /// <param name="context"></param>
         public override void GetObjectData(SerializationInfo info, StreamingContext context)
         {
-            throw new NotImplementedException();
+            if (info == null)
+                throw new ArgumentException("info");
+            info.AddValue("Data", Data);
+        }
+
+        public double Value {
+            get { return Data; }
+            set { Data = value; }
         }
     }
 }
