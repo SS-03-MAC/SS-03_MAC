@@ -63,7 +63,7 @@ using System.Runtime.Serialization;
             try {
                 return this.CompareTo(other) == 0;
             }
-            catch (ArgumentException e) {
+            catch (ArgumentException) {
                 return false;
             }
         }

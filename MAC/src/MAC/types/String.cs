@@ -59,7 +59,7 @@ using System.Runtime.Serialization;
         public override bool Equals(BaseType other) {
             try {
                 return this.CompareTo(other) == 0;
-            } catch(ArgumentException e) {
+            } catch(ArgumentException) {
                 return false;
             }
         }
