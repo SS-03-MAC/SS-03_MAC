@@ -11,11 +11,20 @@ using System.Runtime.Serialization;
      public class DateTime : BaseType {
         private System.DateTime Data;
 
+        /// <summary>
+        /// Initializes a DateTime from a System.DateTime object
+        /// </summary>
+        /// <param name="input">the DateTime to be stored</param>
         public DateTime(System.DateTime input) {
             Data = input;
             DatabaseFieldType = DatabaseFieldTypes.datetime;
         }
 
+        /// <summary>
+        /// Initializes aDateTime from SerializationInfo
+        /// </summary>
+        /// <param name="info"></param>
+        /// <param name="context"></param>
         public DateTime(SerializationInfo info, StreamingContext context) {
             if (info == null)
                 throw new ArgumentNullException("info");
@@ -35,8 +44,8 @@ using System.Runtime.Serialization;
         /// <summary>
         /// Compare the time
         /// </summary>
-        /// <param name="other"></param>
-        /// <returns></returns>
+        /// <param name="other">the BaseType object to compare with</param>
+        /// <returns>the result of comparing System.DateTime</returns>
         public override int CompareTo(BaseType other) {
             if (other is DateTime)
                 return this.Data.CompareTo(((DateTime)other).Data);
@@ -46,8 +55,8 @@ using System.Runtime.Serialization;
         /// <summary>
         /// Checks equality of the time
         /// </summary>
-        /// <param name="other"></param>
-        /// <returns></returns>
+        /// <param name="other">The BaseType object to check equality with</param>
+        /// <returns>True if equal, False otherwise</returns>
         public override bool Equals(BaseType other) {
             try {
                 return this.CompareTo(other) == 0;
@@ -58,7 +67,7 @@ using System.Runtime.Serialization;
         }
 
         /// <summary>
-        /// Should return the string
+        /// Serializes the DateTime
         /// </summary>
         /// <param name="info"></param>
         /// <param name="context"></param>
