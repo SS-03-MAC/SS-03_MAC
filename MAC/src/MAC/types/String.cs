@@ -8,6 +8,19 @@ using System.Runtime.Serialization;
      /// Stored as a SQL nvarchar or varchar
      /// </summary>
      public class String : BaseType {
+        private string Data;
+
+        public String(string input) {
+            Data = input;
+            DatabaseFieldType = DatabaseFieldTypes.nvarchar;
+        }
+
+        public String(SerializationInfo info, StreamingContext context) {
+            if (info == null)
+                throw new ArgumentNullException("info");
+            Data = info.GetValue("Data", typeof(string));
+            DatabaseFieldType = DatabaseFieldTypes.int_t;
+        }
         /// <summary>
         /// This will check for:
         /// Length with if is specified.
@@ -15,7 +28,7 @@ using System.Runtime.Serialization;
         /// </summary>
         /// <returns></returns>
         public override bool Validate() {
-            throw new NotImplementedException();
+            return true;
         }
 
         /// <summary>
@@ -24,7 +37,9 @@ using System.Runtime.Serialization;
         /// <param name="other"></param>
         /// <returns></returns>
         public override int CompareTo(BaseType other) {
-            throw new NotImplementedException();
+            if (other is String)
+                return this.Data.CompareTo(((String)other).Data);
+            throw new ArgumentException();
         }
 
         /// <summary>
@@ -33,7 +48,11 @@ using System.Runtime.Serialization;
         /// <param name="other"></param>
         /// <returns></returns>
         public override bool Equals(BaseType other) {
-            throw new NotImplementedException();
+            try {
+                return this.CompareTo(other) == 0;
+            } catch(ArgumentException e) {
+                return false;
+            }
         }
 
         /// <summary>
@@ -42,7 +61,14 @@ using System.Runtime.Serialization;
         /// <param name="info"></param>
         /// <param name="context"></param>
         public override void GetObjectData(SerializationInfo info, StreamingContext context) {
-            throw new NotImplementedException();
+            if (info == null)
+                throw new ArgumentNullException("info");
+            info.AddValue("Data", Data);
+        }
+
+        public string Value {
+            get { return Data; }
+            set { Data = value; }
         }
      }
  }
