@@ -11,7 +11,7 @@ using System.Runtime.Serialization;
         private string Data;
 
         /// <summary>
-        /// Constructs String rom string type
+        /// Constructs String from string type
         /// </summary>
         /// <param name="input">the string to be stored</param>
         public String(string input) {
