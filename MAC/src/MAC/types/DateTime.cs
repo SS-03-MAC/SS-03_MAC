@@ -9,13 +9,27 @@ using System.Runtime.Serialization;
      /// eg 08/28/2016
      /// </summary>
      public class DateTime : BaseType {
+        private System.DateTime Data;
+
+        public DateTime(System.DateTime input) {
+            Data = input;
+            DatabaseFieldType = DatabaseFieldTypes.datetime;
+        }
+
+        public DateTime(SerializationInfo info, StreamingContext context) {
+            if (info == null)
+                throw new ArgumentNullException("info");
+            Data = (System.DateTime)info.GetValue("Data", typeof(System.DateTime));
+            DatabaseFieldType = DatabaseFieldTypes.datetime;
+        }
+
         /// <summary>
         /// This will check for:
         /// Will check if the time is format can interpered as a datetime
         /// </summary>
         /// <returns></returns>
         public override bool Validate() {
-            throw new NotImplementedException();
+            return true;
         }
 
         /// <summary>
@@ -24,7 +38,9 @@ using System.Runtime.Serialization;
         /// <param name="other"></param>
         /// <returns></returns>
         public override int CompareTo(BaseType other) {
-            throw new NotImplementedException();
+            if (other is DateTime)
+                return this.Data.CompareTo(((DateTime)other).Data);
+            throw new ArgumentException();
         }
 
         /// <summary>
@@ -33,7 +49,12 @@ using System.Runtime.Serialization;
         /// <param name="other"></param>
         /// <returns></returns>
         public override bool Equals(BaseType other) {
-            throw new NotImplementedException();
+            try {
+                return this.CompareTo(other) == 0;
+            }
+            catch (ArgumentException) {
+                return false;
+            }
         }
 
         /// <summary>
@@ -42,7 +63,14 @@ using System.Runtime.Serialization;
         /// <param name="info"></param>
         /// <param name="context"></param>
         public override void GetObjectData(SerializationInfo info, StreamingContext context) {
-            throw new NotImplementedException();
+            if (info == null)
+                throw new ArgumentNullException("info");
+            info.AddValue("Data", Data);
+        }
+
+        public System.DateTime Value {
+            get { return Data; }
+            set { Data = value; }
         }
      }
  }
