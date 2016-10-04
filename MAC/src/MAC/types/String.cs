@@ -10,15 +10,24 @@ using System.Runtime.Serialization;
      public class String : BaseType {
         private string Data;
 
+        /// <summary>
+        /// Constructs String rom string type
+        /// </summary>
+        /// <param name="input">the string to be stored</param>
         public String(string input) {
             Data = input;
             DatabaseFieldType = DatabaseFieldTypes.nvarchar;
         }
 
+        /// <summary>
+        /// Constructs String from SerializationInfo
+        /// </summary>
+        /// <param name="info"></param>
+        /// <param name="context"></param>
         public String(SerializationInfo info, StreamingContext context) {
             if (info == null)
                 throw new ArgumentNullException("info");
-            Data = info.GetValue("Data", typeof(string));
+            Data = (string)info.GetValue("Data", typeof(string));
             DatabaseFieldType = DatabaseFieldTypes.int_t;
         }
         /// <summary>
@@ -34,8 +43,8 @@ using System.Runtime.Serialization;
         /// <summary>
         /// Compare the strings
         /// </summary>
-        /// <param name="other"></param>
-        /// <returns></returns>
+        /// <param name="other">the BaseType object to compare to</param>
+        /// <returns>whatever string.compareTo gives us</returns>
         public override int CompareTo(BaseType other) {
             if (other is String)
                 return this.Data.CompareTo(((String)other).Data);
@@ -45,8 +54,8 @@ using System.Runtime.Serialization;
         /// <summary>
         /// Checks equality of the strings
         /// </summary>
-        /// <param name="other"></param>
-        /// <returns></returns>
+        /// <param name="other">the BaseType object to check equality with</param>
+        /// <returns>true is equal, false otherwise</returns>
         public override bool Equals(BaseType other) {
             try {
                 return this.CompareTo(other) == 0;
@@ -56,7 +65,7 @@ using System.Runtime.Serialization;
         }
 
         /// <summary>
-        /// Should return the string
+        /// Serializes the string
         /// </summary>
         /// <param name="info"></param>
         /// <param name="context"></param>
