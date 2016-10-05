@@ -43,7 +43,7 @@ using System.Runtime.Serialization;
         /// <returns></returns>
         public override bool Validate()
         {
-            return true;
+            return Data != null;
         }
 
         /// <summary>

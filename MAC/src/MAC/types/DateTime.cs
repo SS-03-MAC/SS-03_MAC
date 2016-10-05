@@ -38,7 +38,7 @@ using System.Runtime.Serialization;
         /// </summary>
         /// <returns></returns>
         public override bool Validate() {
-            return true;
+            return Data != null;
         }
 
         /// <summary>
