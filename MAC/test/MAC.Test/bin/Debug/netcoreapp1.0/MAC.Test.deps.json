@@ -1,7 +1,7 @@
 {
   "runtimeTarget": {
     "name": ".NETCoreApp,Version=v1.0",
-    "signature": "805a2eeeb694dc9f7102943ca12fd8ff8b1c82c3"
+    "signature": "9ce7886ed5b0a1915288a1b015fcd9e55a0c4eb6"
   },
   "compilationOptions": {},
   "targets": {
@@ -10,7 +10,8 @@
         "dependencies": {
           "System.Runtime.Serialization.Primitives": "4.1.1",
           "xunit": "2.1.0",
-          "dotnet-test-xunit": "2.2.0-preview2-build1029"
+          "dotnet-test-xunit": "2.2.0-preview2-build1029",
+          "MAC": "1.0.0"
         },
         "runtime": {
           "MAC.Test.dll": {}
@@ -155,6 +156,14 @@
           "lib/netstandard1.0/NuGet.Versioning.dll": {}
         }
       },
+      "System.Runtime.Serialization.Formatters/4.0.0-rc3-24212-01": {
+        "dependencies": {
+          "System.Runtime.Serialization.Primitives": "4.1.1"
+        },
+        "runtime": {
+          "lib/netstandard1.4/System.Runtime.Serialization.Formatters.dll": {}
+        }
+      },
       "System.Runtime.Serialization.Primitives/4.1.1": {
         "runtime": {
           "lib/netstandard1.3/System.Runtime.Serialization.Primitives.dll": {}
@@ -215,6 +224,15 @@
         },
         "runtime": {
           "lib/netstandard1.1/xunit.runner.utility.dotnet.dll": {}
+        }
+      },
+      "MAC/1.0.0": {
+        "dependencies": {
+          "System.Runtime.Serialization.Primitives": "4.1.1",
+          "System.Runtime.Serialization.Formatters": "4.0.0-rc3-24212-01"
+        },
+        "runtime": {
+          "MAC.dll": {}
         }
       }
     }
@@ -300,6 +318,11 @@
       "serviceable": true,
       "sha512": "sha512-Stok+SI5lWxOkTgZZM7jT4xuAZogm5+j85mKJeHSXb8o0OAbB+qDX9jkdM2wIEnjoR8R29J0nQYwk2Kl2lWFpA=="
     },
+    "System.Runtime.Serialization.Formatters/4.0.0-rc3-24212-01": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-bQ9S4JrOuI4pzIo6avnmwHQlEMEsBtBFA0u1GVDK2asYsB9X0hSF1oOIAt0bsqYZdYPi5b8A/1bud27tiLf8ZQ=="
+    },
     "System.Runtime.Serialization.Primitives/4.1.1": {
       "type": "package",
       "serviceable": true,
@@ -344,6 +367,11 @@
       "type": "package",
       "serviceable": true,
       "sha512": "sha512-lotqjLPg8NnjZHlRpj0Yj5TI3z/7hzK7+tb6R7qRAREDoH9P88EDCWJyy2xJh/R6PfbS9KYTaT/Z2ob9gx6PgQ=="
+    },
+    "MAC/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
     }
   }
 }
