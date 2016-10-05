@@ -83,6 +83,7 @@
 --reference:C:\Users\Matt\.nuget\packages\System.Runtime.InteropServices.RuntimeInformation\4.0.0\ref\netstandard1.1\System.Runtime.InteropServices.RuntimeInformation.dll
 --reference:C:\Users\Matt\.nuget\packages\System.Runtime.Loader\4.0.0\ref\netstandard1.5\System.Runtime.Loader.dll
 --reference:C:\Users\Matt\.nuget\packages\System.Runtime.Numerics\4.0.1\ref\netstandard1.1\System.Runtime.Numerics.dll
+--reference:C:\Users\Matt\.nuget\packages\System.Runtime.Serialization.Formatters\4.0.0-rc3-24212-01\ref\netstandard1.3\System.Runtime.Serialization.Formatters.dll
 --reference:C:\Users\Matt\.nuget\packages\System.Runtime.Serialization.Primitives\4.1.1\ref\netstandard1.3\System.Runtime.Serialization.Primitives.dll
 --reference:C:\Users\Matt\.nuget\packages\System.Security.Cryptography.Algorithms\4.2.0\ref\netstandard1.6\System.Security.Cryptography.Algorithms.dll
 --reference:C:\Users\Matt\.nuget\packages\System.Security.Cryptography.Encoding\4.0.0\ref\netstandard1.3\System.Security.Cryptography.Encoding.dll
@@ -108,4 +109,7 @@
 --reference:C:\Users\Matt\.nuget\packages\xunit.extensibility.execution\2.1.0\lib\dotnet\xunit.execution.dotnet.dll
 --reference:C:\Users\Matt\.nuget\packages\xunit.runner.reporters\2.2.0-beta2-build3300\lib\netstandard1.1\xunit.runner.reporters.dotnet.dll
 --reference:C:\Users\Matt\.nuget\packages\xunit.runner.utility\2.2.0-beta2-build3300\lib\netstandard1.1\xunit.runner.utility.dotnet.dll
+--reference:C:\Users\Matt\cs309\mac\SS-03_MAC\MAC\src\MAC\bin\Debug\netcoreapp1.0\MAC.dll
 C:\Users\Matt\cs309\mac\SS-03_MAC\MAC\test\MAC.Test\Tests.cs
+C:\Users\Matt\cs309\mac\SS-03_MAC\MAC\test\MAC.Test\Types\StringTests.cs
+C:\Users\Matt\cs309\mac\SS-03_MAC\MAC\test\MAC.Test\Types\TimeTest.cs
