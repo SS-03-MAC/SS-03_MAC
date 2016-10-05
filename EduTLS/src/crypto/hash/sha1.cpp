@@ -52,8 +52,8 @@ void sha1::core() {
 
   // Message has to be processed as a big endian integer
   for (t = 0; t < 16; t++) {
-    w[t] = (((uint32_t) this->block[t * 4 + 0]) << 24) | (((uint32_t) this->block[t * 4 + 1]) << 16) |
-           (((uint32_t) this->block[t * 4 + 2]) << 8) | (((uint32_t) this->block[t * 4 + 3]) << 0);
+    w[t] = (((uint32_t)this->block[t * 4 + 0]) << 24) | (((uint32_t)this->block[t * 4 + 1]) << 16) |
+           (((uint32_t)this->block[t * 4 + 2]) << 8) | (((uint32_t)this->block[t * 4 + 3]) << 0);
   }
 
   for (t = 16; t < 80; t++) {
