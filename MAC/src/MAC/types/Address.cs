@@ -43,5 +43,9 @@ using System.Runtime.Serialization;
             throw new NotImplementedException();
         }
 
+        public override string ToString()
+        {
+            throw new NotImplementedException();
+        }
     }
  }
