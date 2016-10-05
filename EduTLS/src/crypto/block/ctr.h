@@ -30,22 +30,23 @@ public:
     uint64_t counter = 0;
     uint8_t key[this->cipher->block_size / 8];
     size_t i = 0;
+    size_t i_p = 0;
 
     for (i = 0; i < this->cipher->block_size / 16; i++) {
       key[i] = this->nonce[i];
     }
 
-    for (unsigned long i = 0; i < count; i += this->cipher->block_size / 8) {
+    for (i_p = 0; i_p < count; i_p += (this->cipher->block_size / 8)) {
       for (i = this->cipher->block_size / 16; i < this->cipher->block_size / 8; i++) {
         key[i] = count >> (((this->cipher->block_size / 16) * 4) - ((i - this->cipher->block_size / 16 + 1) * 8));
       }
 
       this->cipher->encrypt(keystream, key, this->cipher->block_size / 8);
 
-      if ((this->cipher->block_size / 8) + i < count) {
+      if ((this->cipher->block_size / 8) + i_p < count) {
         edutls_xor(output, input, keystream, this->cipher->block_size / 8);
       } else {
-        edutls_xor(output, input, keystream, count - i);
+        edutls_xor(output, input, keystream, count - i_p);
       }
 
       output += this->cipher->block_size / 8;
