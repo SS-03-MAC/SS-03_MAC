@@ -28,7 +28,7 @@ using System.Runtime.Serialization;
             if (info == null)
                 throw new ArgumentNullException("info");
             Data = (string)info.GetValue("Data", typeof(string));
-            DatabaseFieldType = DatabaseFieldTypes.int_t;
+            DatabaseFieldType = DatabaseFieldTypes.nvarchar;
         }
         /// <summary>
         /// This will check for:
