@@ -1,7 +1,7 @@
 {
   "runtimeOptions": {
     "additionalProbingPaths": [
-      "/home/mburket/.nuget/packages"
+      "C:\\Users\\Matt\\.nuget\\packages"
     ]
   }
 }
