@@ -94,5 +94,9 @@ namespace MAC.Types
             get { return Data; }
             set { Data = value; }
         }
+
+        public override string ToString() {
+            return Data.ToString();
+        }
     }
 }
