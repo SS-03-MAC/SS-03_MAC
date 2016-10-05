@@ -58,10 +58,5 @@ using System.Runtime.Serialization;
         public bool IsIPv6() {
             return false;
         }
-
-        public override string ToString()
-        {
-            throw new NotImplementedException();
-        }
-    }
+     }
  }

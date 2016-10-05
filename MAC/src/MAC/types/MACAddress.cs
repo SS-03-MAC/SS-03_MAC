@@ -48,10 +48,5 @@ namespace MAC.Types.Internet
         {
             throw new NotImplementedException();
         }
-
-        public override string ToString()
-        {
-            throw new NotImplementedException();
-        }
     }
 }

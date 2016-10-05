@@ -42,10 +42,5 @@ using System.Runtime.Serialization;
         public override void GetObjectData(SerializationInfo info, StreamingContext context) {
             throw new NotImplementedException();
         }
-
-        public override string ToString()
-        {
-            throw new NotImplementedException();
-        }
-    }
+     }
  }

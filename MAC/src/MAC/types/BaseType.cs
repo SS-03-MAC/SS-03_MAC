@@ -61,6 +61,6 @@ namespace MAC.Types {
         /// String respention of the string object
         /// </summary>
         /// <returns>A end-user safe represention of the type</returns>
-        public abstract override string ToString();
+        public abstract string ToString();
     }
 }
