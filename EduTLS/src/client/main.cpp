@@ -11,6 +11,7 @@
 #include "../crypto/symmetric/des.h"
 #include "../crypto/symmetric/rc4.h"
 #include "../crypto/symmetric/symmetric.h"
+#include "../crypto/block/ecb.h"
 
 #include <cstdio>
 
