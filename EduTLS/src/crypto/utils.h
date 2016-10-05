@@ -14,6 +14,7 @@
 
 #pragma once
 
+#include <cstddef>
 #include <cstdint>
 
 static inline uint16_t edutls_rotl16(uint16_t input, uint8_t shift) {
