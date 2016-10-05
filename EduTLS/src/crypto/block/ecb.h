@@ -30,9 +30,10 @@ public:
       throw new std::invalid_argument("Invalid count for ECB mode.");
     }
 
-    for (unsigned long i = 0; i < count / this->cipher->block_size; i++) {
-      this->cipher->encrypt(&output[(i * this->cipher->block_size)], &input[(i * this->cipher->block_size)],
-                            this->cipher->block_size);
+    for (unsigned long i = 0; i < count / (this->cipher->block_size / 8); i++) {
+      this->cipher->encrypt(output, input, this->cipher->block_size / 8);
+      output += this->cipher->block_size / 8;
+      input += this->cipher->block_size / 8;
     }
 
     return 0;
@@ -42,9 +43,10 @@ public:
       throw new std::invalid_argument("Invalid count for ECB mode.");
     }
 
-    for (unsigned long i = 0; i < count / this->cipher->block_size; i++) {
-      this->cipher->decrypt(&output[(i * this->cipher->block_size)], &input[(i * this->cipher->block_size)],
-                            this->cipher->block_size);
+    for (unsigned long i = 0; i < count / (this->cipher->block_size / 8); i++) {
+      this->cipher->decrypt(output, input, this->cipher->block_size / 8);
+      output += this->cipher->block_size / 8;
+      input += this->cipher->block_size / 8;
     }
 
     return 0;
