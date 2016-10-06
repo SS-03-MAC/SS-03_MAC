@@ -103,6 +103,12 @@ int test_aes256_avs_gfsbox() {
     for (size_t i = 0; i < 16; i++) {
       assert(output[i] == ciphertext[j][i]);
     }
+
+    a->decrypt(output, ciphertext[j], 16);
+
+    for (size_t i = 0; i < 16; i++) {
+      assert(output[i] == plaintext[j][i]);
+    }
   }
 
   delete a;
