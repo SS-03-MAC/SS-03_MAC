@@ -53,7 +53,7 @@ using System.Runtime.Serialization;
         /// <returns>the result of comparing System.DateTime</returns>
         public override int CompareTo(BaseType other)
         {
-            if (other is Time)
+            if (other is Date)
                 return this.Data.CompareTo(((Date)other).Data);
             throw new ArgumentException();
         }
