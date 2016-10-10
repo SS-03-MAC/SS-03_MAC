@@ -2,19 +2,28 @@ using System;
 using System.Runtime.Serialization;
 
 
- namespace MAC.Types.User {
-     /// <summary>
-     /// Stores and vaildates 
-     /// </summary>
-     public class Email : BaseType {
+namespace MAC.Types.User
+{
+    /// <summary>
+    /// Stores and vaildates 
+    /// </summary>
+    public class Email : BaseType
+    {
+        private string data;
         /// <summary>
         /// This will check for:
         /// - Vaild email address (a simple regex will work here)
         /// - 
         /// </summary>
         /// <returns></returns>
-        public override bool Validate() {
+        public override bool Validate()
+        {
             throw new NotImplementedException();
+        }
+
+        public Email(string email)
+        {
+            data = email;
         }
 
         /// <summary>
@@ -22,7 +31,8 @@ using System.Runtime.Serialization;
         /// </summary>
         /// <param name="other"></param>
         /// <returns></returns>
-        public override int CompareTo(BaseType other) {
+        public override int CompareTo(BaseType other)
+        {
             throw new NotImplementedException();
         }
 
@@ -31,7 +41,8 @@ using System.Runtime.Serialization;
         /// </summary>
         /// <param name="other"></param>
         /// <returns></returns>
-        public override bool Equals(BaseType other) {
+        public override bool Equals(BaseType other)
+        {
             throw new NotImplementedException();
         }
 
@@ -40,8 +51,14 @@ using System.Runtime.Serialization;
         /// </summary>
         /// <param name="info"></param>
         /// <param name="context"></param>
-        public override void GetObjectData(SerializationInfo info, StreamingContext context) {
+        public override void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
             throw new NotImplementedException();
         }
-     }
- }
+
+        public override string ToString()
+        {
+            throw new NotImplementedException();
+        }
+    }
+}

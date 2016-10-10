@@ -20,6 +20,7 @@ namespace MAC.Tests.Types
             Assert.Equal("apple", s.ToString());
         }
 
+        [Fact]
         public void CompareEqual()
         {
             MAC.Types.String s = new MAC.Types.String("apple");

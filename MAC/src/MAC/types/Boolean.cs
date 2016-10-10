@@ -2,19 +2,22 @@ using System;
 using System.Runtime.Serialization;
 
 
- namespace MAC.Types {
-     /// <summary>
-     /// Stores and vaildates boolean
-     /// Stored as SQL type bit
-     /// </summary>
-     public class Boolean : BaseType {
+namespace MAC.Types
+{
+    /// <summary>
+    /// Stores and vaildates boolean
+    /// Stored as SQL type bit
+    /// </summary>
+    public class Boolean : BaseType
+    {
         private bool Data;
 
         /// <summary>
         /// Initializes a Boolean from bool type
         /// </summary>
         /// <param name="input">the bool to be stored</param>
-        public Boolean(bool input) {
+        public Boolean(bool input)
+        {
             DatabaseFieldType = DatabaseFieldTypes.bit;
             Data = input;
         }
@@ -24,9 +27,12 @@ using System.Runtime.Serialization;
         /// </summary>
         /// <param name="info"></param>
         /// <param name="context"></param>
-        public Boolean(SerializationInfo info, StreamingContext context) {
+        public Boolean(SerializationInfo info, StreamingContext context)
+        {
             if (info == null)
+            {
                 throw new ArgumentNullException("info");
+            }
             DatabaseFieldType = DatabaseFieldTypes.bit;
             Data = (bool)info.GetValue("Data", typeof(bool));
         }
@@ -35,7 +41,8 @@ using System.Runtime.Serialization;
         /// This will check if is truely a boolean
         /// </summary>
         /// <returns></returns>
-        public override bool Validate() {
+        public override bool Validate()
+        {
             return true;
         }
 
@@ -63,11 +70,14 @@ using System.Runtime.Serialization;
         /// </summary>
         /// <param name="other">the BaseType object to check equality with</param>
         /// <returns>true if equal, otherwise false</returns>
-        public override bool Equals(BaseType other) {
-            try {
+        public override bool Equals(BaseType other)
+        {
+            try
+            {
                 return this.CompareTo(other) == 0;
             }
-            catch (ArgumentException) {
+            catch (ArgumentException)
+            {
                 return false;
             }
         }
@@ -77,19 +87,24 @@ using System.Runtime.Serialization;
         /// </summary>
         /// <param name="info"></param>
         /// <param name="context"></param>
-        public override void GetObjectData(SerializationInfo info, StreamingContext context) {
+        public override void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
             if (info == null)
+            {
                 throw new ArgumentNullException("info");
+            }
             info.AddValue("Data", Data);
         }
 
-        public bool Value {
+        public bool Value
+        {
             get { return Data; }
             set { Data = value; }
         }
 
-        public override string ToString() {
+        public override string ToString()
+        {
             return Data.ToString();
         }
     }
- }
+}

@@ -2,19 +2,22 @@ using System;
 using System.Runtime.Serialization;
 
 
- namespace MAC.Types {
-     /// <summary>
-     /// Stores and vaildates strings
-     /// Stored as a SQL nvarchar or varchar
-     /// </summary>
-     public class String : BaseType {
+namespace MAC.Types
+{
+    /// <summary>
+    /// Stores and vaildates strings
+    /// Stored as a SQL nvarchar or varchar
+    /// </summary>
+    public class String : BaseType
+    {
         private string Data;
 
         /// <summary>
         /// Constructs String from string type
         /// </summary>
         /// <param name="input">the string to be stored</param>
-        public String(string input) {
+        public String(string input)
+        {
             Data = input;
             DatabaseFieldType = DatabaseFieldTypes.nvarchar;
         }
@@ -24,9 +27,12 @@ using System.Runtime.Serialization;
         /// </summary>
         /// <param name="info"></param>
         /// <param name="context"></param>
-        public String(SerializationInfo info, StreamingContext context) {
+        public String(SerializationInfo info, StreamingContext context)
+        {
             if (info == null)
+            {
                 throw new ArgumentNullException("info");
+            }
             Data = (string)info.GetValue("Data", typeof(string));
             DatabaseFieldType = DatabaseFieldTypes.nvarchar;
         }
@@ -36,7 +42,8 @@ using System.Runtime.Serialization;
         /// Not sure how yet
         /// </summary>
         /// <returns></returns>
-        public override bool Validate() {
+        public override bool Validate()
+        {
             return Data != null;
         }
 
@@ -45,9 +52,12 @@ using System.Runtime.Serialization;
         /// </summary>
         /// <param name="other">the BaseType object to compare to</param>
         /// <returns>whatever string.compareTo gives us</returns>
-        public override int CompareTo(BaseType other) {
+        public override int CompareTo(BaseType other)
+        {
             if (other is String)
+            {
                 return this.Data.CompareTo(((String)other).Data);
+            }
             throw new ArgumentException();
         }
 
@@ -56,10 +66,14 @@ using System.Runtime.Serialization;
         /// </summary>
         /// <param name="other">the BaseType object to check equality with</param>
         /// <returns>true is equal, false otherwise</returns>
-        public override bool Equals(BaseType other) {
-            try {
-                return this.CompareTo(other) == 0;
-            } catch(ArgumentException) {
+        public override bool Equals(BaseType other)
+        {
+            try
+            {
+                return CompareTo(other) == 0;
+            }
+            catch (ArgumentException)
+            {
                 return false;
             }
         }
@@ -69,19 +83,24 @@ using System.Runtime.Serialization;
         /// </summary>
         /// <param name="info"></param>
         /// <param name="context"></param>
-        public override void GetObjectData(SerializationInfo info, StreamingContext context) {
+        public override void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
             if (info == null)
+            {
                 throw new ArgumentNullException("info");
+            }
             info.AddValue("Data", Data);
         }
 
-        public string Value {
+        public string Value
+        {
             get { return Data; }
             set { Data = value; }
         }
 
-        public override string ToString() {
+        public override string ToString()
+        {
             return Data;
         }
-     }
- }
+    }
+}

@@ -31,7 +31,9 @@ namespace MAC.Types
         public Currency(SerializationInfo info, StreamingContext context)
         {
             if (info == null)
+            {
                 throw new ArgumentNullException("info");
+            }
             DatabaseFieldType = DatabaseFieldTypes.money;
             Data = (decimal)info.GetValue("Data", typeof(decimal));
         }
@@ -55,7 +57,7 @@ namespace MAC.Types
         {
             if (other is Currency)
             {
-                return (int)(this.Data - ((Currency)(other)).Data);
+                return (int)(Data - ((Currency)(other)).Data);
             }
             throw new ArgumentException();
         }
@@ -69,7 +71,7 @@ namespace MAC.Types
         {
             try
             {
-                return this.CompareTo(other) == 0;
+                return CompareTo(other) == 0;
             }
             catch (ArgumentException)
             {
@@ -89,13 +91,21 @@ namespace MAC.Types
             info.AddValue("Data", Data);
         }
 
+        /// <summary>
+        /// Direct access to the data stored
+        /// </summary>
         public decimal Value
         {
             get { return Data; }
             set { Data = value; }
         }
 
-        public override string ToString() {
+        /// <summary>
+        /// Returns the currency
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
             return Data.ToString();
         }
     }

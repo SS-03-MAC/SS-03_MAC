@@ -2,17 +2,19 @@ using System;
 using System.Runtime.Serialization;
 
 
- namespace MAC.Types {
-     /// <summary>
-     /// Stores and vaildates dates
-     /// Stored as a SQL date
-     /// eg 08/28/2016
-     /// 
-     /// Stroed in C# as a System.DateTime object at time 00:00
-     /// </summary>
-     public class Date : BaseType {
+namespace MAC.Types
+{
+    /// <summary>
+    /// Stores and vaildates dates
+    /// Stored as a SQL date
+    /// eg 08/28/2016
+    /// 
+    /// Stroed in C# as a System.DateTime object at time 00:00
+    /// </summary>
+    public class Date : BaseType
+    {
         private System.DateTime Data;
-        
+
         /// <summary>
         /// Initializes a Date from a System.DateTime object
         /// </summary>
@@ -31,7 +33,9 @@ using System.Runtime.Serialization;
         public Date(SerializationInfo info, StreamingContext context)
         {
             if (info == null)
+            {
                 throw new ArgumentNullException("info");
+            }
             Data = ((System.DateTime)info.GetValue("Data", typeof(System.DateTime))).Date;
             DatabaseFieldType = DatabaseFieldTypes.time;
         }
@@ -40,7 +44,7 @@ using System.Runtime.Serialization;
         /// This will check for:
         /// Will check if the time is format can interpered as a datetime
         /// </summary>
-        /// <returns></returns>
+        /// <returns>If the Date stored is valid</returns>
         public override bool Validate()
         {
             return Data != null;
@@ -53,8 +57,10 @@ using System.Runtime.Serialization;
         /// <returns>the result of comparing System.DateTime</returns>
         public override int CompareTo(BaseType other)
         {
-            if (other is Time)
-                return this.Data.CompareTo(((Date)other).Data);
+            if (other is Date)
+            {
+                return Data.CompareTo(((Date)other).Data);
+            }
             throw new ArgumentException();
         }
 
@@ -67,7 +73,7 @@ using System.Runtime.Serialization;
         {
             try
             {
-                return this.CompareTo(other) == 0;
+                return CompareTo(other) == 0;
             }
             catch (ArgumentException)
             {
@@ -83,18 +89,29 @@ using System.Runtime.Serialization;
         public override void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             if (info == null)
+            {
                 throw new ArgumentNullException("info");
+            }
             info.AddValue("Data", Data);
         }
 
+
+        /// <summary>
+        /// Direct access to the data stored
+        /// </summary>
         public System.DateTime Value
         {
             get { return Data; }
             set { Data = value; }
         }
 
-        public override string ToString() {
+        /// <summary>
+        /// Return hre data as string
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
             return Data.ToString();
         }
     }
- }
+}
