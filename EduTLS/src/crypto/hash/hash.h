@@ -1,0 +1,32 @@
+//===-- EduTLS/src/crypto/hash/hash.h                     -------*- C++ -*-===//
+//
+//                     EduTLS - Transport Layer Security
+//
+// This file is distributed under the MIT License. See LICENSE.TXT for details.
+//
+//===----------------------------------------------------------------------===//
+///
+/// \file
+/// This file contains the abstract declaration of the hash class.
+///
+//===----------------------------------------------------------------------===//
+
+#include <cstddef>
+#include <cstdint>
+
+#pragma once
+
+class hash {
+public:
+  uint8_t output_size;
+
+  virtual void init() = 0;
+  virtual void update(uint8_t *input, size_t count) = 0;
+  virtual void finalize(uint8_t *output) = 0;
+
+  inline void sum(uint8_t *output, uint8_t *input, size_t count) {
+    this->init();
+    this->update(input, count);
+    this->finalize(output);
+  };
+};

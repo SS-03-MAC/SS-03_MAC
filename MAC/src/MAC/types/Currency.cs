@@ -10,43 +10,103 @@ namespace MAC.Types
     /// </summary>
     public class Currency : BaseType
     {
+        private decimal Data;
+
         /// <summary>
-        /// This will check if it is a Currency
+        /// Constructs Currency from a decimal type
+        /// For now, we will just stroe amount, not currency type
+        /// </summary>
+        /// <param name="input">the decimal to be stored</param>
+        public Currency(decimal input)
+        {
+            DatabaseFieldType = DatabaseFieldTypes.money;
+            Data = input;
+        }
+
+        /// <summary>
+        /// Constructs Currency from SerializationInfo
+        /// </summary>
+        /// <param name="info"></param>
+        /// <param name="context"></param>
+        public Currency(SerializationInfo info, StreamingContext context)
+        {
+            if (info == null)
+            {
+                throw new ArgumentNullException("info");
+            }
+            DatabaseFieldType = DatabaseFieldTypes.money;
+            Data = (decimal)info.GetValue("Data", typeof(decimal));
+        }
+        /// <summary>
+        /// This will check for:
+        /// - if is an decimal
         /// </summary>
         /// <returns></returns>
         public override bool Validate()
         {
-            throw new NotImplementedException();
+            return true;
         }
 
         /// <summary>
-        /// Compare the Currency
+        /// Compare the decimal
         /// </summary>
-        /// <param name="other"></param>
-        /// <returns></returns>
+        /// <param name="other">the BaseType object to compare with</param>
+        /// <returns> A positive number if this > other, 0 if this == other, 
+        /// and a negative number if this < other.</returns>
         public override int CompareTo(BaseType other)
         {
-            throw new NotImplementedException();
+            if (other is Currency)
+            {
+                return (int)(Data - ((Currency)(other)).Data);
+            }
+            throw new ArgumentException();
         }
 
         /// <summary>
-        /// Checks equality of the Currency
+        /// Checks equality of the decimal
         /// </summary>
-        /// <param name="other"></param>
-        /// <returns></returns>
+        /// <param name="other">the BaseType object to check equality with</param>
+        /// <returns>true if equal. Otherwise, false</returns>
         public override bool Equals(BaseType other)
         {
-            throw new NotImplementedException();
+            try
+            {
+                return CompareTo(other) == 0;
+            }
+            catch (ArgumentException)
+            {
+                return false;
+            }
         }
 
         /// <summary>
-        /// Should return a string of the Currency
+        /// Serializes the Currency
         /// </summary>
         /// <param name="info"></param>
         /// <param name="context"></param>
         public override void GetObjectData(SerializationInfo info, StreamingContext context)
         {
-            throw new NotImplementedException();
+            if (info == null)
+                throw new ArgumentNullException("info");
+            info.AddValue("Data", Data);
+        }
+
+        /// <summary>
+        /// Direct access to the data stored
+        /// </summary>
+        public decimal Value
+        {
+            get { return Data; }
+            set { Data = value; }
+        }
+
+        /// <summary>
+        /// Returns the currency
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
+            return Data.ToString();
         }
     }
 }
