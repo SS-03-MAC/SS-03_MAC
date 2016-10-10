@@ -7,7 +7,8 @@ using System.Runtime.Serialization;
 /// all data can be fund easily, and to make sure data is comparable,
 // equitable, and serializable
 /// </summary>
-namespace MAC.Types {
+namespace MAC.Types
+{
     public abstract class BaseType : IComparable<BaseType>, IEquatable<BaseType>,
                                      ISerializable
     {
@@ -15,11 +16,11 @@ namespace MAC.Types {
         /// Stores what type of field in that database is need store the data
         /// </summary>
         public DatabaseFieldTypes DatabaseFieldType;
-        
+
         /// <summary>
         /// Default constructor
         /// </summary>
-    	public BaseType() { }
+        public BaseType() { }
 
         /// <summary>
         /// 

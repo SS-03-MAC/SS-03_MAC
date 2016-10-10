@@ -1,5 +1,7 @@
-namespace MAC.Types {
-    public enum DatabaseFieldTypes {
+namespace MAC.Types
+{
+    public enum DatabaseFieldTypes
+    {
         bigint,
         int_t,
         bit,

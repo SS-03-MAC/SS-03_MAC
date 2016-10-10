@@ -89,6 +89,19 @@ namespace MAC.Types.Internet
             info.AddValue("Data", Data);
         }
 
+        /// <summary>
+        /// Direct access to the 
+        /// </summary>
+        public Uri Value
+        {
+            get { return Data; }
+            set { Data = value; }
+        }
+
+        /// <summary>
+        /// Return the url as a string
+        /// </summary>
+        /// <returns></returns>
         public override string ToString()
         {
             if (Data != null)
