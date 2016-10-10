@@ -31,7 +31,9 @@ namespace MAC.Types
         public DateTime(SerializationInfo info, StreamingContext context)
         {
             if (info == null)
+            {
                 throw new ArgumentNullException("info");
+            }
             Data = (System.DateTime)info.GetValue("Data", typeof(System.DateTime));
             DatabaseFieldType = DatabaseFieldTypes.datetime;
         }
@@ -54,7 +56,9 @@ namespace MAC.Types
         public override int CompareTo(BaseType other)
         {
             if (other is DateTime)
+            {
                 return this.Data.CompareTo(((DateTime)other).Data);
+            }
             throw new ArgumentException();
         }
 
@@ -67,7 +71,7 @@ namespace MAC.Types
         {
             try
             {
-                return this.CompareTo(other) == 0;
+                return CompareTo(other) == 0;
             }
             catch (ArgumentException)
             {
@@ -83,16 +87,25 @@ namespace MAC.Types
         public override void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             if (info == null)
+            {
                 throw new ArgumentNullException("info");
+            }
             info.AddValue("Data", Data);
         }
 
+        /// <summary>
+        /// Access raw value stored
+        /// </summary>
         public System.DateTime Value
         {
             get { return Data; }
             set { Data = value; }
         }
 
+        /// <summary>
+        /// The stored returned as a string
+        /// </summary>
+        /// <returns></returns>
         public override string ToString()
         {
             return Data.ToString();

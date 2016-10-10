@@ -21,6 +21,10 @@ namespace MAC.Types.User
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        ///  Email
+        /// </summary>
+        /// <param name="email"></param>
         public Email(string email)
         {
             data = email;

@@ -102,7 +102,7 @@ namespace MAC.Types
         }
 
         /// <summary>
-        /// 
+        /// The value stored returned as a string
         /// </summary>
         /// <returns></returns>
         public override string ToString()

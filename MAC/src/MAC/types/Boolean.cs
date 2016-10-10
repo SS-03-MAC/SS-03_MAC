@@ -56,8 +56,8 @@ namespace MAC.Types
         {
             if (other is Boolean)
             {
-                if (!this.Data && ((Boolean)other).Data) return -1;
-                if (this.Data == ((Boolean)other).Data) return 0;
+                if (!Data && ((Boolean)other).Data) return -1;
+                if (Data == ((Boolean)other).Data) return 0;
                 else return -1;
             }
             throw new ArgumentException();
@@ -72,7 +72,7 @@ namespace MAC.Types
         {
             try
             {
-                return this.CompareTo(other) == 0;
+                return CompareTo(other) == 0;
             }
             catch (ArgumentException)
             {

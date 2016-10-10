@@ -57,7 +57,7 @@ namespace MAC.Types.Internet
         {
             return false;
         }
-
+        
         /// <summary>
         /// Checks if the stored address is IPv6
         /// </summary>

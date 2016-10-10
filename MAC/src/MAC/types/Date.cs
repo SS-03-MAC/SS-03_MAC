@@ -106,7 +106,7 @@ namespace MAC.Types
         }
 
         /// <summary>
-        /// Return hre data as string
+        /// Return the data as string
         /// </summary>
         /// <returns></returns>
         public override string ToString()
