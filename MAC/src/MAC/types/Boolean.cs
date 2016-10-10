@@ -47,8 +47,12 @@ using System.Runtime.Serialization;
         /// and 1 if this is true and other is false</returns>
         public override int CompareTo(BaseType other) {
             if(other is Boolean) {
-                if (!this.Data && ((Boolean)other).Data) return -1;
-                if (this.Data == ((Boolean)other).Data) return 0;
+                if (!this.Data && ((Boolean)other).Data) {
+                    return -1;
+                }
+                if (this.Data == ((Boolean)other).Data) {
+                    return 0;
+                }
                 else return -1;
             }
             throw new ArgumentException();
