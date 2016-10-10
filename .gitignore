@@ -41,6 +41,12 @@
 /test/tmp/
 /test/version_tmp/
 /tmp/
+bin/
+!.keep
+!*.keep
+!bin/.keep
+
+*.dSYM
 
 *.dSYM
 
