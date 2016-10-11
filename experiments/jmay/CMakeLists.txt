@@ -4,6 +4,8 @@ project(jmay)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++11")
 
+find_package(Yaml-Cpp REQUIRED)
+
 set(SOURCE_FILES Execute/executer.cpp)
 set(PEXEC_TEST_SRC pexec.cpp tests/pexec.cpp)
 
