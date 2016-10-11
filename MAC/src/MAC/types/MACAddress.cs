@@ -63,9 +63,9 @@ namespace MAC.Types.Internet
             int dashes = 0;
             int dots = 0;
 
-            for(int i = 0; i < data.Length(); i++)
+            for(int i = 0; i < data.Length; i++)
             {
-                if (validHex.Contains(data[i]))
+                if (validHex.Contains(data[i]+""))
                 {
                     hexValues++;
                 }
@@ -143,7 +143,7 @@ namespace MAC.Types.Internet
         {
             if(info == null)
             {
-                return new ArgumentNullException("info");
+                throw new ArgumentNullException("info");
             }
             info.AddValue("data", data);
         }
