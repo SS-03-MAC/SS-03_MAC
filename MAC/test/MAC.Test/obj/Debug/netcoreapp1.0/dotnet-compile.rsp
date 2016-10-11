@@ -110,6 +110,11 @@
 --reference:C:\Users\Matt\.nuget\packages\xunit.runner.reporters\2.2.0-beta2-build3300\lib\netstandard1.1\xunit.runner.reporters.dotnet.dll
 --reference:C:\Users\Matt\.nuget\packages\xunit.runner.utility\2.2.0-beta2-build3300\lib\netstandard1.1\xunit.runner.utility.dotnet.dll
 --reference:C:\Users\Matt\cs309\mac\SS-03_MAC\MAC\src\MAC\bin\Debug\netcoreapp1.0\MAC.dll
-C:\Users\Matt\cs309\mac\SS-03_MAC\MAC\test\MAC.Test\Tests.cs
+C:\Users\Matt\cs309\mac\SS-03_MAC\MAC\test\MAC.Test\Types\BooleanTest.cs
+C:\Users\Matt\cs309\mac\SS-03_MAC\MAC\test\MAC.Test\Types\CurrencyTests.cs
+C:\Users\Matt\cs309\mac\SS-03_MAC\MAC\test\MAC.Test\Types\DateTests.cs
+C:\Users\Matt\cs309\mac\SS-03_MAC\MAC\test\MAC.Test\Types\EmailTests.cs
+C:\Users\Matt\cs309\mac\SS-03_MAC\MAC\test\MAC.Test\Types\MACAddressTests.cs
 C:\Users\Matt\cs309\mac\SS-03_MAC\MAC\test\MAC.Test\Types\StringTests.cs
 C:\Users\Matt\cs309\mac\SS-03_MAC\MAC\test\MAC.Test\Types\TimeTest.cs
+C:\Users\Matt\cs309\mac\SS-03_MAC\MAC\test\MAC.Test\Types\UrlTests.cs

@@ -8,20 +8,20 @@ namespace MAC.Types.Internet
     /// Stores and vaildates MAC Adresses
     /// Stored as SQL type varchar
     /// </summary>
-    public class MACAdress : BaseType
+    public class MACAddress : BaseType
     {
         static string validHex = "0123456789ABCDEFabcdef";
         private string data;
         private long addressValue;
         
-        public MACAdress(string input)
+        public MACAddress(string input)
         {
             data = input.Trim();
             Validate();
-            addressValue = GetNumericalAddress(data);
+            //addressValue = GetNumericalAddress(data);
         }
 
-        public MACAdress(SerializationInfo info, StreamingContext context)
+        public MACAddress(SerializationInfo info, StreamingContext context)
         {
             if(info == null)
             {
@@ -110,9 +110,9 @@ namespace MAC.Types.Internet
         /// <returns></returns>
         public override int CompareTo(BaseType other)
         {
-            if(other is MACAdress)
+            if(other is MACAddress)
             {
-                return this.addressValue.CompareTo(((MACAdress)other).addressValue);
+                return this.addressValue.CompareTo(((MACAddress)other).addressValue);
             }
             throw new ArgumentException();
         }
@@ -126,7 +126,7 @@ namespace MAC.Types.Internet
         {
             try
             {
-                return this.addressValue == ((MACAdress)other).addressValue;
+                return this.addressValue == ((MACAddress)other).addressValue;
             }
             catch (Exception)
             {
