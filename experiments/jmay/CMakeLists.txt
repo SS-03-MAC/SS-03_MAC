@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.6)
 project(jmay)
 
+
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++11")
 
 set(SOURCE_FILES Execute/executer.cpp)
@@ -15,3 +16,7 @@ add_executable(client TCP/client.cpp)
 add_executable(server TCP/server.cpp)
 add_executable(basicServer basicServer.cpp pexec.cpp TcpServer.cpp)
 add_executable(yaml yaml-test/yaml.cpp)
+
+#link_directories(/usr/local/lib)
+#add_dependencies(yaml yaml-cpp)
+target_link_libraries(yaml /usr/local/lib/libyaml-cpp.a)
