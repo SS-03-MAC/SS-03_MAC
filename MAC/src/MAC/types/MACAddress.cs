@@ -17,8 +17,11 @@ namespace MAC.Types.Internet
         public MACAddress(string input)
         {
             data = input.Trim();
-            Validate();
-            //addressValue = GetNumericalAddress(data);
+            bool valid = Validate();
+            if (valid)
+            {
+                addressValue = GetNumericalAddress(data);
+            }
         }
 
         public MACAddress(SerializationInfo info, StreamingContext context)
@@ -44,7 +47,7 @@ namespace MAC.Types.Internet
         private long GetNumericalAddress(string data)
         {
             string hex = data.Replace(".", "").Replace("-", "").Replace(":", "");
-            return Int64.Parse(hex, System.Globalization.NumberStyles.HexNumber);
+            return Int64.Parse(hex.ToLower(), System.Globalization.NumberStyles.HexNumber);
         }
 
         /// <summary>
