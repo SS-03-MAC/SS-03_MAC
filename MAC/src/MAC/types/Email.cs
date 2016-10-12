@@ -1,43 +1,57 @@
 using System;
 using System.Runtime.Serialization;
+using System.Net.Mail;
+
+namespace MAC.Types.User {
+     /// <summary>
+     /// Stores and vaildates 
+     /// </summary>
+     public class Email : BaseType {
+        private string Data;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="email">An email address</param>
+        public Email(string email)
+        {
+            Data = email;
+        }
 
 
-namespace MAC.Types.User
-{
-    /// <summary>
-    /// Stores and vaildates 
-    /// </summary>
-    public class Email : BaseType
-    {
-        private string data;
         /// <summary>
         /// This will check for:
         /// - Vaild email address (a simple regex will work here)
-        /// - 
+        /// Regex for email valdations was taken from http://emailregex.com/
         /// </summary>
-        /// <returns></returns>
-        public override bool Validate()
-        {
-            throw new NotImplementedException();
-        }
-
-        /// <summary>
-        ///  Email
-        /// </summary>
-        /// <param name="email"></param>
-        public Email(string email)
-        {
-            data = email;
+        /// <returns>If the stored email is valid</returns>
+        public override bool Validate() {
+            if (string.IsNullOrWhiteSpace(Data))
+            {
+                return false;
+            }
+            try
+            {
+                MailAddress ma = new MailAddress(Data);
+            }
+            catch (FormatException ex)
+            {
+                return false;
+            }
+            return true;
         }
 
         /// <summary>
         /// Compare emails
-        /// </summary>
+        /// </summary> 
         /// <param name="other"></param>
         /// <returns></returns>
-        public override int CompareTo(BaseType other)
-        {
-            throw new NotImplementedException();
+        public override int CompareTo(BaseType other) {
+            if (other is Email)
+            {
+                return Data.CompareTo(((Email)other).Data);
+            }
+            throw new ArgumentException();
         }
 
         /// <summary>
@@ -45,9 +59,8 @@ namespace MAC.Types.User
         /// </summary>
         /// <param name="other"></param>
         /// <returns></returns>
-        public override bool Equals(BaseType other)
-        {
-            throw new NotImplementedException();
+        public override bool Equals(BaseType other) {
+            return CompareTo(other) == 0;
         }
 
         /// <summary>
@@ -55,14 +68,17 @@ namespace MAC.Types.User
         /// </summary>
         /// <param name="info"></param>
         /// <param name="context"></param>
-        public override void GetObjectData(SerializationInfo info, StreamingContext context)
-        {
+        public override void GetObjectData(SerializationInfo info, StreamingContext context) {
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// Returns the email address as a string
+        /// </summary>
+        /// <returns>Email address as a string</returns>
         public override string ToString()
         {
-            throw new NotImplementedException();
+            return Data;
         }
     }
-}
+ }
