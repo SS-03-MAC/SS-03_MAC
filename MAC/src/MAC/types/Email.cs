@@ -1,6 +1,6 @@
 using System;
 using System.Runtime.Serialization;
-using System.Text.RegularExpressions;
+using System.Net.Mail;
 
 namespace MAC.Types.User {
      /// <summary>
@@ -26,19 +26,30 @@ namespace MAC.Types.User {
         /// </summary>
         /// <returns>If the stored email is valid</returns>
         public override bool Validate() {
-            Regex EmailRegex = new Regex("[a - z0 - 9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?");
-            return EmailRegex.IsMatch(Data);
+            if (string.IsNullOrWhiteSpace(Data))
+            {
+                return false;
+            }
+            try
+            {
+                MailAddress ma = new MailAddress(Data);
+            }
+            catch (FormatException ex)
+            {
+                return false;
+            }
+            return true;
         }
 
         /// <summary>
         /// Compare emails
-        /// </summary>
+        /// </summary> 
         /// <param name="other"></param>
         /// <returns></returns>
         public override int CompareTo(BaseType other) {
             if (other is Email)
             {
-
+                return Data.CompareTo(((Email)other).Data);
             }
             throw new ArgumentException();
         }
@@ -49,7 +60,7 @@ namespace MAC.Types.User {
         /// <param name="other"></param>
         /// <returns></returns>
         public override bool Equals(BaseType other) {
-            throw new NotImplementedException();
+            return CompareTo(other) == 0;
         }
 
         /// <summary>
@@ -60,5 +71,14 @@ namespace MAC.Types.User {
         public override void GetObjectData(SerializationInfo info, StreamingContext context) {
             throw new NotImplementedException();
         }
-     }
+
+        /// <summary>
+        /// Returns the email address as a string
+        /// </summary>
+        /// <returns>Email address as a string</returns>
+        public override string ToString()
+        {
+            return Data;
+        }
+    }
  }
