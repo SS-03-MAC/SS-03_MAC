@@ -161,5 +161,5 @@ Session.vim
 /MAC/src/MAC/bin/Debug/netcoreapp1.0
 /MAC/src/MAC/obj/Debug/netcoreapp1.0
 obj
-
-MAC/test/MAC.Test/bin
+/MAC/test/MAC.Test/obj
+/MAC/test/MAC.Test/bin
