@@ -6,20 +6,11 @@
 
 int main(int argc, char *argv[]) {
   try {
-    YAML::Node config = YAML::LoadFile("config.yaml");
+    YAML::Node config = YAML::LoadFile("test.yaml");
 
-
-
-    //if (config["lastLogin"]) {
-        //std::cout << "Last logged in: " << config["lastLogin"].as<DateTime>() << "\n";
+    //for (int i = 0; i < config.size(); i++) {
+    std::cout << config["items"][0]["descrip"] << std::endl;
     //}
-
-    const std::string username = config["username"].as<std::string>();
-    const std::string password = config["password"].as<std::string>();
-
-
-    std::ofstream fout("config.yaml");
-    fout << config;
   } catch (const std::exception &ex) {
     std::cout << "error" << ex.what() << std::endl;
   }
