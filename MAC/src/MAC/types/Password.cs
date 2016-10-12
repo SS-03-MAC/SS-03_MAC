@@ -1,6 +1,6 @@
 using System;
 using System.Runtime.Serialization;
-using System.Security.Cryptography;
+using BCrypt.Net;
 
 namespace MAC.Types.User
 {
@@ -10,7 +10,7 @@ namespace MAC.Types.User
     /// </summary>
     public class Password : BaseType
     {
-        private string data;
+        private string Data;
         /// <summary>
         /// Validates the password with the following requirements:
         /// - 8 or 10 chars
@@ -19,12 +19,12 @@ namespace MAC.Types.User
         /// <returns></returns>
         public override bool Validate()
         {
-            throw new NotImplementedException();
+            return Data != null;
         }
 
         public Password(string password)
         {
-
+            Data = HashPassword(password);
         }
 
         /// <summary>
@@ -43,7 +43,7 @@ namespace MAC.Types.User
         /// <returns></returns>
         public override string ToString()
         {
-            throw new NotImplementedException();
+            return Data;
         }
 
         /// <summary>
@@ -72,7 +72,17 @@ namespace MAC.Types.User
         /// <returns></returns>
         private string HashPassword(string PlainTextPassword)
         {
-            return null;
+            return BCrypt.Net.BCrypt.HashPassword(PlainTextPassword);
+        }
+
+        /// <summary>
+        /// Verify the password
+        /// </summary>
+        /// <param name="PlainTextPassword"></param>
+        /// <returns></returns>
+        public bool VerifyPassword(string PlainTextPassword)
+        {
+            return BCrypt.Net.BCrypt.Verify(PlainTextPassword, Data);
         }
     }
 }
