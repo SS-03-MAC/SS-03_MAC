@@ -15,7 +15,6 @@ namespace MAC.Types.Internet
         /// Stores the url represented by the type
         /// </summary>
         private Uri Data;
-        private List<string> Eerrors;
         /// <summary>
         /// This will check if is a URL
         /// </summary>
@@ -26,11 +25,9 @@ namespace MAC.Types.Internet
             {
                 return false;
             }
-            if (!Data.IsAbsoluteUri)
-            {
-                return false;
-            }
-            return true;
+
+            return !Data.IsAbsoluteUri;
+
         }
 
         public Url(Uri uri)
