@@ -10,7 +10,7 @@ namespace MAC.Types
     /// </summary>
     public class String : BaseType
     {
-        private string Data;
+        protected string Data;
 
         /// <summary>
         /// Constructs String from string type
