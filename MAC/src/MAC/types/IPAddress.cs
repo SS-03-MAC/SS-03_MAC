@@ -23,6 +23,7 @@ namespace MAC.Types.Internet
         {
             Data = input;
             valid = Validate();
+            DatabaseFieldType = DatabaseFieldTypes.nvarchar;
         }
 
         /// <summary>
@@ -38,6 +39,7 @@ namespace MAC.Types.Internet
             Address = input;
             valid = true;
             Data = input.ToString();
+            DatabaseFieldType = DatabaseFieldTypes.nvarchar;
         }
 
         /// <summary>
@@ -53,6 +55,7 @@ namespace MAC.Types.Internet
             }
             Data = (string)info.GetValue("Data", typeof(string));
             valid = Validate();
+            DatabaseFieldType = DatabaseFieldTypes.nvarchar;
         }
 
         /// <summary>

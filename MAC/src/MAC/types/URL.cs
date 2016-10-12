@@ -50,9 +50,9 @@ namespace MAC.Types.Internet
         /// <returns></returns>
         public override int CompareTo(BaseType other)
         {
-            if(other is URL)
+            if(other is Url)
             {
-                return this.Data.ToString.CompareTo(((URL)other).Data.ToString());
+                return this.Data.ToString().CompareTo(((Url)other).Data.ToString());
             }
             throw new ArgumentException();
         }
