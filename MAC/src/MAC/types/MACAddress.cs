@@ -15,6 +15,10 @@ namespace MAC.Types.Internet
         private long addressValue;
         private bool valid;
         
+        /// <summary>
+        /// Initializes a MACAddress from an input string
+        /// </summary>
+        /// <param name="input">the string to use</param>
         public MACAddress(string input)
         {
             data = input.Trim();
@@ -25,6 +29,11 @@ namespace MAC.Types.Internet
             }
         }
 
+        /// <summary>
+        /// Initializes a MACAddress from SerializationInfo
+        /// </summary>
+        /// <param name="info"></param>
+        /// <param name="context"></param>
         public MACAddress(SerializationInfo info, StreamingContext context)
         {
             if(info == null)
@@ -111,7 +120,7 @@ namespace MAC.Types.Internet
         }
 
         /// <summary>
-        /// Compare the MAC Address
+        /// Compare the MAC Addresses by numerical value
         /// </summary>
         /// <param name="other"></param>
         /// <returns></returns>
@@ -129,7 +138,7 @@ namespace MAC.Types.Internet
         }
 
         /// <summary>
-        /// Checks equality of the MAC Address
+        /// Checks equality of the MAC Address by numerical value
         /// </summary>
         /// <param name="other"></param>
         /// <returns></returns>
@@ -146,7 +155,7 @@ namespace MAC.Types.Internet
         }
 
         /// <summary>
-        /// Should return a string of the MAC Address
+        /// Serializes the MAC Address
         /// </summary>
         /// <param name="info"></param>
         /// <param name="context"></param>
