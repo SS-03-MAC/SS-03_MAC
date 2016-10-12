@@ -13,11 +13,12 @@ namespace MAC.Types.Internet
         static string validHex = "0123456789ABCDEFabcdef";
         private string data;
         private long addressValue;
+        private bool valid;
         
         public MACAddress(string input)
         {
             data = input.Trim();
-            bool valid = Validate();
+            valid = Validate();
             if (valid)
             {
                 addressValue = GetNumericalAddress(data);
@@ -32,8 +33,11 @@ namespace MAC.Types.Internet
             }
             data = (string)info.GetValue("data", typeof(string));
             data = data.Trim();
-            Validate();
-            addressValue = GetNumericalAddress(data);
+            valid = Validate();
+            if (valid)
+            {
+                addressValue = GetNumericalAddress(data);
+            }
         }
 
         /// <summary>
@@ -115,6 +119,10 @@ namespace MAC.Types.Internet
         {
             if(other is MACAddress)
             {
+                if (!((MACAddress)other).valid)
+                {
+                    throw new ArgumentException("This is not a valid MAC Address");
+                }
                 return this.addressValue.CompareTo(((MACAddress)other).addressValue);
             }
             throw new ArgumentException();
@@ -165,13 +173,11 @@ namespace MAC.Types.Internet
             get { return data; }
             set
             {
-                string temp = data;
                 data = value;
-                if (!Validate())
+                valid = Validate();
+                if (valid)
                 {
-                    //not a valid MAC Address, puts the old one back in, throws Exception?
-                    data = temp;
-                    throw new ArgumentException(value + " is not a valid MAC Address");
+                    addressValue = GetNumericalAddress(data);
                 }
             }
         }
