@@ -7,7 +7,9 @@
   "dependencies": {
     "System.Runtime": "4.1.0",
     "System.Runtime.Serialization.Primitives": "4.1.1",
-      "System.Runtime.Serialization.Formatters": "4.0.0-rc3-24212-01"
+    "System.Runtime.Serialization.Formatters": "4.0.0-rc3-24212-01",
+    "BCrypt.Net-Core": "1.1.0",
+    "System.Net.Mail": "1.0.0-rtm-00002"
   },
   "frameworks": {
     "netcoreapp1.0": {
