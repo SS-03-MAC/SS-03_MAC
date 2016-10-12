@@ -11,7 +11,7 @@ namespace MAC.Types.Internet
     public class MACAddress : BaseType
     {
         static string validHex = "0123456789ABCDEFabcdef";
-        private string data;
+        private string Data;
         private long addressValue;
         private bool valid;
         
@@ -21,11 +21,12 @@ namespace MAC.Types.Internet
         /// <param name="input">the string to use</param>
         public MACAddress(string input)
         {
-            data = input.Trim();
+            Data = input.Trim();
             valid = Validate();
+            DatabaseFieldType = DatabaseFieldTypes.nvarchar;
             if (valid)
             {
-                addressValue = GetNumericalAddress(data);
+                addressValue = GetNumericalAddress(Data);
             }
         }
 
@@ -40,12 +41,13 @@ namespace MAC.Types.Internet
             {
                 throw new ArgumentNullException("info");
             }
-            data = (string)info.GetValue("data", typeof(string));
-            data = data.Trim();
+            DatabaseFieldType = DatabaseFieldTypes.nvarchar;
+            Data = (string)info.GetValue("Data", typeof(string));
+            Data = Data.Trim();
             valid = Validate();
             if (valid)
             {
-                addressValue = GetNumericalAddress(data);
+                addressValue = GetNumericalAddress(Data);
             }
         }
 
@@ -55,11 +57,11 @@ namespace MAC.Types.Internet
         /// hex value. This allows us a way to better compare MAC Addresses
         /// 
         /// </summary>
-        /// <param name="data">the mac address to be parsed</param>
+        /// <param name="Data">the mac address to be parsed</param>
         /// <returns>the numerical value represented by the MAC address</returns>
-        private long GetNumericalAddress(string data)
+        private long GetNumericalAddress(string Data)
         {
-            string hex = data.Replace(".", "").Replace("-", "").Replace(":", "");
+            string hex = Data.Replace(".", "").Replace("-", "").Replace(":", "");
             return Int64.Parse(hex.ToLower(), System.Globalization.NumberStyles.HexNumber);
         }
 
@@ -71,7 +73,7 @@ namespace MAC.Types.Internet
         /// Where each X represents a valid hex character. We accept both upper- 
         /// lower- and mixed- case hexecdecimal values. 
         /// </summary>
-        /// <returns>weather the string stored in data is a vaid MAC address</returns>
+        /// <returns>weather the string stored in Data is a vaid MAC address</returns>
         public override bool Validate()
         {
             int hexValues = 0;
@@ -79,13 +81,13 @@ namespace MAC.Types.Internet
             int dashes = 0;
             int dots = 0;
 
-            for(int i = 0; i < data.Length; i++)
+            for(int i = 0; i < Data.Length; i++)
             {
-                if (validHex.Contains(data[i]+""))
+                if (validHex.Contains(Data[i]+""))
                 {
                     hexValues++;
                 }
-                if(data[i] == '.')
+                if(Data[i] == '.')
                 {
                     //if it has dots, it just be in format XXX.XXX.XXX.XXX
                     if (i % 4 != 3) 
@@ -94,7 +96,7 @@ namespace MAC.Types.Internet
                     }
                     dots++;
                 }
-                if (data[i] == '-')
+                if (Data[i] == '-')
                 {
                     //if it has dots, it just be in format XX-XX-XX-XX-XX-XX
                     if (i % 3 != 2)
@@ -103,7 +105,7 @@ namespace MAC.Types.Internet
                     }
                     dashes++;
                 }
-                if (data[i] == ':')
+                if (Data[i] == ':')
                 {
                     //if it has dots, it just be in format XX:XX:XX:XX:XX:XXX
                     if (i % 3 != 2)
@@ -165,7 +167,7 @@ namespace MAC.Types.Internet
             {
                 throw new ArgumentNullException("info");
             }
-            info.AddValue("data", data);
+            info.AddValue("Data", Data);
         }
 
         /// <summary>
@@ -174,21 +176,17 @@ namespace MAC.Types.Internet
         /// <returns></returns>
         public override string ToString()
         {
-            return data;
+            return Data;
         }
 
         public string Value
         {
-            get { return data; }
-            set
-            {
-                data = value;
-                valid = Validate();
-                if (valid)
-                {
-                    addressValue = GetNumericalAddress(data);
-                }
-            }
+            get { return Data; }
+        }
+
+        public bool IsValid()
+        {
+            return valid;
         }
     }
 }
