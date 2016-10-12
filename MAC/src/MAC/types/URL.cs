@@ -7,7 +7,7 @@ namespace MAC.Types.Internet
 {
     /// <summary>
     /// Stores and vaildates URLs
-    /// Stored as SQL type varchar
+    /// Stored as SQL type nvarchar
     /// </summary>
     public class Url : BaseType
     {
@@ -15,7 +15,6 @@ namespace MAC.Types.Internet
         /// Stores the url represented by the type
         /// </summary>
         private Uri Data;
-        private List<string> Eerrors;
         /// <summary>
         /// This will check if is a URL
         /// </summary>
@@ -26,11 +25,7 @@ namespace MAC.Types.Internet
             {
                 return false;
             }
-            if (!Data.IsAbsoluteUri)
-            {
-                return false;
-            }
-            return true;
+            return Data.IsAbsoluteUri;
         }
 
         public Url(Uri uri)
@@ -49,13 +44,17 @@ namespace MAC.Types.Internet
         }
 
         /// <summary>
-        /// Compare the URL. It appears teh the Uri class doesn't have a compare to method
+        /// Compare the URL.
         /// </summary>
-        /// <param name="other">Hashed password</param>
+        /// <param name="other"></param>
         /// <returns></returns>
         public override int CompareTo(BaseType other)
         {
-            throw new NotImplementedException();
+            if(other is URL)
+            {
+                return this.Data.ToString.CompareTo(((URL)other).Data.ToString());
+            }
+            throw new ArgumentException();
         }
 
         /// <summary>
@@ -76,7 +75,7 @@ namespace MAC.Types.Internet
         }
 
         /// <summary>
-        /// Should return a string of the URL
+        /// Serializes the URL
         /// </summary>
         /// <param name="info"></param>
         /// <param name="context"></param>
@@ -90,7 +89,7 @@ namespace MAC.Types.Internet
         }
 
         /// <summary>
-        /// Direct access to the 
+        /// Direct access to the URL
         /// </summary>
         public Uri Value
         {
