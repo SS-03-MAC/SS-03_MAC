@@ -1,5 +1,6 @@
 using System;
 using System.Runtime.Serialization;
+using System.Net;
 
 
 namespace MAC.Types.Internet
@@ -7,8 +8,29 @@ namespace MAC.Types.Internet
     /// <summary>
     /// Stores and vaildates IP Address
     /// </summary>
-    public class Address : BaseType
+    public class IPAddress : BaseType
     {
+
+        string Data;
+        bool valid;
+        System.Net.IPAddress Address;
+
+        public IPAddress(string input)
+        {
+            Data = input;
+            valid = Validate();
+        }
+
+        public IPAddress(SerializationInfo info, StreamingContext context)
+        {
+            if(info == null)
+            {
+                throw new ArgumentNullException("info");
+            }
+            Data = (string)info.GetValue("Data", typeof(string));
+            valid = Validate();
+        }
+
         /// <summary>
         /// This will check for:
         /// If the address is vaildate
@@ -16,7 +38,7 @@ namespace MAC.Types.Internet
         /// <returns></returns>
         public override bool Validate()
         {
-            throw new NotImplementedException();
+            return System.Net.IPAddress.TryParse(Data, out Address);
         }
 
         /// <summary>
@@ -26,7 +48,16 @@ namespace MAC.Types.Internet
         /// <returns></returns>
         public override int CompareTo(BaseType other)
         {
-            throw new NotImplementedException();
+            if(other is IPAddress)
+            {
+                if (!((IPAddress)other).valid)
+                {
+                    throw new ArgumentException("This is not a valid IP Address");
+                }
+                return this.Address.Address.CompareTo(((IPAddress)other).Address.Address);
+            }
+
+            throw new ArgumentException();
         }
 
         /// <summary>
@@ -36,7 +67,14 @@ namespace MAC.Types.Internet
         /// <returns></returns>
         public override bool Equals(BaseType other)
         {
-            throw new NotImplementedException();
+            try
+            {
+                return this.Address.Equals(((IPAddress)other).Address);
+            }
+            catch(Exception)
+            {
+                return false;
+            }
         }
 
         /// <summary>
@@ -46,7 +84,11 @@ namespace MAC.Types.Internet
         /// <param name="context"></param>
         public override void GetObjectData(SerializationInfo info, StreamingContext context)
         {
-            throw new NotImplementedException();
+            if(info == null)
+            {
+                throw new ArgumentNullException("info");
+            }
+            info.AddValue("Data", data);
         }
 
         /// <summary>
@@ -55,7 +97,7 @@ namespace MAC.Types.Internet
         /// <returns>true if the address resprened by the class is IPv4</returns>
         public bool IsIPv4()
         {
-            return false;
+            return Address.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork;
         }
         
         /// <summary>
@@ -64,7 +106,7 @@ namespace MAC.Types.Internet
         /// <returns>true if the address resprened by the class is IPv6</returns>
         public bool IsIPv6()
         {
-            return false;
+            return Address.AddressFamily == System.Net.Sockets.AddressFamily.InterNetworkV6;
         }
 
         /// <summary>
@@ -73,7 +115,13 @@ namespace MAC.Types.Internet
         /// <returns></returns>
         public override string ToString()
         {
-            throw new NotImplementedException();
+            return Data;
         }
+
+        public System.Net.IPAddress Value
+        {
+            get { return Data; }
+        }
+
     }
 }
