@@ -15,12 +15,36 @@ namespace MAC.Types.Internet
         private bool valid;
         private System.Net.IPAddress Address;
 
+        /// <summary>
+        /// constructs an IP Address from an input string
+        /// </summary>
+        /// <param name="input"></param>
         public IPAddress(string input)
         {
             Data = input;
             valid = Validate();
         }
 
+        /// <summary>
+        /// Constructs an IPAddress from a C# IPAddress Object
+        /// </summary>
+        /// <param name="input"></param>
+        public IPAddress(System.Net.IPAddress input)
+        {
+            if(input == null)
+            {
+                throw new ArgumentNullException("input");
+            }
+            Address = input;
+            valid = true;
+            Data = input.ToString();
+        }
+
+        /// <summary>
+        /// Constructs an IPAddress from SerializationInfo
+        /// </summary>
+        /// <param name="info"></param>
+        /// <param name="context"></param>
         public IPAddress(SerializationInfo info, StreamingContext context)
         {
             if(info == null)
@@ -33,7 +57,7 @@ namespace MAC.Types.Internet
 
         /// <summary>
         /// This will check for:
-        /// If the address is vaildate
+        /// If the address is a valid IP
         /// </summary>
         /// <returns></returns>
         public override bool Validate()
@@ -42,7 +66,8 @@ namespace MAC.Types.Internet
         }
 
         /// <summary>
-        /// Compare address
+        /// Compares IP Adresses. We do this by converting the underlying byte
+        /// arrays into integers, then comparing those
         /// </summary>
         /// <param name="other"></param>
         /// <returns></returns>
@@ -68,7 +93,7 @@ namespace MAC.Types.Internet
         }
 
         /// <summary>
-        /// Checks equality of the address
+        /// Checks equality of two IP Addresses
         /// </summary>
         /// <param name="other"></param>
         /// <returns></returns>
@@ -85,7 +110,7 @@ namespace MAC.Types.Internet
         }
 
         /// <summary>
-        /// Should return the address as a string
+        /// Serializes the IP Address
         /// </summary>
         /// <param name="info"></param>
         /// <param name="context"></param>
