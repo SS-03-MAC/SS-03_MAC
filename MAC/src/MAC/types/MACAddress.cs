@@ -184,7 +184,7 @@ namespace MAC.Types.Internet
             get { return Data; }
         }
 
-        public Boolean IsValid()
+        public bool IsValid()
         {
             return valid;
         }

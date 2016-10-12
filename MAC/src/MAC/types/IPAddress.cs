@@ -11,9 +11,9 @@ namespace MAC.Types.Internet
     public class IPAddress : BaseType
     {
 
-        string Data;
-        bool valid;
-        System.Net.IPAddress Address;
+        private string Data;
+        private bool valid;
+        private System.Net.IPAddress Address;
 
         public IPAddress(string input)
         {
@@ -54,7 +54,14 @@ namespace MAC.Types.Internet
                 {
                     throw new ArgumentException("This is not a valid IP Address");
                 }
-                return this.Address.Address.CompareTo(((IPAddress)other).Address.Address);
+
+                // System.Net.IPAddress doesn't actually have a comparison method,
+                // so we need to take matters into our own hands
+                byte[] bytes1 = this.Address.GetAddressBytes();
+                byte[] bytes2 = ((IPAddress)other).Address.GetAddressBytes();
+                int comp1 = (int)(bytes1[0] << 24 | bytes1[1] << 16 | bytes1[2] << 8 | bytes1[3]);
+                int comp2 = (int)(bytes2[0] << 24 | bytes2[1] << 16 | bytes2[2] << 8 | bytes2[3]);
+                return comp1.CompareTo(comp2);
             }
 
             throw new ArgumentException();
@@ -88,7 +95,7 @@ namespace MAC.Types.Internet
             {
                 throw new ArgumentNullException("info");
             }
-            info.AddValue("Data", data);
+            info.AddValue("Data", Data);
         }
 
         /// <summary>
@@ -120,7 +127,7 @@ namespace MAC.Types.Internet
 
         public System.Net.IPAddress Value
         {
-            get { return Data; }
+            get { return Address; }
         }
 
         public bool IsValid()
