@@ -182,18 +182,9 @@ namespace MAC.Types.Internet
         public string Value
         {
             get { return Data; }
-            set
-            {
-                Data = value;
-                valid = Validate();
-                if (valid)
-                {
-                    addressValue = GetNumericalAddress(Data);
-                }
-            }
         }
 
-        public Boolean isValid()
+        public Boolean IsValid()
         {
             return valid;
         }

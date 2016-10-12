@@ -123,5 +123,10 @@ namespace MAC.Types.Internet
             get { return Data; }
         }
 
+        public bool IsValid()
+        {
+            return valid;
+        }
+
     }
 }
