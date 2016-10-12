@@ -192,5 +192,10 @@ namespace MAC.Types.Internet
                 }
             }
         }
+
+        public Boolean isValid()
+        {
+            return valid;
+        }
     }
 }
