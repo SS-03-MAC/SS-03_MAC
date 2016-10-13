@@ -6,6 +6,7 @@ namespace MAC.Tests.Types
 {
     public class IPAddressTests
     {
+        [Fact]
         public void BasicTest()
         {
             System.Net.IPAddress test;
@@ -14,6 +15,7 @@ namespace MAC.Tests.Types
             Assert.Equal(wrapper.Value, test);
         }
 
+        [Fact]
         public void IsIPv6Test()
         {
             System.Net.IPAddress test;
@@ -22,6 +24,7 @@ namespace MAC.Tests.Types
             Assert.True(wrapper.IsIPv6());
         }
 
+        [Fact]
         public void IsIPv4Test()
         {
             System.Net.IPAddress test;
