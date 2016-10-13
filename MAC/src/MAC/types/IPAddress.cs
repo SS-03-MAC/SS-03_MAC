@@ -12,7 +12,6 @@ namespace MAC.Types.Internet
     {
 
         private string Data;
-        private bool valid;
         private System.Net.IPAddress Address;
 
         /// <summary>
@@ -22,7 +21,6 @@ namespace MAC.Types.Internet
         public IPAddress(string input)
         {
             Data = input;
-            valid = Validate();
             DatabaseFieldType = DatabaseFieldTypes.nvarchar;
         }
 
@@ -37,7 +35,6 @@ namespace MAC.Types.Internet
                 throw new ArgumentNullException("input");
             }
             Address = input;
-            valid = true;
             Data = input.ToString();
             DatabaseFieldType = DatabaseFieldTypes.nvarchar;
         }
@@ -54,7 +51,6 @@ namespace MAC.Types.Internet
                 throw new ArgumentNullException("info");
             }
             Data = (string)info.GetValue("Data", typeof(string));
-            valid = Validate();
             DatabaseFieldType = DatabaseFieldTypes.nvarchar;
         }
 
@@ -78,7 +74,7 @@ namespace MAC.Types.Internet
         {
             if(other is IPAddress)
             {
-                if (!((IPAddress)other).valid)
+                if (!other.Validate())
                 {
                     throw new ArgumentException("This is not a valid IP Address");
                 }
@@ -132,7 +128,7 @@ namespace MAC.Types.Internet
         /// <returns>true if the address resprened by the class is IPv4</returns>
         public bool IsIPv4()
         {
-            return Address.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork;
+            return Validate() && Address.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork;
         }
         
         /// <summary>
@@ -141,7 +137,7 @@ namespace MAC.Types.Internet
         /// <returns>true if the address resprened by the class is IPv6</returns>
         public bool IsIPv6()
         {
-            return Address.AddressFamily == System.Net.Sockets.AddressFamily.InterNetworkV6;
+            return Validate() && Address.AddressFamily == System.Net.Sockets.AddressFamily.InterNetworkV6;
         }
 
         /// <summary>
@@ -157,11 +153,5 @@ namespace MAC.Types.Internet
         {
             get { return Address; }
         }
-
-        public bool IsValid()
-        {
-            return valid;
-        }
-
     }
 }

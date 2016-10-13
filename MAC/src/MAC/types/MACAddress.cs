@@ -13,7 +13,6 @@ namespace MAC.Types.Internet
         static string validHex = "0123456789ABCDEFabcdef";
         private string Data;
         private long addressValue;
-        private bool valid;
         
         /// <summary>
         /// Initializes a MACAddress from an input string
@@ -22,9 +21,8 @@ namespace MAC.Types.Internet
         public MACAddress(string input)
         {
             Data = input.Trim();
-            valid = Validate();
             DatabaseFieldType = DatabaseFieldTypes.nvarchar;
-            if (valid)
+            if (Validate())
             {
                 addressValue = GetNumericalAddress(Data);
             }
@@ -44,8 +42,7 @@ namespace MAC.Types.Internet
             DatabaseFieldType = DatabaseFieldTypes.nvarchar;
             Data = (string)info.GetValue("Data", typeof(string));
             Data = Data.Trim();
-            valid = Validate();
-            if (valid)
+            if (Validate())
             {
                 addressValue = GetNumericalAddress(Data);
             }
@@ -130,7 +127,7 @@ namespace MAC.Types.Internet
         {
             if(other is MACAddress)
             {
-                if (!((MACAddress)other).valid)
+                if (!other.Validate())
                 {
                     throw new ArgumentException("This is not a valid MAC Address");
                 }
