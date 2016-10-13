@@ -87,8 +87,8 @@ namespace MAC.Types.Internet
                 // so we need to take matters into our own hands
                 byte[] bytes1 = this.Address.GetAddressBytes();
                 byte[] bytes2 = ((IPAddress)other).Address.GetAddressBytes();
-                int comp1 = (int)(bytes1[0] << 24 | bytes1[1] << 16 | bytes1[2] << 8 | bytes1[3]);
-                int comp2 = (int)(bytes2[0] << 24 | bytes2[1] << 16 | bytes2[2] << 8 | bytes2[3]);
+                uint comp1 = (uint)(bytes1[0] << 24 | bytes1[1] << 16 | bytes1[2] << 8 | bytes1[3]);
+                uint comp2 = (uint)(bytes2[0] << 24 | bytes2[1] << 16 | bytes2[2] << 8 | bytes2[3]);
                 return comp1.CompareTo(comp2);
             }
 
