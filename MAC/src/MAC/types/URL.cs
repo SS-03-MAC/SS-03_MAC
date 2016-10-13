@@ -26,7 +26,7 @@ namespace MAC.Types.Internet
                 return false;
             }
 
-            return !Data.IsAbsoluteUri;
+            return Data.IsAbsoluteUri;
 
         }
 
