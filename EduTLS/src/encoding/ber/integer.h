@@ -72,6 +72,7 @@ inline void encode_int(uint8_t *result, uint64_t value) {
 inline void decode_int(uint64_t *result, uint8_t *encoding) {
   size_t r = 0;
   size_t o = 0;
+  uint64_t mask = 0xFFFFFFFFFFFFFFFF;
 
   if (encoding[0] != (BER_IDENTIFIER_CLASS_UNIVERSAL | BER_IDENTIFIER_TYPE_PRIMITIVE | ASN_INTEGER_CLASS)) {
     return;
@@ -91,6 +92,10 @@ inline void decode_int(uint64_t *result, uint8_t *encoding) {
   for (; r < encoding[1]; r++) {
     *result = (*result) << 8;
     *result += encoding[2 + r + o];
+  }
+
+  if ((encoding[2] & 0x80) == 0x80) {
+    *result += (int64_t)mask;
   }
 }
 
@@ -112,7 +117,7 @@ inline void decode_int(int64_t *result, uint8_t *encoding) {
     *result = (*result) << 8;
     *result += encoding[2 + r];
   }
-  
+
   if ((encoding[2] & 0x80) == 0x80) {
     *result += (int64_t)mask;
   }
