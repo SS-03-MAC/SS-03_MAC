@@ -149,6 +149,9 @@ namespace MAC.Types.Internet
             return Data;
         }
 
+        /// <summary>
+        /// Access to the raw data stored
+        /// </summary>
         public System.Net.IPAddress Value
         {
             get { return Address; }

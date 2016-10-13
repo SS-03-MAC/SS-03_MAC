@@ -175,7 +175,10 @@ namespace MAC.Types.Internet
         {
             return Data;
         }
-
+    
+        /// <summary>
+        /// Access to the raw data stored
+        /// </summary>
         public string Value
         {
             get { return Data; }
