@@ -7,20 +7,20 @@
 //===----------------------------------------------------------------------===//
 ///
 /// \file
-/// This file contains encoding methods for boolena types as defined by
+/// This file contains encoding methods for boolean types as defined by
 /// ASN.1/BER encoding standards.
 ///
 //===----------------------------------------------------------------------===//
 
 #pragma once
 
-#include "../constants/ber.h"
 #include "../constants/asn1.h"
+#include "../constants/ber.h"
 
-#include <cstdint>
 #include <cstddef>
+#include <cstdint>
 
-static inline void encode_boolean(uint8_t* result, bool value) {
+inline void encode_boolean(uint8_t *result, bool value) {
   result[0] = BER_IDENTIFIER_CLASS_UNIVERSAL | BER_IDENTIFIER_TYPE_PRIMITIVE | ASN_BOOLEAN_CLASS;
   result[1] = BER_VALUE_BOOLEAN_LENGTH;
 
@@ -31,11 +31,9 @@ static inline void encode_boolean(uint8_t* result, bool value) {
   }
 }
 
-static inline size_t encode_boolean_length() {
-  return 3;
-}
+inline size_t encode_boolean_length() { return 3; }
 
-static inline void decode_boolean(bool* result, uint8_t* encoding) {
+inline void decode_boolean(bool *result, uint8_t *encoding) {
   if (encoding[0] != (BER_IDENTIFIER_CLASS_UNIVERSAL | BER_IDENTIFIER_TYPE_PRIMITIVE | ASN_BOOLEAN_CLASS)) {
     return;
   }
@@ -51,6 +49,4 @@ static inline void decode_boolean(bool* result, uint8_t* encoding) {
   }
 }
 
-static inline size_t decode_boolean_length() {
-  return 1;
-}
+inline size_t decode_boolean_length() { return 1; }
