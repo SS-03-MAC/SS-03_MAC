@@ -1,15 +1,9 @@
 # Screen sketch: Matthew Burket
-roles:
-  using:
-    - MAC.roles
-  - admin
-  - it_n00b
-  - intern
-
-user:
+-
+  name: user
   uses:
-    MAC.user
-    MAC.location
+    - MAC.user
+    - MAC.location
   fields:
     -
       name: Password
@@ -30,3 +24,15 @@ user:
       acl:
         read: self, admin
         write: self, admin
+
+- post:
+    fields:
+        -
+          name: name
+          type: string
+        -
+          name: body
+          type: string
+          acl:
+              read: admin
+              write: admin
