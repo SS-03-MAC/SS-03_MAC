@@ -1,19 +1,19 @@
 module SSSaaS
   class Generate
     @types = {
-      'Mac.User.Password' => 'nvarchar',
-      'Mac.User.Email' => 'nvarchar',
-      'String' => 'nvarchar',
+      'MAC.User.Password' => 'nvarchar',
+      'MAC.User.Email' => 'nvarchar',
+      'string' => 'nvarchar',
       'Boolean' => 'bit',
       'Currency' => 'money',
       'Date' => 'time',
       'DateTime' => 'datetime',
       'Email' => 'nvarchar',
       'Float' => 'float_t',
-      'Mac.Internet.IPAddress' => 'nvarchar',
+      'MAC.Internet.IPAddress' => 'nvarchar',
       'Integer' => 'int_t',
-      'MACAddress' => 'nvarchar',
-      'Mac.User.PhoneNummber' => 'nvarchar',
+      'MAC.Internet.MACAddress' => 'nvarchar',
+      'MAC.User.PhoneNummber' => 'nvarchar',
       'Time' => 'time',
       'Url' => 'nvarchar'
     }

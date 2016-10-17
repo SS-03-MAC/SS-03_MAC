@@ -1,4 +1,3 @@
-# Screen sketch: Matthew Burket
 -
   name: user
   uses:
@@ -24,15 +23,3 @@
       acl:
         read: self, admin
         write: self, admin
-
-- post:
-    fields:
-        -
-          name: name
-          type: string
-        -
-          name: body
-          type: string
-          acl:
-              read: admin
-              write: admin
