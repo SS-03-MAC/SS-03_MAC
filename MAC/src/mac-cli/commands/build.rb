@@ -1,4 +1,4 @@
-require 'optparse'
+lrequire 'optparse'
 
 module MacCLI
   ##

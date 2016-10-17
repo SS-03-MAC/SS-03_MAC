@@ -1,0 +1,33 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "MAC", "MAC.xproj", "{30588AC4-0641-4520-B273-57BE566E5E82}"
+EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "MAC.Test", "..\..\test\MAC.Test\MAC.Test.xproj", "{6976EFEE-9467-4BB2-94FE-DA399A5FA14F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{743849B6-7680-4CE1-8E3F-AF40AB522DC2}"
+	ProjectSection(SolutionItems) = preProject
+		..\..\global.json = ..\..\global.json
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{30588AC4-0641-4520-B273-57BE566E5E82}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{30588AC4-0641-4520-B273-57BE566E5E82}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{30588AC4-0641-4520-B273-57BE566E5E82}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{30588AC4-0641-4520-B273-57BE566E5E82}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6976EFEE-9467-4BB2-94FE-DA399A5FA14F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6976EFEE-9467-4BB2-94FE-DA399A5FA14F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6976EFEE-9467-4BB2-94FE-DA399A5FA14F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6976EFEE-9467-4BB2-94FE-DA399A5FA14F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

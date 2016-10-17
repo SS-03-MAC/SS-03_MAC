@@ -41,6 +41,12 @@
 /test/tmp/
 /test/version_tmp/
 /tmp/
+bin/
+!.keep
+!*.keep
+!bin/.keep
+
+*.dSYM
 
 *.dSYM
 
@@ -151,3 +157,9 @@ $RECYCLE.BIN/
 [._]s[a-w][a-z]
 # session
 Session.vim
+/MAC/src/MAC/.vs
+/MAC/src/MAC/bin/Debug/netcoreapp1.0
+/MAC/src/MAC/obj/Debug/netcoreapp1.0
+obj
+/MAC/test/MAC.Test/obj
+/MAC/test/MAC.Test/bin
