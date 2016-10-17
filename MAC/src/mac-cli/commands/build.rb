@@ -15,6 +15,8 @@ module MacCLI
       end.parse!
     end
 
+    
+
     private
 
     def run_help
