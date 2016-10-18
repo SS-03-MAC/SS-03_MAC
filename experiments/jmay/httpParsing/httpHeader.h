@@ -13,4 +13,8 @@ public:
     delete &key;
     delete &value;
   }
+
+  std::string toString();
 };
+
+std::ostream &operator<<(std::ostream &os, httpHeader &header);

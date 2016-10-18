@@ -41,3 +41,14 @@ httpHeader::httpHeader(std::string line) {
   } while (line[i] != '\0');
   value = tempString.str();
 }
+
+std::string httpHeader::toString() {
+  std::stringstream out;
+  out << key << ": " << value;
+  return out.str();
+}
+
+std::ostream &operator << (std::ostream &os, httpHeader &header){
+  os << header.toString();
+  return os;
+}
