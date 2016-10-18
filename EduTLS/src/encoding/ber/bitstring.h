@@ -20,7 +20,6 @@
 
 #include <cstddef>
 #include <cstdint>
-#include <cstdio>
 
 inline void encode_bitstring(uint8_t *result, uint8_t *value, size_t length) {
   int offset = encode_length_length(length);
