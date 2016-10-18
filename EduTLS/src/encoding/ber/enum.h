@@ -14,9 +14,9 @@
 
 #pragma once
 
-#include "integer.h"
 #include "../constants/asn1.h"
 #include "../constants/ber.h"
+#include "integer.h"
 
 #include <cstddef>
 #include <cstdint>
