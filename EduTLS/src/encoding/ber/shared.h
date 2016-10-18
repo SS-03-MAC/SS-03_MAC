@@ -41,14 +41,15 @@ inline void encode_length(uint8_t *result, size_t length) {
     return;
   }
 
+  size_t l = encode_length_length(length);
+
   uint8_t p = 1;
-  while (length > 0) {
-    result[p] = (uint8_t)length;
+  while (p < l) {
+    result[p] = (uint8_t)(length >> ((l - p - 1) * 8));
     p += 1;
-    length = length >> 8;
   }
 
-  result[0] = 0x80 | (p - 2);
+  result[0] = 0x80 | (p - 1);
 }
 
 inline size_t decode_length(uint8_t *length) {
@@ -61,7 +62,7 @@ inline size_t decode_length(uint8_t *length) {
   }
 
   size_t result = 0;
-  for (int p = 0; p < (length[0] & 0x7F); p++) {
+  for (int p = 1; p <= (length[0] & 0x7F); p++) {
     result = result << 8;
     result = result | length[p];
   }
