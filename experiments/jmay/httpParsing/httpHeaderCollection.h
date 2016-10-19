@@ -19,3 +19,5 @@ public:
 
   std::string toString();
 };
+
+std::ostream &operator<<(std::ostream &os, httpHeaderCollection &headerCollection);

@@ -62,3 +62,7 @@ void httpHeaderCollection::parseHeaders(std::string &headerLine) {
   // Parse status string
   statusDescription = headerLine.substr(statusValEnd + 1, std::string::npos);
 }
+
+std::ostream &operator<<(std::ostream &os, httpHeaderCollection &headerCollection) {
+  return os << headerCollection.toString();
+}

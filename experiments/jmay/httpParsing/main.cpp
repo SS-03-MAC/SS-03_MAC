@@ -17,7 +17,6 @@ int main() {
   hc->push_back(h2);
   std::cout << hc->size() << std::endl;
   std::cout << hc->toString();
-  std::cout << "Fin" << std::endl;
   delete h;*/
 
   httpHeaderCollection collection("HTTP/1.1", 404, "Not Found");
@@ -29,6 +28,7 @@ int main() {
   httpHeader header2(key, value);
   collection.push_back(&header1);
   collection.push_back(&header2);
-  std::cout << collection.toString() << std::endl;
+  std::cout << collection << std::endl;
+  std::cout << "Fin" << std::endl;
   return 0;
 }
