@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
+using System.Reflection;
 
 /// <summary>
 /// Base model that all MAC models should be dertived from
@@ -12,12 +14,12 @@ namespace MAC.Models
         /// <summary>
         /// What table is the data stored in
         /// </summary>
-        private string TableName;
+        protected static string TableName;
 
         /// <summary>
         /// A connection string. Should be moved. Here for dev purposes
         /// </summary>
-        private string ConnectionString = "Server=localhost;Database=MACDevlopment;User Id=macdev;Password=macdev";
+        private static string ConnectionString = "Server=localhost;Database=MACDevlopment;User Id=macdev;Password=macdev";
 
 
         /// <summary>
@@ -68,6 +70,15 @@ namespace MAC.Models
 
         }
 
+        public BaseModel(IDataRecord reader)
+        {
+            PropertyInfo[] properties = GetType().GetProperties();
+            foreach (PropertyInfo property in properties)
+            {
+                property.SetValue(this, reader[property.Name]);
+            }
+        }
+
         /// <summary>
         /// Saves the record to the database
         /// </summary>
@@ -96,7 +107,12 @@ namespace MAC.Models
         /// <returns></returns>
         public bool Validate()
         {
-            throw new NotImplementedException();
+            PropertyInfo[] properties = GetType().GetProperties();
+
+            foreach (PropertyInfo property in properties)
+            {
+                    
+            }
         }
 
         /// <summary>
@@ -105,17 +121,32 @@ namespace MAC.Models
         /// <returns>All records</returns>
         public static List<BaseModel> Get()
         {
-            throw new NotImplementedException();
+            string query = "select * from " + TableName;
+            SqlCommand cmd = new SqlCommand(query);
+            SqlDataReader reader = RunQuery(cmd);
+            List<BaseModel> results = new List<BaseModel>();
+            while (reader.Read())
+            {
+                results.Add(new BaseModel((IDataRecord)reader));
+            }
+            return results;
         }
 
         /// <summary>
         ///  Get the recrods matching the query
+        ///  
+        ///  Security note:
+        ///  User inpuut should be sanitized
+        ///  before placing into this method. Failing to do
+        ///  so can result in SQL injection
         /// </summary>
         /// <param name="query">A valid where cause</param>
         /// <returns>Record matching the query</returns>
-        public static List<BaseModel> Get(string query)
+        public static List<BaseModel> Get(string whereClause)
         {
-            throw new NotImplementedException();
+            string query = "select * from " + TableName + " where " + whereClause;
+            SqlCommand cmd = new SqlCommand(query);
+            return RunQuery(cmd);
         }
 
         /// <summary>
@@ -125,7 +156,10 @@ namespace MAC.Models
         /// <returns>Record of type T</returns>
         public static BaseModel Get(long id)
         {
-            throw new NotImplementedException();
+            string query = "select * from " + TableName + " where Id = @Id";
+            SqlCommand cmd = new SqlCommand(query);
+            cmd.Parameters.AddWithValue("@Id", id);
+            return RunQuery(cmd);
         }
 
         /// <summary>
@@ -135,9 +169,11 @@ namespace MAC.Models
         /// <returns>If the record was removed</returns>
         public static bool Delete(long id)
         {
-         
-            string command = "DELETE FROM " + TableName + " WHERE Id = " + id + ";";
-            int result = RunNonQuery(new SqlCommand(command));
+
+            string command = "DELETE FROM " + TableName + " WHERE Id = @Id;";
+            SqlCommand cmd = new SqlCommand(command);
+            cmd.Parameters.AddWithValue("@Id", id);
+            int result = RunNonQuery(cmd);
 
             if (result == 1 || result == 0)
             {
@@ -163,7 +199,7 @@ namespace MAC.Models
             {
                 throw new InvalidOperationException("Cannot delete a record that is not saved to the database");
             }
-            return Delete((long) Id);
+            return Delete((long)Id);
 
         }
 
@@ -181,8 +217,18 @@ namespace MAC.Models
                     cmd.Connection = conn;
                     return cmd.ExecuteNonQuery();
                 }
+            }
+        }
 
-
+        private static SqlDataReader RunQuery(SqlCommand cmd)
+        {
+            using (SqlConnection conn = new SqlConnection(ConnectionString))
+            {
+                using (cmd)
+                {
+                    cmd.Connection = conn;
+                    return cmd.ExecuteReader();
+                }
             }
         }
 
