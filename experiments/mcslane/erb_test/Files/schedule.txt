@@ -1,0 +1,15 @@
+
+    Course Schedule for Wednesday
+
+    You are taking:
+
+      
+        Abstract Algebra
+      
+        Stats
+      
+        Algorithms
+      
+        Com S 309
+      
+  
