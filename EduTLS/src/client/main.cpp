@@ -16,6 +16,7 @@
 #include "../crypto/symmetric/symmetric.h"
 #include "../crypto/utils.h"
 #include "../encoding/hex.h"
+#include "../encoding/der/der.h"
 
 #include <cstdio>
 
