@@ -21,6 +21,12 @@ httpHeaderCollection::httpHeaderCollection(std::istream &input) {
   } while (!headersDone);
 }
 
+httpHeaderCollection::httpHeaderCollection(std::string httpVersion, int statusVal, std::string statusDescription) {
+  this->httpVersion = httpVersion;
+  this->statusVal = statusVal;
+  this->statusDescription = statusDescription;
+}
+
 std::string httpHeaderCollection::toString() {
   std::stringstream out;
   // Status

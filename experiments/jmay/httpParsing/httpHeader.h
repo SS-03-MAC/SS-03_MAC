@@ -8,7 +8,7 @@ public:
   std::string value;
 
   httpHeader(std::string line);
-
+  httpHeader(std::string key, std::string value);
   ~httpHeader() {
     delete &key;
     delete &value;

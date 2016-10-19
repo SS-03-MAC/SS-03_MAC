@@ -42,6 +42,11 @@ httpHeader::httpHeader(std::string line) {
   value = tempString.str();
 }
 
+httpHeader::httpHeader(std::string key, std::string value) {
+  this->key = key;
+  this->value = value;
+}
+
 std::string httpHeader::toString() {
   std::stringstream out;
   out << key << ": " << value;

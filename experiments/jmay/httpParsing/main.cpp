@@ -3,7 +3,7 @@
 #include "httpHeaderCollection.h"
 
 int main() {
-  httpHeader *h = new httpHeader("test: value");
+  /*httpHeader *h = new httpHeader("test: value");
   httpHeader *h2 = new httpHeader("Another: test");
   std::cout << h->key << std::endl;
   std::cout << h->value << std::endl;
@@ -18,6 +18,17 @@ int main() {
   std::cout << hc->size() << std::endl;
   std::cout << hc->toString();
   std::cout << "Fin" << std::endl;
-  delete h;
+  delete h;*/
+
+  httpHeaderCollection collection("HTTP/1.1", 404, "Not Found");
+  std::string key = "test";
+  std::string value = "test value #1";
+  httpHeader header1(key, value);
+  key = "New Test";
+  value = "value for new test";
+  httpHeader header2(key, value);
+  collection.push_back(&header1);
+  collection.push_back(&header2);
+  std::cout << collection.toString() << std::endl;
   return 0;
 }
