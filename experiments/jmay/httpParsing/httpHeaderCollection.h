@@ -14,7 +14,7 @@ private:
   void parseHeaders(std::string &headerLine);
 
 public:
-  httpHeaderCollection(std::istream &input);
+  httpHeaderCollection(std::istream *input);
   httpHeaderCollection(std::string httpVersion, int statusVal, std::string statusDescription);
 
   std::string toString();

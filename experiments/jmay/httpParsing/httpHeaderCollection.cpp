@@ -1,22 +1,21 @@
 #include "httpHeaderCollection.h"
+#include "httpUtils.h"
 
-httpHeaderCollection::httpHeaderCollection(std::istream &input) {
-  int inChar;
+httpHeaderCollection::httpHeaderCollection(std::istream *input) {
   std::string thisLine;
-  std::stringstream lineAccumulator;
   bool headersDone = false;
 
   // Parse status and HTTP version
-  httpHeaderCollection::getlineAndTrim(input, thisLine);
+  httpHeaderCollection::getlineAndTrim(*input, thisLine);
   parseHeaders(thisLine);
 
   // Parse headers
   do {
-    httpHeaderCollection::getlineAndTrim(input, thisLine);
-    if (thisLine.length() == 0) {
+    if (httpUtils::isCRLF(input)) {
       headersDone = true;
+      httpUtils::ingestCRLF(input);
     } else {
-      this->push_back(new httpHeader(thisLine));
+      this->push_back(new httpHeader(input));
     }
   } while (!headersDone);
 }

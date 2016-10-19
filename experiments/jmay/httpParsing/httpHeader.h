@@ -1,13 +1,14 @@
 #pragma once
 
-#include <string>
-#include <sstream>
+#include <istream>
+//#include <string>
+//#include <sstream>
 class httpHeader {
 public:
   std::string key;
   std::string value;
 
-  httpHeader(std::string line);
+  httpHeader(std::istream *line);
   httpHeader(std::string key, std::string value);
   ~httpHeader() {
     delete &key;
