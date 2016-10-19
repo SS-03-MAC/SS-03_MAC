@@ -33,7 +33,9 @@ inline void encode_printablestring(uint8_t *result, uint8_t *value, size_t lengt
 
   for (size_t i = 0; i < length; i++) {
     if ((value[i] - 'A' >= 0 && value[i] - 'A' <= 26) || (value[i] - 'a' >= 0 && value[i] - 'a' <= 26) ||
-    (value[i] - '0' >= 0 && value[i] - '0' <= 9) || (value[i] == ' ') || (value[i] == '\'') || (value[i] == '(') || (value[i] == ')') || (value[i] == '+') || (value[i] == ',') || (value[i] == '.') || (value[i] == '-') || (value[i] == '/') || (value[i] == ':') || (value[i] == '=') || (value[i] == '?')) {
+        (value[i] - '0' >= 0 && value[i] - '0' <= 9) || (value[i] == ' ') || (value[i] == '\'') || (value[i] == '(') ||
+        (value[i] == ')') || (value[i] == '+') || (value[i] == ',') || (value[i] == '.') || (value[i] == '-') ||
+        (value[i] == '/') || (value[i] == ':') || (value[i] == '=') || (value[i] == '?')) {
       result[offset + 1 + i] = value[i];
     } else {
       return;
@@ -80,10 +82,14 @@ inline void decode_printablestring(uint8_t *result, uint8_t *encoded, size_t len
     return;
   }
 
-
   for (size_t p = 0; p < data_length; p++) {
-    if ((encoded[p + offset] - 'A' >= 0 && encoded[p + offset] - 'A' <= 26) || (encoded[p + offset] - 'a' >= 0 && encoded[p + offset] - 'a' <= 26) ||
-    (encoded[p + offset] - '0' >= 0 && encoded[p + offset] - '0' <= 9) || (encoded[p + offset] == ' ') || (encoded[p + offset] == '\'') || (encoded[p + offset] == '(') || (encoded[p + offset] == ')') || (encoded[p + offset] == '+') || (encoded[p + offset] == ',') || (encoded[p + offset] == '.') || (encoded[p + offset] == '-') || (encoded[p + offset] == '/') || (encoded[p + offset] == ':') || (encoded[p + offset] == '=') || (encoded[p + offset] == '?')) {
+    if ((encoded[p + offset] - 'A' >= 0 && encoded[p + offset] - 'A' <= 26) ||
+        (encoded[p + offset] - 'a' >= 0 && encoded[p + offset] - 'a' <= 26) ||
+        (encoded[p + offset] - '0' >= 0 && encoded[p + offset] - '0' <= 9) || (encoded[p + offset] == ' ') ||
+        (encoded[p + offset] == '\'') || (encoded[p + offset] == '(') || (encoded[p + offset] == ')') ||
+        (encoded[p + offset] == '+') || (encoded[p + offset] == ',') || (encoded[p + offset] == '.') ||
+        (encoded[p + offset] == '-') || (encoded[p + offset] == '/') || (encoded[p + offset] == ':') ||
+        (encoded[p + offset] == '=') || (encoded[p + offset] == '?')) {
       result[p] = encoded[p + offset];
     } else {
       return;

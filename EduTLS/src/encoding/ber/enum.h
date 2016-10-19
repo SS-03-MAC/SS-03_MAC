@@ -26,7 +26,12 @@ inline void encode_enum(uint8_t *result, int64_t value) {
   result[0] = BER_IDENTIFIER_CLASS_UNIVERSAL | BER_IDENTIFIER_TYPE_PRIMITIVE | ASN_ENUMERATED_CLASS;
 }
 
-inline void decode_int(uint64_t *result, uint8_t *encoding) {
-  result[0] = BER_IDENTIFIER_CLASS_UNIVERSAL | BER_IDENTIFIER_TYPE_PRIMITIVE | ASN_INTEGER_CLASS;
-  decode_int(result, value);
+inline void decode_enum(uint64_t *result, uint8_t *encoding) {
+  if (encoding[0] != (BER_IDENTIFIER_CLASS_UNIVERSAL | BER_IDENTIFIER_TYPE_PRIMITIVE | ASN_ENUMERATED_CLASS)) {
+    return;
+  }
+
+  encoding[0] = BER_IDENTIFIER_CLASS_UNIVERSAL | BER_IDENTIFIER_TYPE_PRIMITIVE | ASN_INTEGER_CLASS;
+  decode_int(result, encoding);
+  encoding[0] = BER_IDENTIFIER_CLASS_UNIVERSAL | BER_IDENTIFIER_TYPE_PRIMITIVE | ASN_ENUMERATED_CLASS;
 }
