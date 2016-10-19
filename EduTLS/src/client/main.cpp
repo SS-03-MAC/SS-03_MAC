@@ -26,10 +26,10 @@ int main() {
   edutls_rand_bytes(buffer, 10);
 
   printf("Entropy: ");
-  for (int i = 0; i < 10; i++) {
-    printf("%02x", buffer[i]);
-  }
-  printf("\n");
+  char buf_out[21];
+  buf_out[20] = '\0';
+  toHex(buf_out, buffer, 10);
+  printf("%s\n", buf_out);
 
   edutls_pad_pkcs1(padded, 15, buffer, 10, PKCS1_BT1);
   printf("PKCS1.1: ");

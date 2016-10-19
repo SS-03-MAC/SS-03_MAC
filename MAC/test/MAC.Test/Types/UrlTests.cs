@@ -6,6 +6,7 @@ namespace MAC.Test.Types
 {
     public class UrlTests
     {
+        [Fact]
         public void basic()
         {
             Url u = new Url(new Uri("https://google.com"));
