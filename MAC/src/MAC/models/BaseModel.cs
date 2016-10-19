@@ -8,7 +8,7 @@ public abstract class BaseModel {
   /// <summary>
   /// What table is the data stored in
   /// </summary>
-  private string TableName;
+  private string readonly TableName;
 
   /// <summary>
   /// SQL Indentify column 
@@ -20,7 +20,7 @@ public abstract class BaseModel {
   /// Built-in field for when the record was saved to the database
   /// </summary>
   /// <returns></returns>
-  public DateTime CreatedAt { get; set; }
+  public DateTime CreatedAt { get; }
   /// <summary>
   /// Built-in field when the record was last updated at
   /// </summary>
@@ -51,7 +51,9 @@ public abstract class BaseModel {
   /// Vaildates the model
   /// </summary>
   /// <returns></returns>
-  public abstract bool Validates();
+  public bool Validates() {
+    throw new NotImplementedException();
+  }
 
   /// <summary>
   /// Gets all records associated with the model
