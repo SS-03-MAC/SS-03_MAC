@@ -25,3 +25,4 @@
 #include "../ber/utctime.h"
 #include "../constants/asn1.h"
 #include "../constants/ber.h"
+#include "../time.h"
