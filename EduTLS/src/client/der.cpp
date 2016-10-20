@@ -42,25 +42,35 @@ void parse_der(uint8_t *data, size_t data_length, int depth) {
 
     if (type == (BER_IDENTIFIER_CLASS_UNIVERSAL | BER_IDENTIFIER_TYPE_CONSTRUCTED | ASN_SEQUENCE_CLASS)) {
       prc('\t', depth);
-      printf("SEQUENCE - len(%zu)\n", data_length);
+      printf("SEQUENCE - len(%zu)\n", contents_length);
       parse_der(&(data[d_p + header_length]), contents_length, depth + 1);
     } else if (type == (BER_IDENTIFIER_CLASS_UNIVERSAL | BER_IDENTIFIER_TYPE_CONSTRUCTED | ASN_SET_CLASS)) {
       prc('\t', depth);
-      printf("SET - len(%zu)\n", data_length);
+      printf("SET - len(%zu)\n", contents_length);
       parse_der(&(data[d_p + header_length]), contents_length, depth + 1);
     } else if (type == (BER_IDENTIFIER_CLASS_CONTEXT | BER_IDENTIFIER_TYPE_CONSTRUCTED)) {
       prc('\t', depth);
-      printf("CONTEXT CONSTRUCTED TAG [%02x] - len(%zu)\n", type & 0x1F, data_length);
+      printf("CONTEXT CONSTRUCTED CLASS [%02x] - len(%zu)\n", type & 0x1F, contents_length);
       parse_der(&(data[d_p + header_length]), contents_length, depth + 1);
     } else if (type == (BER_IDENTIFIER_CLASS_UNIVERSAL | BER_IDENTIFIER_TYPE_PRIMITIVE | ASN_PRINTABLE_STRING_CLASS)) {
       prc('\t', depth);
-      printf("PRINTABLE STRING - len(%zu)\n", data_length);
-      prc('\t', depth + 1);
       size_t ps_length = decode_printablestring_length(&(data[d_p]));
+      printf("PRINTABLE STRING - len(%zu)\n", ps_length);
+      prc('\t', depth + 1);
       uint8_t ps[ps_length + 1];
       decode_printablestring((char *)ps, &(data[d_p]), ps_length + header_length);
       ps[ps_length] = '\0';
       printf("%s\n", (char *)ps);
+    } else if (type == (BER_IDENTIFIER_CLASS_UNIVERSAL | BER_IDENTIFIER_TYPE_PRIMITIVE | ASN_NULL_CLASS)) {
+      prc('\t', depth);
+      printf("NULL CLASS\n");
+    } else if (type == (BER_IDENTIFIER_CLASS_UNIVERSAL | BER_IDENTIFIER_TYPE_PRIMITIVE | ASN_UTC_TIME_CLASS)) {
+      prc('\t', depth);
+      printf("UTC Time - len(%zu)\n", contents_length);
+      UTCTime t;
+      decode_utctime(&t, &(data[d_p]));
+      prc('\t', depth + 1);
+      printf("%02d/%02d/%02d %02d:%02d:%02d Z\n", t.year, t.month, t.day, t.hour, t.minute, t.second);
     } else {
       prc('\t', depth);
       printf("Unknown Tag %02x %02x %02x %zu %zu\n", type, data[d_p + 1], data[d_p + 2], header_length,
