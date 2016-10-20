@@ -1,4 +1,4 @@
-//===-- EduTLS/src/encoding/hex.h                         -------*- C++ -*-===//
+//===-- EduTLS/src/encoding/base64.h                      -------*- C++ -*-===//
 //
 //                     EduTLS - Transport Layer Security
 //
@@ -7,10 +7,16 @@
 //===----------------------------------------------------------------------===//
 ///
 /// \file
-/// This file contains encoding and decoding methods for hexadecimal
-/// representations of bit arrays.
+/// This file contains encoding and decoding methods for the base64
+/// representations of data, per RFC 4648.
 ///
 //===----------------------------------------------------------------------===//
+
+#pragma once
+
+#include <cstddef>
+#include <cstdint>
+#include <cstdio>
 
 const char base64_standard_charset[64] = {
     'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V',
