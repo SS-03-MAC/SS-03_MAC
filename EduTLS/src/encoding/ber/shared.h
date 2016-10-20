@@ -16,6 +16,7 @@
 
 #include <cstddef>
 #include <cstdint>
+#include <cstdio>
 
 inline size_t encode_length_length(size_t length) {
   if (length < (1 << 7)) {
@@ -58,6 +59,7 @@ inline size_t decode_length(uint8_t *length) {
   }
 
   if ((length[0] & 0x7F) > 8) {
+    printf("Here?\n");
     return 0;
   }
 
@@ -68,4 +70,12 @@ inline size_t decode_length(uint8_t *length) {
   }
 
   return result;
+}
+
+inline size_t decode_length_length(uint8_t *length) {
+  if ((length[0] & 0x80) == 0) {
+    return 1;
+  }
+
+  return 1 + (length[0] & 0x7F);
 }
