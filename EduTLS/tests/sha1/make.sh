@@ -6,4 +6,4 @@ fi
 
 rm -rf ./a.out.dSYM ./a.out
 
-g++ ./main.cpp ../../src/crypto/*/*.cpp -Werror -Wall -Wextra -O0 -ggdb -std=c++11
+g++ ./main.cpp ../../src/crypto/hash/*.cpp -Werror -Wall -Wextra -O0 -ggdb -std=c++11
