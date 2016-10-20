@@ -294,8 +294,8 @@ public:
     }
   }
 
-  uint64_t non_zero_length() const {
-    uint64_t length = 0;
+  size_t non_zero_length() const {
+    size_t length = 0;
     struct BigIntLLNode *curr;
     curr = (struct BigIntLLNode *)(this->head)->next;
 
