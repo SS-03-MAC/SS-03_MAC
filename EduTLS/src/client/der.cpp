@@ -64,15 +64,28 @@ void parse_der(uint8_t *data, size_t data_length, int depth) {
       printf("%s\n", (char *)ps);
     } else if (type == (BER_IDENTIFIER_CLASS_UNIVERSAL | BER_IDENTIFIER_TYPE_PRIMITIVE | ASN_OCTET_STRING_CLASS)) {
       prc('\t', depth);
-      size_t os_length = decode_printablestring_length(&(data[d_p]));
+      size_t os_length = decode_octetstring_length(&(data[d_p]));
       printf("OCTET STRING - len(%zu)\n", os_length);
       prc('\t', depth + 1);
       uint8_t os[os_length];
-      decode_printablestring((char *)os, &(data[d_p]), os_length + header_length);
+      decode_octetstring(os, &(data[d_p]), os_length + header_length);
       char hex[2 * os_length + 1];
       toHex(hex, os, os_length);
       hex[2 * os_length] = '\0';
       printf("%s\n", hex);
+    } else if (type == (BER_IDENTIFIER_CLASS_UNIVERSAL | BER_IDENTIFIER_TYPE_PRIMITIVE | ASN_BIT_STRING_CLASS)) {
+      prc('\t', depth);
+      size_t bt_length = decode_bitstring_length(&(data[d_p]));
+      printf("BIT STRING - len(%zu)\n", bt_length);
+      prc('\t', depth + 1);
+      uint8_t bt[bt_length];
+      uint8_t unused = decode_bitstring(bt, &(data[d_p]), contents_length + header_length);
+      char hex[2 * bt_length + 1];
+      toHex(hex, bt, bt_length);
+      hex[2 * bt_length] = '\0';
+      printf("%s\n", hex);
+      prc('\t', depth + 1);
+      printf("Unused: %02d\n", unused);
     } else if (type == (BER_IDENTIFIER_CLASS_UNIVERSAL | BER_IDENTIFIER_TYPE_PRIMITIVE | ASN_BOOLEAN_CLASS)) {
       prc('\t', depth);
       bool b_result = false;
@@ -104,8 +117,7 @@ void parse_der(uint8_t *data, size_t data_length, int depth) {
       printf(" }\n");
     } else {
       prc('\t', depth);
-      printf("Unknown Tag t: %02x h: %zu c: %zu\n", type, header_length,
-             contents_length);
+      printf("Unknown Tag t: %02x h: %zu c: %zu\n", type, header_length, contents_length);
     }
 
     d_p += header_length + contents_length;
