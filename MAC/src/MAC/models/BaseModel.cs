@@ -4,23 +4,17 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Reflection;
 
-/// <summary>
-/// Base model that all MAC models should be dertived from
-/// </summary>
 namespace MAC.Models
 {
-    public abstract class BaseModel
+    /// <summary>
+    /// Base model that all MAC models should be dertived from
+    /// </summary>
+    public abstract class BaseModel : IBaseModel
     {
         /// <summary>
         /// What table is the data stored in
         /// </summary>
         protected static string TableName;
-
-        /// <summary>
-        /// A connection string. Should be moved. Here for dev purposes
-        /// </summary>
-        private static string ConnectionString = "Server=localhost;Database=MACDevlopment;User Id=macdev;Password=macdev";
-
 
         /// <summary>
         /// SQL Indentify column 
@@ -75,7 +69,7 @@ namespace MAC.Models
             PropertyInfo[] properties = GetType().GetProperties();
             foreach (PropertyInfo property in properties)
             {
-                property.SetValue(this, reader[property.Name]);
+                property.SetValue(this, reader[s]);
             }
         }
 
@@ -111,81 +105,7 @@ namespace MAC.Models
 
             foreach (PropertyInfo property in properties)
             {
-                    
-            }
-        }
 
-        /// <summary>
-        /// Gets all records associated with the model
-        /// </summary>
-        /// <returns>All records</returns>
-        public static List<BaseModel> Get()
-        {
-            string query = "select * from " + TableName;
-            SqlCommand cmd = new SqlCommand(query);
-            SqlDataReader reader = RunQuery(cmd);
-            List<BaseModel> results = new List<BaseModel>();
-            while (reader.Read())
-            {
-                results.Add(new BaseModel((IDataRecord)reader));
-            }
-            return results;
-        }
-
-        /// <summary>
-        ///  Get the recrods matching the query
-        ///  
-        ///  Security note:
-        ///  User inpuut should be sanitized
-        ///  before placing into this method. Failing to do
-        ///  so can result in SQL injection
-        /// </summary>
-        /// <param name="query">A valid where cause</param>
-        /// <returns>Record matching the query</returns>
-        public static List<BaseModel> Get(string whereClause)
-        {
-            string query = "select * from " + TableName + " where " + whereClause;
-            SqlCommand cmd = new SqlCommand(query);
-            return RunQuery(cmd);
-        }
-
-        /// <summary>
-        /// Get the record by id
-        /// </summary>
-        /// <param name="id">ID of the record</param>
-        /// <returns>Record of type T</returns>
-        public static BaseModel Get(long id)
-        {
-            string query = "select * from " + TableName + " where Id = @Id";
-            SqlCommand cmd = new SqlCommand(query);
-            cmd.Parameters.AddWithValue("@Id", id);
-            return RunQuery(cmd);
-        }
-
-        /// <summary>
-        /// Delete record by id 
-        /// </summary>
-        /// <param name="id">ID to delete</param>
-        /// <returns>If the record was removed</returns>
-        public static bool Delete(long id)
-        {
-
-            string command = "DELETE FROM " + TableName + " WHERE Id = @Id;";
-            SqlCommand cmd = new SqlCommand(command);
-            cmd.Parameters.AddWithValue("@Id", id);
-            int result = RunNonQuery(cmd);
-
-            if (result == 1 || result == 0)
-            {
-                return result == 1;
-            }
-            else if (result > 1)
-            {
-                throw new UnexpectedResultExpection("The database record that it deleted more than one record.");
-            }
-            else
-            {
-                throw new UnexpectedResultExpection("The database return a negative rows removed.");
             }
         }
 
@@ -203,34 +123,7 @@ namespace MAC.Models
 
         }
 
-        /// <summary>
-        /// Runs a non-query
-        /// </summary>
-        /// <param name="cmd">The commad to return</param>
-        /// <returns0>The number of rows effected by the query</returns>
-        private static int RunNonQuery(SqlCommand cmd)
-        {
-            using (SqlConnection conn = new SqlConnection(ConnectionString))
-            {
-                using (cmd)
-                {
-                    cmd.Connection = conn;
-                    return cmd.ExecuteNonQuery();
-                }
-            }
-        }
-
-        private static SqlDataReader RunQuery(SqlCommand cmd)
-        {
-            using (SqlConnection conn = new SqlConnection(ConnectionString))
-            {
-                using (cmd)
-                {
-                    cmd.Connection = conn;
-                    return cmd.ExecuteReader();
-                }
-            }
-        }
+  
 
     }
 }
