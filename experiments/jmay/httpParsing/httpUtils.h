@@ -75,4 +75,6 @@ public:
     ingestCRLF(in);
     return out.str();
   }
+
+  static std::string readToken(std::istream *in);
 };

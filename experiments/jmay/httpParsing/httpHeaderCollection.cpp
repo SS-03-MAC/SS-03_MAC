@@ -2,12 +2,10 @@
 #include "httpUtils.h"
 
 httpHeaderCollection::httpHeaderCollection(std::istream *input) {
-  std::string thisLine;
   bool headersDone = false;
 
-  // Parse status and HTTP version
-  httpHeaderCollection::getlineAndTrim(*input, thisLine);
-  parseHeaders(thisLine);
+  // Store the first line for subclasses to parse.  We can't call a virtual function in the constructor.
+  getLineAndTrim(*input, firstLine);
 
   // Parse headers
   do {
@@ -20,16 +18,14 @@ httpHeaderCollection::httpHeaderCollection(std::istream *input) {
   } while (!headersDone);
 }
 
-httpHeaderCollection::httpHeaderCollection(std::string httpVersion, int statusVal, std::string statusDescription) {
+httpHeaderCollection::httpHeaderCollection(std::string httpVersion) {
   this->httpVersion = httpVersion;
-  this->statusVal = statusVal;
-  this->statusDescription = statusDescription;
 }
 
 std::string httpHeaderCollection::toString() {
   std::stringstream out;
-  // Status
-  out << httpVersion << " " << statusVal << " " << statusDescription << std::endl;
+  // Virtual toString for subclass specific first line
+  out << firstLineToString() << std::endl;
   // Headers
   for (size_type i = 0; i < this->size(); i++) {
     out << *this->at(i) << std::endl;
@@ -46,20 +42,9 @@ int httpHeaderCollection::trimTrailingCR(std::string &toTrim) {
   }
   return 0;
 }
-void httpHeaderCollection::getlineAndTrim(std::istream &input, std::string &out) {
+void httpHeaderCollection::getLineAndTrim(std::istream &input, std::string &out) {
   std::getline(input, out);
   httpHeaderCollection::trimTrailingCR(out);
-}
-
-void httpHeaderCollection::parseHeaders(std::string &headerLine) {
-  unsigned long versionEnd = headerLine.find(' ', 0);
-  unsigned long statusValEnd = headerLine.find(' ', versionEnd + 1);
-  // Parse HTTP version
-  httpVersion = headerLine.substr(0, versionEnd);
-  // Parse status val
-  statusVal = std::stoi(headerLine.substr(versionEnd + 1, statusValEnd - versionEnd - 1));
-  // Parse status string
-  statusDescription = headerLine.substr(statusValEnd + 1, std::string::npos);
 }
 
 std::ostream &operator<<(std::ostream &os, httpHeaderCollection &headerCollection) {
