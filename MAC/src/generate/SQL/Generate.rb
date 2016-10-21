@@ -1,5 +1,5 @@
-module SSSaaS
-  class Generate
+module Generation
+  class GenerateSQL
   @types = {
     'MAC.User.Password' => 'nvarchar',
     'MAC.User.Email' => 'nvarchar',
