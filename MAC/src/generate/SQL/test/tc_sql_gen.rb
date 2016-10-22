@@ -1,14 +1,18 @@
 require 'test/unit'
 require 'erb'
-require './../Generate.rb'
+require 'yaml'
+require_relative '../generate.rb'
 
 # This class is for testing that that SQL generationn works properly
 class TestSQLGen < Test::Unit::TestCase
-  def basic_table
-    yaml = YAML.load(File.open(path))
-    @types = Generation::GenerateSQL.types
-    ERB.new(File.read('../table.sql.erb')).result(yaml[0])
-    assert_equal(0, 1)
+  include Generation
+
+  def test_basic_table
+    in_path = './data/user.yaml'
+    out_path = './data/user_table.sql'
+    yaml = YAML.load(File.open(in_path))
+    gen = GenerateSQL.new()
+    gen.write_table(yaml[0], out_path)
     assert(true)
   end
 end
