@@ -206,7 +206,7 @@ BigInt *BigInt::sub(const BigInt *v) {
         borrow = 0;
       }
 
-      carry = (uint64_t) sub;
+      carry = (uint64_t)sub;
 
       for (; len > 0; len--) {
         result->data->prepend((uint8_t)carry);
@@ -237,7 +237,7 @@ BigInt *BigInt::sub(const BigInt *v) {
         borrow = 0;
       }
 
-      carry = (uint64_t) sub;
+      carry = (uint64_t)sub;
 
       for (; len > 0; len--) {
         result->data->prepend((uint8_t)carry);
@@ -268,7 +268,7 @@ BigInt *BigInt::sub(const BigInt *v) {
         borrow = 0;
       }
 
-      carry = (uint64_t) sub;
+      carry = (uint64_t)sub;
 
       for (; len > 0; len--) {
         result->data->prepend((uint8_t)carry);
@@ -286,13 +286,13 @@ BigInt *BigInt::sub(const BigInt *v) {
     sub = a_val - borrow - b_val;
 
     if (sub < 0) {
-      sub = sub + (1ll << 8*len);
+      sub = sub + (1ll << 8 * len);
       borrow = 1;
     } else {
       borrow = 0;
     }
 
-    carry = (uint64_t) sub;
+    carry = (uint64_t)sub;
 
     for (; len > 0; len--) {
       result->data->prepend((uint8_t)carry);

@@ -14,6 +14,7 @@
 
 #pragma once
 
+#include "../ber/biginteger.h"
 #include "../ber/bitstring.h"
 #include "../ber/boolean.h"
 #include "../ber/enum.h"

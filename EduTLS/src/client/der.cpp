@@ -1,4 +1,5 @@
 #include "../encoding/der/der.h"
+#include "../bignum/bigint.h"
 #include "../encoding/base64.h"
 #include "../encoding/constants/asn1.h"
 #include "../encoding/hex.h"
@@ -106,7 +107,7 @@ void parse_der(uint8_t *data, size_t data_length, int depth) {
     } else if (type == (BER_IDENTIFIER_CLASS_UNIVERSAL | BER_IDENTIFIER_TYPE_PRIMITIVE | ASN_OBJECT_IDENTIFIER_CLASS)) {
       prc('\t', depth);
       size_t o_length = decode_objectidentifier_length(&(data[d_p]), contents_length + header_length);
-      printf("Object Identifier - len(%zu)\n", o_length);
+      printf("OBJECT IDENTIFIER - len(%zu)\n", o_length);
       uint32_t o[o_length];
       decode_objectidentifier(o, &(data[d_p]), contents_length + header_length);
       prc('\t', depth + 1);
@@ -115,6 +116,14 @@ void parse_der(uint8_t *data, size_t data_length, int depth) {
         printf(" %d", o[i]);
       }
       printf(" }\n");
+    } else if (type == (BER_IDENTIFIER_CLASS_UNIVERSAL | BER_IDENTIFIER_TYPE_PRIMITIVE | ASN_INTEGER_CLASS)) {
+      prc('\t', depth);
+      printf("INTEGER - len(%zu)\n", contents_length + header_length);
+      BigInt *result = new BigInt(0, false);
+      decode_bigint(result, &(data[d_p]), contents_length + header_length);
+      prc('\t', depth + 1);
+      result->print();
+      delete result;
     } else {
       prc('\t', depth);
       printf("Unknown Tag t: %02x h: %zu c: %zu\n", type, header_length, contents_length);

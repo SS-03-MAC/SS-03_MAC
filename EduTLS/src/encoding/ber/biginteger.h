@@ -52,7 +52,6 @@ inline void encode_bigint(uint8_t *result, BigInt *value) {
       return;
     }
 
-
     result[0] = BER_IDENTIFIER_CLASS_UNIVERSAL | BER_IDENTIFIER_TYPE_PRIMITIVE | ASN_INTEGER_CLASS;
 
     encode_length(&(result[1]), written - offset);
@@ -88,7 +87,6 @@ inline void encode_bigint(uint8_t *result, BigInt *value) {
   while (offset < length && contents[offset] == 0x00 && (contents[offset + 1] & 0x80) == 0x00) {
     offset += 1;
   }
-
 
   result[0] = BER_IDENTIFIER_CLASS_UNIVERSAL | BER_IDENTIFIER_TYPE_PRIMITIVE | ASN_INTEGER_CLASS;
   encode_length(&(result[1]), written - offset + 1);
