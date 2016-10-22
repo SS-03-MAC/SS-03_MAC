@@ -23,7 +23,6 @@
 BigInt *BigInt::add(const BigInt *val) {
   BigInt *result = new BigInt();
 
-
   if (this->negative != val->negative) {
     if (this->negative) {
       BigInt *cpy = new BigInt(val);
@@ -174,10 +173,135 @@ BigInt *BigInt::sub(const BigInt *v) {
     return result;
   }
 
-  int borrow;
-  int digit;
+  // guaranteed: a > b
 
-  
+  result = new BigInt(0, false);
+
+  struct BigIntLLNode *a_curr = (struct BigIntLLNode *)t->data->tail;
+  struct BigIntLLNode *b_curr = (struct BigIntLLNode *)val->data->tail;
+
+  uint64_t borrow = 0;
+  uint64_t a_val = 0;
+  uint64_t b_val = 0;
+  int64_t sub = 0;
+  uint64_t carry = 0;
+  size_t len = 0;
+
+  while (a_curr->prev != t->data->head && b_curr->prev != val->data->head) {
+    a_curr = (struct BigIntLLNode *)a_curr->prev;
+    b_curr = (struct BigIntLLNode *)b_curr->prev;
+
+    a_val += ((uint64_t)a_curr->data) << (len * 8);
+    b_val += ((uint64_t)b_curr->data) << (len * 8);
+
+    len += 1;
+
+    if (len == 7) {
+      sub = a_val - borrow - b_val;
+
+      if (sub < 0) {
+        sub = sub + (1ll << 56);
+        borrow = 1;
+      } else {
+        borrow = 0;
+      }
+
+      carry = (uint64_t) sub;
+
+      for (; len > 0; len--) {
+        result->data->prepend((uint8_t)carry);
+        carry = carry >> 8;
+      }
+      a_val = 0;
+      b_val = 0;
+      sub = 0;
+      len = 0;
+    }
+  }
+
+  while (a_curr->prev != t->data->head) {
+    a_curr = (struct BigIntLLNode *)a_curr->prev;
+
+    a_val += ((uint64_t)a_curr->data) << (len * 8);
+    b_val += 0;
+
+    len += 1;
+
+    if (len == 7) {
+      sub = a_val - borrow - b_val;
+
+      if (sub < 0) {
+        sub = sub + (1ll << 56);
+        borrow = 1;
+      } else {
+        borrow = 0;
+      }
+
+      carry = (uint64_t) sub;
+
+      for (; len > 0; len--) {
+        result->data->prepend((uint8_t)carry);
+        carry = carry >> 8;
+      }
+      a_val = 0;
+      b_val = 0;
+      sub = 0;
+      len = 0;
+    }
+  }
+
+  while (b_curr->prev != val->data->head) {
+    b_curr = (struct BigIntLLNode *)b_curr->prev;
+
+    a_val += 0;
+    b_val += ((uint64_t)b_curr->data) << (len * 8);
+
+    len += 1;
+
+    if (len == 7) {
+      sub = a_val - borrow - b_val;
+
+      if (sub < 0) {
+        sub = sub + (1ll << 56);
+        borrow = 1;
+      } else {
+        borrow = 0;
+      }
+
+      carry = (uint64_t) sub;
+
+      for (; len > 0; len--) {
+        result->data->prepend((uint8_t)carry);
+        carry = carry >> 8;
+      }
+      a_val = 0;
+      sub = 0;
+      b_val = 0;
+      len = 0;
+    }
+  }
+
+  // At the end, deal with any remaining data.
+  if (len != 0) {
+    sub = a_val - borrow - b_val;
+
+    if (sub < 0) {
+      sub = sub + (1ll << 8*len);
+      borrow = 1;
+    } else {
+      borrow = 0;
+    }
+
+    carry = (uint64_t) sub;
+
+    for (; len > 0; len--) {
+      result->data->prepend((uint8_t)carry);
+      carry = carry >> 8;
+    }
+    a_val = 0;
+    b_val = 0;
+    len = 0;
+  }
 
   delete val;
   delete t;
