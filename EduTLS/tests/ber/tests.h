@@ -1,3 +1,4 @@
+#include "tests_bigint.h"
 #include "tests_boolean.h"
 #include "tests_ia5string.h"
 #include "tests_integer.h"
@@ -14,6 +15,8 @@ std::string tests_n[] = {
     "Testing BER Boolean Decoding...",
     "Testing BER Unsigned Integers...",
     "Testing BER Signed Integers...",
+    "Testing BER Big Integers Unsigned...",
+    "Testing BER Big Integers Signed...",
     "Testing BER Short Octet String Encoding...",
     "Testing BER Short Octet String Decoding...",
     "Testing BER Long Octet String Encoding...",
@@ -32,6 +35,8 @@ void *tests_f[] = {(void *)&test_ber_boolean_encode,
                    (void *)&test_ber_boolean_decode,
                    (void *)&test_ber_unsigned_integer,
                    (void *)&test_ber_signed_integer,
+                   (void *)&test_ber_bigint_unsigned,
+                   (void *)&test_ber_bigint_signed,
                    (void *)&test_ber_octetstring_short_encode,
                    (void *)&test_ber_octetstring_short_decode,
                    (void *)&test_ber_octetstring_long_encode,
