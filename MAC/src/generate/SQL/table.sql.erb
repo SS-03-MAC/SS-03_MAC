@@ -1,5 +1,5 @@
-CREATE TABLE <%= table["name"] %> (
-  <% table["fields"].each do |field| %>
-     puts field["name"] + " " + @types[field["type"]] + ","
+CREATE TABLE <%= name %> (
+  <% fields.each do |field| %>
+     <%= field["name"] + " " + field["type"] + "," %>
   <% end %>
 );
