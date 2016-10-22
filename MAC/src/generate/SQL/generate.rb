@@ -29,7 +29,8 @@ module Generation
     def generate_table(yaml_hash)
       template_path = './table.sql.erb';
       template = File.read(template_path)
-      HashGenerator.generate_from_hash(template, yaml_hash)
+      composed_hash = compose_hash(yaml_hash)
+      HashGenerator.render_from_hash(template, composed_hash)
     end
 
     def compose_hash(input_hash)

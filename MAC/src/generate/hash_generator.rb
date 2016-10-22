@@ -1,5 +1,5 @@
 require 'erb'
-require 'obstruct'
+require 'ostruct'
 
 # This module allows us to generate source files using ERB
 module Generation
