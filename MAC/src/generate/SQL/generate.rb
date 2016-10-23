@@ -1,4 +1,4 @@
-require './../hash_generator.rb'
+require_relative '../hash_generator.rb'
 
 module Generation
   # This class alows us to generate SQL source files using an ERB template and
@@ -27,7 +27,7 @@ module Generation
     end
 
     def generate_table(yaml_hash)
-      template_path = './table.sql.erb';
+      template_path = File.expand_path(File.join(File.dirname(__FILE__), 'table.sql.erb'))
       template = File.read(template_path)
       composed_hash = compose_hash(yaml_hash)
       HashGenerator.render_from_hash(template, composed_hash)
@@ -39,6 +39,13 @@ module Generation
         field['type'] = @types[field['type']]
       end
       output_hash
+    end
+
+    def write_table(yaml_hash, output_path)
+      result = generate_table(yaml_hash)
+      File.open(output_path, 'w') do |f|
+        f.write(result)
+      end
     end
   end
 end

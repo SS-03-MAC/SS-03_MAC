@@ -13,7 +13,7 @@ module Generation
   # HashGenerator.render_from_hash(t, h)
   class HashGenerator < OpenStruct
     def render(template)
-      ERB.new(template).result(binding)
+      ERB.new(template, 0, '<>').result(binding)
     end
 
     def self.render_from_hash(template, in_hash)
