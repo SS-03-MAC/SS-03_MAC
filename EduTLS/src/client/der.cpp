@@ -63,6 +63,15 @@ void parse_der(uint8_t *data, size_t data_length, int depth) {
       decode_printablestring((char *)ps, &(data[d_p]), ps_length + header_length);
       ps[ps_length] = '\0';
       printf("%s\n", (char *)ps);
+    } else if (type == (BER_IDENTIFIER_CLASS_UNIVERSAL | BER_IDENTIFIER_TYPE_PRIMITIVE | ASN_UTF8_STRING_CLASS)) {
+      prc('\t', depth);
+      size_t utf8s_length = decode_utf8string_length(&(data[d_p]));
+      printf("UTF8 STRING - len(%zu)\n", utf8s_length);
+      prc('\t', depth + 1);
+      uint8_t utf8s[utf8s_length + 1];
+      decode_utf8string((char *)utf8s, &(data[d_p]), utf8s_length + header_length);
+      utf8s[utf8s_length] = '\0';
+      printf("%s\n", (char *)utf8s);
     } else if (type == (BER_IDENTIFIER_CLASS_UNIVERSAL | BER_IDENTIFIER_TYPE_PRIMITIVE | ASN_OCTET_STRING_CLASS)) {
       prc('\t', depth);
       size_t os_length = decode_octetstring_length(&(data[d_p]));

@@ -25,6 +25,7 @@
 #include "../ber/printablestring.h"
 #include "../ber/shared.h"
 #include "../ber/utctime.h"
+#include "../ber/utf8string.h"
 #include "../constants/asn1.h"
 #include "../constants/ber.h"
 #include "../time.h"
