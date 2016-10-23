@@ -6,7 +6,7 @@ module Generation
   class GenerateSQL
     attr_reader :types
 
-    def initialize()
+    def initialize
       @types = {
         'MAC.User.Password' => 'nvarchar',
         'MAC.User.Email' => 'nvarchar',
@@ -27,7 +27,8 @@ module Generation
     end
 
     def generate_table(yaml_hash)
-      template_path = File.expand_path(File.join(File.dirname(__FILE__), 'table.sql.erb'))
+      cur_directory_path = File.expand_path(File.dirname(__FILE__))
+      template_path = File.join(cur_directory_path, 'table.sql.erb')
       template = File.read(template_path)
       composed_hash = compose_hash(yaml_hash)
       HashGenerator.render_from_hash(template, composed_hash)

@@ -11,7 +11,7 @@ class TestSQLGen < Test::Unit::TestCase
     in_path = './data/user.yaml'
     out_path = './data/user_table.sql'
     yaml = YAML.load(File.open(in_path))
-    gen = GenerateSQL.new()
+    gen = GenerateSQL.new
     gen.write_table(yaml[0], out_path)
     assert(true)
   end
