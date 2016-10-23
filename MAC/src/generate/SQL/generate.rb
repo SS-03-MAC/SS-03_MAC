@@ -26,6 +26,9 @@ module Generation
       }
     end
 
+    # This method takes in a hash from one of our YAML files and generates
+    # a string representing a SQL table, storing data as required in the 
+    # input
     def generate_table(yaml_hash)
       cur_directory_path = File.expand_path(File.dirname(__FILE__))
       template_path = File.join(cur_directory_path, 'table.sql.erb')
@@ -34,6 +37,9 @@ module Generation
       HashGenerator.render_from_hash(template, composed_hash)
     end
 
+    # This method takes a hash and for everything in the "fields" catagory,
+    # will go through and change the type of each field from a MAC defined type
+    # into a SQL type
     def compose_hash(input_hash)
       output_hash = input_hash
       output_hash['fields'].each do |field|
@@ -42,6 +48,8 @@ module Generation
       output_hash
     end
 
+    # Takes in a hash and an output destination, writes the table to 
+    # the given file
     def write_table(yaml_hash, output_path)
       result = generate_table(yaml_hash)
       File.open(output_path, 'w') do |f|
