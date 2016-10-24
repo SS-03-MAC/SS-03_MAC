@@ -13,8 +13,4 @@
 
 #pragma once
 
-
-enum {
-          none=0, md5=1, sha1=2, sha224=3, sha256=4, sha384=5,
-          sha512=6, unknown=255
-      } HashAlgorithm_t;
+enum { none = 0, md5 = 1, sha1 = 2, sha224 = 3, sha256 = 4, sha384 = 5, sha512 = 6, unknown = 255 } HashAlgorithm_t;

@@ -13,6 +13,4 @@
 
 #pragma once
 
-
-enum { dhe_dss, dhe_rsa, dh_anon, rsa, dh_dss, dh_rsa
-          } KeyExchangeAlgorithm_t;
+enum { dhe_dss, dhe_rsa, dh_anon, rsa, dh_dss, dh_rsa } KeyExchangeAlgorithm_t;

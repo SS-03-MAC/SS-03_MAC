@@ -13,5 +13,4 @@
 
 #pragma once
 
-      enum { anonymous=0, rsa=1, dsa=2, ecdsa=3, unknown=255 }
-        SignatureAlgorithm_t;
+enum { anonymous = 0, rsa = 1, dsa = 2, ecdsa = 3, unknown = 255 } SignatureAlgorithm_t;

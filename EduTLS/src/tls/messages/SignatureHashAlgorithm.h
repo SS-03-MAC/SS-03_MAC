@@ -14,11 +14,11 @@
 
 #pragma once
 
-#include "../interfaces/encodable.h"
 #include "../enum/HashAlgorithm.h"
 #include "../enum/SignatureAlgorithm.h"
+#include "../interfaces/encodable.h"
 
 class SignatureAndHashAlgorithm_t : public encodable_i {
-       HashAlgorithm_t hash;
-       SignatureAlgorithm_t signature;
- };
+  HashAlgorithm_t hash;
+  SignatureAlgorithm_t signature;
+};
