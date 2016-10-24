@@ -22,17 +22,15 @@
 
 final class ServerHello : public HandshakeContents_t {
 public:
-  ProtocolVersion_t client_version;
+  ProtocolVersion_t server_version;
   Random_t random;
 
   size_t session_id_length;
   uint8_t *session_id;
 
-  size_t cipher_suites_length;
-  uint8_t *cipher_suites;
+  uint8_t cipher_suite[2];
 
-  size_t compression_methods_length;
-  CompressionMethod_t *compression_methods;
+  CompressionMethod_t compression_method;
 
   size_t extensions_length = 0;
   Extension_t *extensions;
