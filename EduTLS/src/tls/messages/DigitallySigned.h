@@ -1,4 +1,4 @@
-//===-- EduTLS/src/tls/messages/SignatureHashAlgorithm.h  -------*- C++ -*-===//
+//===-- EduTLS/src/tls/messages/DigitallySigned.h         -------*- C++ -*-===//
 //
 //                     EduTLS - Transport Layer Security
 //
@@ -7,18 +7,17 @@
 //===----------------------------------------------------------------------===//
 ///
 /// \file
-/// This file contains message classes for the Signature and Hash Algorithm
-/// protocol.
+/// This file contains message classes for the Digitally Signed protocol.
 ///
 //===----------------------------------------------------------------------===//
 
 #pragma once
 
-#include "../enum/HashAlgorithm.h"
-#include "../enum/SignatureAlgorithm.h"
 #include "../interfaces/encodable.h"
+#include "./SignatureHashAlgorithm.h"
 
-class SignatureAndHashAlgorithm : public encodable_i {
-  HashAlgorithm_t hash;
-  SignatureAlgorithm_t signature;
+final class DigitallySigned : public encodable_i {
+  SignatureAndHashAlgorithm algorithm;
+  size_t signature_length;
+  uint8_t *signature;
 };
