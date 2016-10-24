@@ -14,8 +14,9 @@
 #pragma once
 
 #include "../enums/Alert.h"
+#include "../interfaces/encodable.h"
 
-class Alert {
+class Alert : public encodable_i {
 public:
   AlertLevel_t level;
   AlertDescription_t description;

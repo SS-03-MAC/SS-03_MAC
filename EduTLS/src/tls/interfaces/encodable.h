@@ -1,4 +1,4 @@
-//===-- EduTLS/src/tls/messages/ChangeCipherSpec.h        -------*- C++ -*-===//
+//===-- EduTLS/src/tls/interfaces/encodable.h             -------*- C++ -*-===//
 //
 //                     EduTLS - Transport Layer Security
 //
@@ -7,16 +7,14 @@
 //===----------------------------------------------------------------------===//
 ///
 /// \file
-/// This file contains message classes for the Change Cipher Spec protocol.
+/// This file contains the Encodable interface.
 ///
 //===----------------------------------------------------------------------===//
 
 #pragma once
 
-#include "../enums/ChangeCipherSpec.h"
-#include "../interfaces/encodable.h"
-
-class ChangeCipherSpec : public encodable_i {
-public:
-  ChangeCipherSpec_t value;
+class encodable_i {
+  virtual int encode(uint8_t *result) = 0;
+  virtual size_t encode_length() = 0;
+  virtual int decode(uint8_t *encoded) = 0;
 };
