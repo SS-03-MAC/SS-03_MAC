@@ -1,4 +1,4 @@
-//===-- EduTLS/src/tls/messages/HelloRequest.h        -------*- C++ -*-===//
+//===-- EduTLS/src/tls/messages/Certificate.h        -------*- C++ -*-===//
 //
 //                     EduTLS - Transport Layer Security
 //
@@ -7,7 +7,7 @@
 //===----------------------------------------------------------------------===//
 ///
 /// \file
-/// This file contains message classes for the Hello Request protocol.
+/// This file contains message classes for the Certificate protocol.
 ///
 //===----------------------------------------------------------------------===//
 
@@ -16,8 +16,9 @@
 #include "../interfaces/encodable.h"
 #include "Handshake.h"
 
-final class HelloRequest : public HandshakeContents_t {
+final class Certificate : public HandshakeContents_t {
 public:
+  uint8_t *certificate_list;
   int encode(uint8_t *result);
   size_t encode_length();
   int decode(uint8_t *encoded);

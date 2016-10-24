@@ -1,4 +1,4 @@
-//===-- EduTLS/src/tls/messages/HelloRequest.h        -------*- C++ -*-===//
+//===-- EduTLS/src/tls/messages/Extension.h               -------*- C++ -*-===//
 //
 //                     EduTLS - Transport Layer Security
 //
@@ -7,18 +7,17 @@
 //===----------------------------------------------------------------------===//
 ///
 /// \file
-/// This file contains message classes for the Hello Request protocol.
+/// This file contains message classes for the Extension protocol.
 ///
 //===----------------------------------------------------------------------===//
 
 #pragma once
 
 #include "../interfaces/encodable.h"
-#include "Handshake.h"
 
-final class HelloRequest : public HandshakeContents_t {
+class Extension : public encodable_i {
 public:
-  int encode(uint8_t *result);
-  size_t encode_length();
-  int decode(uint8_t *encoded);
+  ExtensionType_t extension_type;
+  size_t extension_length;
+  uint8_t *extension_data;
 };

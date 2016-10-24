@@ -1,4 +1,4 @@
-//===-- EduTLS/src/tls/messages/Alert.h                   -------*- C++ -*-===//
+//===-- EduTLS/src/tls/enums/ExtensionType.h              -------*- C++ -*-===//
 //
 //                     EduTLS - Transport Layer Security
 //
@@ -7,17 +7,10 @@
 //===----------------------------------------------------------------------===//
 ///
 /// \file
-/// This file contains message classes for the Alert protocol.
+/// This file contains enums for the Extension Type protocol.
 ///
 //===----------------------------------------------------------------------===//
 
 #pragma once
 
-#include "../enums/Alert.h"
-#include "../interfaces/encodable.h"
-
-class Alert : public encodable_i {
-public:
-  AlertLevel_t level;
-  AlertDescription_t description;
-};
+enum { signature_algorithms = 13, unknown = 65535 } ExtensionType_t;

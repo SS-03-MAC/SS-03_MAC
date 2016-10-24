@@ -1,4 +1,4 @@
-//===-- EduTLS/src/tls/messages/ClientHello.h             -------*- C++ -*-===//
+//===-- EduTLS/src/tls/messages/ServerHello.h             -------*- C++ -*-===//
 //
 //                     EduTLS - Transport Layer Security
 //
@@ -7,7 +7,7 @@
 //===----------------------------------------------------------------------===//
 ///
 /// \file
-/// This file contains message classes for the Client Hello protocol.
+/// This file contains message classes for the Server Hello protocol.
 ///
 //===----------------------------------------------------------------------===//
 
@@ -20,7 +20,7 @@
 #include "../interfaces/encodable.h"
 #include "./ProtocolVersion.h"
 
-final class ClientHello : public HandshakeContents_t {
+final class ServerHello : public HandshakeContents_t {
 public:
   ProtocolVersion_t client_version;
   Random_t random;
