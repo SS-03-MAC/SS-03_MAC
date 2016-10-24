@@ -7,8 +7,17 @@ using MAC.Models.Attributes;
 
 namespace MAC.Models
 {
+    /// <summary>
+    /// This class is a factory for models
+    /// </summary>
     public static class BaseModelFactory
     {
+        /// <summary>
+        /// This method fill a model 
+        /// </summary>
+        /// <param name="model">The Type of model to create</param>
+        /// <param name="reader">The row that represnets the model</param>
+        /// <returns></returns>
         public static object FillModel(Type model, IDataRecord reader)
         {
             var output = Activator.CreateInstance(model);
