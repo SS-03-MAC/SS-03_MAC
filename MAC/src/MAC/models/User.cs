@@ -1,29 +1,28 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
+using MAC.Models.Attributes;
+using MAC.Types.User;
 
 namespace MAC.Models
 {
-    public class User : BaseModel
+    public partial class User : BaseModel
     {
-        /// <summary>
-        /// Database id
-        /// </summary>
-        public long? Id { get; }
         /// <summary>
         /// A basic string field
         /// </summary>
         /// <returns></returns>
-        //[Required]
-        public string Email { get; set; }
+        [Required]
+        [DatabaseField("Name")]
+        public Email Email { get; set; }
         /// <summary>
         /// On set will set PasswordDigest to the BCrypt Password
         /// </summary>
+        [Required]
+        [Length(Minimum = 10, Maximum = 72)]
         public virtual string Password { get; set; }
         /// <summary>
         /// How the Password is stored in the database
         /// </summary>
         /// <returns></returns>
-        public string PasswordDigest { get; set; }
+        [DatabaseField("PasswordDigest")]
+        public Password PasswordDigest { get; set; }
     }
 }
