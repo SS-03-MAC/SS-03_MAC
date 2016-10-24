@@ -1,4 +1,4 @@
-require 'optparse'
+lrequire 'optparse'
 
 module MacCLI
   ##
@@ -14,6 +14,8 @@ module MacCLI
         parser.on('-h', '--help', 'Shows this help message.') { run_help }
       end.parse!
     end
+
+    
 
     private
 
