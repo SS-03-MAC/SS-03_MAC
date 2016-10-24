@@ -15,7 +15,7 @@
 
 #include "../interfaces/encodable.h"
 
-final class Random_t : public encodable_i {
+class Random_t final : public encodable_i {
 public:
   uint32_t gmt_unix_time;
   uint8_t random_bytes[28];

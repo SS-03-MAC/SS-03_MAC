@@ -20,7 +20,7 @@
 #include "../interfaces/encodable.h"
 #include "./ProtocolVersion.h"
 
-final class ServerHello : public HandshakeContents_t {
+class ServerHelloDone final : public HandshakeContents_t {
 public:
   int encode(uint8_t *result);
   size_t encode_length();

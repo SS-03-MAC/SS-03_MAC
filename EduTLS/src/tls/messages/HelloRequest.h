@@ -16,7 +16,7 @@
 #include "../interfaces/encodable.h"
 #include "Handshake.h"
 
-final class HelloRequest : public HandshakeContents_t {
+class HelloRequest final : public HandshakeContents_t {
 public:
   int encode(uint8_t *result);
   size_t encode_length();

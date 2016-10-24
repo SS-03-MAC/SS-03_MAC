@@ -16,7 +16,7 @@
 #include "../enums/ContentType.h"
 #include "../interfaces/encodable.h"
 
-class TLSPlaintext : public encodable_i {
+class TLSPlaintext final : public encodable_i {
 public:
   ContentType_t type;
   ProtocolVersion_t version;

@@ -16,8 +16,12 @@
 #include "../enums/Alert.h"
 #include "../interfaces/encodable.h"
 
-class Alert : public encodable_i {
+class Alert final : public encodable_i {
 public:
   AlertLevel_t level;
   AlertDescription_t description;
+
+  int encode(uint8_t *result);
+  size_t encode_length();
+  int decode(uint8_t *encoded);
 };

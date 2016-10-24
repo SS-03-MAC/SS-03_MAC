@@ -15,7 +15,7 @@
 
 #include "../interfaces/encodable.h"
 
-final class ProtocolVersion_t : public encodable_i {
+class ProtocolVersion_t final : public encodable_i {
 public:
   uint8_t major;
   uint8_t minor;

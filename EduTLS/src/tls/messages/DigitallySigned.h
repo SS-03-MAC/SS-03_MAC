@@ -16,8 +16,12 @@
 #include "../interfaces/encodable.h"
 #include "./SignatureHashAlgorithm.h"
 
-final class DigitallySigned : public encodable_i {
+class DigitallySigned final : public encodable_i {
   SignatureAndHashAlgorithm algorithm;
   size_t signature_length;
   uint8_t *signature;
+
+  int encode(uint8_t *result);
+  size_t encode_length();
+  int decode(uint8_t *encoded);
 };

@@ -14,11 +14,16 @@
 
 #pragma once
 
-#include "../enum/HashAlgorithm.h"
-#include "../enum/SignatureAlgorithm.h"
+#include "../enums/HashAlgorithm.h"
+#include "../enums/SignatureAlgorithm.h"
 #include "../interfaces/encodable.h"
 
-class SignatureAndHashAlgorithm : public encodable_i {
+class SignatureAndHashAlgorithm final : public encodable_i {
+public:
   HashAlgorithm_t hash;
   SignatureAlgorithm_t signature;
+
+  int encode(uint8_t *result);
+  size_t encode_length();
+  int decode(uint8_t *encoded);
 };

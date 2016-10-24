@@ -1,4 +1,4 @@
-//===-- EduTLS/src/tls/messages/ServerDHParams.h        -------*- C++ -*-===//
+//===-- EduTLS/src/tls/messages/ServerDHParams.h          -------*- C++ -*-===//
 //
 //                     EduTLS - Transport Layer Security
 //
@@ -14,9 +14,9 @@
 #pragma once
 
 #include "../interfaces/encodable.h"
-#include "Handshake.h"
+#include "./ServerKeyExchange.h"
 
-final class ServerDHParams : public ServerKeyExchange {
+class ServerDHParams final : public ServerKeyExchange {
 public:
   size_t dh_p_length;
   uint8_t *dh_p;

@@ -16,7 +16,11 @@
 #include "../enums/ChangeCipherSpec.h"
 #include "../interfaces/encodable.h"
 
-class ChangeCipherSpec : public encodable_i {
+class ChangeCipherSpec final : public encodable_i {
 public:
   ChangeCipherSpec_t value;
+
+  int encode(uint8_t *result);
+  size_t encode_length();
+  int decode(uint8_t *encoded);
 };

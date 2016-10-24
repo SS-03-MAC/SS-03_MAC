@@ -13,4 +13,4 @@
 
 #pragma once
 
-enum { signature_algorithms = 13, unknown = 65535 } ExtensionType_t;
+enum class ExtensionType_t { signature_algorithms = 13, max = 65535 };

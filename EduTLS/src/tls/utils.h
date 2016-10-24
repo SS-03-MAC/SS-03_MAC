@@ -1,4 +1,4 @@
-//===-- EduTLS/src/tls/enums/CompressionMethod.h          -------*- C++ -*-===//
+//===-- EduTLS/src/tls/utils.h                            -------*- C++ -*-===//
 //
 //                     EduTLS - Transport Layer Security
 //
@@ -7,9 +7,14 @@
 //===----------------------------------------------------------------------===//
 ///
 /// \file
-/// This file contains enums for the Compression Method protocol.
+/// This file contains various utilities for use with TLS
 ///
 //===----------------------------------------------------------------------===//
 
 #pragma once
-enum class CompressionMethod_t { null = 0, max = 255 };
+
+#include <cstdint>
+
+struct uint24_t {
+  uint32_t value : 24;
+};

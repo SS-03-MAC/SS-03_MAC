@@ -18,9 +18,11 @@
 #include "../enums/CompressionMethod.h"
 #include "../enums/HandshakeType.h"
 #include "../interfaces/encodable.h"
+#include "./Extension.h"
 #include "./ProtocolVersion.h"
+#include "./Random.h"
 
-final class ServerHello : public HandshakeContents_t {
+class ServerHello final : public HandshakeContents_t {
 public:
   ProtocolVersion_t server_version;
   Random_t random;

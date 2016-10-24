@@ -13,7 +13,7 @@
 
 #pragma once
 
-enum {
+enum class HandshakeType_t {
   hello_request = 0,
   client_hello = 1,
   server_hello = 2,
@@ -24,5 +24,5 @@ enum {
   certificate_verify = 15,
   client_key_exchange = 16,
   finished = 20,
-  unknown = 255
-} HandshakeType_t;
+  max = 255
+};

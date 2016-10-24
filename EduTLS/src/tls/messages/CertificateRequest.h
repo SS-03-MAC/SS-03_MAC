@@ -15,12 +15,17 @@
 
 #include "../interfaces/encodable.h"
 #include "Handshake.h"
+#include "SignatureHashAlgorithm.h"
 
-final class CertificateRequest : public HandshakeContents_t {
+class CertificateRequest final : public HandshakeContents_t {
   size_t certificate_types_length;
   ClientCertificateType_t *certificate_types;
   size_t supported_signature_algorithms_length;
   SignatureAndHashAlgorithm *supported_signature_algorithms;
   size_t certificate_authorities_length;
   uint8_t *certificate_authorities;
+
+  int encode(uint8_t *result);
+  size_t encode_length();
+  int decode(uint8_t *encoded);
 };

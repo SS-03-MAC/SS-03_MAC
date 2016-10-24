@@ -15,9 +15,13 @@
 
 #include "../interfaces/encodable.h"
 
-class Extension : public encodable_i {
+class Extension_t final : public encodable_i {
 public:
   ExtensionType_t extension_type;
   size_t extension_length;
   uint8_t *extension_data;
+
+  int encode(uint8_t *result);
+  size_t encode_length();
+  int decode(uint8_t *encoded);
 };

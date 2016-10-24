@@ -18,6 +18,7 @@
 #include "../encoding/base64.h"
 #include "../encoding/der/der.h"
 #include "../encoding/hex.h"
+#include "../tls/tls.h"
 #include "der.h"
 
 #include <cstdio>

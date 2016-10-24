@@ -13,4 +13,4 @@
 
 #pragma once
 
-enum ChangeCipherSpec_t { change_cipher_spec = 1, keep_cipher_spec = 255 };
+enum class ChangeCipherSpec_t { change_cipher_spec = 1, max = 255 };

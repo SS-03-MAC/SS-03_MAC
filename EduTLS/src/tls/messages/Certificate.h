@@ -1,4 +1,4 @@
-//===-- EduTLS/src/tls/messages/Certificate.h        -------*- C++ -*-===//
+//===-- EduTLS/src/tls/messages/Certificate.h             -------*- C++ -*-===//
 //
 //                     EduTLS - Transport Layer Security
 //
@@ -16,9 +16,10 @@
 #include "../interfaces/encodable.h"
 #include "Handshake.h"
 
-final class Certificate : public HandshakeContents_t {
+class Certificate final : public HandshakeContents_t {
 public:
   uint8_t *certificate_list;
+
   int encode(uint8_t *result);
   size_t encode_length();
   int decode(uint8_t *encoded);
