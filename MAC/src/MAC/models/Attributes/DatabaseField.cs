@@ -8,11 +8,11 @@ namespace MAC.Models.Attributes
     [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
     public class DatabaseField : Attribute
     {
-        private string name;
-        
+        public string Name { get; }
+
         public DatabaseField(string name)
         {
-            this.name = name;
+            Name = name;
         }
     }
 }
