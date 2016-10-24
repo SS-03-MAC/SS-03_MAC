@@ -97,4 +97,10 @@ public:
 
   /// Remove leading zero bytes.
   void trim() { this->data->trim(); }
+
+  bool isNegative() { return this->negative; }
+
+  size_t bytes(uint8_t *data);
+
+  size_t length() { return this->data->non_zero_length(); }
 };

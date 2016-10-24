@@ -23,14 +23,37 @@
 BigInt *BigInt::add(const BigInt *val) {
   BigInt *result = new BigInt();
 
+  if (this->negative != val->negative) {
+    if (this->negative) {
+      BigInt *cpy = new BigInt(val);
+      this->negate();
+      BigInt *data = cpy->sub(this);
+      result->copy(data);
+      this->negate();
+
+      delete cpy;
+      delete data;
+    } else {
+      BigInt *cpy = new BigInt(val);
+      cpy->negate();
+      BigInt *data = this->sub(cpy);
+      result->copy(data);
+
+      delete cpy;
+      delete data;
+    }
+    return result;
+  }
+
+  result->negative = this->negative;
+
   struct BigIntLLNode *a_curr = (struct BigIntLLNode *)this->data->tail;
   struct BigIntLLNode *b_curr = (struct BigIntLLNode *)val->data->tail;
 
   uint64_t carry = 0;
-  int64_t add_result = 0;
-  int64_t a_val = 0;
-  int64_t b_val = 0;
-  uint8_t len = 0;
+  uint64_t a_val = 0;
+  uint64_t b_val = 0;
+  size_t len = 0;
 
   // Starting at the LSB, group into sets of 7 bytes and perform addition,
   // saving the carry bit. Perform addition as signed integers, allowing the
@@ -49,22 +72,7 @@ BigInt *BigInt::add(const BigInt *val) {
     len += 1;
 
     if (len == 7) {
-      if (this->negative) {
-        a_val *= -1;
-      }
-
-      if (val->negative) {
-        b_val *= -1;
-      }
-
-      add_result = ((int64_t)carry) + a_val + b_val;
-      if (add_result < 0) {
-        add_result *= -1;
-        result->negative = true;
-      } else if (add_result > 0) {
-        result->negative = false;
-      }
-      carry = (uint64_t)add_result;
+      carry = carry + a_val + b_val;
 
       for (; len > 0; len--) {
         result->data->prepend((uint8_t)carry);
@@ -85,22 +93,7 @@ BigInt *BigInt::add(const BigInt *val) {
     len += 1;
 
     if (len == 7) {
-      if (this->negative) {
-        a_val *= -1;
-      }
-
-      if (val->negative) {
-        b_val *= -1;
-      }
-
-      add_result = ((int64_t)carry) + a_val + b_val;
-      if (add_result < 0) {
-        add_result *= -1;
-        result->negative = true;
-      } else if (add_result > 0) {
-        result->negative = false;
-      }
-      carry = (uint64_t)add_result;
+      carry = carry + a_val + b_val;
 
       for (; len > 0; len--) {
         result->data->prepend((uint8_t)carry);
@@ -121,22 +114,7 @@ BigInt *BigInt::add(const BigInt *val) {
     len += 1;
 
     if (len == 7) {
-      if (this->negative) {
-        a_val *= -1;
-      }
-
-      if (val->negative) {
-        b_val *= -1;
-      }
-
-      add_result = ((int64_t)carry) + a_val + b_val;
-      if (add_result < 0) {
-        add_result *= -1;
-        result->negative = true;
-      } else if (add_result > 0) {
-        result->negative = false;
-      }
-      carry = (uint64_t)add_result;
+      carry = carry + a_val + b_val;
 
       for (; len > 0; len--) {
         result->data->prepend((uint8_t)carry);
@@ -150,22 +128,7 @@ BigInt *BigInt::add(const BigInt *val) {
 
   // At the end, deal with any remaining data.
   if (len != 0) {
-    if (this->negative) {
-      a_val *= -1;
-    }
-
-    if (val->negative) {
-      b_val *= -1;
-    }
-
-    add_result = ((int64_t)carry) + a_val + b_val;
-    if (add_result < 0) {
-      add_result *= -1;
-      result->negative = true;
-    } else if (add_result > 0) {
-      result->negative = false;
-    }
-    carry = (uint64_t)add_result;
+    carry = carry + a_val + b_val;
 
     for (; len > 0; len--) {
       result->data->prepend((uint8_t)carry);
@@ -189,9 +152,156 @@ BigInt *BigInt::sub(const BigInt *v) {
   BigInt *val = new BigInt(v);
   BigInt *t = new BigInt(this);
 
-  // Negate and then add.
-  val->negate();
-  result = t->add(val);
+  if (this->negative || v->negative) {
+    val->negate();
+    result = t->add(val);
+    val->negate();
+
+    delete val;
+    delete t;
+
+    return result;
+  }
+
+  if (this->cmp(val) < 0) {
+    result = val->sub(t);
+    result->negative = true;
+
+    delete val;
+    delete t;
+
+    return result;
+  }
+
+  // guaranteed: a > b
+
+  result = new BigInt(0, false);
+
+  struct BigIntLLNode *a_curr = (struct BigIntLLNode *)t->data->tail;
+  struct BigIntLLNode *b_curr = (struct BigIntLLNode *)val->data->tail;
+
+  uint64_t borrow = 0;
+  uint64_t a_val = 0;
+  uint64_t b_val = 0;
+  int64_t sub = 0;
+  uint64_t carry = 0;
+  size_t len = 0;
+
+  while (a_curr->prev != t->data->head && b_curr->prev != val->data->head) {
+    a_curr = (struct BigIntLLNode *)a_curr->prev;
+    b_curr = (struct BigIntLLNode *)b_curr->prev;
+
+    a_val += ((uint64_t)a_curr->data) << (len * 8);
+    b_val += ((uint64_t)b_curr->data) << (len * 8);
+
+    len += 1;
+
+    if (len == 7) {
+      sub = a_val - borrow - b_val;
+
+      if (sub < 0) {
+        sub = sub + (1ll << 56);
+        borrow = 1;
+      } else {
+        borrow = 0;
+      }
+
+      carry = (uint64_t)sub;
+
+      for (; len > 0; len--) {
+        result->data->prepend((uint8_t)carry);
+        carry = carry >> 8;
+      }
+      a_val = 0;
+      b_val = 0;
+      sub = 0;
+      len = 0;
+    }
+  }
+
+  while (a_curr->prev != t->data->head) {
+    a_curr = (struct BigIntLLNode *)a_curr->prev;
+
+    a_val += ((uint64_t)a_curr->data) << (len * 8);
+    b_val += 0;
+
+    len += 1;
+
+    if (len == 7) {
+      sub = a_val - borrow - b_val;
+
+      if (sub < 0) {
+        sub = sub + (1ll << 56);
+        borrow = 1;
+      } else {
+        borrow = 0;
+      }
+
+      carry = (uint64_t)sub;
+
+      for (; len > 0; len--) {
+        result->data->prepend((uint8_t)carry);
+        carry = carry >> 8;
+      }
+      a_val = 0;
+      b_val = 0;
+      sub = 0;
+      len = 0;
+    }
+  }
+
+  while (b_curr->prev != val->data->head) {
+    b_curr = (struct BigIntLLNode *)b_curr->prev;
+
+    a_val += 0;
+    b_val += ((uint64_t)b_curr->data) << (len * 8);
+
+    len += 1;
+
+    if (len == 7) {
+      sub = a_val - borrow - b_val;
+
+      if (sub < 0) {
+        sub = sub + (1ll << 56);
+        borrow = 1;
+      } else {
+        borrow = 0;
+      }
+
+      carry = (uint64_t)sub;
+
+      for (; len > 0; len--) {
+        result->data->prepend((uint8_t)carry);
+        carry = carry >> 8;
+      }
+      a_val = 0;
+      sub = 0;
+      b_val = 0;
+      len = 0;
+    }
+  }
+
+  // At the end, deal with any remaining data.
+  if (len != 0) {
+    sub = a_val - borrow - b_val;
+
+    if (sub < 0) {
+      sub = sub + (1ll << 8 * len);
+      borrow = 1;
+    } else {
+      borrow = 0;
+    }
+
+    carry = (uint64_t)sub;
+
+    for (; len > 0; len--) {
+      result->data->prepend((uint8_t)carry);
+      carry = carry >> 8;
+    }
+    a_val = 0;
+    b_val = 0;
+    len = 0;
+  }
 
   delete val;
   delete t;

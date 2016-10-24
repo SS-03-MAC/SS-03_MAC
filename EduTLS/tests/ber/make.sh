@@ -6,4 +6,4 @@ fi
 
 rm -rf ./a.out.dSYM ./a.out
 
-g++ ./main.cpp -Werror -Wall -Wextra -O0 -ggdb -std=c++11
+g++ ./main.cpp ../../src/bignum/*.cpp -Werror -Wall -Wextra -O0 -ggdb -std=c++11

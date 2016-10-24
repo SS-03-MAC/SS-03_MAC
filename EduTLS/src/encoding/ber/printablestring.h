@@ -21,7 +21,7 @@
 #include <cstddef>
 #include <cstdint>
 
-inline void encode_printablestring(uint8_t *result, uint8_t *value, size_t length) {
+inline void encode_printablestring(uint8_t *result, char *value, size_t length) {
   int offset = encode_length_length(length);
   if (offset == 0 && length != 0) {
     return;
@@ -58,7 +58,7 @@ inline size_t decode_printablestring_length(uint8_t *encoded) {
   return result;
 }
 
-inline void decode_printablestring(uint8_t *result, uint8_t *encoded, size_t length) {
+inline void decode_printablestring(char *result, uint8_t *encoded, size_t length) {
   if (encoded[0] != (BER_IDENTIFIER_CLASS_UNIVERSAL | BER_IDENTIFIER_TYPE_PRIMITIVE | ASN_PRINTABLE_STRING_CLASS)) {
     return;
   }

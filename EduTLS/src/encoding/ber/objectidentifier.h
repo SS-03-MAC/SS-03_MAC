@@ -166,8 +166,8 @@ inline size_t decode_objectidentifier_length(uint8_t *value, size_t length) {
   }
 
   size_t data_pos = 0;
-  size_t result = 2;
-  for (data_pos = 0; data_pos < length - offset; data_pos++) {
+  size_t result = 1;
+  for (data_pos = 0; data_pos < length - offset;) {
     data_pos += decode_objectidentifier_subidentifier_length(&(value[offset + data_pos]));
     result += 1;
   }
@@ -204,7 +204,7 @@ inline void decode_objectidentifier(uint32_t *result, uint8_t *value, size_t len
   uint32_t data = 0;
   size_t data_length = 0;
 
-  for (data_pos = 0; data_pos < value_length; data_pos++) {
+  for (data_pos = 0; data_pos < value_length;) {
     data_length = decode_objectidentifier_subidentifier_length(&(value[offset + data_pos]));
     data = decode_objectidentifier_subidentifier(&(value[offset + data_pos]), data_length);
 
@@ -223,7 +223,7 @@ inline void decode_objectidentifier(uint32_t *result, uint8_t *value, size_t len
       result[result_pos] = data;
     }
 
-    data_pos += data_length - 1;
+    data_pos += data_length;
     result_pos += 1;
   }
 }

@@ -126,3 +126,32 @@ int BigInt::cmp(const BigInt *val) const {
 
   return 0;
 }
+
+size_t BigInt::bytes(uint8_t *data) {
+  struct BigIntLLNode *curr;
+  curr = (struct BigIntLLNode *)(this->data->head)->next;
+
+  // Ingore leading zeros
+  while (curr != this->data->tail) {
+    if (curr->data != 0x00) {
+      break;
+    }
+
+    curr = (struct BigIntLLNode *)curr->next;
+  }
+
+  size_t d_p = 0;
+  if (curr == this->data->tail) {
+    data[0] = 0;
+    return 1;
+  }
+
+  while (curr != this->data->tail) {
+    data[d_p] = curr->data;
+
+    curr = (struct BigIntLLNode *)curr->next;
+    d_p += 1;
+  }
+
+  return d_p;
+}

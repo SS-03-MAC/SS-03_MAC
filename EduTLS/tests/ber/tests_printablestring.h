@@ -5,7 +5,7 @@
 #include <cstdio>
 
 int test_ber_printablestring_short_encode() {
-  uint8_t printablestring[17] = "YELLOW SUBMARINE";
+  char printablestring[17] = "YELLOW SUBMARINE";
   uint8_t encoded[18] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
                          0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
 
@@ -36,8 +36,8 @@ int test_ber_printablestring_short_encode() {
 
 int test_ber_printablestring_short_decode() {
   uint8_t encoded[18] = {0x13, 16, 'Y', 'E', 'L', 'L', 'O', 'W', ' ', 'S', 'U', 'B', 'M', 'A', 'R', 'I', 'N', 'E'};
-  uint8_t printablestring[16] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-                                 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
+  char printablestring[16] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                              0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
 
   assert(decode_printablestring_length(encoded) == 16);
   decode_printablestring(printablestring, encoded, 18);
