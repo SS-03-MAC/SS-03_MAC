@@ -13,7 +13,7 @@
 
 #pragma once
 
-enum class HandshakeType_t {
+enum class HandshakeType_e {
   hello_request = 0,
   client_hello = 1,
   server_hello = 2,

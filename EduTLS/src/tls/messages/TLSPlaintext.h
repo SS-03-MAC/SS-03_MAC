@@ -18,7 +18,7 @@
 
 class TLSPlaintext final : public encodable_i {
 public:
-  ContentType_t type;
+  ContentType_e type;
   ProtocolVersion_t version;
   uint16_t length;
   uint8_t *fragment;

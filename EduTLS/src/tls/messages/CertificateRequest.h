@@ -19,7 +19,7 @@
 
 class CertificateRequest final : public HandshakeContents_t {
   size_t certificate_types_length;
-  ClientCertificateType_t *certificate_types;
+  ClientCertificateType_e *certificate_types;
   size_t supported_signature_algorithms_length;
   SignatureAndHashAlgorithm *supported_signature_algorithms;
   size_t certificate_authorities_length;

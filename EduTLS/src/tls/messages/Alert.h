@@ -18,8 +18,8 @@
 
 class Alert final : public encodable_i {
 public:
-  AlertLevel_t level;
-  AlertDescription_t description;
+  AlertLevel_e level;
+  AlertDescription_e description;
 
   int encode(uint8_t *result);
   size_t encode_length();

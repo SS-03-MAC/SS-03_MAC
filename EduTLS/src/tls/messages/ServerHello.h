@@ -32,7 +32,7 @@ public:
 
   uint8_t cipher_suite[2];
 
-  CompressionMethod_t compression_method;
+  CompressionMethod_e compression_method;
 
   size_t extensions_length = 0;
   Extension_t *extensions;

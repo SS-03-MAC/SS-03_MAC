@@ -17,7 +17,7 @@
 
 class Extension_t final : public encodable_i {
 public:
-  ExtensionType_t extension_type;
+  ExtensionType_e extension_type;
   size_t extension_length;
   uint8_t *extension_data;
 

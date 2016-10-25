@@ -13,4 +13,4 @@
 
 #pragma once
 
-enum class SignatureAlgorithm_t { anonymous = 0, rsa = 1, dsa = 2, ecdsa = 3, max = 255 };
+enum class SignatureAlgorithm_e { anonymous = 0, rsa = 1, dsa = 2, ecdsa = 3, max = 255 };

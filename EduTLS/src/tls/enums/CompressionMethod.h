@@ -12,4 +12,4 @@
 //===----------------------------------------------------------------------===//
 
 #pragma once
-enum class CompressionMethod_t { null = 0, max = 255 };
+enum class CompressionMethod_e { null = 0, max = 255 };

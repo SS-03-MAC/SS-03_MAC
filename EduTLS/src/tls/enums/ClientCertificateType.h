@@ -13,7 +13,7 @@
 
 #pragma once
 
-enum class ClientCertificateType_t {
+enum class ClientCertificateType_e {
   rsa_sign = 1,
   dss_sign = 2,
   rsa_fixed_dh = 3,

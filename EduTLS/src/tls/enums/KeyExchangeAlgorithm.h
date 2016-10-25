@@ -13,4 +13,4 @@
 
 #pragma once
 
-enum class KeyExchangeAlgorithm_t { dhe_dss, dhe_rsa, dh_anon, rsa, dh_dss, dh_rsa };
+enum class KeyExchangeAlgorithm_e { dhe_dss, dhe_rsa, dh_anon, rsa, dh_dss, dh_rsa };

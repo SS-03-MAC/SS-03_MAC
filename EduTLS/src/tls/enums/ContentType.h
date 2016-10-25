@@ -13,4 +13,4 @@
 
 #pragma once
 
-enum class ContentType_t { change_cipher_spec = 20, alert = 21, handshake = 22, application_data = 23, max = 255 };
+enum class ContentType_e { change_cipher_spec = 20, alert = 21, handshake = 22, application_data = 23, max = 255 };

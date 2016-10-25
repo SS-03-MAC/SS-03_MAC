@@ -18,7 +18,7 @@
 
 class ChangeCipherSpec final : public encodable_i {
 public:
-  ChangeCipherSpec_t value;
+  ChangeCipherSpec_e value;
 
   int encode(uint8_t *result);
   size_t encode_length();

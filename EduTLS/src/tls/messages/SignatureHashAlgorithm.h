@@ -20,8 +20,8 @@
 
 class SignatureAndHashAlgorithm final : public encodable_i {
 public:
-  HashAlgorithm_t hash;
-  SignatureAlgorithm_t signature;
+  HashAlgorithm_e hash;
+  SignatureAlgorithm_e signature;
 
   int encode(uint8_t *result);
   size_t encode_length();

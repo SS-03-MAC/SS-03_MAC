@@ -24,7 +24,7 @@ public:
 
 class HandshakeType : public encodable_i {
 public:
-  HandshakeType_t type;
+  HandshakeType_e type;
   uint32_t length : 24;
   HandshakeContents_t body;
 

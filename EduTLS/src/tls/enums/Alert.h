@@ -13,9 +13,9 @@
 
 #pragma once
 
-enum class AlertLevel_t { warning = 1, fatal = 2, max = 255 };
+enum class AlertLevel_e { warning = 1, fatal = 2, max = 255 };
 
-enum class AlertDescription_t {
+enum class AlertDescription_e {
   close_notify = 0,
   unexpected_message = 10,
   bad_record_mac = 20,

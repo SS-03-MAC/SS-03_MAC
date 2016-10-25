@@ -34,7 +34,7 @@ public:
   uint8_t *cipher_suites;
 
   size_t compression_methods_length;
-  CompressionMethod_t *compression_methods;
+  CompressionMethod_e *compression_methods;
 
   size_t extensions_length = 0;
   Extension_t *extensions;
