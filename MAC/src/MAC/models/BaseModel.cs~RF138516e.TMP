@@ -26,18 +26,39 @@ namespace MAC.Models
         public Integer Id { get; set; }
 
         /// <summary>
+        /// Private variable for DateTime
+        /// </summary>
+        private System.DateTime _CreatedAt { get; set; }
+
+        /// <summary>
         /// Built-in field for when the record was saved to the database
         /// </summary>
         /// <returns></returns>
-        [DatabaseField("CreatedAt")]
-        public Types.DateTime CreatedAt { get; set; }
+        public Types.DateTime CreatedAt
+        {
+            get
+            {
+                return new Types.DateTime(_CreatedAt);
+            }
+        }
+
+        /// <summary>
+        /// Internal storage for Updated at
+        /// </summary>
+        public System.DateTime _UpdatedAt { get; set; }
 
         /// <summary>
         /// Built-in field when the record was last updated at
         /// </summary>
         /// <returns></returns>
         [DatabaseField("UpdatedAt")]
-        public Types.DateTime UpdatedAt { get; set; }
+        public Types.DateTime UpdatedAt
+        {
+            get
+            {
+                return new Types.DateTime(_UpdatedAt);
+            }
+        }
 
         /// <summary>
         ///  Blank contrustor
@@ -46,6 +67,15 @@ namespace MAC.Models
         {
 
         }
+
+        //public BaseModel(IDataRecord reader)
+        //{
+        //    PropertyInfo[] properties = GetType().GetProperties();
+        //    foreach (PropertyInfo property in properties)
+        //    {
+        //        property.SetValue(this, reader);
+        //    }
+        //}
 
         /// <summary>
         /// Saves the record to the database
@@ -60,12 +90,12 @@ namespace MAC.Models
             }
             if (Id == null)
             {
-                CreatedAt = new Types.DateTime(System.DateTime.Now);
-                UpdatedAt = CreatedAt;
+                _CreatedAt = System.DateTime.Now;
+                _UpdatedAt = CreatedAt.Value;
             }
             else
             {
-                UpdatedAt = new Types.DateTime(System.DateTime.Now);
+                _UpdatedAt = System.DateTime.Now;
             }
         }
 
@@ -99,7 +129,7 @@ namespace MAC.Models
 
         //}
 
-
+  
 
     }
 }
