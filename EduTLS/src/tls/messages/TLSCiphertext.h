@@ -1,4 +1,4 @@
-//===-- EduTLS/src/tls/messages/TLSPlaintext.h            -------*- C++ -*-===//
+//===-- EduTLS/src/tls/messages/TLSCiphertext.h           -------*- C++ -*-===//
 //
 //                     EduTLS - Transport Layer Security
 //
@@ -7,7 +7,7 @@
 //===----------------------------------------------------------------------===//
 ///
 /// \file
-/// This file contains message classes for the TLS Plaintext protocol.
+/// This file contains message classes for the TLS Ciphertext protocol.
 ///
 //===----------------------------------------------------------------------===//
 
@@ -17,12 +17,19 @@
 #include "../interfaces/encodable.h"
 #include "./ProtocolVersion.h"
 
-class TLSPlaintext final : public encodable_i {
+class CipherFragment_t : public encodable_i {
+public:
+  int encode(uint8_t *result);
+  size_t encode_length();
+  int decode(uint8_t *encoded);
+};
+
+class TLSCiphertext final : public encodable_i {
 public:
   ContentType_e type;
   ProtocolVersion_t version;
   uint16_t length;
-  uint8_t *fragment;
+  CipherFragment_t *fragment;
 
   int encode(uint8_t *result);
   size_t encode_length();

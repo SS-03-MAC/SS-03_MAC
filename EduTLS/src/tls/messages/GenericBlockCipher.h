@@ -1,4 +1,4 @@
-//===-- EduTLS/src/tls/messages/TLSPlaintext.h            -------*- C++ -*-===//
+//===-- EduTLS/src/tls/messages/GenericBlockCipher.h      -------*- C++ -*-===//
 //
 //                     EduTLS - Transport Layer Security
 //
@@ -7,22 +7,25 @@
 //===----------------------------------------------------------------------===//
 ///
 /// \file
-/// This file contains message classes for the TLS Plaintext protocol.
+/// This file contains message classes for the Generic Block Cipher protocol.
 ///
 //===----------------------------------------------------------------------===//
 
 #pragma once
 
-#include "../enums/ContentType.h"
-#include "../interfaces/encodable.h"
-#include "./ProtocolVersion.h"
+#include "./TLSCiphertext.h"
 
-class TLSPlaintext final : public encodable_i {
+class GenericBlockCipher final : public encodable_i {
 public:
-  ContentType_e type;
-  ProtocolVersion_t version;
-  uint16_t length;
-  uint8_t *fragment;
+  size_t iv_length;
+  uint8_t *iv;
+  size_t content_length;
+  uint8_t *content;
+  size_t mac_length;
+  uint8_t *mac;
+
+  uint8_t padding_length;
+  uint8_t *padding;
 
   int encode(uint8_t *result);
   size_t encode_length();

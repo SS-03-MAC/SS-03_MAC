@@ -1,4 +1,4 @@
-//===-- EduTLS/src/tls/messages/TLSPlaintext.h            -------*- C++ -*-===//
+//===-- EduTLS/src/tls/messages/TLSCompressed.h           -------*- C++ -*-===//
 //
 //                     EduTLS - Transport Layer Security
 //
@@ -7,7 +7,7 @@
 //===----------------------------------------------------------------------===//
 ///
 /// \file
-/// This file contains message classes for the TLS Plaintext protocol.
+/// This file contains message classes for the TLS Compressed protocol.
 ///
 //===----------------------------------------------------------------------===//
 
@@ -17,7 +17,7 @@
 #include "../interfaces/encodable.h"
 #include "./ProtocolVersion.h"
 
-class TLSPlaintext final : public encodable_i {
+class TLSCompressed final : public encodable_i {
 public:
   ContentType_e type;
   ProtocolVersion_t version;
