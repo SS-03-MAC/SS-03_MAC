@@ -22,9 +22,19 @@ namespace MAC.Types.User
             return Data != null;
         }
 
-        public Password(string password)
+        public Password(string password, bool hash=true)
         {
-            Data = HashPassword(password);
+            if (!hash)
+            {
+                Data = HashPassword(password);
+            } else
+            {
+                Data = password;
+            }
+        }
+
+        public Password(string password) : this(password, true)
+        {
         }
 
         /// <summary>
