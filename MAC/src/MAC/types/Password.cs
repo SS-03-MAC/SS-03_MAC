@@ -22,7 +22,7 @@ namespace MAC.Types.User
             return Data != null;
         }
 
-        public Password(string password, bool hash=true)
+        public Password(string password, bool hash)
         {
             if (!hash)
             {

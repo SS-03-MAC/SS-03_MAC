@@ -12,8 +12,14 @@ namespace MAC.Models
         /// </summary>
         /// <returns></returns>
         [Required]
-        [DatabaseField("FullName")]
+        [DatabaseField("Email")]
         public Email Email { get; set; }
+
+
+        [Required]
+        [DatabaseField("FullName")]
+        public String FullName { get; set; }
+
         /// <summary>
         /// On set will set PasswordDigest to the BCrypt Password
         /// </summary>
