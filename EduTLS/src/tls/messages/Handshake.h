@@ -14,7 +14,6 @@
 #pragma once
 
 #include "../interfaces/encodable.h"
-#include "../utils.h"
 
 class HandshakeContents_t : public encodable_i {
 public:
@@ -26,7 +25,7 @@ public:
 class HandshakeType : public encodable_i {
 public:
   HandshakeType_t type;
-  uint24_t length;
+  uint32_t length : 24;
   HandshakeContents_t body;
 
   int encode(uint8_t *result);
