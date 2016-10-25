@@ -1,4 +1,4 @@
-//===-- EduTLS/src/tls/messages/GenericBlockCipher.h      -------*- C++ -*-===//
+//===-- EduTLS/src/tls/containers/GenericBlockCipher.h    -------*- C++ -*-===//
 //
 //                     EduTLS - Transport Layer Security
 //
@@ -29,5 +29,5 @@ public:
 
   int encode(uint8_t *result);
   size_t encode_length();
-  int decode(uint8_t *encoded);
+  int decode(uint8_t *encoded, size_t length);
 };

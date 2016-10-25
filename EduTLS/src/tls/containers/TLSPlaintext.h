@@ -1,4 +1,4 @@
-//===-- EduTLS/src/tls/messages/TLSPlaintext.h            -------*- C++ -*-===//
+//===-- EduTLS/src/tls/containers/TLSPlaintext.h          -------*- C++ -*-===//
 //
 //                     EduTLS - Transport Layer Security
 //
@@ -15,7 +15,7 @@
 
 #include "../enums/ContentType.h"
 #include "../interfaces/encodable.h"
-#include "./ProtocolVersion.h"
+#include "../messages/ProtocolVersion.h"
 
 #include <cstdint>
 #include <cstdio>
@@ -23,16 +23,14 @@
 
 class TLSPlaintext final : public encodable_i {
 public:
-  ContentType_e type;
-  ProtocolVersion_t version;
   uint16_t length;
   uint8_t *fragment;
 
   TLSPlaintext();
-  TLSPlaintext(ContentType_e type, ProtocolVersion_t version, uint16_t length, uint8_t *fragment);
+  TLSPlaintext(uint16_t length, uint8_t *fragment);
   ~TLSPlaintext();
 
   int encode(uint8_t *result);
   size_t encode_length();
-  int decode(uint8_t *encoded);
+  int decode(uint8_t *encoded, size_t length);
 };

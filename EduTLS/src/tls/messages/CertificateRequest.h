@@ -27,5 +27,5 @@ class CertificateRequest final : public HandshakeContents_t {
 
   int encode(uint8_t *result);
   size_t encode_length();
-  int decode(uint8_t *encoded);
+  int decode(uint8_t *encoded, size_t length);
 };

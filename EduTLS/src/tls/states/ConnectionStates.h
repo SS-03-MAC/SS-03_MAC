@@ -13,23 +13,12 @@
 
 #pragma once
 
-#include "../enums/ConnectionStates.h"
+#include "./SecurityParameters.h"
 
-class SecurityParameters {
+class ConnectionStates {
 public:
-  ConnectionEnd_e entity;
-  PRFAlgorithm_e prf_algorithm;
-  BulkCipherAlgorithm_e bulk_cipher_algorithm;
-  CipherType_e cipher_type;
-  uint8_t enc_key_length;
-  uint8_t block_length;
-  uint8_t fixed_iv_length;
-  uint8_t record_iv_length;
-  MACAlgorithm_e mac_algorithm;
-  uint8_t mac_length;
-  uint8_t mac_key_length;
-  CompressionMethod_e compression_algorithm;
-  uint8_t master_secret[48];
-  uint8_t client_random[32];
-  uint8_t server_random[32];
+  SecurityParameters *current_read;
+  SecurityParameters *current_write;
+  SecurityParameters *pending_read;
+  SecurityParameters *pending_write;
 };

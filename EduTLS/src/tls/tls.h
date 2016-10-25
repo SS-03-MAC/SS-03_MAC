@@ -13,6 +13,12 @@
 
 #pragma once
 
+#include "./containers/GenericAEADCipher.h"
+#include "./containers/GenericBlockCipher.h"
+#include "./containers/GenericStreamCipher.h"
+#include "./containers/TLSCiphertext.h"
+#include "./containers/TLSCompressed.h"
+#include "./containers/TLSPlaintext.h"
 #include "./enums/Alert.h"
 #include "./enums/ChangeCipherSpec.h"
 #include "./enums/ClientCertificateType.h"
@@ -32,9 +38,6 @@
 #include "./messages/ClientHello.h"
 #include "./messages/DigitallySigned.h"
 #include "./messages/Extension.h"
-#include "./messages/GenericAEADCipher.h"
-#include "./messages/GenericBlockCipher.h"
-#include "./messages/GenericStreamCipher.h"
 #include "./messages/Handshake.h"
 #include "./messages/HelloRequest.h"
 #include "./messages/ProtocolVersion.h"
@@ -44,7 +47,5 @@
 #include "./messages/ServerHelloDone.h"
 #include "./messages/ServerKeyExchange.h"
 #include "./messages/SignatureHashAlgorithm.h"
-#include "./messages/TLSCiphertext.h"
-#include "./messages/TLSCompressed.h"
-#include "./messages/TLSPlaintext.h"
 #include "./states/ConnectionStates.h"
+#include "./states/SecurityParameters.h"

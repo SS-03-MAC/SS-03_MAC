@@ -1,4 +1,4 @@
-//===-- EduTLS/src/tls/messages/TLSCiphertext.h           -------*- C++ -*-===//
+//===-- EduTLS/src/tls/containers/TLSCiphertext.h         -------*- C++ -*-===//
 //
 //                     EduTLS - Transport Layer Security
 //
@@ -15,13 +15,13 @@
 
 #include "../enums/ContentType.h"
 #include "../interfaces/encodable.h"
-#include "./ProtocolVersion.h"
+#include "../messages/ProtocolVersion.h"
 
 class CipherFragment_t : public encodable_i {
 public:
   int encode(uint8_t *result);
   size_t encode_length();
-  int decode(uint8_t *encoded);
+  int decode(uint8_t *encoded, size_t length);
 };
 
 class TLSCiphertext final : public encodable_i {
@@ -31,7 +31,11 @@ public:
   uint16_t length;
   CipherFragment_t *fragment;
 
+  TLSCiphertext();
+  TLSCiphertext(CipherFragment_t *fragment);
+  ~TLSCiphertext();
+
   int encode(uint8_t *result);
   size_t encode_length();
-  int decode(uint8_t *encoded);
+  int decode(uint8_t *encoded, size_t length);
 };
