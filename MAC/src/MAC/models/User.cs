@@ -1,16 +1,18 @@
 using MAC.Models.Attributes;
+using MAC.Types;
 using MAC.Types.User;
 
 namespace MAC.Models
 {
     public partial class User : BaseModel
     {
+ 
         /// <summary>
         /// A basic string field
         /// </summary>
         /// <returns></returns>
         [Required]
-        [DatabaseField("Name")]
+        [DatabaseField("FullName")]
         public Email Email { get; set; }
         /// <summary>
         /// On set will set PasswordDigest to the BCrypt Password
@@ -24,5 +26,11 @@ namespace MAC.Models
         /// <returns></returns>
         [DatabaseField("PasswordDigest")]
         public Password PasswordDigest { get; set; }
+
+        /// <summary>
+        /// City 
+        /// </summary>
+        [DatabaseField("City")]
+        public String City { get; set; }
     }
 }

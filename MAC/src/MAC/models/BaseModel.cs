@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Reflection;
+using MAC.Types;
+using MAC.Models.Attributes;
 
 namespace MAC.Models
 {
@@ -20,39 +22,40 @@ namespace MAC.Models
         /// SQL Indentify column 
         /// </summary>
         /// <returns></returns>
-        public long? Id { get; }
+        [DatabaseField("ID")]
+        public Integer Id { get; set; }
 
         /// <summary>
         /// Private variable for DateTime
         /// </summary>
-        private DateTime _CreatedAt { get; set; }
+        private System.DateTime _CreatedAt { get; set; }
 
         /// <summary>
         /// Built-in field for when the record was saved to the database
         /// </summary>
         /// <returns></returns>
-        public DateTime CreatedAt
+        public Types.DateTime CreatedAt
         {
             get
             {
-                return _CreatedAt;
+                return new Types.DateTime(_CreatedAt);
             }
         }
 
         /// <summary>
         /// Internal storage for Updated at
         /// </summary>
-        public DateTime _UpdatedAt { get; set; }
+        public System.DateTime _UpdatedAt { get; set; }
 
         /// <summary>
         /// Built-in field when the record was last updated at
         /// </summary>
         /// <returns></returns>
-        public DateTime UpdatedAt
+        public Types.DateTime UpdatedAt
         {
             get
             {
-                return _UpdatedAt;
+                return new Types.DateTime(_UpdatedAt);
             }
         }
 
@@ -64,14 +67,14 @@ namespace MAC.Models
 
         }
 
-        public BaseModel(IDataRecord reader)
-        {
-            PropertyInfo[] properties = GetType().GetProperties();
-            foreach (PropertyInfo property in properties)
-            {
-                property.SetValue(this, reader[s]);
-            }
-        }
+        //public BaseModel(IDataRecord reader)
+        //{
+        //    PropertyInfo[] properties = GetType().GetProperties();
+        //    foreach (PropertyInfo property in properties)
+        //    {
+        //        property.SetValue(this, reader);
+        //    }
+        //}
 
         /// <summary>
         /// Saves the record to the database
@@ -86,12 +89,12 @@ namespace MAC.Models
             }
             if (Id == null)
             {
-                _CreatedAt = DateTime.Now;
-                _UpdatedAt = CreatedAt;
+                _CreatedAt = System.DateTime.Now;
+                _UpdatedAt = CreatedAt.Value;
             }
             else
             {
-                _UpdatedAt = DateTime.Now;
+                _UpdatedAt = System.DateTime.Now;
             }
         }
 
@@ -107,21 +110,23 @@ namespace MAC.Models
             {
 
             }
+
+            return false;
         }
 
         /// <summary>
         ///  Delete the current record
         /// </summary>
         /// <returns></returns>
-        public bool Delete()
-        {
-            if (Id == null)
-            {
-                throw new InvalidOperationException("Cannot delete a record that is not saved to the database");
-            }
-            return Delete((long)Id);
+        //public bool Delete()
+        //{
+        //    if (Id == null)
+        //    {
+        //        throw new InvalidOperationException("Cannot delete a record that is not saved to the database");
+        //    }
+        //    return Delete((long)Id);
 
-        }
+        //}
 
   
 
