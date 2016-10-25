@@ -17,12 +17,20 @@
 #include "../interfaces/encodable.h"
 #include "./ProtocolVersion.h"
 
+#include <cstdint>
+#include <cstdio>
+#include <cstdlib>
+
 class TLSPlaintext final : public encodable_i {
 public:
   ContentType_e type;
   ProtocolVersion_t version;
   uint16_t length;
   uint8_t *fragment;
+
+  TLSPlaintext();
+  TLSPlaintext(ContentType_e type, ProtocolVersion_t version, uint16_t length, uint8_t *fragment);
+  ~TLSPlaintext();
 
   int encode(uint8_t *result);
   size_t encode_length();

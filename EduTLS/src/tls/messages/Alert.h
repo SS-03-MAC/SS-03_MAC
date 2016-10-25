@@ -16,6 +16,8 @@
 #include "../enums/Alert.h"
 #include "../interfaces/encodable.h"
 
+#include <cstdint>
+
 class Alert final : public encodable_i {
 public:
   AlertLevel_e level;

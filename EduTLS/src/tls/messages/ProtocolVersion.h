@@ -14,13 +14,10 @@
 #pragma once
 
 #include "../interfaces/encodable.h"
+#include <cstdint>
 
-class ProtocolVersion_t final : public encodable_i {
+class ProtocolVersion_t final {
 public:
   uint8_t major;
   uint8_t minor;
-
-  int encode(uint8_t *result);
-  size_t encode_length();
-  int decode(uint8_t *encoded);
 };

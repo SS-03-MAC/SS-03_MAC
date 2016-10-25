@@ -16,6 +16,8 @@
 #include "../interfaces/encodable.h"
 #include "Handshake.h"
 
+#include <cstdint>
+
 class Certificate final : public HandshakeContents_t {
 public:
   uint8_t *certificate_list;

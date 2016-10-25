@@ -13,6 +13,9 @@
 
 #pragma once
 
+#include <cstdint>
+#include <cstdlib>
+
 class encodable_i {
   virtual int encode(uint8_t *result) = 0;
   virtual size_t encode_length() = 0;
