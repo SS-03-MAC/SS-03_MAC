@@ -15,7 +15,7 @@
 
 #include "./TLSCiphertext.h"
 
-class GenericBlockCipher final : public encodable_i {
+class GenericBlockCipher final : public CipherFragment_t {
 public:
   size_t iv_length;
   uint8_t *iv;

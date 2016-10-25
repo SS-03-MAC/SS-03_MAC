@@ -20,7 +20,7 @@
 #include <cstdint>
 #include <cstdlib>
 
-class GenericStreamCipher final : public encodable_i {
+class GenericStreamCipher final : public CipherFragment_t {
 public:
   uint16_t contents_length;
   uint8_t *ciphertext;

@@ -56,6 +56,13 @@ size_t GenericStreamCipher::encode_length() { return this->contents_length + thi
 int GenericStreamCipher::decode(uint8_t *encoded, size_t length) {
   size_t i = 0;
   this->contents_length = length - this->mac_length;
+  printf("%zu %d %d\n", length, this->contents_length, this->mac_length);
+
+  if (this->ciphertext != NULL) {
+    free(this->ciphertext);
+  }
+
+  this->ciphertext = (uint8_t *)malloc(sizeof(uint8_t) * this->contents_length);
 
   for (i = 0; i < this->contents_length; i++) {
     this->ciphertext[i] = encoded[i];
@@ -63,6 +70,7 @@ int GenericStreamCipher::decode(uint8_t *encoded, size_t length) {
 
   for (i = 0; i < this->mac_length; i++) {
     this->mac[i] = encoded[i + this->contents_length];
+    printf("Here!\n");
   }
 
   return this->contents->decode(this->ciphertext, this->contents_length);

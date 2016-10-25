@@ -15,7 +15,7 @@
 
 #include "./TLSCiphertext.h"
 
-class GenericAEADCipher final : public encodable_i {
+class GenericAEADCipher final : public CipherFragment_t {
 public:
   size_t nonce_length;
   uint8_t *nonce;

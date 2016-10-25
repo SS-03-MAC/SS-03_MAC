@@ -47,7 +47,7 @@ int TLSCiphertext::decode(uint8_t *encoded, size_t length) {
   this->type = static_cast<ContentType_e>(encoded[0]);
   this->version.major = encoded[1];
   this->version.minor = encoded[2];
-  this->length = (encoded[3] << 8) | encoded[4];
+  this->length = (((uint16_t)encoded[3]) << 8) | encoded[4];
 
   return this->fragment->decode(&(encoded[5]), length - 5);
 }
