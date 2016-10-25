@@ -27,7 +27,6 @@ protected:
 
   uint8_t *block;
   size_t b_len;
-  size_t b_max;
 
   virtual void core() = 0;
   virtual void digest(uint8_t *output) = 0;
