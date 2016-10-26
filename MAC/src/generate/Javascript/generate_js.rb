@@ -1,10 +1,10 @@
 require_relative '../hash_generator.rb'
 
 module Generation
-
+  # This class alows us to generate javascript files for our framework
   class GenerateJavascript
     # This method takes in a hash from one of our YAML files and generates
-    # a string representing a Javascript class, storing data as required in the 
+    # a string representing a Javascript class, storing data as required in the
     # input
     def generate_class(yaml_hash)
       cur_directory_path = File.expand_path(File.dirname(__FILE__))
@@ -13,7 +13,7 @@ module Generation
       HashGenerator.render_from_hash(template, yaml_hash)
     end
 
-    # Takes in a hash and an output destination, writes the class to 
+    # Takes in a hash and an output destination, writes the class to
     # the given file
     def write_class(yaml_hash, output_path)
       refined_hash = add_fields_str(yaml_hash)
@@ -23,17 +23,16 @@ module Generation
       end
     end
 
-
     # creates a string of a comma seperated list of values in the field hash
     # used for constructor of javascript class
     def add_fields_str(in_hash)
       fields_str = ''
       in_hash.each_key do |key|
-        fields_str += key +', '
+        fields_str += key + ', '
       end
       out_hash = in_hash
       out_hash['fields_str'] = fields_str[0..-3]
-      return out_hash
+      out_hash
     end
   end
 end
