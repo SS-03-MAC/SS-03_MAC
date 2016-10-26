@@ -1,0 +1,23 @@
+var <%= name %> = function(){
+<% fields.each do |field| %>
+  <%= "this." + field["name"] + " = " + field["name"] + ";" %>
+<% end %>
+
+  this.Save(){
+    //HTTP put request to /users/:id
+  }
+
+  this.Load(){
+    //HTTP GET request to users/:id
+  }
+
+  this.Update(){
+    //HTTP PATCH request to users/:id
+  }
+  
+  //screensketch by Matt Slane
+
+  this.Delete(){
+    //HTTP DELETE request to users/:id
+  }
+};
