@@ -13,6 +13,7 @@
 
 #pragma once
 
+#include "../enums/ExtensionType.h"
 #include "../interfaces/encodable.h"
 
 class Extension_t final : public encodable_i {

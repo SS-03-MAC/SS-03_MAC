@@ -27,17 +27,20 @@ public:
   ProtocolVersion_t client_version;
   Random_t random;
 
-  size_t session_id_length;
+  uint8_t session_id_length;
   uint8_t *session_id;
 
-  size_t cipher_suites_length;
+  uint16_t cipher_suites_lengths;
   uint8_t *cipher_suites;
 
-  size_t compression_methods_length;
+  uint8_t compression_methods_length;
   CompressionMethod_e *compression_methods;
 
   size_t extensions_length = 0;
   Extension_t *extensions;
+
+  ClientHello();
+  ~ClientHello();
 
   int encode(uint8_t *result);
   size_t encode_length();

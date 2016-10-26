@@ -13,6 +13,7 @@
 
 #pragma once
 
+#include "../enums/HandshakeType.h"
 #include "../interfaces/encodable.h"
 
 class HandshakeContents_t : public encodable_i {
@@ -29,7 +30,7 @@ public:
   HandshakeContents_t *body;
 
   HandshakeType();
-  HandshakeType(HandshakeContents_t* body);
+  HandshakeType(HandshakeContents_t *body);
   ~HandshakeType();
 
   int encode(uint8_t *result);

@@ -13,6 +13,7 @@
 
 #pragma once
 
+#include "../enums/ClientCertificateType.h"
 #include "../interfaces/encodable.h"
 #include "Handshake.h"
 #include "SignatureHashAlgorithm.h"

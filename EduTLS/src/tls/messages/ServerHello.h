@@ -37,6 +37,9 @@ public:
   size_t extensions_length = 0;
   Extension_t *extensions;
 
+  ServerHello();
+  ~ServerHello();
+
   int encode(uint8_t *result);
   size_t encode_length();
   int decode(uint8_t *encoded, size_t length);

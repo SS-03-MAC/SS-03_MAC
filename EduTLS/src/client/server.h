@@ -57,8 +57,8 @@ inline int serve() {
 
   if (ct->type == ContentType_e::handshake) {
     ClientHello *ch = new ClientHello();
-    Handshake *h = new Handshake(ch);
-    std::cout << "Decoding plaintext handshake:" << h->decode(p->fragment) << std::endl;
+    HandshakeType *h = new HandshakeType(ch);
+    std::cout << "Decoding plaintext handshake:" << h->decode(p->fragment, p->length) << std::endl;
   }
 
   close(c);

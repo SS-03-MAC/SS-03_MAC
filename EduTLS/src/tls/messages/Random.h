@@ -20,6 +20,10 @@ public:
   uint32_t gmt_unix_time;
   uint8_t random_bytes[28];
 
+  Random_t();
+  Random_t(uint32_t gmt_unix_time, uint8_t random_bytes[28]);
+  ~Random_t();
+
   int encode(uint8_t *result);
   size_t encode_length();
   int decode(uint8_t *encoded, size_t length);

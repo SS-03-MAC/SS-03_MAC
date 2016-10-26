@@ -12,10 +12,17 @@
 //===----------------------------------------------------------------------===//
 
 #include "Handshake.h"
+#include "../enums/HandshakeType.h"
+#include "Certificate.h"
+#include "CertificateRequest.h"
+#include "ClientHello.h"
+#include "ServerHello.h"
+#include "ServerHelloDone.h"
+#include "ServerKeyExchange.h"
 
-HandshakeType::HandshakeType() {this->body = NULL}
-HandshakeType::HandshakeType(HandshakeContents_t* body) { this->body = body; }
-~HandshakeType::HandshakeType() {}
+HandshakeType::HandshakeType() { this->body = NULL; }
+HandshakeType::HandshakeType(HandshakeContents_t *body) { this->body = body; }
+HandshakeType::~HandshakeType() {}
 
 int HandshakeType::encode(uint8_t *result) {
   result[0] = static_cast<uint8_t>(this->type);
@@ -23,12 +30,10 @@ int HandshakeType::encode(uint8_t *result) {
   result[2] = (this->length >> 8) & 0xFF;
   result[3] = this->length & 0xFF;
 
-  this->body->encode(&(result[4]));
+  return this->body->encode(&(result[4]));
 }
 
-size_t HandshakeType::encode_length() {
-  return 4 + this->length;
-}
+size_t HandshakeType::encode_length() { return 4 + this->length; }
 
 int HandshakeType::decode(uint8_t *encoded, size_t length) {
   this->type = static_cast<HandshakeType_e>(encoded[0]);
@@ -53,16 +58,11 @@ int HandshakeType::decode(uint8_t *encoded, size_t length) {
     this->body = new CertificateRequest();
     break;
   case HandshakeType_e::server_hello_done:
-    this->body = new ServeHelloDone();
+    this->body = new ServerHelloDone();
     break;
-  case HandshakeType_e::certificate_verify:
-    this->body = new CertificateVerify();
-    break;
-  case HandshakeType_e::client_key_exchange:
-    break;
-  case HandshakeType_e::finished:
+  default:
     break;
   }
 
-  this->body->decode(&(encoded[4]), length - 4);
+  return this->body->decode(&(encoded[4]), length - 4);
 }
