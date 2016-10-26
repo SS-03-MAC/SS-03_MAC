@@ -15,8 +15,8 @@ module Generation
 
     # Takes in a hash and an output destination, writes the class to 
     # the given file
-    def write_class(yaml_hash, ouput_path)
-      result = generate_file(yaml_hash)
+    def write_class(yaml_hash, output_path)
+      result = generate_class(yaml_hash)
       File.open(output_path, 'w') do |f|
         f.write(result)
       end
