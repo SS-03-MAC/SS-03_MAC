@@ -1,7 +1,7 @@
 require 'test/unit'
 require 'erb'
 require 'yaml'
-require_relative '../generate.rb'
+require_relative '../generate_sql.rb'
 
 # This class is for testing that that SQL generationn works properly
 class TestSQLGen < Test::Unit::TestCase
