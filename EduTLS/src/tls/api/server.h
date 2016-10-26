@@ -1,4 +1,4 @@
-//===-- EduTLS/src/tls/states/ConnectionStates.h        -------*- C++ -*-===//
+//===-- EduTLS/src/tls/api/server.h                       -------*- C++ -*-===//
 //
 //                     EduTLS - Transport Layer Security
 //
@@ -7,18 +7,23 @@
 //===----------------------------------------------------------------------===//
 ///
 /// \file
-/// This file contains state objects for the Security Parameters protocol.
+/// This file creates the TLS
 ///
 //===----------------------------------------------------------------------===//
 
 #pragma once
 
+#include "../states/Sessions.h"
 
-class ConnectionStates {
+class tls_server {
+private:
+  Sessions *sessions;
+
 public:
-  CompressionState_t *compression;
-  CipherState_t *cipher;
-  MACKey_t *mac_key;
+  tls_server();
+  ~tls_server();
 
-  size_t sequence_number;
+  Sessions *Accept();
+  SetConfiguration(char *option, );
+
 };
