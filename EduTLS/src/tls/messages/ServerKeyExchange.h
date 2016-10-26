@@ -18,7 +18,10 @@
 
 class ServerKeyExchange : public HandshakeContents_t {
 public:
-  int encode(uint8_t *result);
+  ServerKeyExchange();
+  ~ServerKeyExchange();
+
+  int encode(uint8_t *);
   size_t encode_length();
-  int decode(uint8_t *encoded, size_t length);
+  int decode(uint8_t *, size_t);
 };

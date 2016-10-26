@@ -22,6 +22,9 @@
 #include "./ProtocolVersion.h"
 #include "./Random.h"
 
+#include <cstdint>
+#include <cstdlib>
+
 class ClientHello final : public HandshakeContents_t {
 public:
   ProtocolVersion_t client_version;

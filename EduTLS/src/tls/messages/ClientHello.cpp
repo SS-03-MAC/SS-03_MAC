@@ -21,6 +21,9 @@
 #include "./ProtocolVersion.h"
 #include "./Random.h"
 
+#include <cstdint>
+#include <cstdlib>
+
 ClientHello::ClientHello() {
   this->session_id = NULL;
   this->cipher_suites = NULL;
@@ -51,11 +54,6 @@ int ClientHello::encode(uint8_t *result) {
 
   this->random.encode(&(result[r_p]));
   r_p += this->random.encode_length();
-
-  result[r_p++] = this->session_id_length;
-  for (i = 0; i < this->session_id_length; i++) {
-    result[r_p++] = this->session_id[i];
-  }
 
   result[r_p++] = this->session_id_length;
   for (i = 0; i < this->session_id_length; i++) {
@@ -110,9 +108,30 @@ int ClientHello::decode(uint8_t *encoded, size_t length) {
 
   this->session_id_length = encoded[r_p++];
 
-  for (i = 0; i < this->session_id_length && i < length; i++) {
+  this->session_id = (uint8_t *)malloc(sizeof(uint8_t) * this->session_id_length);
+
+  for (i = 0; i < this->session_id_length && r_p < length; i++) {
     this->session_id[i] = encoded[r_p++];
   }
+
+  this->cipher_suites_lengths = (encoded[r_p] << 8) | encoded[r_p + 1];
+  r_p += 2;
+  this->cipher_suites = (uint8_t *)malloc(sizeof(uint8_t) * this->cipher_suites_lengths);
+  for (i = 0; i < this->cipher_suites_lengths && r_p < length; i++) {
+    this->cipher_suites[i] = encoded[r_p++];
+  }
+  this->cipher_suites_lengths = this->cipher_suites_lengths / 2;
+
+  this->compression_methods_length = encoded[r_p++];
+  this->compression_methods =
+      (CompressionMethod_e *)malloc(sizeof(CompressionMethod_e) * this->compression_methods_length);
+  for (i = 0; i < this->compression_methods_length && r_p < length; i++) {
+    this->compression_methods[i] = static_cast<CompressionMethod_e>(encoded[r_p++]);
+  }
+
+  this->extensions_length = (encoded[r_p] << 8) | encoded[r_p + 1];
+  r_p += 2;
+  // Ignore extensions for now.
 
   return 0;
 }

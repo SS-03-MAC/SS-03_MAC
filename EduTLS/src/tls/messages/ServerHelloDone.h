@@ -19,10 +19,14 @@
 #include "../enums/HandshakeType.h"
 #include "../interfaces/encodable.h"
 #include "./ProtocolVersion.h"
+#include <cstdint>
 
 class ServerHelloDone final : public HandshakeContents_t {
 public:
-  int encode(uint8_t *result);
+  ServerHelloDone();
+  ~ServerHelloDone();
+
+  int encode(uint8_t *);
   size_t encode_length();
-  int decode(uint8_t *encoded, size_t length);
+  int decode(uint8_t *, size_t);
 };

@@ -33,6 +33,7 @@ int Random_t::encode(uint8_t *result) {
   for (i = 0; i < 28; i++) {
     result[i + 4] = this->random_bytes[i];
   }
+  return 0;
 }
 size_t Random_t::encode_length() { return 32; }
 int Random_t::decode(uint8_t *encoded, size_t length) {
@@ -41,4 +42,5 @@ int Random_t::decode(uint8_t *encoded, size_t length) {
   for (i = 4; i < 32 && i < length; i++) {
     this->random_bytes[i - 4] = encoded[i];
   }
+  return 0;
 }

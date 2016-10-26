@@ -19,8 +19,11 @@
 class Extension_t final : public encodable_i {
 public:
   ExtensionType_e extension_type;
-  size_t extension_length;
+  uint16_t extension_length;
   uint8_t *extension_data;
+
+  Extension_t();
+  ~Extension_t();
 
   int encode(uint8_t *result);
   size_t encode_length();
