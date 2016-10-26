@@ -1,4 +1,8 @@
-var <%= name %> = function(){
+var <%= name %> = function(
+<% fields.each do |field| %>
+  <%= field['name'] + ',' %>
+<% end %>
+  ){
 <% fields.each do |field| %>
   <%= "this." + field["name"] + " = " + field["name"] + ";" %>
 <% end %>
@@ -14,8 +18,6 @@ var <%= name %> = function(){
   this.Update(){
     //HTTP PATCH request to users/:id
   }
-  
-  //screensketch by Matt Slane
 
   this.Delete(){
     //HTTP DELETE request to users/:id
