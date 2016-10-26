@@ -13,6 +13,10 @@
 
 inline int serve() {
   int s = socket(AF_INET, SOCK_STREAM, 0);
+
+  int optval = 1;
+  setsockopt(s, SOL_SOCKET, SO_REUSEADDR, &optval, sizeof optval);
+
   struct sockaddr_in addr;
   addr.sin_family = AF_INET;
   addr.sin_port = htons(8443);
@@ -41,7 +45,7 @@ inline int serve() {
   char hex[r * 2 + 1];
   toHex(hex, buf, r);
   hex[r * 2 + 1] = '\0';
-  std::cout << "Data:\n" << hex << std::endl;
+  std::cout << "Data:\n" << hex << std::endl << std::endl;
 
   TLSPlaintext *p = new TLSPlaintext();
   TLSCompressed *cp = new TLSCompressed(p);
@@ -57,9 +61,26 @@ inline int serve() {
 
   if (ct->type == ContentType_e::handshake) {
     HandshakeType *h = new HandshakeType();
-    std::cout << "Decoding plaintext handshake:" << h->decode(p->fragment, p->length) << std::endl;
+    std::cout << "\tDecoding plaintext handshake:" << h->decode(p->fragment, p->length) << std::endl;
+    std::cout << "\t\tMessage type: " << static_cast<int>(h->type) << std::endl;
+    std::cout << "\t\tLength: " << h->length << std::endl;
+
+    if (h->type == HandshakeType_e::client_hello) {
+      ClientHello *ch = (ClientHello *)h->body;
+      std::cout << "\t\tDecoding client_hello:" << std::endl;
+      std::cout << "\t\t\tClient Version: " << (int)ch->client_version.major << "." << (int)ch->client_version.minor
+                << std::endl;
+      std::cout << "\t\t\tClient Random (date): " << ch->random.gmt_unix_time << std::endl;
+      toHex(hex, ch->random.random_bytes, 28);
+      hex[56] = '\0';
+      std::cout << "\t\t\tClient Random (data): " << hex << std::endl;
+      toHex(hex, ch->session_id, ch->session_id_length);
+      hex[2 * ch->session_id_length] = '\0';
+      std::cout << "\t\t\tClient Session ID (" << ch->session_id_length << "): " << hex << std::endl;
+    }
   }
 
+  close(b);
   close(c);
   close(s);
 

@@ -56,7 +56,6 @@ size_t GenericStreamCipher::encode_length() { return this->contents_length + thi
 int GenericStreamCipher::decode(uint8_t *encoded, size_t length) {
   size_t i = 0;
   this->contents_length = length - this->mac_length;
-  printf("%zu %d %d\n", length, this->contents_length, this->mac_length);
 
   if (this->ciphertext != NULL) {
     free(this->ciphertext);
