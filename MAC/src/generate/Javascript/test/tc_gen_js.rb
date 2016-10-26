@@ -7,7 +7,7 @@ require_relative '../generate_js.rb'
 class TestSQLGen < Test::Unit::TestCase
   include Generation
 
-  def test_basic_table
+  def test_basic_class
     in_path = './data/user.yaml'
     out_path = './data/user_class.js'
     yaml = YAML.load(File.open(in_path))

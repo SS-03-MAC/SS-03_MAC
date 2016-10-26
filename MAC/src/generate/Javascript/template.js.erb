@@ -1,11 +1,11 @@
-var <%= name %> = function(
-<% fields.each do |field| %>
-  <%= field['name'] + ',' %>
-<% end %>
-  ){
+var <%= name %> = function(<%= fields_str %>){
 <% fields.each do |field| %>
   <%= "this." + field["name"] + " = " + field["name"] + ";" %>
 <% end %>
+  this.id = 0
+  this.createdAt = Date.getTime();
+  this.updatedAt = Date.getTime();
+
 
   this.Save(){
     //HTTP put request to /users/:id
