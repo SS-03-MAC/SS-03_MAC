@@ -7,4 +7,5 @@ namespace network {
   int tcp_start();
 
   int tcp_accept(int sockfd);
+  int write_stream(int netStreamFd, std::istream &inStream);
 }

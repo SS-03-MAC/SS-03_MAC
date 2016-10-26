@@ -25,12 +25,12 @@ httpHeaderCollection::httpHeaderCollection(std::string httpVersion) {
 std::string httpHeaderCollection::toString() {
   std::stringstream out;
   // Virtual toString for subclass specific first line
-  out << firstLineToString() << std::endl;
+  out << firstLineToString() << "\r\n";
   // Headers
   for (size_type i = 0; i < this->size(); i++) {
-    out << *this->at(i) << std::endl;
+    out << *this->at(i) << "\r\n";
   }
-  out << std::endl;
+  out << "\r\n";
   return out.str();
 }
 
