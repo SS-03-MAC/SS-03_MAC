@@ -13,6 +13,7 @@
 
 #pragma once
 
+#include "./api/TLSServer.h"
 #include "./containers/GenericAEADCipher.h"
 #include "./containers/GenericBlockCipher.h"
 #include "./containers/GenericStreamCipher.h"
@@ -47,5 +48,10 @@
 #include "./messages/ServerHelloDone.h"
 #include "./messages/ServerKeyExchange.h"
 #include "./messages/SignatureHashAlgorithm.h"
+#include "./states/CipherState.h"
+#include "./states/CompressionState.h"
 #include "./states/ConnectionStates.h"
+#include "./states/MACKey.h"
 #include "./states/SecurityParameters.h"
+#include "./states/TLSConfiguration.h"
+#include "./states/TLSSession.h"
