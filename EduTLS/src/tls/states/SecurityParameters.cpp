@@ -24,6 +24,7 @@ SecurityParameters::SecurityParameters() {
   this->bulk_cipher_algorithm = BulkCipherAlgorithm_e::null;
   this->cipher_type = CipherType_e::stream;
   this->mac_algorithm = MACAlgorithm_e::null;
+  this->compression_algorithm = CompressionMethod_e::null;
 
   this->enc_key_length = 0;
   this->block_length = 0;

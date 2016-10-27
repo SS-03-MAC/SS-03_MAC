@@ -38,11 +38,15 @@ inline int serve() {
   socklen_t *clilen = (socklen_t *)sizeof(client_addr);
   int c = accept(s, (sockaddr *)&client_addr, (socklen_t *)&clilen);
 
-  TLSServer *srv = new TLSServer(NULL);
+  TLSConfiguration *config = new TLSConfiguration();
+  config->debug = true;
+
+  TLSServer *srv = new TLSServer(config);
   srv->AcceptClient(c);
   srv->Handshake();
 
   delete srv;
+  delete config;
 
   /*
   uint8_t buf[(1 << 16) + 1];

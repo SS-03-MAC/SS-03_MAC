@@ -45,7 +45,7 @@ TLSServer::~TLSServer() {
 }
 
 void TLSServer::Handshake() {
-  HandshakeFSM *hs = new HandshakeFSM(this->state);
+  HandshakeFSM *hs = new HandshakeFSM(this->state, this->config);
 
   hs->InitialHandshake(this->pq);
 

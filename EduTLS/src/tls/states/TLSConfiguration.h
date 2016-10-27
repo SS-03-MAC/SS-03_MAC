@@ -13,7 +13,20 @@
 
 #pragma once
 
+#include "../containers/CipherSuite.h"
+
 class TLSConfiguration {
 public:
   bool debug;
+
+  size_t SupportedCipherSuitesLength;
+  CipherSuite *SupportedCipherSuites;
+
+  TLSConfiguration() {
+    uint8_t supported[20] = {0x00, 0x01, 0x00, 0x02, 0x00, 0x3B, 0x00, 0x04, 0x00, 0x05,
+                             0x00, 0x0A, 0x00, 0x2F, 0x00, 0x35, 0x00, 0x3C, 0x00, 0x3D};
+    this->debug = false;
+    this->SupportedCipherSuites = CipherSuite::FromUint8(supported, 20);
+    this->SupportedCipherSuitesLength = 10;
+  }
 };

@@ -39,4 +39,5 @@ public:
 
   size_t ReadPacket(uint8_t *packet);
   size_t PeekPacket(uint8_t *packet);
+  void WritePacket(uint8_t *data, size_t length);
 };
