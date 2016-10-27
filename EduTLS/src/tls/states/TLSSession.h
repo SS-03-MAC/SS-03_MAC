@@ -19,7 +19,7 @@
 #include <cstdlib>
 
 class TLSSession {
-private:
+public:
   size_t session_id_length;
   uint8_t *session_id;
 
@@ -51,7 +51,6 @@ private:
   size_t write_encryption_iv_length;
   uint8_t *write_encryption_iv;
 
-public:
   TLSSession(ConnectionEnd_e entity);
   ~TLSSession();
 

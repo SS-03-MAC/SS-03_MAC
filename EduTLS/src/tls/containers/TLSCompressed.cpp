@@ -12,17 +12,22 @@
 //===----------------------------------------------------------------------===//
 
 #include "./TLSCompressed.h"
+#include "../states/TLSSession.h"
 #include "./TLSPlaintext.h"
 
 #include <cstdint>
 #include <cstdio>
 #include <cstdlib>
 
-TLSCompressed::TLSCompressed() { this->contents = NULL; }
+TLSCompressed::TLSCompressed(TLSSession *state) {
+  this->contents = NULL;
+  this->state = state;
+}
 
-TLSCompressed::TLSCompressed(TLSPlaintext *contents) {
+TLSCompressed::TLSCompressed(TLSSession *state, TLSPlaintext *contents) {
   this->length = contents->length;
   this->contents = contents;
+  this->state = state;
 }
 
 TLSCompressed::~TLSCompressed() {}

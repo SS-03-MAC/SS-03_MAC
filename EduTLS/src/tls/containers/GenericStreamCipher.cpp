@@ -13,6 +13,7 @@
 //===----------------------------------------------------------------------===//
 
 #include "./GenericStreamCipher.h"
+#include "../states/TLSSession.h"
 #include "./TLSCiphertext.h"
 #include "./TLSCompressed.h"
 #include "./TLSPlaintext.h"
@@ -21,21 +22,28 @@
 #include <cstdio>
 #include <cstdlib>
 
-GenericStreamCipher::GenericStreamCipher() {
+GenericStreamCipher::GenericStreamCipher(TLSSession *state) {
   this->ciphertext = NULL;
   this->mac_length = 0;
   this->contents_length = 0;
+  this->state = state;
+  this->contents = NULL;
 }
-GenericStreamCipher::GenericStreamCipher(TLSCompressed *contents) {
+GenericStreamCipher::GenericStreamCipher(TLSSession *state, TLSCompressed *contents) {
   this->contents = contents;
   this->contents_length = this->contents->encode_length();
   this->ciphertext = (uint8_t *)malloc(sizeof(uint8_t) * this->contents->encode_length());
   this->contents->encode(this->ciphertext);
   this->mac_length = 0;
+  this->state = state;
 }
 GenericStreamCipher::~GenericStreamCipher() {
   if (this->ciphertext != NULL) {
     free(this->ciphertext);
+  }
+
+  if (this->contents == NULL) {
+    delete this->contents;
   }
 }
 
@@ -57,6 +65,8 @@ int GenericStreamCipher::decode(uint8_t *encoded, size_t length) {
   size_t i = 0;
   this->contents_length = length - this->mac_length;
 
+  printf("Contents length: %d\n", this->contents_length);
+
   if (this->ciphertext != NULL) {
     free(this->ciphertext);
   }
@@ -69,8 +79,9 @@ int GenericStreamCipher::decode(uint8_t *encoded, size_t length) {
 
   for (i = 0; i < this->mac_length; i++) {
     this->mac[i] = encoded[i + this->contents_length];
-    printf("Here!\n");
   }
+
+  this->contents = new TLSCompressed(this->state);
 
   return this->contents->decode(this->ciphertext, this->contents_length);
 }

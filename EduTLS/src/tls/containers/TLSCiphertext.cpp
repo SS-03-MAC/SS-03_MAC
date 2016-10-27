@@ -12,6 +12,7 @@
 //===----------------------------------------------------------------------===//
 
 #include "./TLSCiphertext.h"
+#include "../abstractions/CipherFragmentFactory.h"
 #include "../states/TLSSession.h"
 #include "./TLSCompressed.h"
 #include "./TLSPlaintext.h"
@@ -60,5 +61,15 @@ int TLSCiphertext::decode(uint8_t *encoded, size_t length) {
   this->version.minor = encoded[2];
   this->length = (((uint16_t)encoded[3]) << 8) | encoded[4];
 
-  return this->fragment->decode(&(encoded[5]), length - 5);
+  if (this->length != length - 5) {
+    return -3;
+  }
+
+  this->fragment = CipherFragment_f::Construct(this->state->current_read_params->cipher_type, this->state);
+
+  if (this->fragment == NULL) {
+    return -4;
+  }
+
+  return this->fragment->decode(&(encoded[5]), this->length);
 }

@@ -16,6 +16,7 @@
 #include "../enums/ContentType.h"
 #include "../interfaces/encodable.h"
 #include "../messages/ProtocolVersion.h"
+#include "../states/TLSSession.h"
 #include "./TLSPlaintext.h"
 
 class TLSCompressed final : public encodable_i {
@@ -23,8 +24,10 @@ public:
   uint16_t length;
   TLSPlaintext *contents;
 
-  TLSCompressed();
-  TLSCompressed(TLSPlaintext *contents);
+  TLSSession *state;
+
+  TLSCompressed(TLSSession *state);
+  TLSCompressed(TLSSession *state, TLSPlaintext *contents);
   ~TLSCompressed();
 
   int encode(uint8_t *result);

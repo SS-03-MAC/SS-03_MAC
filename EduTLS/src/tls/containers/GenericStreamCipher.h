@@ -13,6 +13,7 @@
 
 #pragma once
 
+#include "../states/TLSSession.h"
 #include "./TLSCiphertext.h"
 #include "./TLSCompressed.h"
 #include "./TLSPlaintext.h"
@@ -28,8 +29,10 @@ public:
   uint8_t mac_length;
   uint8_t *mac;
 
-  GenericStreamCipher();
-  GenericStreamCipher(TLSCompressed *contents);
+  TLSSession *state;
+
+  GenericStreamCipher(TLSSession *state);
+  GenericStreamCipher(TLSSession *state, TLSCompressed *contents);
   ~GenericStreamCipher();
 
   int encode(uint8_t *result);

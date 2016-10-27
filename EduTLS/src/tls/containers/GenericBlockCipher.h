@@ -13,6 +13,7 @@
 
 #pragma once
 
+#include "../states/TLSSession.h"
 #include "./TLSCiphertext.h"
 
 class GenericBlockCipher final : public CipherFragment_t {
@@ -27,7 +28,12 @@ public:
   uint8_t padding_length;
   uint8_t *padding;
 
-  int encode(uint8_t *result);
+  TLSSession *state;
+
+  GenericBlockCipher(TLSSession *state);
+  ~GenericBlockCipher();
+
+  int encode(uint8_t *);
   size_t encode_length();
-  int decode(uint8_t *encoded, size_t length);
+  int decode(uint8_t *, size_t);
 };
