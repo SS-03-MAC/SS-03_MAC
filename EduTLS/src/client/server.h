@@ -42,6 +42,8 @@ inline int serve() {
   srv->AcceptClient(c);
   srv->Handshake();
 
+  delete srv;
+
   /*
   uint8_t buf[(1 << 16) + 1];
   ssize_t r = read(c, buf, sizeof(buf) - 1);

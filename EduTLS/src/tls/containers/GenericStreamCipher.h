@@ -25,7 +25,6 @@ class GenericStreamCipher final : public CipherFragment_t {
 public:
   uint16_t contents_length;
   uint8_t *ciphertext;
-  TLSCompressed *contents;
   uint8_t mac_length;
   uint8_t *mac;
 

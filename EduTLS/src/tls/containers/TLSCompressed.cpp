@@ -30,7 +30,11 @@ TLSCompressed::TLSCompressed(TLSSession *state, TLSPlaintext *contents) {
   this->state = state;
 }
 
-TLSCompressed::~TLSCompressed() {}
+TLSCompressed::~TLSCompressed() {
+  if (this->contents != NULL) {
+    delete this->contents;
+  }
+}
 
 int TLSCompressed::encode(uint8_t *result) {
   this->contents->encode(result);

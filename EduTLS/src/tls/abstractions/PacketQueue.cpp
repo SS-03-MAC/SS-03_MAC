@@ -110,6 +110,8 @@ size_t PacketQueue::ReadPacket(uint8_t *packet) {
     packet[i] = p->data[i];
   }
 
+  delete p;
+
   return length;
 }
 

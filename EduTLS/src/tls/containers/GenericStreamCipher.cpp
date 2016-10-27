@@ -41,10 +41,6 @@ GenericStreamCipher::~GenericStreamCipher() {
   if (this->ciphertext != NULL) {
     free(this->ciphertext);
   }
-
-  if (this->contents == NULL) {
-    delete this->contents;
-  }
 }
 
 int GenericStreamCipher::encode(uint8_t *result) {

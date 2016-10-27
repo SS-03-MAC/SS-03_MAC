@@ -54,6 +54,8 @@ void TLSServer::Handshake() {
   printf("Decoded: %d - CIPHERTEXT; %d - PLAINTEXT\n", c->length,
          ((GenericStreamCipher *)(c->fragment))->contents->contents->length);
 
+  delete c;
+
   return;
 }
 

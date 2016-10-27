@@ -17,14 +17,21 @@
 #include "../interfaces/encodable.h"
 #include "../messages/ProtocolVersion.h"
 #include "../states/TLSSession.h"
+#include "./TLSCompressed.h"
 
 class CipherFragment_t : public encodable_i {
 public:
+  TLSCompressed *contents;
+
   virtual int encode(uint8_t *result) = 0;
   virtual size_t encode_length() = 0;
   virtual int decode(uint8_t *encoded, size_t length) = 0;
 
-  virtual ~CipherFragment_t(){};
+  virtual ~CipherFragment_t() {
+    if (this->contents != NULL) {
+      delete this->contents;
+    }
+  };
 };
 
 class TLSCiphertext final : public encodable_i {
