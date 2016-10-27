@@ -16,12 +16,15 @@
 #include "../enums/ContentType.h"
 #include "../interfaces/encodable.h"
 #include "../messages/ProtocolVersion.h"
+#include "../states/TLSSession.h"
 
 class CipherFragment_t : public encodable_i {
 public:
   virtual int encode(uint8_t *result) = 0;
   virtual size_t encode_length() = 0;
   virtual int decode(uint8_t *encoded, size_t length) = 0;
+
+  virtual ~CipherFragment_t(){};
 };
 
 class TLSCiphertext final : public encodable_i {
@@ -31,8 +34,10 @@ public:
   uint16_t length;
   CipherFragment_t *fragment;
 
-  TLSCiphertext();
-  TLSCiphertext(CipherFragment_t *fragment);
+  TLSSession *state;
+
+  TLSCiphertext(TLSSession *state);
+  TLSCiphertext(TLSSession *state, CipherFragment_t *fragment);
   ~TLSCiphertext();
 
   int encode(uint8_t *result);

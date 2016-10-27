@@ -26,6 +26,8 @@ private:
   bool established;
   int renegotation_state;
 
+  ConnectionEnd_e entity;
+
   SecurityParameters *current_read_params;
   SecurityParameters *current_write_params;
   SecurityParameters *pending_read_params;
@@ -50,6 +52,8 @@ private:
   uint8_t *write_encryption_iv;
 
 public:
-  TLSSession();
+  TLSSession(ConnectionEnd_e entity);
   ~TLSSession();
+
+  int SwitchStates();
 };

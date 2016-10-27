@@ -33,7 +33,10 @@ int TLSCompressed::encode(uint8_t *result) {
 }
 
 size_t TLSCompressed::encode_length() { return this->contents->encode_length(); }
+
 int TLSCompressed::decode(uint8_t *encoded, size_t length) {
+  this->contents = new TLSPlaintext();
+
   this->contents->decode(encoded, length);
   return 0;
 }

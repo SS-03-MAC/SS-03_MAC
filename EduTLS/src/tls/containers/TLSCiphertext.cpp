@@ -12,6 +12,7 @@
 //===----------------------------------------------------------------------===//
 
 #include "./TLSCiphertext.h"
+#include "../states/TLSSession.h"
 #include "./TLSCompressed.h"
 #include "./TLSPlaintext.h"
 
@@ -19,9 +20,19 @@
 #include <cstdio>
 #include <cstdlib>
 
-TLSCiphertext::TLSCiphertext() { this->fragment = NULL; }
-TLSCiphertext::TLSCiphertext(CipherFragment_t *fragment) { this->fragment = fragment; }
-TLSCiphertext::~TLSCiphertext() {}
+TLSCiphertext::TLSCiphertext(TLSSession *state) {
+  this->fragment = NULL;
+  this->state = state;
+}
+TLSCiphertext::TLSCiphertext(TLSSession *state, CipherFragment_t *fragment) {
+  this->fragment = fragment;
+  this->state = state;
+}
+TLSCiphertext::~TLSCiphertext() {
+  if (this->fragment != NULL) {
+    delete this->fragment;
+  }
+}
 
 int TLSCiphertext::encode(uint8_t *result) {
   result[0] = static_cast<uint8_t>(this->type);
