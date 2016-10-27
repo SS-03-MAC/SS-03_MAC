@@ -14,6 +14,8 @@
 #pragma once
 
 #include "../enums/ConnectionStates.h"
+#include <cstdint>
+#include <cstdlib>
 
 class SecurityParameters {
 public:

@@ -1,4 +1,4 @@
-//===-- EduTLS/src/tls/states/ConnectionStates.h        -------*- C++ -*-===//
+//===-- EduTLS/src/tls/states/CompressionState.h        -------*- C++ -*-===//
 //
 //                     EduTLS - Transport Layer Security
 //
@@ -7,24 +7,13 @@
 //===----------------------------------------------------------------------===//
 ///
 /// \file
-/// This file contains state objects for the Security Parameters protocol.
+/// This file contains state objects for the Compression State protocol.
 ///
 //===----------------------------------------------------------------------===//
 
 #pragma once
 
-#include "./CipherState.h"
-#include "./CompressionState.h"
-#include "./MACKey.h"
-
-#include <cstdint>
-#include <cstdlib>
-
-class ConnectionStates {
+class CompressionState_t {
 public:
   CompressionState_t *compression;
-  CipherState_t *cipher;
-  MACKey_t *mac_key;
-
-  size_t sequence_number;
 };

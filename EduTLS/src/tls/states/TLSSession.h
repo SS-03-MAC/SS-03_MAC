@@ -1,4 +1,4 @@
-//===-- EduTLS/src/tls/states/Sessions.h                  -------*- C++ -*-===//
+//===-- EduTLS/src/tls/states/TLSSession.h                -------*- C++ -*-===//
 //
 //                     EduTLS - Transport Layer Security
 //
@@ -7,16 +7,18 @@
 //===----------------------------------------------------------------------===//
 ///
 /// \file
-/// This file contains state objects for the Sessions protocol.
+/// This file contains state objects for the TLS Session protocol.
 ///
 //===----------------------------------------------------------------------===//
 
 #pragma once
 
-#include "./SecurityParameters.h"
 #include "./ConnectionStates.h"
+#include "./SecurityParameters.h"
+#include <cstdint>
+#include <cstdlib>
 
-class Sessions {
+class TLSSession {
 private:
   size_t session_id_length;
   uint8_t *session_id;
@@ -48,11 +50,6 @@ private:
   uint8_t *write_encryption_iv;
 
 public:
-  Sessions();
-  ~Sessions();
-
-  Handshake();
-
-  ProcessMessage(uint8_t *message, size_t length);
-  GenerateMessage(uint8_t *message, size_t length);
+  TLSSession();
+  ~TLSSession();
 };
