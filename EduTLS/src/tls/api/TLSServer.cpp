@@ -12,6 +12,8 @@
 //===----------------------------------------------------------------------===//
 
 #include "./TLSServer.h"
+#include "../containers/GenericStreamCipher.h"
+#include "../containers/TLSCiphertext.h"
 #include "../enums/ConnectionStates.h"
 #include "../states/TLSConfiguration.h"
 #include "../states/TLSSession.h"
@@ -44,7 +46,14 @@ TLSServer::~TLSServer() {
 void TLSServer::Handshake() {
   // Begin handshake
   uint8_t buffer[65536];
-  this->pq->ReadPacket(buffer);
+  size_t length = this->pq->ReadPacket(buffer);
+
+  TLSCiphertext *c = new TLSCiphertext(this->state);
+  c->decode(buffer, length);
+
+  printf("Decoded: %d - CIPHERTEXT; %d - PLAINTEXT\n", c->length,
+         ((GenericStreamCipher *)(c->fragment))->contents->contents->length);
+
   return;
 }
 

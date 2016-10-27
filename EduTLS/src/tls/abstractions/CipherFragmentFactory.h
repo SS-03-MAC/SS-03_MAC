@@ -1,4 +1,4 @@
-//===-- EduTLS/src/tls/abstractions/Packet.h              -------*- C++ -*-===//
+//===--EduTLS/src/tls/abstractions/CipherFragmentFactory.h-------*- C++ -*-===//
 //
 //                     EduTLS - Transport Layer Security
 //
@@ -7,7 +7,7 @@
 //===----------------------------------------------------------------------===//
 ///
 /// \file
-/// This file creates the Packet class declaration..
+/// This file creates the Cipher Fragment Factory class declaration..
 ///
 //===----------------------------------------------------------------------===//
 
@@ -21,21 +21,23 @@
 #include "../containers/GenericStreamCipher.h"
 #include "../containers/TLSCiphertext.h"
 #include "../enums/ConnectionStates.h"
+#include "../states/TLSSession.h"
 
 class CipherFragment_f {
 public:
-  static inline CipherFragment_t Construct(CipherType_e type) {
-    CipherFragment_t *result;
+  static inline CipherFragment_t *Construct(CipherType_e type, TLSSession *state) {
     switch (type) {
     case CipherType_e::stream:
-      result = new GenericStreamCipher();
+      return new GenericStreamCipher(state);
+      break;
     case CipherType_e::block:
-      result = new GenericBlockCipher();
+      return new GenericBlockCipher(state);
+      break;
     case CipherType_e::aead:
-      result = new GenericAEADCipher();
+      return new GenericAEADCipher(state);
       break;
     }
 
-    return result;
+    return NULL;
   };
 };

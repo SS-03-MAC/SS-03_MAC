@@ -73,7 +73,7 @@ void PacketQueue::Read() {
   }
 
   while (this->buffer_offset > length) {
-    Packet *p = new Packet(this->buffer, length);
+    Packet *p = new Packet(this->buffer, length + this->size_offset + this->size_length);
     this->data.push(p);
 
     for (i = length; i < this->buffer_offset; i++) {
