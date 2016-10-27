@@ -22,7 +22,7 @@ class PacketQueue {
 private:
   int socket;
 
-  std::queue<Packet> data;
+  std::queue<Packet *> data;
 
   size_t buffer_offset;
   size_t buffer_length;

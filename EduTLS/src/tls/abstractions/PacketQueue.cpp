@@ -73,7 +73,7 @@ void PacketQueue::Read() {
   }
 
   while (this->buffer_offset > length) {
-    Packet p(this->buffer, length);
+    Packet *p = new Packet(this->buffer, length);
     this->data.push(p);
 
     for (i = length; i < this->buffer_offset; i++) {
@@ -102,12 +102,12 @@ size_t PacketQueue::ReadPacket(uint8_t *packet) {
     this->Read();
   }
 
-  Packet p = this->data.front();
+  Packet *p = this->data.front();
   this->data.pop();
-  size_t length = p.length;
+  size_t length = p->length;
   size_t i = 0;
   for (i = 0; i < length; i++) {
-    packet[i] = p.data[i];
+    packet[i] = p->data[i];
   }
 
   return length;
@@ -118,11 +118,11 @@ size_t PacketQueue::PeekPacket(uint8_t *packet) {
     this->Read();
   }
 
-  Packet p = this->data.front();
-  size_t length = p.length;
+  Packet *p = this->data.front();
+  size_t length = p->length;
   size_t i = 0;
   for (i = 0; i < length; i++) {
-    packet[i] = p.data[i];
+    packet[i] = p->data[i];
   }
 
   return length;

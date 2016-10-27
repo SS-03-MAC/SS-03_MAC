@@ -17,7 +17,7 @@
 #include <cstdlib>
 
 Packet::Packet(uint8_t *data, size_t length) {
-  this->data = new uint8_t[length];
+  this->data = (uint8_t *)malloc(sizeof(uint8_t) * length);
   size_t i = 0;
   for (i = 0; i < length; i++) {
     this->data[i] = data[i];
@@ -26,4 +26,4 @@ Packet::Packet(uint8_t *data, size_t length) {
   this->length = length;
 }
 
-Packet::~Packet() { delete[] this->data; }
+Packet::~Packet() { free(this->data); }
