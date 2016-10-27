@@ -22,7 +22,11 @@
 
 HandshakeType::HandshakeType() { this->body = NULL; }
 HandshakeType::HandshakeType(HandshakeContents_t *body) { this->body = body; }
-HandshakeType::~HandshakeType() {}
+HandshakeType::~HandshakeType() {
+  if (this->body != NULL) {
+    // delete this->body;
+  }
+}
 
 int HandshakeType::encode(uint8_t *result) {
   result[0] = static_cast<uint8_t>(this->type);

@@ -17,6 +17,8 @@ TLSSession::TLSSession(ConnectionEnd_e entity) {
   this->session_id = NULL;
   this->entity = entity;
 
+  this->established = false;
+
   this->current_read_params = new SecurityParameters();
   this->current_read_params->entity = entity;
 
