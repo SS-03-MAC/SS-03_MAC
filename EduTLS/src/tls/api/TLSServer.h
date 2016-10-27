@@ -35,5 +35,6 @@ public:
   TLSServer(TLSConfiguration *config);
   ~TLSServer();
 
+  void Handshake();
   void AcceptClient(int client);
 };

@@ -12,6 +12,7 @@
 //===----------------------------------------------------------------------===//
 
 #include "./TLSServer.h"
+#include "../enums/ConnectionStates.h"
 #include "../states/TLSConfiguration.h"
 #include "../states/TLSSession.h"
 
@@ -26,7 +27,7 @@
 #include <unistd.h>
 
 TLSServer::TLSServer(TLSConfiguration *config) {
-  this->state = new TLSSession();
+  this->state = new TLSSession(ConnectionEnd_e::server);
   this->config = config;
 
   this->socket = -1;
@@ -38,6 +39,13 @@ TLSServer::~TLSServer() {
   if (this->pq != NULL) {
     delete this->pq;
   }
+}
+
+void TLSServer::Handshake() {
+  // Begin handshake
+  uint8_t buffer[65536];
+  this->pq->ReadPacket(buffer);
+  return;
 }
 
 void TLSServer::AcceptClient(int client) {

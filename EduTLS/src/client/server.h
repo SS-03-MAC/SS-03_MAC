@@ -38,6 +38,11 @@ inline int serve() {
   socklen_t *clilen = (socklen_t *)sizeof(client_addr);
   int c = accept(s, (sockaddr *)&client_addr, (socklen_t *)&clilen);
 
+  TLSServer *srv = new TLSServer(NULL);
+  srv->AcceptClient(c);
+  srv->Handshake();
+
+  /*
   uint8_t buf[(1 << 16) + 1];
   ssize_t r = read(c, buf, sizeof(buf) - 1);
   std::cout << "Read " << r << " bytes" << std::endl;
@@ -78,7 +83,7 @@ inline int serve() {
       hex[2 * ch->session_id_length] = '\0';
       std::cout << "\t\t\tClient Session ID (" << ch->session_id_length << "): " << hex << std::endl;
     }
-  }
+  }*/
 
   close(b);
   close(c);
