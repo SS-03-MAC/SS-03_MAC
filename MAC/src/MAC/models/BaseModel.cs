@@ -1,7 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.SqlClient;
 using System.Reflection;
 using MAC.Types;
 using MAC.Models.Attributes;
@@ -50,10 +47,9 @@ namespace MAC.Models
         /// <summary>
         /// Saves the record to the database
         /// </summary>
-        /// <returns></returns>
+        /// <returns>If the record was saved to the database</returns>
         public bool Save()
         {
-            throw new NotImplementedException();
             if (!Validate())
             {
                 throw new RecordNotValidException();
@@ -62,10 +58,12 @@ namespace MAC.Models
             {
                 CreatedAt = new Types.DateTime(System.DateTime.Now);
                 UpdatedAt = CreatedAt;
+                return Query.RunNonQuery(ToInsertStatement()) == 1;
             }
             else
             {
                 UpdatedAt = new Types.DateTime(System.DateTime.Now);
+                return Query.RunNonQuery(ToUpdateStatement()) == 1;
             }
         }
 
@@ -89,18 +87,50 @@ namespace MAC.Models
         ///  Delete the current record
         /// </summary>
         /// <returns></returns>
-        //public bool Delete()
-        //{
-        //    if (Id == null)
-        //    {
-        //        throw new InvalidOperationException("Cannot delete a record that is not saved to the database");
-        //    }
-        //    return Delete((long)Id);
+        public bool Delete()
+        {
+            if (Id == null)
+            {
+                throw new InvalidOperationException("Cannot delete a record that is not saved to the database");
+            }
+            return Delete(Id.Value);
 
-        //}
+        }
 
+        /// <summary>
+        /// Converts the current record to an Insert statement
+        /// </summary>
+        private string ToInsertStatement()
+        {
+            string result = "INSERT INTO " + TableName;
+            result += " (";
+            // Loop though fields here
+            result += ") VALUES (";
+            // Loop though values
+            result += ")";
+            result += ";";
+            return result;
+        }
 
+        /// <summary>
+        /// Converts the current record to an update statement
+        /// </summary>
+        /// <returns></returns>
+        private string ToUpdateStatement()
+        {
+            string result = "UPDATE";
+            return result;
+        }
 
+        /// <summary>
+        /// Deletes the given record with the given id
+        /// </summary>
+        /// <param name="id">If the record was deleted</param>
+        /// <returns></returns>
+        public static bool Delete(int id)
+        {
+            return Query.Delete(TableName, id);
+        }
     }
 }
 

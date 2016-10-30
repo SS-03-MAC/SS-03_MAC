@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.SqlClient;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Data.SqlClient;
 
 namespace MAC.Models
 {
@@ -31,6 +27,16 @@ namespace MAC.Models
         }
 
         /// <summary>
+        /// Run the given query
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        public static int RunNonQuery(string query)
+        {
+            return RunNonQuery(new SqlCommand(query));
+        }
+
+        /// <summary>
         ///  Runs the givn command 
         /// </summary>
         /// <param name="cmd"></param>
@@ -50,7 +56,7 @@ namespace MAC.Models
         /// <summary>
         /// Gets all records associated with the model
         /// </summary>
-        /// <returns>All records</returns>
+        /// <returns>All records in the given table name</returns>
         public static SqlDataReader Get(string tableName)
         {
             string query = "select * from " + tableName;
@@ -81,7 +87,7 @@ namespace MAC.Models
         /// </summary>
         /// <param name="id">ID of the record</param>
         /// <returns>Record of type T</returns>
-        public static SqlDataReader Get(string tableName, long id)
+        public static SqlDataReader Get(string tableName, int id)
         {
             string query = "select * from " + tableName + " where Id = @Id";
             SqlCommand cmd = new SqlCommand(query);
@@ -94,7 +100,7 @@ namespace MAC.Models
         /// </summary>
         /// <param name="id">ID to delete</param>
         /// <returns>If the record was removed</returns>
-        public static bool Delete(string tableName, long id)
+        public static bool Delete(string tableName, int id)
         {
 
             string command = "DELETE FROM " + tableName + " WHERE Id = @Id;";
