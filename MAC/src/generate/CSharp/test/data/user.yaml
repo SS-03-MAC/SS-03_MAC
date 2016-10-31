@@ -1,0 +1,25 @@
+-
+  name: user
+  uses:
+    - MAC.user
+    - MAC.location
+  fields:
+    -
+      name: Password
+      type: MAC.User.Password
+    -
+      name: FullName
+      type: string
+      validations:
+        required: true
+      acl:
+        read: MAC.self, admin, MAC.signed, MAC.Public
+        write: self, admin
+    -
+      name: City
+      type: string
+      validations:
+        required: false
+      acl:
+        read: self, admin
+        write: self, admin

@@ -1,0 +1,9 @@
+using System;
+using Mac.Types;
+
+public class <%= name %> : BaseModel {
+  <% fields.each do |field| %>
+    [DatabaseField("<%= field["type"] %>")]
+    public <%= field["type"] %> <%= field["name"] %> { get; set; }
+  <% end %>
+}
