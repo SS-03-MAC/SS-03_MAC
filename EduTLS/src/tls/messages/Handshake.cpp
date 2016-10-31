@@ -16,12 +16,16 @@
 #include "Certificate.h"
 #include "CertificateRequest.h"
 #include "ClientHello.h"
+#include "ClientKeyExchange.h"
 #include "ServerHello.h"
 #include "ServerHelloDone.h"
 #include "ServerKeyExchange.h"
 
 HandshakeType::HandshakeType() { this->body = NULL; }
-HandshakeType::HandshakeType(HandshakeContents_t *body) { this->body = body; }
+HandshakeType::HandshakeType(HandshakeContents_t *body) {
+  this->body = body;
+  this->length = this->body->encode_length();
+}
 HandshakeType::~HandshakeType() {
   if (this->body != NULL) {
     // delete this->body;
@@ -57,6 +61,9 @@ int HandshakeType::decode(uint8_t *encoded, size_t length) {
     break;
   case HandshakeType_e::server_key_exchange:
     this->body = new ServerKeyExchange();
+    break;
+  case HandshakeType_e::client_key_exchange:
+    this->body = new ClientKeyExchange();
     break;
   case HandshakeType_e::certificate_request:
     this->body = new CertificateRequest();

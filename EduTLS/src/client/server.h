@@ -40,6 +40,22 @@ inline int serve() {
 
   TLSConfiguration *config = new TLSConfiguration();
   config->debug = true;
+  config->cert.certificate_length = 806;
+  config->cert.certificate_data = (uint8_t *)malloc(sizeof(uint8_t) * 806);
+  std::string cert =
+      "MIIDIjCCAgoCCQCAHbmNOfRXmTANBgkqhkiG9w0BAQsFADBTMQswCQYDVQQGEwJVUzENMAsGA1UECAwESW93YTENMAsGA1UEBwwEQW1lczESMBAG"
+      "A1UECgwJQ09NIFMgMzA5MRIwEAYDVQQDDAlsb2NhbGhvc3QwHhcNMTYxMDMwMTgyODEzWhcNMTkwODIwMTgyODEzWjBTMQswCQYDVQQGEwJVUzEN"
+      "MAsGA1UECAwESW93YTENMAsGA1UEBwwEQW1lczESMBAGA1UECgwJQ09NIFMgMzA5MRIwEAYDVQQDDAlsb2NhbGhvc3QwggEiMA0GCSqGSIb3DQEB"
+      "AQUAA4IBDwAwggEKAoIBAQCewIyjZu97WCTp/TqwT4cZX1OLYUwRyPKFHlmHgDjCU3ZBf2KK155xopkl+TnejKsblupAOI26f19H6/"
+      "FV+qPMO5i9s3oRFl6+dIQKMVPr3VH0cQmOFWYYETHrZwFbCHbkuWEsVq4ArBrmwFRinE9ByGx/YBfZlVy0a1ZVC/ZBVDmAD2TJShPd0SeGl/"
+      "YlRJ8Fo54BoZWOZP06yWetfK0QtPehOr9231gNP3t0lxEZeum76c73Dfs55IbjSEg/Aq1NLT8R9JFBeHOao/B94N/"
+      "trvs7QLc3RPCWX7yR61rmpo2nw+1RYW6wA/Uy/ZMDx3sXQaMB1sNgB3wuQVFBUgptAgMBAAEwDQYJKoZIhvcNAQELBQADggEBAH6L/"
+      "7NL48Yn1E6DR5AXRI9J2upKIkXtMYc6+2fDniffiwCkWvUYpKZe1vLAwfIZltAukoZatVmTT7Kc0WlyS2QXeTifnQdZkAE5jpnN2sJ6vOw2VE3G/"
+      "rvAflX55TbgXx7P8PGchRHqlR6jO/HQF9A4+kBBQ0kj8QbOt//pQEca85wHEoS37k4Zon/bnV89QnZg0RaGCzlEo/"
+      "+KculJP9XLwmNH2NknScz7x3/"
+      "FeMWEvjGJGq0MyZx15W6w6EgnUTKGQDmrBMGuL8TSUvGLkidQ6b797uw1rO8ccaZCB6R2OcySdwXUv3Rs+"
+      "kod1YVXpeV9aQz2zOPIhqqc0fFxPhc=";
+  fromBase64(config->cert.certificate_data, (char *)cert.c_str(), 1076);
 
   TLSServer *srv = new TLSServer(config);
   srv->AcceptClient(c);

@@ -28,6 +28,7 @@ TLSCiphertext::TLSCiphertext(TLSSession *state) {
 TLSCiphertext::TLSCiphertext(TLSSession *state, CipherFragment_t *fragment) {
   this->fragment = fragment;
   this->state = state;
+  this->length = fragment->encode_length();
 }
 TLSCiphertext::~TLSCiphertext() {
   if (this->fragment != NULL) {

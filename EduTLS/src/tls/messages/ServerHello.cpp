@@ -63,11 +63,13 @@ int ServerHello::encode(uint8_t *result) {
     ext_len += this->extensions[i].encode_length();
   }
 
-  result[r_p++] = (ext_len >> 8) & 0xFF;
-  result[r_p++] = ext_len & 0xFF;
-  for (i = 0; i < this->extensions_length; i++) {
-    this->extensions[i].encode(&(result[r_p]));
-    r_p += this->extensions[i].encode_length();
+  if (ext_len != 0) {
+    result[r_p++] = (ext_len >> 8) & 0xFF;
+    result[r_p++] = ext_len & 0xFF;
+    for (i = 0; i < this->extensions_length; i++) {
+      this->extensions[i].encode(&(result[r_p]));
+      r_p += this->extensions[i].encode_length();
+    }
   }
 
   return 0;
@@ -80,7 +82,12 @@ size_t ServerHello::encode_length() {
     ext_len += this->extensions[i].encode_length();
   }
 
-  return 2 + this->random.encode_length() + 1 + this->session_id_length + 2 + 1 + 2 + ext_len;
+  size_t result = 2 + this->random.encode_length() + 1 + this->session_id_length + 2 + 1;
+  if (ext_len != 0) {
+    result += 2 + ext_len;
+  }
+
+  return result;
 }
 
 int ServerHello::decode(uint8_t *encoded, size_t length) {

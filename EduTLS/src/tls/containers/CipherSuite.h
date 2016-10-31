@@ -24,9 +24,6 @@
 
 class CipherSuite {
 private:
-  uint8_t big;
-  uint8_t little;
-
   std::map<uint16_t, std::string> names;
   std::map<std::string, uint16_t> ids;
   std::map<std::string, KeyExchangeAlgorithm_e> exchange;
@@ -34,6 +31,9 @@ private:
   std::map<std::string, MACAlgorithm_e> mac;
 
 public:
+  uint8_t big;
+  uint8_t little;
+
   CipherSuite() {
     this->big = 0;
     this->little = 0;
@@ -61,11 +61,20 @@ public:
     return result;
   };
 
-  KeyExchangeAlgorithm_e KeyExchange() { return this->exchange[this->names[(this->big << 8) | this->little]]; }
+  KeyExchangeAlgorithm_e KeyExchange() {
+    std::string name = this->names.at((this->big << 8) | this->little);
+    return this->exchange.at(name);
+  }
 
-  BulkCipherAlgorithm_e BulkCipherAlgorithm() { return this->bulk[this->names[(this->big << 8) | this->little]]; }
+  BulkCipherAlgorithm_e BulkCipherAlgorithm() {
+    std::string name = this->names.at((this->big << 8) | this->little);
+    return this->bulk.at(name);
+  }
 
-  MACAlgorithm_e MACAlgorithm() { return this->mac[this->names[(this->big << 8) | this->little]]; }
+  MACAlgorithm_e MACAlgorithm() {
+    std::string name = this->names.at((this->big << 8) | this->little);
+    return this->mac.at(name);
+  }
 
   std::string String() {
     std::string result;
@@ -74,7 +83,11 @@ public:
     result += " ";
     result += std::to_string(this->little);
     result += "}: ";
-    result += this->names[(this->big << 8) | this->little];
+    try {
+      result += this->names.at((this->big << 8) | this->little);
+    } catch (std::out_of_range e) {
+      result += "<unknown>";
+    }
     return result;
   }
 

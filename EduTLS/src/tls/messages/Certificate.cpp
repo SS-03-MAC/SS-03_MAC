@@ -15,6 +15,8 @@
 #include "../interfaces/encodable.h"
 #include "Handshake.h"
 
+#include <cstdio>
+
 #include <cstdint>
 #include <cstdlib>
 

@@ -15,6 +15,7 @@
 
 #include "../abstractions/PacketQueue.h"
 #include "../messages/ClientHello.h"
+#include "../messages/ClientKeyExchange.h"
 #include "./TLSConfiguration.h"
 #include "./TLSSession.h"
 #include <cstdint>
@@ -34,7 +35,7 @@ private:
   void ProcessServerHello();
   void ProcessServerCertificate();
   void ProcessServerHelloDone();
-  void ProcessClientKeyExchange(uint8_t *data, size_t length);
+  void ProcessClientKeyExchange(ClientKeyExchange *m);
   void ProcessClientChangeCipherSpec(uint8_t *data, size_t length);
   void ProcessClientFinished(uint8_t *data, size_t length);
   void ProcessServerChangeCipherSpec();
