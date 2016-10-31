@@ -66,7 +66,7 @@ void handleClient(int clientFd) {
     write(clientFd, errorText.c_str(), errorText.length());
   } else {
     httpResponseHeaderCollection resp("HTTP/1.1", 200, "Success");
-    
+
     resp.push_back(new httpHeader("Content-Length", std::to_string(getFileSize(headers->path))));
 
     std::string headerString(resp.toString());

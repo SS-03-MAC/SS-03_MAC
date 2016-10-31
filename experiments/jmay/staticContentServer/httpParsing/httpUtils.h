@@ -4,7 +4,14 @@
 #include <sstream>
 //#include <sstream>
 class httpUtils {
+private:
+  static char hexToChar(char c1, char c2);
+  static int hexToInt(char c);
+
 public:
+  static const char URI_UNSAFE[] = {'\127', ' ', '"', '#', '%', '<', '>'};// and CTL (0 through 31 and DEL(127))
+  static const char URL_RESREVED[] = {';', '/', '?', ':', '@', '&', '=', '+'};
+
   inline static bool ingestLWS(std::istream *in) {
     bool hasCRLF;
     bool hasWSP;
@@ -76,5 +83,11 @@ public:
     return out.str();
   }
 
+  static bool isUriUnsafe(char c);
+  static bool isUriReserved(char c);
+
   static std::string readToken(std::istream *in);
+
+  static std::string uriDecode(std::string &uri);
+  static std::string uriEncode(std::string &uri);
 };
