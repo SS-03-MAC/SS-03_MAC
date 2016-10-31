@@ -321,6 +321,7 @@ void HandshakeFSM::ProcessServerHelloDone() {
 }
 
 void HandshakeFSM::ProcessClientKeyExchange(ClientKeyExchange *) {}
+
 void HandshakeFSM::ProcessClientChangeCipherSpec(uint8_t *, size_t) {}
 void HandshakeFSM::ProcessClientFinished(uint8_t *, size_t) {}
 void HandshakeFSM::ProcessServerChangeCipherSpec() {}

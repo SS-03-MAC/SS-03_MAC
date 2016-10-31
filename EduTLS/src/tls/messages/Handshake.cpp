@@ -17,9 +17,14 @@
 #include "CertificateRequest.h"
 #include "ClientHello.h"
 #include "ClientKeyExchange.h"
+#include "Finished.h"
 #include "ServerHello.h"
 #include "ServerHelloDone.h"
 #include "ServerKeyExchange.h"
+
+#include <cstdint>
+#include <cstdio>
+#include <cstdlib>
 
 HandshakeType::HandshakeType() { this->body = NULL; }
 HandshakeType::HandshakeType(HandshakeContents_t *body) {
@@ -71,7 +76,12 @@ int HandshakeType::decode(uint8_t *encoded, size_t length) {
   case HandshakeType_e::server_hello_done:
     this->body = new ServerHelloDone();
     break;
+  case HandshakeType_e::finished:
+    this->body = new Finished();
+    break;
   default:
+    printf("Unknown handshake message type (%d)!\n", encoded[0]);
+    return 1;
     break;
   }
 
