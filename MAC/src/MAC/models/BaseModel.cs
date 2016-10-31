@@ -2,6 +2,7 @@ using System;
 using System.Reflection;
 using MAC.Types;
 using MAC.Models.Attributes;
+using System.Collections.Generic;
 
 namespace MAC.Models
 {
@@ -104,7 +105,7 @@ namespace MAC.Models
         {
             string result = "INSERT INTO " + TableName;
             result += " (";
-            // Loop though fields here
+            result += GetFieldsString();
             result += ") VALUES (";
             // Loop though values
             result += ")";
@@ -130,6 +131,25 @@ namespace MAC.Models
         public static bool Delete(int id)
         {
             return Query.Delete(TableName, id);
+        }
+
+        /// <summary>
+        /// Get the database properities of this model in a useable format
+        /// </summary>
+        /// <returns></returns>
+        private List<KeyValuePair<string, BaseType>> GetDatabaseFields()
+        {
+            List<KeyValuePair<string, BaseType>> result = new List<KeyValuePair<string, BaseType>>();
+            foreach (PropertyInfo property in GetType().GetProperties())
+            {
+                Attribute dbField = property.GetCustomAttribute(typeof(DatabaseField));
+                if (dbField is DatabaseField)
+                {
+                    KeyValuePair<string, BaseType> value = new KeyValuePair<string, BaseType>(((DatabaseField)dbField).Name, property.GetValue(this) as BaseType);
+                    result.Add(value);
+                }
+            }
+            return result;
         }
     }
 }
