@@ -1,4 +1,5 @@
-var <%= name %> = function(<%= fields_str %>){
+<% require 'active_support/inflector' %>
+var <%= name.capitalize %> = function(<%= fields_str %>){
 <% fields.each do |field| %>
   <%= "this." + field["name"] + " = " + field["name"] + ";" %>
 <% end %>
@@ -6,20 +7,16 @@ var <%= name %> = function(<%= fields_str %>){
   this.createdAt = Date.getTime();
   this.updatedAt = Date.getTime();
 
-
-  this.Save(){
-    //HTTP put request to /users/:id
-  }
-
-  this.Load(){
-    //HTTP GET request to users/:id
-  }
-
-  this.Update(){
-    //HTTP PATCH request to users/:id
-  }
-
-  this.Delete(){
-    //HTTP DELETE request to users/:id
-  }
 };
+
+<%= name.capitalize %>.get = function(id){
+  xhr = new XMLHTTPRequest();
+  xhr.onreadystatechenge = function() {
+    if(this.readystate == 4 && this.status == 200){
+      //do something
+    }
+  }
+
+  xhr.open("GET", <%="/" + name.pluralize + "/" + id %>, true);
+  xhr.send();
+}
