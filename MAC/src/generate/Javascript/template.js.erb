@@ -1,4 +1,3 @@
-<% require 'active_support/inflector' %>
 var <%= name.capitalize %> = function(<%= fields_str %>){
 <% fields.each do |field| %>
   <%= "this." + field["name"] + " = " + field["name"] + ";" %>
@@ -17,6 +16,6 @@ var <%= name.capitalize %> = function(<%= fields_str %>){
     }
   }
 
-  xhr.open("GET", <%="/" + name.pluralize + "/" + id %>, true);
+  xhr.open("GET", <%="/" + name.pluralize + "/" %>id, true);
   xhr.send();
 }

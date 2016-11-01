@@ -1,4 +1,4 @@
-var user = function(name, uses, fields){
+var User = function(name, uses, fields){
   this.Password = Password;
   this.FullName = FullName;
   this.City = City;
@@ -6,20 +6,16 @@ var user = function(name, uses, fields){
   this.createdAt = Date.getTime();
   this.updatedAt = Date.getTime();
 
-
-  this.Save(){
-    //HTTP put request to /users/:id
-  }
-
-  this.Load(){
-    //HTTP GET request to users/:id
-  }
-
-  this.Update(){
-    //HTTP PATCH request to users/:id
-  }
-
-  this.Delete(){
-    //HTTP DELETE request to users/:id
-  }
 };
+
+User.get = function(id){
+  xhr = new XMLHTTPRequest();
+  xhr.onreadystatechenge = function() {
+    if(this.readystate == 4 && this.status == 200){
+      //do something
+    }
+  }
+
+  xhr.open("GET", /users/id, true);
+  xhr.send();
+}
