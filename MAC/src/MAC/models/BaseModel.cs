@@ -109,27 +109,48 @@ namespace MAC.Models
             string query = "INSERT INTO " + TableName;
             List<KeyValuePair<string, BaseType>> values = GetDatabaseFields();
             query += " (";
-            foreach (KeyValuePair<string, BaseType> key in values)
-            {
-                query += key.Key + ",";
-            }
-            query = query.Remove(query.LastIndexOf(','));
+            query = GetColumnNames(query, values);
             query += ") VALUES (";
+            query = GetValuesForInsert(query, values);
+            query += ")";
+            query += ";";
+            SqlCommand result = new SqlCommand(query);
+            SetValues(values, result);
+            return result;
+        }
+
+        private static void SetValues(List<KeyValuePair<string, BaseType>> values, SqlCommand result)
+        {
+            foreach (KeyValuePair<string, BaseType> kvPair in values)
+            {
+                result.Parameters.AddWithValue(kvPair.Key, kvPair.Value.GetRawObject() as object);
+            }
+        }
+
+        private static string GetValuesForInsert(string query, List<KeyValuePair<string, BaseType>> values)
+        {
             foreach (KeyValuePair<string, BaseType> key in values)
             {
                 query += "@" + key.Key + ",";
             }
             query = query.Remove(query.LastIndexOf(','));
-            query += ")";
-            query += ";";
-            SqlCommand result = new SqlCommand(query);
+            return query;
+        }
 
-            foreach (KeyValuePair<string, BaseType> kvPair in values)
+        /// <summary>
+        /// Get the column names in comma sperated list
+        /// </summary>
+        /// <param name="query">The </param>
+        /// <param name="values"></param>
+        /// <returns></returns>
+        private static string GetColumnNames(string query, List<KeyValuePair<string, BaseType>> values)
+        {
+            foreach (KeyValuePair<string, BaseType> key in values)
             {
-                result.Parameters.AddWithValue(kvPair.Key, kvPair.Value.GetRawObject() as object);
+                query += key.Key + ",";
             }
-
-            return result;
+            query = query.Remove(query.LastIndexOf(','));
+            return query;
         }
 
         /// <summary>
