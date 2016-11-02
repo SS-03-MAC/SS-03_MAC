@@ -8,7 +8,7 @@ namespace MAC.Types
     /// Stores and vaildates Currency
     /// Stored as SQL type varchar
     /// </summary>
-    public class Currency : BaseType
+    public class Currency : BaseType<Currency, decimal>
     {
         private decimal Data;
 
@@ -53,7 +53,7 @@ namespace MAC.Types
         /// <param name="other">the BaseType object to compare with</param>
         /// <returns> A positive number if this > other, 0 if this == other, 
         /// and a negative number if this < other.</returns>
-        public override int CompareTo(BaseType other)
+        public override int CompareTo(object other)
         {
             if (other is Currency)
             {
@@ -67,7 +67,7 @@ namespace MAC.Types
         /// </summary>
         /// <param name="other">the BaseType object to check equality with</param>
         /// <returns>true if equal. Otherwise, false</returns>
-        public override bool Equals(BaseType other)
+        public override bool Equals(object other)
         {
             try
             {
@@ -94,7 +94,7 @@ namespace MAC.Types
         /// <summary>
         /// Direct access to the data stored
         /// </summary>
-        public decimal Value
+        public override decimal Value
         {
             get { return Data; }
             set { Data = value; }
