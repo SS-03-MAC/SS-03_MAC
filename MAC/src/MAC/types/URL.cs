@@ -9,7 +9,7 @@ namespace MAC.Types.Internet
     /// Stores and vaildates URLs
     /// Stored as SQL type nvarchar
     /// </summary>
-    public class Url : BaseType
+    public class Url : BaseType<Url, Uri>
     {
         /// <summary>
         /// Stores the url represented by the type
@@ -50,11 +50,11 @@ namespace MAC.Types.Internet
         /// </summary>
         /// <param name="other"></param>
         /// <returns></returns>
-        public override int CompareTo(BaseType other)
+        public override int CompareTo(object other)
         {
             if(other is Url)
             {
-                return this.Data.ToString().CompareTo(((Url)other).Data.ToString());
+                return Data.ToString().CompareTo(((Url)other).Data.ToString());
             }
             throw new ArgumentException();
         }
@@ -64,7 +64,7 @@ namespace MAC.Types.Internet
         /// </summary>
         /// <param name="other"></param>
         /// <returns></returns>
-        public override bool Equals(BaseType other)
+        public override bool Equals(object other)
         {
             if (other is Url)
             {
@@ -93,7 +93,7 @@ namespace MAC.Types.Internet
         /// <summary>
         /// Direct access to the URL
         /// </summary>
-        public Uri Value
+        public override Uri Value
         {
             get { return Data; }
             set { Data = value; }
