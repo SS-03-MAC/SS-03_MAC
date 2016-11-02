@@ -20,19 +20,19 @@
 hmac::hmac(hash *h, uint8_t *key, size_t key_length) {
   size_t i = 0;
   this->h = h;
-  this->block_length = h->block_size;
-  this->output_length = h->output_size;
+  this->block_size = h->block_size;
+  this->output_size = h->output_size;
 
-  this->ipad = (uint8_t *)malloc(sizeof(uint8_t) * block_length);
-  this->opad = (uint8_t *)malloc(sizeof(uint8_t) * block_length);
-  this->key = (uint8_t *)malloc(sizeof(uint8_t) * block_length);
-  for (i = 0; i < block_length; i++) {
+  this->ipad = (uint8_t *)malloc(sizeof(uint8_t) * block_size);
+  this->opad = (uint8_t *)malloc(sizeof(uint8_t) * block_size);
+  this->key = (uint8_t *)malloc(sizeof(uint8_t) * block_size);
+  for (i = 0; i < block_size; i++) {
     this->ipad[i] = 0x36;
     this->opad[i] = 0x5C;
     this->key[i] = 0x00;
   }
 
-  if (key_length > block_length) {
+  if (key_length > block_size) {
     h->sum(this->key, key, key_length);
   } else {
     for (i = 0; i < key_length; i++) {
@@ -40,8 +40,8 @@ hmac::hmac(hash *h, uint8_t *key, size_t key_length) {
     }
   }
 
-  edutls_xor(this->ipad, this->ipad, this->key, block_length);
-  edutls_xor(this->opad, this->opad, this->key, block_length);
+  edutls_xor(this->ipad, this->ipad, this->key, block_size);
+  edutls_xor(this->opad, this->opad, this->key, block_size);
 }
 
 hmac::~hmac() {
@@ -50,14 +50,19 @@ hmac::~hmac() {
   free(this->key);
 }
 
-void hmac::sum(uint8_t *result, uint8_t *text, size_t text_length) {
-  uint8_t intermediate[this->output_length];
+void hmac::init() {
+
   this->h->init();
-  this->h->update(this->ipad, this->block_length);
-  this->h->update(text, text_length);
+  this->h->update(this->ipad, this->block_size);
+}
+void hmac::update(uint8_t *input, size_t count) { this->h->update(input, count); }
+
+void hmac::finalize(uint8_t *output) {
+  uint8_t intermediate[this->output_size];
+
   this->h->finalize(intermediate);
   this->h->init();
-  this->h->update(this->opad, this->block_length);
-  this->h->update(intermediate, this->output_length);
-  this->h->finalize(result);
+  this->h->update(this->opad, this->block_size);
+  this->h->update(intermediate, this->output_size);
+  this->h->finalize(output);
 }

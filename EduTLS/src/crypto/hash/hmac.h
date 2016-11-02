@@ -18,7 +18,7 @@
 
 #include "./hash.h"
 
-class hmac {
+class hmac final : public hash {
 private:
   hash *h;
 
@@ -26,12 +26,15 @@ private:
   uint8_t *opad;
   uint8_t *key;
 
-  size_t block_length;
-  size_t output_length;
+  size_t key_length;
+  size_t block_size;
+  size_t output_size;
 
 public:
   hmac(hash *h, uint8_t *key, size_t key_length);
   ~hmac();
 
-  void sum(uint8_t *result, uint8_t *text, size_t text_length);
+  void update(uint8_t *input, size_t count);
+  void finalize(uint8_t *output);
+  void init();
 };
