@@ -3,6 +3,7 @@ using System.Reflection;
 using MAC.Types;
 using MAC.Models.Attributes;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 
 namespace MAC.Models
 {
@@ -59,7 +60,8 @@ namespace MAC.Models
             {
                 CreatedAt = new Types.DateTime(System.DateTime.Now);
                 UpdatedAt = CreatedAt;
-                return Query.RunNonQuery(ToInsertStatement()) == 1;
+                return false;
+                    //return Query.RunNonQuery(ToInsertStatement()) == 1;
             }
             else
             {
@@ -101,15 +103,31 @@ namespace MAC.Models
         /// <summary>
         /// Converts the current record to an Insert statement
         /// </summary>
-        private string ToInsertStatement()
+        private SqlCommand ToInsertStatement()
         {
-            string result = "INSERT INTO " + TableName;
-            result += " (";
-            result += GetFieldsString();
-            result += ") VALUES (";
-            // Loop though values
-            result += ")";
-            result += ";";
+            string query = "INSERT INTO " + TableName;
+            List<KeyValuePair<string, BaseType<object, object>>> values = GetDatabaseFields();
+            query += " (";
+            foreach (KeyValuePair<string, BaseType<object, object>> key in values)
+            {
+                query += key.Key + ",";
+            }
+            query = query.Remove(query.LastIndexOf(','));
+            query += ") VALUES (";
+            for (int i = 0; i < values.Count; i++)
+            {
+                query += "?,";
+            }
+            query = query.Remove(query.LastIndexOf(','));
+            query += ")";
+            query += ";";
+            SqlCommand result = new SqlCommand(query);
+
+            foreach(KeyValuePair<string, BaseType<object, object>> key in values)
+            {
+                result.Parameters.Add(key.Value.Value);
+            }
+          
             return result;
         }
 
@@ -137,15 +155,15 @@ namespace MAC.Models
         /// Get the database properities of this model in a useable format
         /// </summary>
         /// <returns></returns>
-        private List<KeyValuePair<string, BaseType>> GetDatabaseFields()
+        private List<KeyValuePair<string, BaseType<object, object>>> GetDatabaseFields()
         {
-            List<KeyValuePair<string, BaseType>> result = new List<KeyValuePair<string, BaseType>>();
+            List<KeyValuePair<string, BaseType<object, object>>> result = new List<KeyValuePair<string, BaseType<object, object>>>();
             foreach (PropertyInfo property in GetType().GetProperties())
             {
                 Attribute dbField = property.GetCustomAttribute(typeof(DatabaseField));
                 if (dbField is DatabaseField)
                 {
-                    KeyValuePair<string, BaseType> value = new KeyValuePair<string, BaseType>(((DatabaseField)dbField).Name, property.GetValue(this) as BaseType);
+                    KeyValuePair<string, BaseType<object, object>> value = new KeyValuePair<string, BaseType<object,object>>(((DatabaseField)dbField).Name, property.GetValue(this) as BaseType<object,object>);
                     result.Add(value);
                 }
             }
