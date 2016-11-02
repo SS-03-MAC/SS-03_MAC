@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.Serialization;
+using System.Collections.Generic;
 
 /// <summary>
 /// Base abstract classfor MAC types. Each MAC type will inherit this class.
@@ -9,7 +10,7 @@ using System.Runtime.Serialization;
 /// </summary>
 namespace MAC.Types
 {
-    public abstract class BaseType : IComparable<BaseType>, IEquatable<BaseType>,
+    public abstract class BaseType<T,V> : IComparable, IEquatable<object>,
                                      ISerializable
     {
         /// <summary>
@@ -21,6 +22,11 @@ namespace MAC.Types
         /// Default constructor
         /// </summary>
         public BaseType() { }
+
+        public BaseType(T type)
+        {
+
+        }
 
         /// <summary>
         /// 
@@ -42,14 +48,14 @@ namespace MAC.Types
         /// </summary>
         /// <param name="other">Type of compare</param>
         /// <returns></returns>
-        public abstract int CompareTo(BaseType other);
+        public abstract int CompareTo(object other);
 
         /// <summary>
         /// function inherited from IEquitable
         /// </summary>
         /// <param name="other"></param>
         /// <returns></returns>
-        public abstract bool Equals(BaseType other);
+        public abstract override bool Equals(object other);
 
         /// <summary>
         /// function inherited from ISerializable
@@ -63,5 +69,7 @@ namespace MAC.Types
         /// </summary>
         /// <returns>A end-user safe represention of the type</returns>
         public abstract override string ToString();
+
+        public abstract V Value { get; set; }
     }
 }
