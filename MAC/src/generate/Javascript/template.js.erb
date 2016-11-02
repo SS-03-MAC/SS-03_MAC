@@ -11,11 +11,16 @@ var <%= name.capitalize %> = function(<%= fields_str %>){
 <%= name.capitalize %>.get = function(id){
   xhr = new XMLHTTPRequest();
   xhr.onreadystatechenge = function() {
-    if(this.readystate == 4 && this.status == 200){
-      //do something
+    if(xhr.readystate == 4){
+      if(xhr.status == 200){
+        var result = eval("("+xhr.responseTest+")");
+        return result;
+      } else{
+        throw new Error(xhr.statusText);
+      }
     }
   }
 
   xhr.open("GET", <%="/" + name.pluralize + "/" %>id, true);
-  xhr.send();
+  xhr.send(null);
 }
