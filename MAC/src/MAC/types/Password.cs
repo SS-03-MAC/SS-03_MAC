@@ -99,12 +99,19 @@ namespace MAC.Types.User
             return BCrypt.Net.BCrypt.Verify(PlainTextPassword, Data);
         }
 
+        /// <summary>
+        /// Get access to RAW Data
+        /// </summary>
         public override string Value
         {
             get { return Data; }
             set { Data = Value; }
         }
 
+        /// <summary>
+        /// Access to the RAW data return has a object
+        /// </summary>
+        /// <returns>Raw data as an object</returns>
         public override object GetRawObject()
         {
             return Data as object;

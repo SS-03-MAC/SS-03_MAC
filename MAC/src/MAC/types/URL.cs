@@ -112,6 +112,10 @@ namespace MAC.Types.Internet
             return string.Empty;
         }
 
+        /// <summary>
+        /// Access to the RAW data return has a object
+        /// </summary>
+        /// <returns>Raw data as an object</returns>
         public override object GetRawObject()
         {
             return Data as object;

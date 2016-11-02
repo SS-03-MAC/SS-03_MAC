@@ -29,7 +29,7 @@ namespace MAC.Models
         /// <summary>
         /// Run the given query
         /// </summary>
-        /// <param name="query"></param>
+        /// <param name="query">Query can be ran</param>
         /// <returns></returns>
         public static int RunNonQuery(string query)
         {

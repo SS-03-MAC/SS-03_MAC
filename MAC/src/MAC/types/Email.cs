@@ -21,9 +21,8 @@ namespace MAC.Types.User {
 
 
         /// <summary>
-        /// This will check for:
-        /// - Vaild email address (a simple regex will work here)
-        /// Regex for email valdations was taken from http://emailregex.com/
+        /// This will check the email address with .NET class
+        /// MailAddress
         /// </summary>
         /// <returns>If the stored email is valid</returns>
         public override bool Validate() {
@@ -98,6 +97,10 @@ namespace MAC.Types.User {
             }
         }
 
+        /// <summary>
+        /// Access to the RAW data return has a object
+        /// </summary>
+        /// <returns>Raw data as an object</returns>>
         public override object GetRawObject()
         {
             return Data as object;

@@ -109,6 +109,10 @@ namespace MAC.Types
             return Data.ToString();
         }
 
+        /// <summary>
+        /// Access to the RAW data return has a object
+        /// </summary>
+        /// <returns>Raw data as an object</returns>
         public override object GetRawObject()
         {
             return Data as object;

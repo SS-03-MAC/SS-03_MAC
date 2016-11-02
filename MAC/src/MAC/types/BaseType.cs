@@ -1,17 +1,17 @@
 ﻿using System;
 using System.Runtime.Serialization;
-using System.Collections.Generic;
 
-/// <summary>
-/// Base abstract classfor MAC types. Each MAC type will inherit this class.
-/// Children of this class are used as wrapper classes for data, such that
-/// all data can be fund easily, and to make sure data is comparable,
-// equitable, and serializable
-/// </summary>
 namespace MAC.Types
 {
-    public abstract class BaseType<T,V> : BaseType, IComparable, IEquatable<object>,
-                                     ISerializable
+    /// <summary>
+    /// Base abstract class for MAC types. Each MAC type will inherit this class.
+    /// Children of this class are used as wrapper classes for data, such that
+    /// all data and methods can be easily, and to make sure data is comparable,
+    /// equitable, and serializable
+    ///
+    /// Methods that requiure generics
+    /// </summary>
+    public abstract class BaseType<T,V> : BaseType
     {
         /// <summary>
         /// Stores what type of field in that database is need store the data
@@ -23,13 +23,17 @@ namespace MAC.Types
         /// </summary>
         public BaseType() { }
 
+        /// <summary>
+        /// Contrustor 
+        /// </summary>
+        /// <param name="type">Contrustor</param>
         public BaseType(T type)
         {
 
         }
 
         /// <summary>
-        /// 
+        /// Serialization constructor
         /// </summary>
         /// <param name="info"></param>
         /// <param name="context"></param>
@@ -38,7 +42,11 @@ namespace MAC.Types
         public abstract V Value { get; set; }
     }
 
-    public abstract class BaseType
+    /// <summary>
+    /// Method on the base type that do not requiure generics
+    /// </summary>
+    public abstract class BaseType : IComparable, IEquatable<object>,
+                                     ISerializable
     {
         /// <summary>
         /// function to validate data for the given object is in the correct format
@@ -74,6 +82,13 @@ namespace MAC.Types
         /// <returns>A end-user safe represention of the type</returns>
         public abstract override string ToString();
 
+        /// <summary>
+        /// A hack to get the raw value of the object
+        /// 
+        /// This method needs to be abstract since each type needs to decide 
+        /// on how it stores it's data
+        /// </summary>
+        /// <returns></returns>
         public abstract object GetRawObject();
     }
 }

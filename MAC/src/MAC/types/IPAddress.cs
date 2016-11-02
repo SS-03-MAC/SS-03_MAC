@@ -1,6 +1,5 @@
 using System;
 using System.Runtime.Serialization;
-using System.Net;
 
 
 namespace MAC.Types.Internet
@@ -159,6 +158,10 @@ namespace MAC.Types.Internet
             set { Address = Value; }
         }
 
+        /// <summary>
+        /// Access to the RAW data return has a object
+        /// </summary>
+        /// <returns>Raw data as an object</returns>
         public override object GetRawObject()
         {
             return Data as object;

@@ -1,5 +1,8 @@
 namespace MAC.Types
 {
+    /// <summary>
+    /// An Enum of database types
+    /// </summary>
     public enum DatabaseFieldTypes
     {
         bigint,
