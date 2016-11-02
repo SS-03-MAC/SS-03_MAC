@@ -10,7 +10,7 @@ using System.Collections.Generic;
 /// </summary>
 namespace MAC.Types
 {
-    public abstract class BaseType<T,V> : IComparable, IEquatable<object>,
+    public abstract class BaseType<T,V> : BaseType, IComparable, IEquatable<object>,
                                      ISerializable
     {
         /// <summary>
@@ -35,7 +35,11 @@ namespace MAC.Types
         /// <param name="context"></param>
         public BaseType(SerializationInfo info, StreamingContext context) { }
 
+        public abstract V Value { get; set; }
+    }
 
+    public abstract class BaseType
+    {
         /// <summary>
         /// function to validate data for the given object is in the correct format
         /// independantly inplemented by each child class
@@ -70,6 +74,6 @@ namespace MAC.Types
         /// <returns>A end-user safe represention of the type</returns>
         public abstract override string ToString();
 
-        public abstract V Value { get; set; }
+        public abstract object GetRawObject();
     }
 }
