@@ -8,7 +8,7 @@ namespace MAC.Types.Internet
     /// <summary>
     /// Stores and vaildates IP Address
     /// </summary>
-    public class IPAddress : BaseType
+    public class IPAddress : BaseType<IPAddress, System.Net.IPAddress>
     {
 
         private string Data;
@@ -30,7 +30,7 @@ namespace MAC.Types.Internet
         /// <param name="input"></param>
         public IPAddress(System.Net.IPAddress input)
         {
-            if(input == null)
+            if (input == null)
             {
                 throw new ArgumentNullException("input");
             }
@@ -46,7 +46,7 @@ namespace MAC.Types.Internet
         /// <param name="context"></param>
         public IPAddress(SerializationInfo info, StreamingContext context)
         {
-            if(info == null)
+            if (info == null)
             {
                 throw new ArgumentNullException("info");
             }
@@ -70,18 +70,19 @@ namespace MAC.Types.Internet
         /// </summary>
         /// <param name="other"></param>
         /// <returns></returns>
-        public override int CompareTo(BaseType other)
+        public override int CompareTo(object other)
         {
-            if(other is IPAddress)
+            if (other is IPAddress)
             {
-                if (!other.Validate())
+
+                if (!(other as IPAddress).Validate())
                 {
                     throw new ArgumentException("This is not a valid IP Address");
                 }
 
                 // System.Net.IPAddress doesn't actually have a comparison method,
                 // so we need to take matters into our own hands
-                byte[] bytes1 = this.Address.GetAddressBytes();
+                byte[] bytes1 = Address.GetAddressBytes();
                 byte[] bytes2 = ((IPAddress)other).Address.GetAddressBytes();
                 uint comp1 = (uint)(bytes1[0] << 24 | bytes1[1] << 16 | bytes1[2] << 8 | bytes1[3]);
                 uint comp2 = (uint)(bytes2[0] << 24 | bytes2[1] << 16 | bytes2[2] << 8 | bytes2[3]);
@@ -96,13 +97,13 @@ namespace MAC.Types.Internet
         /// </summary>
         /// <param name="other"></param>
         /// <returns></returns>
-        public override bool Equals(BaseType other)
+        public override bool Equals(object other)
         {
             try
             {
-                return this.Address.Equals(((IPAddress)other).Address);
+                return Address.Equals(((IPAddress)other).Address);
             }
-            catch(Exception)
+            catch (Exception)
             {
                 return false;
             }
@@ -115,7 +116,7 @@ namespace MAC.Types.Internet
         /// <param name="context"></param>
         public override void GetObjectData(SerializationInfo info, StreamingContext context)
         {
-            if(info == null)
+            if (info == null)
             {
                 throw new ArgumentNullException("info");
             }
@@ -130,7 +131,7 @@ namespace MAC.Types.Internet
         {
             return Validate() && Address.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork;
         }
-        
+
         /// <summary>
         /// Checks if the stored address is IPv6
         /// </summary>
@@ -152,9 +153,10 @@ namespace MAC.Types.Internet
         /// <summary>
         /// Access to the raw data stored
         /// </summary>
-        public System.Net.IPAddress Value
+        public override System.Net.IPAddress Value
         {
             get { return Address; }
+            set { Address = Value; }
         }
     }
 }
