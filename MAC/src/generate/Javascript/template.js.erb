@@ -21,6 +21,23 @@ var <%= name.capitalize %> = function(<%= fields_str %>){
     }
   }
 
-  xhr.open("GET", <%="/" + name.pluralize + "/" %>id, true);
+  xhr.open("GET", <%= "\"/" + name.pluralize + "/" %>id<%= "\"" %>, true);
+  xhr.send(null);
+}
+
+<%= name.capitalize %>.getAll = function(){
+  xhr = new XMLHTTPRequest();
+  xhr.onreadystatechenge = function() {
+    if(xhr.readystate == 4){
+      if(xhr.status == 200){
+        var result = eval("("+xhr.responseTest+")");
+        return result;
+      } else{
+        throw new Error(xhr.statusText);
+      }
+    }
+  }
+
+  xhr.open("GET", <%="\"/" + name.pluralize + "\""%>, true);
   xhr.send(null);
 }

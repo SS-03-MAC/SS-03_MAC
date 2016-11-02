@@ -11,16 +11,33 @@ var User = function(name, uses, fields){
 User.get = function(id){
   xhr = new XMLHTTPRequest();
   xhr.onreadystatechenge = function() {
-    if(this.readystate == 4){
-      if(this.status == 200){
-        var result = eval("("+this.responseTest+")");
+    if(xhr.readystate == 4){
+      if(xhr.status == 200){
+        var result = eval("("+xhr.responseTest+")");
         return result;
       } else{
-        throw new Error(this.statusText);
+        throw new Error(xhr.statusText);
       }
     }
   }
 
-  xhr.open("GET", /users/id, true);
+  xhr.open("GET", "/users/id", true);
+  xhr.send(null);
+}
+
+User.getAll = function(){
+  xhr = new XMLHTTPRequest();
+  xhr.onreadystatechenge = function() {
+    if(xhr.readystate == 4){
+      if(xhr.status == 200){
+        var result = eval("("+xhr.responseTest+")");
+        return result;
+      } else{
+        throw new Error(xhr.statusText);
+      }
+    }
+  }
+
+  xhr.open("GET", "/users", true);
   xhr.send(null);
 }
