@@ -9,7 +9,7 @@ namespace MAC.Types
     /// Stored as a SQL time
     /// eg 08/28/2016
     /// </summary>
-    public class Time : BaseType
+    public class Time : BaseType<Time, TimeSpan>
     {
         private TimeSpan Data;
 
@@ -52,11 +52,11 @@ namespace MAC.Types
         /// </summary>
         /// <param name="other">the BaseType object to compare with</param>
         /// <returns>the result of TimeSpan.CompareTo()</returns>
-        public override int CompareTo(BaseType other)
+        public override int CompareTo(object other)
         {
             if (other is Time)
             {
-                return this.Data.CompareTo(((Time)other).Data);
+                return Data.CompareTo(((Time)other).Data);
             }
             throw new ArgumentException();
         }
@@ -66,7 +66,7 @@ namespace MAC.Types
         /// </summary>
         /// <param name="other">The BaseType object to check equalitry with</param>
         /// <returns>True if equals, false otherwise</returns>
-        public override bool Equals(BaseType other)
+        public override bool Equals(object other)
         {
             try
             {
@@ -95,7 +95,7 @@ namespace MAC.Types
         /// <summary>
         /// Direct access to the stored value
         /// </summary>
-        public TimeSpan Value
+        public override TimeSpan Value
         {
             get { return Data; }
             set { Data = value; }
