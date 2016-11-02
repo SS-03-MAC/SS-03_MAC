@@ -104,5 +104,10 @@ namespace MAC.Types.User
             get { return Data; }
             set { Data = Value; }
         }
+
+        public override object GetRawObject()
+        {
+            return Data as object;
+        }
     }
 }

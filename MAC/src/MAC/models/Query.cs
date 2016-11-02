@@ -14,7 +14,7 @@ namespace MAC.Models
         /// </summary>
         /// <param name="cmd">The commad to return</param>
         /// <returns0>The number of rows effected by the query</returns>
-        private static int RunNonQuery(SqlCommand cmd)
+        public static int RunNonQuery(SqlCommand cmd)
         {
             using (SqlConnection conn = new SqlConnection(ConnectionString))
             {
@@ -86,7 +86,7 @@ namespace MAC.Models
         /// Get the record by id
         /// </summary>
         /// <param name="id">ID of the record</param>
-        /// <returns>Record of type T</returns>
+        /// <returns>Record in a SqlDataReader</returns>
         public static SqlDataReader Get(string tableName, int id)
         {
             string query = "select * from " + tableName + " where Id = @Id";

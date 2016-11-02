@@ -111,5 +111,10 @@ namespace MAC.Types.Internet
             }
             return string.Empty;
         }
+
+        public override object GetRawObject()
+        {
+            return Data as object;
+        }
     }
 }

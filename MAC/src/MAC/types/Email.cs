@@ -16,6 +16,7 @@ namespace MAC.Types.User {
         public Email(string email)
         {
             Data = email;
+            DatabaseFieldType = DatabaseFieldTypes.nvarchar;
         }
 
 
@@ -95,6 +96,11 @@ namespace MAC.Types.User {
             {
                 Data = value; 
             }
+        }
+
+        public override object GetRawObject()
+        {
+            return Data as object;
         }
     }
  }

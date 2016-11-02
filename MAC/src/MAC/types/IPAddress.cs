@@ -158,5 +158,10 @@ namespace MAC.Types.Internet
             get { return Address; }
             set { Address = Value; }
         }
+
+        public override object GetRawObject()
+        {
+            return Data as object;
+        }
     }
 }

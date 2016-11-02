@@ -3,7 +3,6 @@ using System.Reflection;
 using MAC.Types;
 using MAC.Models.Attributes;
 using System.Collections.Generic;
-using System.Data.SqlClient;
 
 namespace MAC.Models
 {
@@ -101,34 +100,16 @@ namespace MAC.Models
 
         /// <summary>
         /// Converts the current record to an Insert statement
-        /// 
-        /// This method is public for testing purposes
         /// </summary>
-        public SqlCommand ToInsertStatement()
+        private string ToInsertStatement()
         {
-            string query = "INSERT INTO " + TableName;
-            List<KeyValuePair<string, BaseType>> values = GetDatabaseFields();
-            query += " (";
-            foreach (KeyValuePair<string, BaseType> key in values)
-            {
-                query += key.Key + ",";
-            }
-            query = query.Remove(query.LastIndexOf(','));
-            query += ") VALUES (";
-            foreach (KeyValuePair<string, BaseType> key in values)
-            {
-                query += "@" + key.Key + ",";
-            }
-            query = query.Remove(query.LastIndexOf(','));
-            query += ")";
-            query += ";";
-            SqlCommand result = new SqlCommand(query);
+            string result = "INSERT INTO " + TableName;
+            result += " (";
 
-            foreach (KeyValuePair<string, BaseType> kvPair in values)
-            {
-                result.Parameters.AddWithValue(kvPair.Key, kvPair.Value.GetRawObject() as object);
-            }
-
+            result += ") VALUES (";
+            // Loop though values
+            result += ")";
+            result += ";";
             return result;
         }
 
@@ -152,19 +133,15 @@ namespace MAC.Models
             return Query.Delete(TableName, id);
         }
 
-        /// <summary>
-        /// Get the database properities of this model in a useable format
-        /// </summary>
-        /// <returns></returns>
-        private List<KeyValuePair<string, BaseType>> GetDatabaseFields()
+        private List<KeyValuePair<string, string>> GetDatabaseFields()
         {
-            List<KeyValuePair<string, BaseType>> result = new List<KeyValuePair<string, BaseType>>();
+            List<KeyValuePair<string, object>> result = new List<KeyValuePair<string, object>>();
             foreach (PropertyInfo property in GetType().GetProperties())
             {
                 Attribute dbField = property.GetCustomAttribute(typeof(DatabaseField));
                 if (dbField is DatabaseField)
                 {
-                    KeyValuePair<string, BaseType> value = new KeyValuePair<string, BaseType>(((DatabaseField) dbField).Name, (BaseType) property.GetValue(this));
+                    KeyValuePair<string, string> value = new KeyValuePair<string, string>(((DatabaseField)dbField).Name, property.GetValue());
                     result.Add(value);
                 }
             }

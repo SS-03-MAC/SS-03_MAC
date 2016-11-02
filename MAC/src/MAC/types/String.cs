@@ -109,5 +109,10 @@ namespace MAC.Types
         {
             return Data;
         }
+
+        public override object GetRawObject()
+        {
+            return Data as object;
+        }
     }
 }
