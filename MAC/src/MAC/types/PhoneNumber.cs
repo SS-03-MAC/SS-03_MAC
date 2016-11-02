@@ -4,9 +4,11 @@ using System.Text.RegularExpressions;
 
 namespace MAC.Types.User
 {
-    public class PhoneNumber : String
+    public class PhoneNumber : BaseType<PhoneNumber, string>
     {
         public DatabaseFieldTypes DatabaseFieldType = DatabaseFieldTypes.nvarchar;
+
+        private string Data;
         /// <summary>
         /// Validates format of the number 
         /// Possiblely based on country code (e.g +1 for US)
@@ -35,9 +37,9 @@ namespace MAC.Types.User
         /// Create a new phone number
         /// </summary>
         /// <param name="PhoneNumber">Phone number in E.164 Format as a string</param>
-        public PhoneNumber(string PhoneNumber) : base(PhoneNumber)
+        public PhoneNumber(string PhoneNumber)
         {
-
+            Data = PhoneNumber;
         }
 
         /// <summary>
@@ -55,19 +57,31 @@ namespace MAC.Types.User
         /// </summary>
         /// <param name="other"></param>
         /// <returns></returns>
-        public override int CompareTo(BaseType other)
+        public override int CompareTo(object other)
         {
-            return base.CompareTo(other);
+            if (other is PhoneNumber)
+            {
+                return Data.CompareTo(((String)other).Value);
+            }
+            throw new ArgumentException();
         }
+
 
         /// <summary>
         /// Check equality of the phone nubmer
         /// </summary>
         /// <param name="other"></param>
         /// <returns></returns>
-        public override bool Equals(BaseType other)
+        public override bool Equals(object other)
         {
-            return base.Equals(other);
+            try
+            {
+                return CompareTo(other) == 0;
+            }
+            catch (ArgumentException)
+            {
+                return false;
+            }
         }
 
         /// <summary>
@@ -76,7 +90,11 @@ namespace MAC.Types.User
         /// <returns></returns>
         public override void GetObjectData(SerializationInfo info, StreamingContext cont)
         {
-            base.GetObjectData(info, cont);
+            if (info == null)
+            {
+                throw new ArgumentNullException("info");
+            }
+            info.AddValue("Data", Data);
         }
 
         /// <summary>
@@ -85,7 +103,16 @@ namespace MAC.Types.User
         /// <returns></returns>
         public override string ToString()
         {
-            return base.ToString();
+            return Data;
+        }
+
+        /// <summary>
+        /// Access to underlyling data type
+        /// </summary>
+        public override string Value
+        {
+            get { return Data; }
+            set { Data = Value; }
         }
     }
 }
