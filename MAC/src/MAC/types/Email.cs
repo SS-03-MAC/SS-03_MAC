@@ -6,7 +6,7 @@ namespace MAC.Types.User {
      /// <summary>
      /// Stores and vaildates 
      /// </summary>
-     public class Email : BaseType {
+     public class Email : BaseType<Email,string> {
         private string Data;
 
         /// <summary>
@@ -46,7 +46,7 @@ namespace MAC.Types.User {
         /// </summary> 
         /// <param name="other"></param>
         /// <returns></returns>
-        public override int CompareTo(BaseType other) {
+        public override int CompareTo(object other) {
             if (other is Email)
             {
                 return Data.CompareTo(((Email)other).Data);
@@ -59,7 +59,7 @@ namespace MAC.Types.User {
         /// </summary>
         /// <param name="other"></param>
         /// <returns></returns>
-        public override bool Equals(BaseType other) {
+        public override bool Equals(object other) {
             return CompareTo(other) == 0;
         }
 
@@ -79,6 +79,22 @@ namespace MAC.Types.User {
         public override string ToString()
         {
             return Data;
+        }
+
+        /// <summary>
+        /// Return that email stored as string
+        /// </summary>
+        public override string Value
+        {
+            get
+            {
+                return Data;
+            }
+
+            set
+            {
+                Data = value; 
+            }
         }
     }
  }
