@@ -14,6 +14,7 @@
 #pragma once
 
 #include "../abstractions/PacketQueue.h"
+#include "../messages/ChangeCipherSpec.h"
 #include "../messages/ClientHello.h"
 #include "../messages/ClientKeyExchange.h"
 #include "./TLSConfiguration.h"
@@ -36,7 +37,7 @@ private:
   void ProcessServerCertificate();
   void ProcessServerHelloDone();
   void ProcessClientKeyExchange(ClientKeyExchange *m);
-  void ProcessClientChangeCipherSpec(uint8_t *data, size_t length);
+  void ProcessClientChangeCipherSpec(ChangeCipherSpec *ccs);
   void ProcessClientFinished(uint8_t *data, size_t length);
   void ProcessServerChangeCipherSpec();
   void ProcessServerFinished();

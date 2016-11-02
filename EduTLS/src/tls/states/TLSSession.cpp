@@ -51,20 +51,31 @@ TLSSession::~TLSSession() {
   }
 }
 
-int TLSSession::SwitchStates() {
-  if (this->pending_read_params != NULL && this->pending_write_params != NULL) {
+int TLSSession::SwitchReadState() {
+  if (this->pending_read_params != NULL) {
     if (this->current_read_params != NULL) {
       delete this->current_read_params;
     }
+
+    this->current_read_params = this->pending_read_params;
+
+    this->pending_read_params = NULL;
+
+    return 0;
+  }
+
+  return 1;
+}
+
+int TLSSession::SwitchWriteState() {
+  if (this->pending_write_params != NULL) {
 
     if (this->current_write_params != NULL) {
       delete this->current_write_params;
     }
 
-    this->current_read_params = this->pending_read_params;
     this->current_write_params = this->pending_write_params;
 
-    this->pending_read_params = NULL;
     this->pending_write_params = NULL;
 
     return 0;

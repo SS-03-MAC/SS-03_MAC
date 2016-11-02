@@ -54,5 +54,6 @@ public:
   TLSSession(ConnectionEnd_e entity);
   ~TLSSession();
 
-  int SwitchStates();
+  int SwitchReadState();
+  int SwitchWriteState();
 };

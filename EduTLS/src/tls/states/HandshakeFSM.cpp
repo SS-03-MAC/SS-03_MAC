@@ -20,6 +20,7 @@
 #include "../containers/TLSPlaintext.h"
 #include "../enums/ContentType.h"
 #include "../messages/Certificate.h"
+#include "../messages/ChangeCipherSpec.h"
 #include "../messages/ClientHello.h"
 #include "../messages/ClientKeyExchange.h"
 #include "../messages/Handshake.h"
@@ -83,16 +84,22 @@ void HandshakeFSM::ProcessMessage(uint8_t *data, size_t length) {
 
     switch (h->type) {
     case HandshakeType_e::client_hello:
-      ProcessClientHello(dynamic_cast<ClientHello *>(h->body));
+      this->ProcessClientHello(dynamic_cast<ClientHello *>(h->body));
       break;
     case HandshakeType_e::client_key_exchange:
-      ProcessClientKeyExchange(dynamic_cast<ClientKeyExchange *>(h->body));
+      this->ProcessClientKeyExchange(dynamic_cast<ClientKeyExchange *>(h->body));
+      break;
     default:
       break;
     }
 
     delete h;
   } else if (c->type == ContentType_e::change_cipher_spec) {
+    ChangeCipherSpec *ccs = new ChangeCipherSpec();
+    ccs->decode(p->fragment, p->length);
+    this->ProcessClientChangeCipherSpec(ccs);
+
+    delete ccs;
   }
 
   delete c;
@@ -141,6 +148,8 @@ void HandshakeFSM::ProcessClientHello(ClientHello *m) {
   this->state->pending_write_params = new SecurityParameters();
   this->state->pending_read_params->entity = this->state->current_read_params->entity;
   this->state->pending_write_params->entity = this->state->current_write_params->entity;
+  this->state->pending_read_params->client_version = m->client_version;
+  this->state->pending_write_params->client_version = m->client_version;
   this->state->pending_read_params->bulk_cipher_algorithm = this->common.BulkCipherAlgorithm();
   this->state->pending_read_params->mac_algorithm = this->common.MACAlgorithm();
   this->state->pending_write_params->bulk_cipher_algorithm = this->common.BulkCipherAlgorithm();
@@ -320,9 +329,32 @@ void HandshakeFSM::ProcessServerHelloDone() {
   this->current_state = 4;
 }
 
-void HandshakeFSM::ProcessClientKeyExchange(ClientKeyExchange *) {}
+void HandshakeFSM::ProcessClientKeyExchange(ClientKeyExchange *cke) {
+  if (this->current_state != 4) {
+    return;
+  }
 
-void HandshakeFSM::ProcessClientChangeCipherSpec(uint8_t *, size_t) {}
+  int result = cke->decrypt(this->state, this->config);
+  if (result != 0) {
+    printf("Bad decryption (%d)!\n", result);
+    return;
+  }
+
+  this->current_state = 5;
+}
+
+void HandshakeFSM::ProcessClientChangeCipherSpec(ChangeCipherSpec *ccs) {
+  if (this->current_state != 5) {
+    return;
+  }
+
+  if (ccs->value == ChangeCipherSpec_e::change_cipher_spec) {
+    this->state->SwitchReadState();
+    this->current_state = 6;
+
+    printf("Switched read states.");
+  }
+}
 void HandshakeFSM::ProcessClientFinished(uint8_t *, size_t) {}
 void HandshakeFSM::ProcessServerChangeCipherSpec() {}
 void HandshakeFSM::ProcessServerFinished() {}

@@ -14,6 +14,7 @@
 #pragma once
 
 #include "../enums/ConnectionStates.h"
+#include "../messages/ProtocolVersion.h"
 #include <cstdint>
 #include <cstdlib>
 
@@ -35,6 +36,8 @@ public:
   uint8_t mac_key_length;
 
   CompressionMethod_e compression_algorithm;
+
+  ProtocolVersion_t client_version;
 
   uint8_t master_secret[48];
   uint8_t client_random[32];

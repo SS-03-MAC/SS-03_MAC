@@ -13,6 +13,7 @@
 
 #pragma once
 
+#include "../../crypto/asymmetric/rsa.h"
 #include "../containers/CipherSuite.h"
 #include "../messages/Certificate.h"
 
@@ -24,6 +25,8 @@ public:
   CipherSuite *SupportedCipherSuites;
 
   Certificate_t cert;
+
+  rsa key;
 
   TLSConfiguration() {
     uint8_t supported[20] = {0x00, 0x01, 0x00, 0x02, 0x00, 0x3B, 0x00, 0x04, 0x00, 0x05,

@@ -20,6 +20,9 @@ class ChangeCipherSpec final : public encodable_i {
 public:
   ChangeCipherSpec_e value;
 
+  ChangeCipherSpec();
+  ~ChangeCipherSpec();
+
   int encode(uint8_t *result);
   size_t encode_length();
   int decode(uint8_t *encoded, size_t length);
