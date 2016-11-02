@@ -7,7 +7,7 @@ namespace MAC.Types
     /// <summary>
     /// Stores and vaildates Integers
     /// </summary>
-    public class Integer : BaseType
+    public class Integer : BaseType<Integer, int>
     {
         private int Data;
 
@@ -51,7 +51,7 @@ namespace MAC.Types
         /// <param name="other">the BaseType object to compare with</param>
         /// <returns> A positive number if this > other, 0 if this == other, 
         /// and a negative number if this < other.</returns>
-        public override int CompareTo(BaseType other)
+        public override int CompareTo(object other)
         {
             if (other is Integer)
             {
@@ -65,7 +65,7 @@ namespace MAC.Types
         /// </summary>
         /// <param name="other">the BaseType object to check equality with</param>
         /// <returns>true if equal. Otherwise, false</returns>
-        public override bool Equals(BaseType other)
+        public override bool Equals(object other)
         {
             try
             {
@@ -94,7 +94,7 @@ namespace MAC.Types
         /// <summary>
         /// Direct access to the data stored
         /// </summary>
-        public int Value
+        public override int Value
         {
             get { return Data; }
             set { Data = value; }
