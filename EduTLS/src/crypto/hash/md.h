@@ -12,12 +12,12 @@
 ///
 //===----------------------------------------------------------------------===//
 
+#pragma once
+
 #include "hash.h"
 
 #include <cstddef>
 #include <cstdint>
-
-#pragma once
 
 class md : public hash {
 protected:

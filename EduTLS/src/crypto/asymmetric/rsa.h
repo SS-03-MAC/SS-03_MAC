@@ -12,12 +12,12 @@
 ///
 //===----------------------------------------------------------------------===//
 
+#pragma once
+
 #include "../../bignum/bigint.h"
 
 #include <cstddef>
 #include <cstdint>
-
-#pragma once
 
 #define PUBLIC_KEY 1
 #define PRIVATE_KEY 2
