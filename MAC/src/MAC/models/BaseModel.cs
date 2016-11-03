@@ -13,11 +13,6 @@ namespace MAC.Models
     public abstract class BaseModel : IBaseModel
     {
         /// <summary>
-        /// What table is the data stored in
-        /// </summary>
-        protected static string TableName;
-
-        /// <summary>
         /// SQL Indentify column 
         /// </summary>
         /// <returns></returns>
@@ -106,7 +101,7 @@ namespace MAC.Models
         /// </summary>
         public SqlCommand ToInsertStatement()
         {
-            string query = "INSERT INTO " + TableName;
+            string query = "INSERT INTO " + GetTableName();
             List<KeyValuePair<string, BaseType>> values = GetDatabaseFields();
             query += " (";
             query = GetColumnNames(query, values);
@@ -117,6 +112,11 @@ namespace MAC.Models
             SqlCommand result = new SqlCommand(query);
             SetValues(values, result);
             return result;
+        }
+
+        private string GetTableName()
+        {
+            return (GetType().GetTypeInfo().GetCustomAttribute(typeof(TableName)) as TableName).Name;
         }
 
         private static void SetValues(List<KeyValuePair<string, BaseType>> values, SqlCommand result)
@@ -131,6 +131,10 @@ namespace MAC.Models
         {
             foreach (KeyValuePair<string, BaseType> key in values)
             {
+                if (key.Key.ToLower() == "id")
+                {
+                    continue;
+                }
                 query += "@" + key.Key + ",";
             }
             query = query.Remove(query.LastIndexOf(','));
@@ -147,6 +151,10 @@ namespace MAC.Models
         {
             foreach (KeyValuePair<string, BaseType> key in values)
             {
+                if (key.Key.ToLower() == "id")
+                {
+                    continue;
+                }
                 query += key.Key + ",";
             }
             query = query.Remove(query.LastIndexOf(','));
@@ -157,9 +165,19 @@ namespace MAC.Models
         /// Converts the current record to an update statement
         /// </summary>
         /// <returns></returns>
-        private string ToUpdateStatement()
+        public string ToUpdateStatement()
         {
-            string result = "UPDATE";
+            string result = "UPDATE " + GetTableName() + " SET ";
+            foreach(KeyValuePair<string, BaseType> kvPair in GetDatabaseFields())
+            {
+                if (kvPair.Key.ToLower() == "id")
+                {
+                    continue;
+                }
+                result += kvPair.Key + "=@" + kvPair.Key + ","; 
+            }
+            result = result.Remove(result.LastIndexOf(","));
+            result += " WHERE Id = " + Id.Value + ";";
             return result;
         }
 
@@ -170,7 +188,8 @@ namespace MAC.Models
         /// <returns></returns>
         public static bool Delete(int id)
         {
-            return Query.Delete(TableName, id);
+            //return Query.Delete(GetTableName(), id);
+            return false;
         }
 
         /// <summary>
@@ -185,7 +204,8 @@ namespace MAC.Models
                 Attribute dbField = property.GetCustomAttribute(typeof(DatabaseField));
                 if (dbField is DatabaseField)
                 {
-                    KeyValuePair<string, BaseType> value = new KeyValuePair<string, BaseType>(((DatabaseField) dbField).Name, (BaseType) property.GetValue(this));
+                    string columnName = ((DatabaseField)dbField).Name;
+                    KeyValuePair<string, BaseType> value = new KeyValuePair<string, BaseType>(columnName, (BaseType) property.GetValue(this));
                     result.Add(value);
                 }
             }
