@@ -27,6 +27,7 @@ namespace ConsoleApplication
             }
             ;
             Console.WriteLine(user.ToInsertStatement().CommandText);
+            Console.WriteLine(user.ToUpdateStatement());
             Console.ReadLine();
             List<dynamic> list = new List<dynamic>();
 
