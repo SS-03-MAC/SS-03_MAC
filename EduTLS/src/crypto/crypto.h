@@ -13,6 +13,7 @@
 #include "./hash/hmac.h"
 #include "./hash/md.h"
 #include "./hash/md5.h"
+#include "./hash/prf_sha256.h"
 #include "./hash/sha1.h"
 #include "./hash/sha2-224.h"
 #include "./hash/sha2-256.h"

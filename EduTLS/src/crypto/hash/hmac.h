@@ -27,12 +27,13 @@ private:
   uint8_t *key;
 
   size_t key_length;
-  size_t block_size;
-  size_t output_size;
 
 public:
   hmac(hash *h, uint8_t *key, size_t key_length);
   ~hmac();
+
+  size_t block_size;
+  size_t output_size;
 
   void update(uint8_t *input, size_t count);
   void finalize(uint8_t *output);

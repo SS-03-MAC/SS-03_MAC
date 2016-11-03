@@ -21,7 +21,7 @@ public:
   size_t output_size;
   size_t block_size;
 
-  ~hash(){};
+  virtual ~hash(){};
 
   virtual void init() = 0;
   virtual void update(uint8_t *input, size_t count) = 0;
