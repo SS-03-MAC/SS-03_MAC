@@ -29,6 +29,25 @@ var User = function(name, uses, fields){
     xhr.send(serialize(this));
   }
 
+  delete = function(){
+    if(id == 0){
+      return; //never saved to database, don't have to do anything
+    }
+
+    xhr = new XMLHTTPRequest();
+    xhr.onreadystatechenge = function() {
+      if(xhr.readyState == 4){
+        if(xhr.status == 200){
+          alert(xhr.ResponseText)
+        } else{
+          throw new Error(xhr.statusText);
+        }
+      }
+    }
+
+    xhr.open("DELETE", "/users/id", true);
+    xhr.send(null);
+  }
 };
 
 User.get = function(id){
