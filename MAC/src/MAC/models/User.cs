@@ -5,7 +5,7 @@ using MAC.Types.User;
 namespace MAC.Models
 {
     [TableName("User")]
-    public partial class User : BaseModel
+    public partial class User : BaseModel<User>
     {
         /// <summary>
         /// A basic string field
