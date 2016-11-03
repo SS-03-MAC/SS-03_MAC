@@ -1077,7 +1077,7 @@
           "System.Runtime.Extensions": "4.1.0"
         },
         "compile": {
-          "ref/netstandard1.3/_._": {}
+          "ref/netstandard1.3/System.Diagnostics.StackTrace.dll": {}
         },
         "runtime": {
           "lib/netstandard1.3/System.Diagnostics.StackTrace.dll": {}
@@ -2799,14 +2799,16 @@
           "lib/netstandard1.1/xunit.runner.utility.dotnet.dll": {}
         }
       },
-      "MAC/1.0.0": {
+      "MAC/1.1.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v1.0",
         "dependencies": {
           "BCrypt.Net-Core": "1.1.0",
           "Microsoft.NETCore.App": "1.0.0",
           "System.Data.SqlClient": "4.1.0",
+          "System.Diagnostics.StackTrace": "4.0.1",
           "System.Net.Mail": "1.0.0-rtm-00002",
+          "System.Reflection": "4.1.0",
           "System.Runtime": "4.1.0",
           "System.Runtime.Serialization.Formatters": "4.0.0-rc3-24212-01",
           "System.Runtime.Serialization.Primitives": "4.1.1"
@@ -8129,7 +8131,7 @@
         "xunit.runner.utility.nuspec"
       ]
     },
-    "MAC/1.0.0": {
+    "MAC/1.1.0": {
       "type": "project",
       "path": "../../src/MAC/project.json",
       "msbuildProject": "../../src/MAC/MAC.xproj"

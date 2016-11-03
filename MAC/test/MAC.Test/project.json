@@ -1,5 +1,4 @@
 {
-  "version": "1.0.0-*",
   "buildOptions": {
     "debugType": "portable"
   },
@@ -9,8 +8,6 @@
     "dotnet-test-xunit": "2.2.0-preview2-build1029",
     "MAC": "1.0.0-*"
   },
-  "MAC" : { "target": "project" },
-  "testRunner": "xunit",
   "frameworks": {
     "netcoreapp1.0": {
       "dependencies": {
@@ -24,5 +21,8 @@
         "portable-net451+win8"
       ]
     }
-  }
+  },
+  "MAC": { "target": "project" },
+  "testRunner": "xunit",
+  "version": "1.0.0-*"
 }

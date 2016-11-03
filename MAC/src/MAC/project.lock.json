@@ -516,7 +516,7 @@
           "lib/netstandard1.0/System.Collections.Immutable.dll": {}
         },
         "runtime": {
-          "lib/netstandard1.0/_._": {}
+          "lib/netstandard1.0/System.Collections.Immutable.dll": {}
         }
       },
       "System.Collections.NonGeneric/4.0.1": {
@@ -771,10 +771,10 @@
           "System.Runtime.Extensions": "4.1.0"
         },
         "compile": {
-          "ref/netstandard1.3/_._": {}
+          "ref/netstandard1.3/System.Diagnostics.StackTrace.dll": {}
         },
         "runtime": {
-          "lib/netstandard1.3/_._": {}
+          "lib/netstandard1.3/System.Diagnostics.StackTrace.dll": {}
         }
       },
       "System.Diagnostics.Tools/4.0.1": {
@@ -1513,7 +1513,7 @@
           "lib/netstandard1.1/System.Reflection.Metadata.dll": {}
         },
         "runtime": {
-          "lib/netstandard1.1/_._": {}
+          "lib/netstandard1.1/System.Reflection.Metadata.dll": {}
         }
       },
       "System.Reflection.Primitives/4.0.1": {
@@ -7274,7 +7274,9 @@
     "": [
       "BCrypt.Net-Core >= 1.1.0",
       "System.Data.SqlClient >= 4.1.0",
+      "System.Diagnostics.StackTrace >= 4.0.1",
       "System.Net.Mail >= 1.0.0-rtm-00002",
+      "System.Reflection >= 4.1.0",
       "System.Runtime >= 4.1.0",
       "System.Runtime.Serialization.Formatters >= 4.0.0-rc3-24212-01",
       "System.Runtime.Serialization.Primitives >= 4.1.1"
