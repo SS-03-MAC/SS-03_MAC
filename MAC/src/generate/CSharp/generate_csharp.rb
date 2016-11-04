@@ -1,4 +1,5 @@
 require_relative '../hash_generator.rb'
+require 'active_support/Inflector'
 
 module Generation
   # This class alows us to generate C# source files using an ERB template and
@@ -20,11 +21,10 @@ module Generation
       HashGenerator.render_from_hash(template, composed_hash)
     end
 
-    # This method takes a hash and for everything in the "fields" catagory,
-    # will go through and change the type of each field from a MAC defined type
-    # into a SQL type
+    # This method adds the table name to the hash
     def compose_hash(input_hash)
       output_hash = input_hash
+      output_hash['table_name'] = ActiveSupport::Inflector.tableize(input_hash['name'])
       output_hash
     end
 
