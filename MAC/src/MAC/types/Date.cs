@@ -81,6 +81,11 @@ namespace MAC.Types
             }
         }
 
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
+
         /// <summary>
         /// Serializes the DateTime
         /// </summary>

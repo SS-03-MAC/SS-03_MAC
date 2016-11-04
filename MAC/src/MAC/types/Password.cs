@@ -66,6 +66,11 @@ namespace MAC.Types.User
             throw new NotImplementedException();
         }
 
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
+
         /// <summary>
         /// Should a password be Serializatiable?
         /// </summary>

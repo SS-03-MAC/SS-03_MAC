@@ -84,6 +84,11 @@ namespace MAC.Types.User
             }
         }
 
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
+
         /// <summary>
         ///  Full phone number as a string
         /// </summary>

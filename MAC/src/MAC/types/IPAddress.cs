@@ -108,6 +108,12 @@ namespace MAC.Types.Internet
             }
         }
 
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
+
         /// <summary>
         /// Serializes the IP Address
         /// </summary>

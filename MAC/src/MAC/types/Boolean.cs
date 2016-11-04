@@ -81,6 +81,15 @@ namespace MAC.Types
         }
 
         /// <summary>
+        /// Hash code over ride to make C# happy
+        /// </summary>
+        /// <returns></returns>
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
+
+        /// <summary>
         /// Serialize the boolean
         /// </summary>
         /// <param name="info"></param>

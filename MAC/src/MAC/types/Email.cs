@@ -63,6 +63,11 @@ namespace MAC.Types.User {
             return CompareTo(other) == 0;
         }
 
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
+
         /// <summary>
         /// Should return the email as a string
         /// </summary>

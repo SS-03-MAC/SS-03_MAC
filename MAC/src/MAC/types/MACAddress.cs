@@ -59,7 +59,7 @@ namespace MAC.Types.Internet
         private long GetNumericalAddress(string Data)
         {
             string hex = Data.Replace(".", "").Replace("-", "").Replace(":", "");
-            return Int64.Parse(hex.ToLower(), System.Globalization.NumberStyles.HexNumber);
+            return long.Parse(hex.ToLower(), System.Globalization.NumberStyles.HexNumber);
         }
 
         /// <summary>
@@ -131,7 +131,7 @@ namespace MAC.Types.Internet
                 {
                     throw new ArgumentException("This is not a valid MAC Address");
                 }
-                return this.addressValue.CompareTo(((MACAddress)other).addressValue);
+                return addressValue.CompareTo(((MACAddress)other).addressValue);
             }
             throw new ArgumentException();
         }
@@ -145,12 +145,17 @@ namespace MAC.Types.Internet
         {
             try
             {
-                return this.addressValue == ((MACAddress)other).addressValue;
+                return addressValue == ((MACAddress)other).addressValue;
             }
             catch (Exception)
             {
                 return false;
             }
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
         }
 
         /// <summary>

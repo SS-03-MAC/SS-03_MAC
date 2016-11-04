@@ -61,6 +61,11 @@ namespace MAC.Types
             throw new ArgumentException();
         }
 
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
+
         /// <summary>
         /// Checks equality of the float
         /// </summary>
