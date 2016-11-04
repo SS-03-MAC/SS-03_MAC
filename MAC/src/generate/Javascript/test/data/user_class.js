@@ -7,7 +7,7 @@ var User = function(Password, FullName, City){
   this.UpdatedAt = Date.getTime();
 
   this.save = function(){
-    var xhr = new XMLHTTPRequest();
+    var xhr = new XMLHttpRequest();
     if(id == 0){
       xhr.open("POST", "/users/", true);
     } else{
@@ -34,7 +34,7 @@ var User = function(Password, FullName, City){
       return; //never saved to database, don't have to do anything
     }
 
-    var xhr = new XMLHTTPRequest();
+    var xhr = new XMLHttpRequest();
     xhr.onreadystatechenge = function() {
       if(xhr.readyState == 4){
         if(xhr.status == 200){
@@ -51,7 +51,7 @@ var User = function(Password, FullName, City){
 };
 
 User.get = function(id){
-  var xhr = new XMLHTTPRequest();
+  var xhr = new XMLHttpRequest();
   xhr.onreadystatechenge = function() {
     if(xhr.readyState == 4){
       if(xhr.status == 200){
@@ -68,7 +68,7 @@ User.get = function(id){
 };
 
 User.getAll = function(){
-  var xhr = new XMLHTTPRequest();
+  var xhr = new XMLHttpRequest();
   xhr.onreadystatechenge = function() {
     if(xhr.readyState == 4){
       if(xhr.status == 200){

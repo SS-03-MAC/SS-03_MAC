@@ -7,7 +7,7 @@ var <%= name.capitalize %> = function(<%= fields_str %>){
   this.UpdatedAt = Date.getTime();
 
   this.save = function(){
-    var xhr = new XMLHTTPRequest();
+    var xhr = new XMLHttpRequest();
     if(id == 0){
       xhr.open("POST", <%= "\"/" + name.pluralize + "/\"" %>, true);
     } else{
@@ -34,7 +34,7 @@ var <%= name.capitalize %> = function(<%= fields_str %>){
       return; //never saved to database, don't have to do anything
     }
 
-    var xhr = new XMLHTTPRequest();
+    var xhr = new XMLHttpRequest();
     xhr.onreadystatechenge = function() {
       if(xhr.readyState == 4){
         if(xhr.status == 200){
@@ -51,7 +51,7 @@ var <%= name.capitalize %> = function(<%= fields_str %>){
 };
 
 <%= name.capitalize %>.get = function(id){
-  var xhr = new XMLHTTPRequest();
+  var xhr = new XMLHttpRequest();
   xhr.onreadystatechenge = function() {
     if(xhr.readyState == 4){
       if(xhr.status == 200){
@@ -68,7 +68,7 @@ var <%= name.capitalize %> = function(<%= fields_str %>){
 };
 
 <%= name.capitalize %>.getAll = function(){
-  var xhr = new XMLHTTPRequest();
+  var xhr = new XMLHttpRequest();
   xhr.onreadystatechenge = function() {
     if(xhr.readyState == 4){
       if(xhr.status == 200){
