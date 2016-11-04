@@ -14,7 +14,7 @@ var <%= name.capitalize %> = function(<%= fields_str %>){
       xhr.open("POST", <%= "\"/" + name.pluralize + "/\"+"%>id);
     }
 
-    xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xhr.setRequestHeader("Content-type", "application/json");
 
     xhr.onreadystatechange = function(){
       if(xhr.readyState == 4){
@@ -35,6 +35,7 @@ var <%= name.capitalize %> = function(<%= fields_str %>){
     }
 
     var xhr = new XMLHttpRequest();
+    xhr.setRequestHeader("Content-type", "application/json");
     xhr.onreadystatechange = function() {
       if(xhr.readyState == 4){
         if(xhr.status == 200){
@@ -52,6 +53,7 @@ var <%= name.capitalize %> = function(<%= fields_str %>){
 
 <%= name.capitalize %>.get = function(id){
   var xhr = new XMLHttpRequest();
+  xhr.setRequestHeader("Content-type", "application/json");
   xhr.onreadystatechange = function() {
     if(xhr.readyState == 4){
       if(xhr.status == 200){
@@ -69,6 +71,7 @@ var <%= name.capitalize %> = function(<%= fields_str %>){
 
 <%= name.capitalize %>.getAll = function(){
   var xhr = new XMLHttpRequest();
+  xhr.setRequestHeader("Content-type", "application/json");
   xhr.onreadystatechange = function() {
     if(xhr.readyState == 4){
       if(xhr.status == 200){
