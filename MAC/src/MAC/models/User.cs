@@ -4,7 +4,7 @@ using MAC.Types.User;
 
 namespace MAC.Models
 {
-    [TableName("User")]
+    [TableName("Users")]
     public partial class User : BaseModel<User>
     {
         /// <summary>

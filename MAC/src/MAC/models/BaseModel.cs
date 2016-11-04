@@ -50,7 +50,6 @@ namespace MAC.Models
         public static bool Delete(int id)
         {
             return Query.Delete(GetStaticTableName(), id);
-            return false;
         }
     }
 
@@ -113,7 +112,7 @@ namespace MAC.Models
 
             }
 
-            return false;
+            return true;
         }
 
 
@@ -134,7 +133,7 @@ namespace MAC.Models
             }
             result = result.Remove(result.LastIndexOf(","));
             result += " WHERE Id = " + Id.Value + ";";
-            return  new SqlCommand(result);
+            return new SqlCommand(result);
         }
 
         /// <summary>
@@ -161,7 +160,16 @@ namespace MAC.Models
         {
             foreach (KeyValuePair<string, BaseType> kvPair in values)
             {
-                result.Parameters.AddWithValue(kvPair.Key, kvPair.Value.GetRawObject() as object);
+                if (kvPair.Key.ToLower() == "id")
+                {
+                    continue;
+                }
+                object value = null;
+                if (kvPair.Value != null)
+                {
+                    value = kvPair.Value.GetRawObject() as object;
+                }
+                result.Parameters.AddWithValue(kvPair.Key, value);
             }
         }
 

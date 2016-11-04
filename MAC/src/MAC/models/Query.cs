@@ -18,6 +18,7 @@ namespace MAC.Models
         {
             using (SqlConnection conn = new SqlConnection(ConnectionString))
             {
+                conn.Open();
                 using (cmd)
                 {
                     cmd.Connection = conn;
