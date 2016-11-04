@@ -11,7 +11,7 @@ var <%= name.capitalize %> = function(<%= fields_str %>){
     if(id == 0){
       xhr.open("POST", <%= "\"/" + name.pluralize + "/\"" %>, true);
     } else{
-      xhr.open("POST", <%= "\"/" + name.pluralize + "/"%>id<%= "\"" %>);
+      xhr.open("POST", <%= "\"/" + name.pluralize + "/\"+"%>id);
     }
 
     xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
@@ -45,7 +45,7 @@ var <%= name.capitalize %> = function(<%= fields_str %>){
       }
     };
 
-    xhr.open("DELETE", <%= "\"/" + name.pluralize + "/" %>id<%= "\"" %>, true);
+    xhr.open("DELETE", <%= "\"/" + name.pluralize + "/\"+" %>id, true);
     xhr.send(null);
   };
 };
@@ -63,7 +63,7 @@ var <%= name.capitalize %> = function(<%= fields_str %>){
     }
   };
 
-  xhr.open("GET", <%= "\"/" + name.pluralize + "/" %>id<%= "\"" %>, true);
+  xhr.open("GET", <%= "\"/" + name.pluralize + "/\"+" %>id, true);
   xhr.send(null);
 };
 
@@ -80,7 +80,7 @@ var <%= name.capitalize %> = function(<%= fields_str %>){
     }
   };
 
-  xhr.open("GET", <%="\"/" + name.pluralize + "\""%>, true);
+  xhr.open("GET", <%="\"/" + name.pluralize + ".json\"" %>, true);
   xhr.send(null);
 };
 

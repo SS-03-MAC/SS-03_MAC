@@ -11,7 +11,7 @@ var User = function(Password, FullName, City){
     if(id == 0){
       xhr.open("POST", "/users/", true);
     } else{
-      xhr.open("POST", "/users/id");
+      xhr.open("POST", "/users/"+id);
     }
 
     xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
@@ -45,7 +45,7 @@ var User = function(Password, FullName, City){
       }
     };
 
-    xhr.open("DELETE", "/users/id", true);
+    xhr.open("DELETE", "/users/"+id, true);
     xhr.send(null);
   };
 };
@@ -63,7 +63,7 @@ User.get = function(id){
     }
   };
 
-  xhr.open("GET", "/users/id", true);
+  xhr.open("GET", "/users/"+id, true);
   xhr.send(null);
 };
 
@@ -80,7 +80,7 @@ User.getAll = function(){
     }
   };
 
-  xhr.open("GET", "/users", true);
+  xhr.open("GET", "/users.json", true);
   xhr.send(null);
 };
 
