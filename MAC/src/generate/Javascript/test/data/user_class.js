@@ -60,8 +60,8 @@ User.get = function(id){
       } else{
         throw new Error(xhr.statusText);
       }
-    };
-  }
+    }
+  };
 
   xhr.open("GET", "/users/id", true);
   xhr.send(null);
