@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.SqlClient;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Data.SqlClient;
 
 namespace MAC.Models
 {
-    public class Query
+    public static class Query
     {
         /// <summary>
         /// A connection string. Should be moved. Here for dev purposes
@@ -18,10 +14,11 @@ namespace MAC.Models
         /// </summary>
         /// <param name="cmd">The commad to return</param>
         /// <returns0>The number of rows effected by the query</returns>
-        private static int RunNonQuery(SqlCommand cmd)
+        public static int RunNonQuery(SqlCommand cmd)
         {
             using (SqlConnection conn = new SqlConnection(ConnectionString))
             {
+                conn.Open();
                 using (cmd)
                 {
                     cmd.Connection = conn;
@@ -30,27 +27,58 @@ namespace MAC.Models
             }
         }
 
-        /// <summary>
-        ///  Runs the givn command 
-        /// </summary>
-        /// <param name="cmd"></param>
-        /// <returns></returns>
-        private static SqlDataReader RunQuery(SqlCommand cmd)
+
+        public static int RunInsertQuery(SqlCommand cmd)
         {
             using (SqlConnection conn = new SqlConnection(ConnectionString))
             {
+                conn.Open();
                 using (cmd)
                 {
                     cmd.Connection = conn;
-                    return cmd.ExecuteReader();
+                    return (int)cmd.ExecuteScalar();
                 }
             }
         }
 
         /// <summary>
+        /// Run the given query
+        /// </summary>
+        /// <param name="query">Query can be ran</param>
+        /// <returns></returns>
+        public static int RunNonQuery(string query)
+        {
+            return RunNonQuery(new SqlCommand(query));
+        }
+
+        /// <summary>
+        ///  Runs the givn command 
+        /// </summary>
+        /// <param name="cmd">SQL Command to run</param>
+        /// <returns>Data return</returns>
+        private static SqlDataReader RunQuery(SqlCommand cmd)
+        {
+            SqlConnection conn = new SqlConnection(ConnectionString);
+            conn.Open();
+            cmd.Connection = conn;
+            return cmd.ExecuteReader();
+
+        }
+
+        /// <summary>
+        /// Run the given query 
+        /// </summary>
+        /// <param name="query">Query to run</param>
+        /// <returns></returns>
+        public static SqlDataReader RunQuery(string query)
+        {
+            return RunQuery(new SqlCommand(query));
+        }
+
+        /// <summary>
         /// Gets all records associated with the model
         /// </summary>
-        /// <returns>All records</returns>
+        /// <returns>All records in the given table name</returns>
         public static SqlDataReader Get(string tableName)
         {
             string query = "select * from " + tableName;
@@ -80,8 +108,8 @@ namespace MAC.Models
         /// Get the record by id
         /// </summary>
         /// <param name="id">ID of the record</param>
-        /// <returns>Record of type T</returns>
-        public static SqlDataReader Get(string tableName, long id)
+        /// <returns>Record in a SqlDataReader</returns>
+        public static SqlDataReader Get(string tableName, int id)
         {
             string query = "select * from " + tableName + " where Id = @Id";
             SqlCommand cmd = new SqlCommand(query);
@@ -94,7 +122,7 @@ namespace MAC.Models
         /// </summary>
         /// <param name="id">ID to delete</param>
         /// <returns>If the record was removed</returns>
-        public static bool Delete(string tableName, long id)
+        public static bool Delete(string tableName, int id)
         {
 
             string command = "DELETE FROM " + tableName + " WHERE Id = @Id;";

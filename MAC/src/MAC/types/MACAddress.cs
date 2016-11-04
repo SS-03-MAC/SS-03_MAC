@@ -8,12 +8,12 @@ namespace MAC.Types.Internet
     /// Stores and vaildates MAC Adresses
     /// Stored as SQL type varchar
     /// </summary>
-    public class MACAddress : BaseType
+    public class MACAddress : BaseType<MACAddress, string>
     {
         static string validHex = "0123456789ABCDEFabcdef";
         private string Data;
         private long addressValue;
-        
+
         /// <summary>
         /// Initializes a MACAddress from an input string
         /// </summary>
@@ -35,7 +35,7 @@ namespace MAC.Types.Internet
         /// <param name="context"></param>
         public MACAddress(SerializationInfo info, StreamingContext context)
         {
-            if(info == null)
+            if (info == null)
             {
                 throw new ArgumentNullException("info");
             }
@@ -59,7 +59,7 @@ namespace MAC.Types.Internet
         private long GetNumericalAddress(string Data)
         {
             string hex = Data.Replace(".", "").Replace("-", "").Replace(":", "");
-            return Int64.Parse(hex.ToLower(), System.Globalization.NumberStyles.HexNumber);
+            return long.Parse(hex.ToLower(), System.Globalization.NumberStyles.HexNumber);
         }
 
         /// <summary>
@@ -78,16 +78,16 @@ namespace MAC.Types.Internet
             int dashes = 0;
             int dots = 0;
 
-            for(int i = 0; i < Data.Length; i++)
+            for (int i = 0; i < Data.Length; i++)
             {
-                if (validHex.Contains(Data[i]+""))
+                if (validHex.Contains(Data[i] + ""))
                 {
                     hexValues++;
                 }
-                if(Data[i] == '.')
+                if (Data[i] == '.')
                 {
                     //if it has dots, it just be in format XXX.XXX.XXX.XXX
-                    if (i % 4 != 3) 
+                    if (i % 4 != 3)
                     {
                         return false;
                     }
@@ -114,7 +114,7 @@ namespace MAC.Types.Internet
             }
 
             return (hexValues == 12) && ((dots == 3 && dashes == 0 && colons == 0)
-                || (dots == 0 && dashes == 5 && colons == 0) 
+                || (dots == 0 && dashes == 5 && colons == 0)
                 || (dots == 0 && dashes == 0 && colons == 5));
         }
 
@@ -123,15 +123,15 @@ namespace MAC.Types.Internet
         /// </summary>
         /// <param name="other"></param>
         /// <returns></returns>
-        public override int CompareTo(BaseType other)
+        public override int CompareTo(object other)
         {
-            if(other is MACAddress)
+            if (other is MACAddress)
             {
-                if (!other.Validate())
+                if (!(other as MACAddress).Validate())
                 {
                     throw new ArgumentException("This is not a valid MAC Address");
                 }
-                return this.addressValue.CompareTo(((MACAddress)other).addressValue);
+                return addressValue.CompareTo(((MACAddress)other).addressValue);
             }
             throw new ArgumentException();
         }
@@ -141,16 +141,21 @@ namespace MAC.Types.Internet
         /// </summary>
         /// <param name="other"></param>
         /// <returns></returns>
-        public override bool Equals(BaseType other)
+        public override bool Equals(object other)
         {
             try
             {
-                return this.addressValue == ((MACAddress)other).addressValue;
+                return addressValue == ((MACAddress)other).addressValue;
             }
             catch (Exception)
             {
                 return false;
             }
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
         }
 
         /// <summary>
@@ -160,7 +165,7 @@ namespace MAC.Types.Internet
         /// <param name="context"></param>
         public override void GetObjectData(SerializationInfo info, StreamingContext context)
         {
-            if(info == null)
+            if (info == null)
             {
                 throw new ArgumentNullException("info");
             }
@@ -175,13 +180,23 @@ namespace MAC.Types.Internet
         {
             return Data;
         }
-    
+
         /// <summary>
         /// Access to the raw data stored
         /// </summary>
-        public string Value
+        public override string Value
         {
             get { return Data; }
+            set { Data = Value; }
+        }
+
+        /// <summary>
+        /// Access to the RAW data return has a object
+        /// </summary>
+        /// <returns>Raw data as an object</returns>
+        public override object GetRawObject()
+        {
+            return Data as object;
         }
     }
 }

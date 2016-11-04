@@ -8,7 +8,7 @@ namespace MAC.Types
     /// Stores and vaildates Floats
     /// Stored as SQL type float
     /// </summary>
-    public class Float : BaseType
+    public class Float : BaseType<Float, double>
     {
         private double Data;
 
@@ -52,7 +52,7 @@ namespace MAC.Types
         /// <param name="other">the BaseType to be compared to</param>
         /// <returns>a negative number if this less than other
         /// , 0 if this == other, positive if this greater than other</returns>
-        public override int CompareTo(BaseType other)
+        public override int CompareTo(object other)
         {
             if (other is Float)
             {
@@ -61,12 +61,17 @@ namespace MAC.Types
             throw new ArgumentException();
         }
 
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
+
         /// <summary>
         /// Checks equality of the float
         /// </summary>
         /// <param name="other">the BaseType to check equality with</param>
         /// <returns>true if equal, false otherwise</returns>
-        public override bool Equals(BaseType other)
+        public override bool Equals(object other)
         {
             try
             {
@@ -95,7 +100,7 @@ namespace MAC.Types
         /// <summary>
         /// Direct access to the data stored
         /// </summary>
-        public double Value
+        public override double Value
         {
             get { return Data; }
             set { Data = value; }
@@ -108,6 +113,15 @@ namespace MAC.Types
         public override string ToString()
         {
             return Data.ToString();
+        }
+
+        /// <summary>
+        /// Access to the RAW data return has a object
+        /// </summary>
+        /// <returns>Raw data as an object</returns>
+        public override object GetRawObject()
+        {
+            return Data as object;
         }
     }
 }

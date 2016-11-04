@@ -8,7 +8,7 @@ namespace MAC.Types
     /// Stores and vaildates strings
     /// Stored as a SQL nvarchar or varchar
     /// </summary>
-    public class String : BaseType
+    public class String : BaseType<String,string>
     {
         protected string Data;
 
@@ -52,11 +52,11 @@ namespace MAC.Types
         /// </summary>
         /// <param name="other">the BaseType object to compare to</param>
         /// <returns>whatever string.compareTo gives us</returns>
-        public override int CompareTo(BaseType other)
+        public override int CompareTo(object other)
         {
             if (other is String)
             {
-                return this.Data.CompareTo(((String)other).Data);
+                return Data.CompareTo(((String)other).Data);
             }
             throw new ArgumentException();
         }
@@ -66,7 +66,7 @@ namespace MAC.Types
         /// </summary>
         /// <param name="other">the BaseType object to check equality with</param>
         /// <returns>true is equal, false otherwise</returns>
-        public override bool Equals(BaseType other)
+        public override bool Equals(object other)
         {
             try
             {
@@ -76,6 +76,11 @@ namespace MAC.Types
             {
                 return false;
             }
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
         }
 
         /// <summary>
@@ -92,15 +97,31 @@ namespace MAC.Types
             info.AddValue("Data", Data);
         }
 
-        public string Value
+        /// <summary>
+        /// Return the value of the object
+        /// </summary>
+        public override string Value
         {
             get { return Data; }
             set { Data = value; }
         }
 
+        /// <summary>
+        /// Return the string
+        /// </summary>
+        /// <returns></returns>
         public override string ToString()
         {
             return Data;
+        }
+
+        /// <summary>
+        /// Access to the RAW data return has a object
+        /// </summary>
+        /// <returns>Raw data as an object</returns>
+        public override object GetRawObject()
+        {
+            return Data as object;
         }
     }
 }

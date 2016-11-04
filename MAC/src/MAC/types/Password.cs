@@ -8,7 +8,7 @@ namespace MAC.Types.User
     /// This the password class for user
     /// This class will handle 
     /// </summary>
-    public class Password : BaseType
+    public class Password : BaseType<Password, string>
     {
         private string Data;
         /// <summary>
@@ -42,7 +42,7 @@ namespace MAC.Types.User
         /// </summary>
         /// <param name="other"></param>
         /// <returns></returns>
-        public override int CompareTo(BaseType other)
+        public override int CompareTo(object other)
         {
             throw new NotImplementedException();
         }
@@ -61,9 +61,14 @@ namespace MAC.Types.User
         /// </summary>
         /// <param name="other"></param>
         /// <returns></returns>
-        public override bool Equals(BaseType other)
+        public override bool Equals(object other)
         {
             throw new NotImplementedException();
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
         }
 
         /// <summary>
@@ -72,7 +77,11 @@ namespace MAC.Types.User
         /// <returns></returns>
         public override void GetObjectData(SerializationInfo info, StreamingContext cont)
         {
-            throw new NotImplementedException();
+            if (info == null)
+            {
+                throw new ArgumentNullException("info");
+            }
+            info.AddValue("Data", Data);
         }
 
         /// <summary>
@@ -93,6 +102,24 @@ namespace MAC.Types.User
         public bool VerifyPassword(string PlainTextPassword)
         {
             return BCrypt.Net.BCrypt.Verify(PlainTextPassword, Data);
+        }
+
+        /// <summary>
+        /// Get access to RAW Data
+        /// </summary>
+        public override string Value
+        {
+            get { return Data; }
+            set { Data = Value; }
+        }
+
+        /// <summary>
+        /// Access to the RAW data return has a object
+        /// </summary>
+        /// <returns>Raw data as an object</returns>
+        public override object GetRawObject()
+        {
+            return Data as object;
         }
     }
 }

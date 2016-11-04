@@ -8,7 +8,7 @@ namespace MAC.Types
     /// Stores and vaildates boolean
     /// Stored as SQL type bit
     /// </summary>
-    public class Boolean : BaseType
+    public class Boolean : BaseType<Boolean, bool>
     {
         private bool Data;
 
@@ -52,7 +52,7 @@ namespace MAC.Types
         /// <param name="other">The BaseType object to compare with</param>
         /// <returns>-1 if this is false and other is true, 0 if this==other,
         /// and 1 if this is true and other is false</returns>
-        public override int CompareTo(BaseType other)
+        public override int CompareTo(object other)
         {
             if (other is Boolean)
             {
@@ -68,7 +68,7 @@ namespace MAC.Types
         /// </summary>
         /// <param name="other">the BaseType object to check equality with</param>
         /// <returns>true if equal, otherwise false</returns>
-        public override bool Equals(BaseType other)
+        public override bool Equals(object other)
         {
             try
             {
@@ -78,6 +78,15 @@ namespace MAC.Types
             {
                 return false;
             }
+        }
+
+        /// <summary>
+        /// Hash code over ride to make C# happy
+        /// </summary>
+        /// <returns></returns>
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
         }
 
         /// <summary>
@@ -94,15 +103,31 @@ namespace MAC.Types
             info.AddValue("Data", Data);
         }
 
-        public bool Value
+        /// <summary>
+        /// Direct access to the stored value
+        /// </summary>
+        public override bool Value
         {
             get { return Data; }
             set { Data = value; }
         }
 
+        /// <summary>
+        /// Convert the data to a string
+        /// </summary>
+        /// <returns></returns>
         public override string ToString()
         {
             return Data.ToString();
+        }
+
+        /// <summary>
+        /// Access to the RAW data return has a object
+        /// </summary>
+        /// <returns>Raw data as an object</returns>
+        public override object GetRawObject()
+        {
+            return Data as object;
         }
     }
 }

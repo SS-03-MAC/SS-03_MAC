@@ -9,7 +9,7 @@ namespace MAC.Types
     /// Stored as a SQL time
     /// eg 08/28/2016
     /// </summary>
-    public class DateTime : BaseType
+    public class DateTime : BaseType<DateTime, System.DateTime>
     {
         private System.DateTime Data;
 
@@ -53,7 +53,7 @@ namespace MAC.Types
         /// </summary>
         /// <param name="other">the BaseType object to compare with</param>
         /// <returns>the result of comparing System.DateTime</returns>
-        public override int CompareTo(BaseType other)
+        public override int CompareTo(object other)
         {
             if (other is DateTime)
             {
@@ -67,7 +67,7 @@ namespace MAC.Types
         /// </summary>
         /// <param name="other">The BaseType object to check equality with</param>
         /// <returns>True if equal, False otherwise</returns>
-        public override bool Equals(BaseType other)
+        public override bool Equals(object other)
         {
             try
             {
@@ -77,6 +77,11 @@ namespace MAC.Types
             {
                 return false;
             }
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
         }
 
         /// <summary>
@@ -96,7 +101,7 @@ namespace MAC.Types
         /// <summary>
         /// Access raw value stored
         /// </summary>
-        public System.DateTime Value
+        public override System.DateTime Value
         {
             get { return Data; }
             set { Data = value; }
@@ -109,6 +114,15 @@ namespace MAC.Types
         public override string ToString()
         {
             return Data.ToString();
+        }
+
+        /// <summary>
+        /// Access to the RAW data return has a object
+        /// </summary>
+        /// <returns>Raw data as an object</returns>
+        public override object GetRawObject()
+        {
+            return Data as object;
         }
     }
 }

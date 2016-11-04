@@ -6,7 +6,7 @@ namespace MAC.Types.User {
      /// <summary>
      /// Stores and vaildates 
      /// </summary>
-     public class Email : BaseType {
+     public class Email : BaseType<Email,string> {
         private string Data;
 
         /// <summary>
@@ -16,13 +16,13 @@ namespace MAC.Types.User {
         public Email(string email)
         {
             Data = email;
+            DatabaseFieldType = DatabaseFieldTypes.nvarchar;
         }
 
 
         /// <summary>
-        /// This will check for:
-        /// - Vaild email address (a simple regex will work here)
-        /// Regex for email valdations was taken from http://emailregex.com/
+        /// This will check the email address with .NET class
+        /// MailAddress
         /// </summary>
         /// <returns>If the stored email is valid</returns>
         public override bool Validate() {
@@ -34,7 +34,7 @@ namespace MAC.Types.User {
             {
                 MailAddress ma = new MailAddress(Data);
             }
-            catch (FormatException ex)
+            catch (FormatException)
             {
                 return false;
             }
@@ -46,7 +46,7 @@ namespace MAC.Types.User {
         /// </summary> 
         /// <param name="other"></param>
         /// <returns></returns>
-        public override int CompareTo(BaseType other) {
+        public override int CompareTo(object other) {
             if (other is Email)
             {
                 return Data.CompareTo(((Email)other).Data);
@@ -59,8 +59,13 @@ namespace MAC.Types.User {
         /// </summary>
         /// <param name="other"></param>
         /// <returns></returns>
-        public override bool Equals(BaseType other) {
+        public override bool Equals(object other) {
             return CompareTo(other) == 0;
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
         }
 
         /// <summary>
@@ -79,6 +84,31 @@ namespace MAC.Types.User {
         public override string ToString()
         {
             return Data;
+        }
+
+        /// <summary>
+        /// Return that email stored as string
+        /// </summary>
+        public override string Value
+        {
+            get
+            {
+                return Data;
+            }
+
+            set
+            {
+                Data = value; 
+            }
+        }
+
+        /// <summary>
+        /// Access to the RAW data return has a object
+        /// </summary>
+        /// <returns>Raw data as an object</returns>>
+        public override object GetRawObject()
+        {
+            return Data as object;
         }
     }
  }
