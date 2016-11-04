@@ -1,4 +1,5 @@
 require_relative '../hash_generator.rb'
+require 'active_support/Inflector'
 
 module Generation
   # This class alows us to generate SQL source files using an ERB template and
@@ -27,7 +28,7 @@ module Generation
     end
 
     # This method takes in a hash from one of our YAML files and generates
-    # a string representing a SQL table, storing data as required in the 
+    # a string representing a SQL table, storing data as required in the
     # input
     def generate_table(yaml_hash)
       cur_directory_path = File.expand_path(File.dirname(__FILE__))
@@ -42,13 +43,14 @@ module Generation
     # into a SQL type
     def compose_hash(input_hash)
       output_hash = input_hash
+      output_hash['table_name'] = ActiveSupport::Inflector.tableize(input_hash['name'])
       output_hash['fields'].each do |field|
         field['type'] = @types[field['type']]
       end
       output_hash
     end
 
-    # Takes in a hash and an output destination, writes the table to 
+    # Takes in a hash and an output destination, writes the table to
     # the given file
     def write_table(yaml_hash, output_path)
       result = generate_table(yaml_hash)

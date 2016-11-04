@@ -1,6 +1,8 @@
 using System;
 using Mac.Types;
 
+
+[TableName("users")]
 public class user : BaseModel {
   
     [DatabaseField("MAC.User.Password")]

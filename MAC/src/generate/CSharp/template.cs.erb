@@ -1,6 +1,8 @@
 using System;
 using Mac.Types;
 
+
+[TableName("<%= table_name %>")]
 public class <%= name %> : BaseModel {
   <% fields.each do |field| %>
     [DatabaseField("<%= field["type"] %>")]

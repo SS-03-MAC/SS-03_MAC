@@ -1,4 +1,4 @@
-CREATE TABLE user (
+CREATE TABLE users (
   Password nvarchar,
   FullName nvarchar,
   City nvarchar,
