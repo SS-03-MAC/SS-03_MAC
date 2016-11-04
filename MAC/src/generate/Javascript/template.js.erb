@@ -2,7 +2,7 @@ var <%= name.capitalize %> = function(<%= fields_str %>){
 <% fields.each do |field| %>
   <%= "this." + field["name"] + " = " + field["name"] + ";" %>
 <% end %>
-  this.id = 0
+  this.id = 0;
   this.createdAt = Date.getTime();
   this.updatedAt = Date.getTime();
 
@@ -11,7 +11,7 @@ var <%= name.capitalize %> = function(<%= fields_str %>){
     if(id == 0){
       xhr.open("POST", <%= "\"/" + name.pluralize + "/\"" %>, true);
     } else{
-      xhr.open("POST", <%= "\"/" + name.pluralize + "/"%>id<%= "\"" %>)
+      xhr.open("POST", <%= "\"/" + name.pluralize + "/"%>id<%= "\"" %>);
     }
 
     xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
@@ -38,7 +38,7 @@ var <%= name.capitalize %> = function(<%= fields_str %>){
     xhr.onreadystatechenge = function() {
       if(xhr.readyState == 4){
         if(xhr.status == 200){
-          alert(xhr.ResponseText)
+          alert(xhr.ResponseText);
         } else{
           throw new Error(xhr.statusText);
         }
