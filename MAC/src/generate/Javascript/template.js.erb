@@ -16,10 +16,10 @@ var <%= name.capitalize %> = function(<%= fields_str %>){
 
     xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 
-    xhr.onreadystatechenge = function(){
+    xhr.onreadystatechange = function(){
       if(xhr.readyState == 4){
         if(xhr.status == 200){
-          alert(xhr.ResponseText);
+          alert(xhr.responseText);
         } else{
           throw new Error(xhr.statusText);
         }
@@ -35,10 +35,10 @@ var <%= name.capitalize %> = function(<%= fields_str %>){
     }
 
     var xhr = new XMLHttpRequest();
-    xhr.onreadystatechenge = function() {
+    xhr.onreadystatechange = function() {
       if(xhr.readyState == 4){
         if(xhr.status == 200){
-          alert(xhr.ResponseText);
+          alert(xhr.responseText);
         } else{
           throw new Error(xhr.statusText);
         }
@@ -52,10 +52,10 @@ var <%= name.capitalize %> = function(<%= fields_str %>){
 
 <%= name.capitalize %>.get = function(id){
   var xhr = new XMLHttpRequest();
-  xhr.onreadystatechenge = function() {
+  xhr.onreadystatechange = function() {
     if(xhr.readyState == 4){
       if(xhr.status == 200){
-        var result = eval("("+xhr.responseTest+")");
+        var result = eval("("+xhr.responseText+")");
         return result;
       } else{
         throw new Error(xhr.statusText);
@@ -69,10 +69,10 @@ var <%= name.capitalize %> = function(<%= fields_str %>){
 
 <%= name.capitalize %>.getAll = function(){
   var xhr = new XMLHttpRequest();
-  xhr.onreadystatechenge = function() {
+  xhr.onreadystatechange = function() {
     if(xhr.readyState == 4){
       if(xhr.status == 200){
-        var result = eval("("+xhr.responseTest+")");
+        var result = eval("("+xhr.responseText+")");
         return result;
       } else{
         throw new Error(xhr.statusText);
