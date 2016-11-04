@@ -27,6 +27,20 @@ namespace MAC.Models
             }
         }
 
+
+        public static int RunInsertQuery(SqlCommand cmd)
+        {
+            using (SqlConnection conn = new SqlConnection(ConnectionString))
+            {
+                conn.Open();
+                using (cmd)
+                {
+                    cmd.Connection = conn;
+                    return (int) cmd.ExecuteScalar();
+                }
+            }
+        }
+
         /// <summary>
         /// Run the given query
         /// </summary>

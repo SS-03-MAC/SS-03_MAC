@@ -90,7 +90,8 @@ namespace MAC.Models
             {
                 CreatedAt = new Types.DateTime(System.DateTime.Now);
                 UpdatedAt = CreatedAt;
-                return Query.RunNonQuery(ToInsertStatement()) == 1;
+                Id = new Integer(Query.RunInsertQuery(ToInsertStatement()));
+                return Id.Value > 0;
             }
             else
             {
@@ -122,18 +123,21 @@ namespace MAC.Models
         /// <returns></returns>
         public SqlCommand ToUpdateStatement()
         {
-            string result = "UPDATE " + GetTableName() + " SET ";
-            foreach (KeyValuePair<string, BaseType> kvPair in GetDatabaseFields())
+            string query = "UPDATE " + GetTableName() + " SET ";
+           List<KeyValuePair<string, BaseType>> values = GetDatabaseFields();
+            foreach (KeyValuePair<string, BaseType> kvPair in values)
             {
                 if (kvPair.Key.ToLower() == "id")
                 {
                     continue;
                 }
-                result += kvPair.Key + "=@" + kvPair.Key + ",";
+                query += kvPair.Key + "=@" + kvPair.Key + ",";
             }
-            result = result.Remove(result.LastIndexOf(","));
-            result += " WHERE Id = " + Id.Value + ";";
-            return new SqlCommand(result);
+            query = query.Remove(query.LastIndexOf(","));
+            query += " WHERE Id = " + Id.Value + ";";
+            SqlCommand result = new SqlCommand(query);
+            SetValues(values, result);
+            return result;
         }
 
         /// <summary>
@@ -156,6 +160,11 @@ namespace MAC.Models
             return result;
         }
 
+        /// <summary>
+        /// The values for the query
+        /// </summary>
+        /// <param name="values">Key Value store of the values</param>
+        /// <param name="result">SQL query to add them to</param>
         private static void SetValues(List<KeyValuePair<string, BaseType>> values, SqlCommand result)
         {
             foreach (KeyValuePair<string, BaseType> kvPair in values)
@@ -225,7 +234,7 @@ namespace MAC.Models
             List<KeyValuePair<string, BaseType>> values = GetDatabaseFields();
             query += " (";
             query = GetColumnNames(query, values);
-            query += ") VALUES (";
+            query += ") OUTPUT INSERTED.ID VALUES(";
             query = GetValuesForInsert(query, values);
             query += ")";
             query += ";";
