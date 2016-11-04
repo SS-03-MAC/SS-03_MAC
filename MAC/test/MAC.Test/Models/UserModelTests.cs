@@ -31,5 +31,14 @@ namespace MAC.Test.Models
             Assert.True(u.Save());
         }
 
+        [Fact]
+        public void Delete()
+        {
+            string email = "matthew" + DateTime.Now.Ticks + "@assignitapp.com";
+            User u = new User { FullName = new MAC.Types.String("Matthew"), City = new MAC.Types.String("Ames"), Email = new MAC.Types.User.Email(email), PasswordDigest = new MAC.Types.User.Password("apple", false) };
+            u.Save();
+            Assert.True(u.Delete());
+        }
+
     }
 }
