@@ -1,4 +1,4 @@
-var User = function(name, uses, fields){
+var User = function(Password, FullName, City){
   this.Password = Password;
   this.FullName = FullName;
   this.City = City;
@@ -14,7 +14,7 @@ var User = function(name, uses, fields){
       xhr.open("POST", "/users/id")
     }
 
-    xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+    xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 
     xhr.onreadystatechenge = function(){
       if(xhr.readyState == 4){
@@ -91,5 +91,5 @@ serialize = function(obj){
       str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
     }
   }
-  return str.join('&');
+  return str.join("&");
 }

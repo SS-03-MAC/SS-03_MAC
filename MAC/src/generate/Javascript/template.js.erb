@@ -14,7 +14,7 @@ var <%= name.capitalize %> = function(<%= fields_str %>){
       xhr.open("POST", <%= "\"/" + name.pluralize + "/"%>id<%= "\"" %>)
     }
 
-    xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+    xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 
     xhr.onreadystatechenge = function(){
       if(xhr.readyState == 4){
@@ -91,5 +91,5 @@ serialize = function(obj){
       str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
     }
   }
-  return str.join('&');
+  return str.join("&");
 }
