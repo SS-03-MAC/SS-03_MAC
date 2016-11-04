@@ -35,6 +35,43 @@ namespace MAC.Models
 
         }
 
+        /// <summary>
+        /// Get all records in the database for the model
+        /// </summary>
+        /// <returns></returns>
+        public static List<T> Get()
+        {
+            SqlDataReader reader = Query.Get(GetStaticTableName());
+            List<T> result = new List<T>();
+            while (reader.Read())
+            {
+                result.Add((T) BaseModelFactory.FillModel(typeof(T), reader));
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// Get the given record form the database
+        /// </summary>
+        /// <param name="id">The ID of the record to fetch</param>
+        /// <returns>The record</returns>
+        public static T Get(int id)
+        {
+            SqlDataReader reader = Query.Get(GetStaticTableName(), id);
+            if (!reader.HasRows)
+            {
+                throw new RecordNotFoundException();
+            }
+            reader.Read();
+            T result = (T)BaseModelFactory.FillModel(typeof(T), reader);
+            return result;
+            
+        }
+
+        /// <summary>
+        /// Get the table name for the the model
+        /// </summary>
+        /// <returns>Table name of class as a .NET string</returns>
         private static string GetStaticTableName()
         {
 

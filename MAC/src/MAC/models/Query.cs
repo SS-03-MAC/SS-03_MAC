@@ -2,7 +2,7 @@
 
 namespace MAC.Models
 {
-    public class Query
+    public static class Query
     {
         /// <summary>
         /// A connection string. Should be moved. Here for dev purposes
@@ -36,7 +36,7 @@ namespace MAC.Models
                 using (cmd)
                 {
                     cmd.Connection = conn;
-                    return (int) cmd.ExecuteScalar();
+                    return (int)cmd.ExecuteScalar();
                 }
             }
         }
@@ -54,18 +54,25 @@ namespace MAC.Models
         /// <summary>
         ///  Runs the givn command 
         /// </summary>
-        /// <param name="cmd"></param>
-        /// <returns></returns>
+        /// <param name="cmd">SQL Command to run</param>
+        /// <returns>Data return</returns>
         private static SqlDataReader RunQuery(SqlCommand cmd)
         {
-            using (SqlConnection conn = new SqlConnection(ConnectionString))
-            {
-                using (cmd)
-                {
-                    cmd.Connection = conn;
-                    return cmd.ExecuteReader();
-                }
-            }
+            SqlConnection conn = new SqlConnection(ConnectionString);
+            conn.Open();
+            cmd.Connection = conn;
+            return cmd.ExecuteReader();
+
+        }
+
+        /// <summary>
+        /// Run the given query 
+        /// </summary>
+        /// <param name="query">Query to run</param>
+        /// <returns></returns>
+        public static SqlDataReader RunQuery(string query)
+        {
+            return RunQuery(new SqlCommand(query));
         }
 
         /// <summary>
