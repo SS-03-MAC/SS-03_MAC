@@ -3,11 +3,11 @@ var <%= name.capitalize %> = function(<%= fields_str %>){
   <%= "this." + field["name"] + " = " + field["name"] + ";" %>
 <% end %>
   this.id = 0;
-  this.createdAt = Date.getTime();
-  this.updatedAt = Date.getTime();
+  this.CreatedAt = Date.getTime();
+  this.UpdatedAt = Date.getTime();
 
-  save = function(){
-    xhr = new XMLHTTPRequest();
+  this.save = function(){
+    var xhr = new XMLHTTPRequest();
     if(id == 0){
       xhr.open("POST", <%= "\"/" + name.pluralize + "/\"" %>, true);
     } else{
@@ -29,12 +29,12 @@ var <%= name.capitalize %> = function(<%= fields_str %>){
     xhr.send(serialize(this));
   };
 
-  delete = function(){
+  this.delete = function(){
     if(id == 0){
       return; //never saved to database, don't have to do anything
     }
 
-    xhr = new XMLHTTPRequest();
+    var xhr = new XMLHTTPRequest();
     xhr.onreadystatechenge = function() {
       if(xhr.readyState == 4){
         if(xhr.status == 200){
@@ -43,7 +43,7 @@ var <%= name.capitalize %> = function(<%= fields_str %>){
           throw new Error(xhr.statusText);
         }
       }
-    }
+    };
 
     xhr.open("DELETE", <%= "\"/" + name.pluralize + "/" %>id<%= "\"" %>, true);
     xhr.send(null);
@@ -51,7 +51,7 @@ var <%= name.capitalize %> = function(<%= fields_str %>){
 };
 
 <%= name.capitalize %>.get = function(id){
-  xhr = new XMLHTTPRequest();
+  var xhr = new XMLHTTPRequest();
   xhr.onreadystatechenge = function() {
     if(xhr.readyState == 4){
       if(xhr.status == 200){
@@ -60,7 +60,7 @@ var <%= name.capitalize %> = function(<%= fields_str %>){
       } else{
         throw new Error(xhr.statusText);
       }
-    }
+    };
   }
 
   xhr.open("GET", <%= "\"/" + name.pluralize + "/" %>id<%= "\"" %>, true);
@@ -68,7 +68,7 @@ var <%= name.capitalize %> = function(<%= fields_str %>){
 };
 
 <%= name.capitalize %>.getAll = function(){
-  xhr = new XMLHTTPRequest();
+  var xhr = new XMLHTTPRequest();
   xhr.onreadystatechenge = function() {
     if(xhr.readyState == 4){
       if(xhr.status == 200){
@@ -78,7 +78,7 @@ var <%= name.capitalize %> = function(<%= fields_str %>){
         throw new Error(xhr.statusText);
       }
     }
-  }
+  };
 
   xhr.open("GET", <%="\"/" + name.pluralize + "\""%>, true);
   xhr.send(null);
