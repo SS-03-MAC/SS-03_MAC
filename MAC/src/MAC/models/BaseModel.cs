@@ -42,10 +42,15 @@ namespace MAC.Models
         public static List<T> Get()
         {
             SqlDataReader reader = Query.Get(GetStaticTableName());
+            return ReaderToList(reader);
+        }
+
+        private static List<T> ReaderToList(SqlDataReader reader)
+        {
             List<T> result = new List<T>();
             while (reader.Read())
             {
-                result.Add((T) BaseModelFactory.FillModel(typeof(T), reader));
+                result.Add((T)BaseModelFactory.FillModel(typeof(T), reader));
             }
             return result;
         }
@@ -65,7 +70,22 @@ namespace MAC.Models
             reader.Read();
             T result = (T)BaseModelFactory.FillModel(typeof(T), reader);
             return result;
-            
+        }
+
+        /// <summary>
+        /// Runs a query on the talbe with a given where clause
+        /// </summary>
+        /// <remarks>
+        /// This method will blindly place the where paramter into a SQL where statement.
+        /// This means that if you pass raw unflitered user input inotot where your 
+        /// application will have a SQL injection vulnerability 
+        /// </remarks>
+        /// <param name="where"></param>
+        /// <returns></returns>
+        public static List<T> Get(string where)
+        {
+            SqlDataReader reader = Query.Get(GetStaticTableName(), where);
+            return ReaderToList(reader);
         }
 
         /// <summary>
@@ -161,7 +181,7 @@ namespace MAC.Models
         public SqlCommand ToUpdateStatement()
         {
             string query = "UPDATE " + GetTableName() + " SET ";
-           List<KeyValuePair<string, BaseType>> values = GetDatabaseFields();
+            List<KeyValuePair<string, BaseType>> values = GetDatabaseFields();
             foreach (KeyValuePair<string, BaseType> kvPair in values)
             {
                 if (kvPair.Key.ToLower() == "id")

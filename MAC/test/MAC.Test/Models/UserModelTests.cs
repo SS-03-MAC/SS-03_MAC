@@ -69,5 +69,26 @@ namespace MAC.Test.Models
             User u2 = User.Get(u.Id.Value);
             //Assert.Equal(u, u2);
         }
+
+        [Fact]
+        public void BasicWhere()
+        {
+            string email = "matthew" + DateTime.Now.Ticks + "GetOne@assignitapp.com";
+            User u = new User { FullName = new MAC.Types.String("Matthew"), City = new MAC.Types.String("Ames"), Email = new MAC.Types.User.Email(email), PasswordDigest = new MAC.Types.User.Password("apple", false) };
+            u.Save();
+            SqlDataReader expectedReader = Query.RunQuery("select * from users where email='" + u.Email + "'");
+            int rows = 0;
+            while (expectedReader.Read())
+            {
+                rows++;
+            }
+            List<User> users = User.Get("email='" + u.Email + "'");
+            Assert.Equal(rows, users.Count);
+            expectedReader = Query.RunQuery("select * from users where email='" + u.Email + "'");
+            expectedReader.Read();
+            User expectedUser = (User)BaseModelFactory.FillModel(typeof(User), expectedReader);
+            Assert.Equal(expectedUser.Id, users[0].Id);
+
+        }
     }
 }
