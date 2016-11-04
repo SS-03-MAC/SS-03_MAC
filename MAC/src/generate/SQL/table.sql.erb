@@ -1,4 +1,4 @@
-CREATE TABLE <%= name %> (
+CREATE TABLE <%= table_name %> (
 <% fields.each do |field| %>
   <%= field["name"] + " " + field["type"] + "," %>
 <% end %>
