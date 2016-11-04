@@ -24,10 +24,10 @@ var <%= name.capitalize %> = function(<%= fields_str %>){
           throw new Error(xhr.statusText);
         }
       }
-    }
+    };
 
     xhr.send(serialize(this));
-  }
+  };
 
   delete = function(){
     if(id == 0){
@@ -47,7 +47,7 @@ var <%= name.capitalize %> = function(<%= fields_str %>){
 
     xhr.open("DELETE", <%= "\"/" + name.pluralize + "/" %>id<%= "\"" %>, true);
     xhr.send(null);
-  }
+  };
 };
 
 <%= name.capitalize %>.get = function(id){
@@ -65,7 +65,7 @@ var <%= name.capitalize %> = function(<%= fields_str %>){
 
   xhr.open("GET", <%= "\"/" + name.pluralize + "/" %>id<%= "\"" %>, true);
   xhr.send(null);
-}
+};
 
 <%= name.capitalize %>.getAll = function(){
   xhr = new XMLHTTPRequest();
@@ -82,7 +82,7 @@ var <%= name.capitalize %> = function(<%= fields_str %>){
 
   xhr.open("GET", <%="\"/" + name.pluralize + "\""%>, true);
   xhr.send(null);
-}
+};
 
 serialize = function(obj){
   var str = [];
@@ -92,4 +92,4 @@ serialize = function(obj){
     }
   }
   return str.join("&");
-}
+};
