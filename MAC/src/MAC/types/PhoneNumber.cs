@@ -6,8 +6,6 @@ namespace MAC.Types.User
 {
     public class PhoneNumber : BaseType<PhoneNumber, string>
     {
-        public DatabaseFieldTypes DatabaseFieldType = DatabaseFieldTypes.nvarchar;
-
         private string Data;
         /// <summary>
         /// Validates format of the number 

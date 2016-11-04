@@ -34,7 +34,7 @@ namespace MAC.Types.User {
             {
                 MailAddress ma = new MailAddress(Data);
             }
-            catch (FormatException ex)
+            catch (FormatException)
             {
                 return false;
             }

@@ -69,6 +69,11 @@ namespace MAC.Types
         /// <returns></returns>
         public abstract override bool Equals(object other);
 
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
+
         /// <summary>
         /// function inherited from ISerializable
         /// </summary>
