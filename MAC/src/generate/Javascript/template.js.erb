@@ -51,14 +51,21 @@ var <%= name.capitalize %> = function(<%= fields_str %>){
   };
 };
 
-<%= name.capitalize %>.get = function(id){
+<%= name.capitalize %>.get = function(id, ret){
   var xhr = new XMLHttpRequest();
   xhr.setRequestHeader("Content-type", "application/json");
   xhr.onreadystatechange = function() {
     if(xhr.readyState == 4){
       if(xhr.status == 200){
-        var result = eval("("+xhr.responseText+")");
-        return result;
+        var fields = ["id", "CreatedAt", "UpdatedAt", <%= fields_str %>];
+        var data = JSON.parse(xhr.responseText);
+        
+        for(var feild in result){
+          if(fields.indexOf(field) !== -1){
+            ret[field] = result[field];
+          }
+        }
+
       } else{
         throw new Error(xhr.statusText);
       }
@@ -69,14 +76,25 @@ var <%= name.capitalize %> = function(<%= fields_str %>){
   xhr.send(null);
 };
 
-<%= name.capitalize %>.getAll = function(){
+<%= name.capitalize %>.getAll = function(arr){
   var xhr = new XMLHttpRequest();
   xhr.setRequestHeader("Content-type", "application/json");
   xhr.onreadystatechange = function() {
     if(xhr.readyState == 4){
       if(xhr.status == 200){
-        var result = eval("("+xhr.responseText+")");
-        return result;
+        var fields = ["id", "CreatedAt", "UpdatedAt", <%= fields_str %>];
+        var result = JSON.parse(xhr.responseText);
+        
+        for(obj in result){
+          tmp = new <%= name.capitalize %>();
+          for(var feild in obj){
+            if(fields.indexOf(field) !== -1){
+              tmp[field] = obj[field];
+            }
+          }
+
+          tmp.push(usr);
+        }
       } else{
         throw new Error(xhr.statusText);
       }

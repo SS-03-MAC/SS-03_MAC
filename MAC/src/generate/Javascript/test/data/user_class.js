@@ -14,7 +14,7 @@ var User = function(Password, FullName, City){
       xhr.open("POST", "/users/"+id);
     }
 
-    xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xhr.setRequestHeader("Content-type", "application/json");
 
     xhr.onreadystatechange = function(){
       if(xhr.readyState == 4){
@@ -35,6 +35,7 @@ var User = function(Password, FullName, City){
     }
 
     var xhr = new XMLHttpRequest();
+    xhr.setRequestHeader("Content-type", "application/json");
     xhr.onreadystatechange = function() {
       if(xhr.readyState == 4){
         if(xhr.status == 200){
@@ -50,13 +51,21 @@ var User = function(Password, FullName, City){
   };
 };
 
-User.get = function(id){
+User.get = function(id, ret){
   var xhr = new XMLHttpRequest();
+  xhr.setRequestHeader("Content-type", "application/json");
   xhr.onreadystatechange = function() {
     if(xhr.readyState == 4){
       if(xhr.status == 200){
-        var result = eval("("+xhr.responseText+")");
-        return result;
+        var fields = ["id", "CreatedAt", "UpdatedAt", Password, FullName, City];
+        var data = JSON.parse(xhr.responseText);
+        
+        for(var feild in result){
+          if(fields.indexOf(field) !== -1){
+            ret[field] = result[field];
+          }
+        }
+
       } else{
         throw new Error(xhr.statusText);
       }
@@ -67,13 +76,25 @@ User.get = function(id){
   xhr.send(null);
 };
 
-User.getAll = function(){
+User.getAll = function(arr){
   var xhr = new XMLHttpRequest();
+  xhr.setRequestHeader("Content-type", "application/json");
   xhr.onreadystatechange = function() {
     if(xhr.readyState == 4){
       if(xhr.status == 200){
-        var result = eval("("+xhr.responseText+")");
-        return result;
+        var fields = ["id", "CreatedAt", "UpdatedAt", Password, FullName, City];
+        var result = JSON.parse(xhr.responseText);
+        
+        for(obj in result){
+          tmp = new User();
+          for(var feild in obj){
+            if(fields.indexOf(field) !== -1){
+              tmp[field] = obj[field];
+            }
+          }
+
+          tmp.push(usr);
+        }
       } else{
         throw new Error(xhr.statusText);
       }
