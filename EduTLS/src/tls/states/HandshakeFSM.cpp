@@ -12,6 +12,7 @@
 //===----------------------------------------------------------------------===//
 
 #include "./HandshakeFSM.h"
+#include "../../crypto/crypto.h"
 #include "../../encoding/hex.h"
 #include "../abstractions/PacketQueue.h"
 #include "../containers/GenericStreamCipher.h"
@@ -71,16 +72,25 @@ void HandshakeFSM::ProcessMessage(uint8_t *data, size_t length) {
   std::cout << "Decoding message:\n" << hex << std::endl;
 
   c->decode(data, length);
-  if (c->fragment == NULL || c->fragment->contents == NULL || c->fragment->contents->contents == NULL) {
-    printf("Unknown decoding error.");
+  if (c->fragment == NULL) {
+    printf("Unknown decoding error (1).");
     return;
   }
+  if (c->fragment->contents == NULL) {
+    printf("Unknown decoding error (2).");
+    return;
+  }
+  if (c->fragment->contents->contents == NULL) {
+    printf("Unknown decoding error (3).");
+    return;
+  }
+
   TLSPlaintext *p = c->fragment->contents->contents;
 
   if (c->type == ContentType_e::handshake) {
     HandshakeType *h = new HandshakeType();
 
-    h->decode(p->fragment, p->length);
+    printf("Decoding HandshakeType: %d\n", h->decode(p->fragment, p->length));
 
     switch (h->type) {
     case HandshakeType_e::client_hello:
@@ -96,11 +106,13 @@ void HandshakeFSM::ProcessMessage(uint8_t *data, size_t length) {
     delete h;
   } else if (c->type == ContentType_e::change_cipher_spec) {
     ChangeCipherSpec *ccs = new ChangeCipherSpec();
-    ccs->decode(p->fragment, p->length);
+    printf("Decoding ChangeCipherSpec: %d\n", ccs->decode(p->fragment, p->length));
     this->ProcessClientChangeCipherSpec(ccs);
 
     delete ccs;
   }
+
+  printf("\n\n");
 
   delete c;
 }
@@ -150,10 +162,11 @@ void HandshakeFSM::ProcessClientHello(ClientHello *m) {
   this->state->pending_write_params->entity = this->state->current_write_params->entity;
   this->state->pending_read_params->client_version = m->client_version;
   this->state->pending_write_params->client_version = m->client_version;
-  this->state->pending_read_params->bulk_cipher_algorithm = this->common.BulkCipherAlgorithm();
   this->state->pending_read_params->mac_algorithm = this->common.MACAlgorithm();
-  this->state->pending_write_params->bulk_cipher_algorithm = this->common.BulkCipherAlgorithm();
   this->state->pending_write_params->mac_algorithm = this->common.MACAlgorithm();
+
+  this->state->pending_read_params->SetCipher(this->common.BulkCipherAlgorithm());
+  this->state->pending_write_params->SetCipher(this->common.BulkCipherAlgorithm());
 
   this->ProcessServerHello();
 }
@@ -207,9 +220,9 @@ void HandshakeFSM::ProcessServerHello() {
   m->encode(data);
   length = m->encode_length();
 
-  char hex[2 * length + 1];
-  toHex(hex, data, length);
-  hex[2 * length] = '\0';
+  // char hex[2 * length + 1];
+  // toHex(hex, data, length);
+  // hex[2 * length] = '\0';
 
   // printf("Sending packet: \n\t%s\n", hex);
 
@@ -266,9 +279,9 @@ void HandshakeFSM::ProcessServerCertificate() {
   m->encode(data);
   length = m->encode_length();
 
-  char hex[2 * length + 1];
-  toHex(hex, data, length);
-  hex[2 * length] = '\0';
+  // char hex[2 * length + 1];
+  // toHex(hex, data, length);
+  // hex[2 * length] = '\0';
 
   // printf("Sending packet: \n\t%s\n", hex);
 
@@ -340,11 +353,108 @@ void HandshakeFSM::ProcessClientKeyExchange(ClientKeyExchange *cke) {
     return;
   }
 
+  uint8_t premaster[48];
+  uint8_t seed[77];
+
+  size_t i = 0;
+  premaster[0] = cke->client_version.major;
+  premaster[1] = cke->client_version.minor;
+  for (i = 2; i < 48; i++) {
+    premaster[i] = cke->random[i - 2];
+  }
+  i = 0;
+  seed[0] = 'm';
+  seed[1] = 'a';
+  seed[2] = 's';
+  seed[3] = 't';
+  seed[4] = 'e';
+  seed[5] = 'r';
+  seed[6] = ' ';
+  seed[7] = 's';
+  seed[8] = 'e';
+  seed[9] = 'c';
+  seed[10] = 'r';
+  seed[11] = 'e';
+  seed[12] = 't';
+  for (i = 13; i < 45; i++) {
+    seed[i] = this->state->pending_read_params->client_random[i - 13];
+  }
+  for (i = 45; i < 77; i++) {
+    seed[i] = this->state->pending_read_params->server_random[i - 45];
+  }
+
+  prf_sha256 *prf = new prf_sha256(premaster, 48, seed, 77);
+
+  prf->generate(this->state->pending_read_params->master_secret, 48);
+  for (i = 0; i < 48; i++) {
+    this->state->pending_write_params->master_secret[i] = this->state->pending_read_params->master_secret[i];
+  }
+
+  delete prf;
+  seed[0] = 'k';
+  seed[1] = 'e';
+  seed[2] = 'y';
+  seed[3] = ' ';
+  seed[4] = 'e';
+  seed[5] = 'x';
+  seed[6] = 'p';
+  seed[7] = 'a';
+  seed[8] = 'n';
+  seed[9] = 's';
+  seed[10] = 'i';
+  seed[11] = 'o';
+  seed[12] = 'n';
+  for (i = 13; i < 45; i++) {
+    seed[i] = this->state->pending_read_params->server_random[i - 13];
+  }
+  for (i = 45; i < 77; i++) {
+    seed[i] = this->state->pending_read_params->client_random[i - 45];
+  }
+
+  prf = new prf_sha256(this->state->pending_read_params->master_secret, 48, seed, 77);
+
+  uint8_t keydata[128];
+  prf->generate(keydata, 128);
+
+  size_t k_p = 0;
+
+  this->state->pending_read_params->mac_key =
+      (uint8_t *)malloc(sizeof(uint8_t) * this->state->pending_read_params->mac_key_length);
+  this->state->pending_write_params->mac_key =
+      (uint8_t *)malloc(sizeof(uint8_t) * this->state->pending_write_params->mac_key_length);
+  this->state->pending_read_params->cipher_key =
+      (uint8_t *)malloc(sizeof(uint8_t) * this->state->pending_read_params->enc_key_length);
+  this->state->pending_write_params->cipher_key =
+      (uint8_t *)malloc(sizeof(uint8_t) * this->state->pending_write_params->enc_key_length);
+
+  for (i = 0; i < this->state->pending_read_params->mac_key_length; i++) {
+    this->state->pending_read_params->mac_key[i] = keydata[k_p];
+    k_p++;
+  }
+
+  for (i = 0; i < this->state->pending_write_params->mac_key_length; i++) {
+    this->state->pending_write_params->mac_key[i] = keydata[k_p];
+    k_p++;
+  }
+
+  for (i = 0; i < this->state->pending_read_params->enc_key_length; i++) {
+    this->state->pending_read_params->cipher_key[i] = keydata[k_p];
+    k_p++;
+  }
+
+  for (i = 0; i < this->state->pending_write_params->enc_key_length; i++) {
+    this->state->pending_write_params->cipher_key[i] = keydata[k_p];
+    k_p++;
+  }
+
+  delete prf;
+
   this->current_state = 5;
 }
 
 void HandshakeFSM::ProcessClientChangeCipherSpec(ChangeCipherSpec *ccs) {
   if (this->current_state != 5) {
+    printf("Bad state %d!\n", this->current_state);
     return;
   }
 
@@ -352,7 +462,9 @@ void HandshakeFSM::ProcessClientChangeCipherSpec(ChangeCipherSpec *ccs) {
     this->state->SwitchReadState();
     this->current_state = 6;
 
-    printf("Switched read states.");
+    printf("Switched read states.\n");
+  } else {
+    printf("Refusing to switch states.\n");
   }
 }
 void HandshakeFSM::ProcessClientFinished(uint8_t *, size_t) {}

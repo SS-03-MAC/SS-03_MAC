@@ -43,8 +43,13 @@ public:
   uint8_t client_random[32];
   uint8_t server_random[32];
 
+  uint8_t *mac_key;
+  uint8_t *cipher_key;
+
   SecurityParameters();
   ~SecurityParameters();
 
   void GenerateRandom();
+  void SetCipher(BulkCipherAlgorithm_e algo);
+  void SetMAC(MACAlgorithm_e algo);
 };

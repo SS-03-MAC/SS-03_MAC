@@ -66,6 +66,8 @@ int TLSCiphertext::decode(uint8_t *encoded, size_t length) {
     return -3;
   }
 
+  printf("Current READ Cipher type: %d\n", static_cast<int>(this->state->current_read_params->cipher_type));
+
   this->fragment = CipherFragment_f::Construct(this->state->current_read_params->cipher_type, this->state);
 
   if (this->fragment == NULL) {

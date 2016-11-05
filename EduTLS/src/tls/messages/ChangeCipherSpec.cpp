@@ -19,17 +19,16 @@ ChangeCipherSpec::ChangeCipherSpec() {}
 ChangeCipherSpec::~ChangeCipherSpec() {}
 
 int ChangeCipherSpec::encode(uint8_t *result) {
-  result[0] = 1;
-  result[1] = static_cast<uint8_t>(this->value);
+  result[0] = static_cast<uint8_t>(this->value);
   return 0;
 }
 
-size_t ChangeCipherSpec::encode_length() { return 2; }
+size_t ChangeCipherSpec::encode_length() { return 1; }
 int ChangeCipherSpec::decode(uint8_t *encoded, size_t length) {
-  if (length != 2 || encoded[0] != 1) {
+  if (length != 1) {
     return 1;
   }
 
-  this->value = static_cast<ChangeCipherSpec_e>(encoded[1]);
+  this->value = static_cast<ChangeCipherSpec_e>(encoded[0]);
   return 0;
 }
