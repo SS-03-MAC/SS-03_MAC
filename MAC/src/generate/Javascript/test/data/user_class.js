@@ -3,8 +3,8 @@ var User = function(Password, FullName, City){
   this.FullName = FullName;
   this.City = City;
   this.id = 0;
-  this.CreatedAt = Date.getTime();
-  this.UpdatedAt = Date.getTime();
+  this.CreatedAt = Date.now();
+  this.UpdatedAt = Date.now();
 
   this.save = function(){
     var xhr = new XMLHttpRequest();
@@ -57,7 +57,7 @@ User.get = function(id, ret){
   xhr.onreadystatechange = function() {
     if(xhr.readyState == 4){
       if(xhr.status == 200){
-        var fields = ["id", "CreatedAt", "UpdatedAt", Password, FullName, City];
+        var fields = ["id", "CreatedAt", "UpdatedAt", "Password", "FullName", "City"];
         var data = JSON.parse(xhr.responseText);
         
         for(var feild in result){
@@ -82,7 +82,7 @@ User.getAll = function(arr){
   xhr.onreadystatechange = function() {
     if(xhr.readyState == 4){
       if(xhr.status == 200){
-        var fields = ["id", "CreatedAt", "UpdatedAt", Password, FullName, City];
+        var fields = ["id", "CreatedAt", "UpdatedAt", "Password", "FullName", "City"];
         var result = JSON.parse(xhr.responseText);
         
         for(obj in result){

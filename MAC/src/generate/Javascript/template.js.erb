@@ -3,8 +3,8 @@ var <%= name.capitalize %> = function(<%= fields_str %>){
   <%= "this." + field["name"] + " = " + field["name"] + ";" %>
 <% end %>
   this.id = 0;
-  this.CreatedAt = Date.getTime();
-  this.UpdatedAt = Date.getTime();
+  this.CreatedAt = Date.now();
+  this.UpdatedAt = Date.now();
 
   this.save = function(){
     var xhr = new XMLHttpRequest();
@@ -57,7 +57,7 @@ var <%= name.capitalize %> = function(<%= fields_str %>){
   xhr.onreadystatechange = function() {
     if(xhr.readyState == 4){
       if(xhr.status == 200){
-        var fields = ["id", "CreatedAt", "UpdatedAt", <%= fields_str %>];
+        var fields = ["id", "CreatedAt", "UpdatedAt", <%= fields_str_quoted %>];
         var data = JSON.parse(xhr.responseText);
         
         for(var feild in result){
@@ -82,7 +82,7 @@ var <%= name.capitalize %> = function(<%= fields_str %>){
   xhr.onreadystatechange = function() {
     if(xhr.readyState == 4){
       if(xhr.status == 200){
-        var fields = ["id", "CreatedAt", "UpdatedAt", <%= fields_str %>];
+        var fields = ["id", "CreatedAt", "UpdatedAt", <%= fields_str_quoted %>];
         var result = JSON.parse(xhr.responseText);
         
         for(obj in result){
