@@ -9,8 +9,8 @@ private:
   static int hexToInt(char c);
 
 public:
-  static const char URI_UNSAFE[] = {'\127', ' ', '"', '#', '%', '<', '>'};// and CTL (0 through 31 and DEL(127))
-  static const char URL_RESREVED[] = {';', '/', '?', ':', '@', '&', '=', '+'};
+  static const char URI_UNSAFE[];
+  static const char URL_RESERVED[];
 
   inline static bool ingestLWS(std::istream *in) {
     bool hasCRLF;
@@ -83,6 +83,8 @@ public:
     return out.str();
   }
 
+  static bool isQueryStringSafe(char c);
+  static bool isUrlSafe(char c);
   static bool isUriUnsafe(char c);
   static bool isUriReserved(char c);
 

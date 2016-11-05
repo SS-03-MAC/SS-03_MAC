@@ -1,5 +1,8 @@
 #include "httpUtils.h"
 
+const char httpUtils::URI_UNSAFE[] = {'\127', ' ', '"', '#', '%', '<', '>'};// and CTL (0 through 31 and DEL(127))
+const char httpUtils::URL_RESERVED[] = {';', '/', '?', ':', '@', '&', '=', '+'};
+
 char httpUtils::hexToChar(char c1, char c2) {
   return (char) ((hexToInt(c1) << 4) + hexToInt(c2));
 }
@@ -36,6 +39,16 @@ std::string httpUtils::readToken(std::istream *in) {
   return out.str();
 }
 
+bool httpUtils::isQueryStringSafe(char c) {
+  // TODO
+  return true;
+}
+
+bool httpUtils::isUrlSafe(char c) {
+  // TODO
+  return true;
+}
+
 bool httpUtils::isUriUnsafe(char c) {
   if (c < 32) {
     return true;
@@ -49,8 +62,8 @@ bool httpUtils::isUriUnsafe(char c) {
 }
 
 bool httpUtils::isUriReserved(char c) {
-  for (int i = 0; i < sizeof(URL_RESREVED); i++) {
-    if (c == URL_RESREVED[i]) {
+  for (int i = 0; i < sizeof(URL_RESERVED); i++) {
+    if (c == URL_RESERVED[i]) {
       return true;
     }
   }
