@@ -162,11 +162,11 @@ void HandshakeFSM::ProcessClientHello(ClientHello *m) {
   this->state->pending_write_params->entity = this->state->current_write_params->entity;
   this->state->pending_read_params->client_version = m->client_version;
   this->state->pending_write_params->client_version = m->client_version;
-  this->state->pending_read_params->mac_algorithm = this->common.MACAlgorithm();
-  this->state->pending_write_params->mac_algorithm = this->common.MACAlgorithm();
 
   this->state->pending_read_params->SetCipher(this->common.BulkCipherAlgorithm());
   this->state->pending_write_params->SetCipher(this->common.BulkCipherAlgorithm());
+  this->state->pending_read_params->SetMAC(this->common.MACAlgorithm());
+  this->state->pending_write_params->SetMAC(this->common.MACAlgorithm());
 
   this->state->pending_read_params->client_random[0] = (m->random.gmt_unix_time >> 24) & 0xFF;
   this->state->pending_read_params->client_random[1] = (m->random.gmt_unix_time >> 16) & 0xFF;
@@ -431,19 +431,29 @@ void HandshakeFSM::ProcessClientKeyExchange(ClientKeyExchange *cke) {
   seed[10] = 'i';
   seed[11] = 'o';
   seed[12] = 'n';
-  for (i = 13; i < 45; i++) {
-    seed[i] = this->state->pending_read_params->server_random[i - 13];
+  printf("Server random: \n");
+  for (i = 0; i < 32; i++) {
+    seed[i + 13] = this->state->pending_read_params->server_random[i];
+    printf("%02x", seed[i + 13]);
   }
-  for (i = 45; i < 77; i++) {
-    seed[i] = this->state->pending_read_params->client_random[i - 45];
+  printf("\n");
+  printf("Client random: \n");
+  for (i = 0; i < 32; i++) {
+    seed[i + 45] = this->state->pending_read_params->client_random[i];
+    printf("%02x", seed[i + 45]);
   }
+  printf("\n");
 
-  prf = new prf_sha256(this->state->pending_read_params->master_secret, 48, seed, 77);
+  prf_sha256 *prf_2 = new prf_sha256(this->state->pending_read_params->master_secret, 48, seed, 77);
 
   uint8_t keydata[128];
-  prf->generate(keydata, 128);
+  prf_2->generate(keydata, 128);
 
   size_t k_p = 0;
+
+  printf("rm: %d, wm: %d, rc: %d, wc: %d\n", this->state->pending_read_params->mac_key_length,
+         this->state->pending_write_params->mac_key_length, this->state->pending_read_params->enc_key_length,
+         this->state->pending_write_params->enc_key_length);
 
   this->state->pending_read_params->mac_key =
       (uint8_t *)malloc(sizeof(uint8_t) * this->state->pending_read_params->mac_key_length);
