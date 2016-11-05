@@ -18,8 +18,12 @@ private:
   int state4(int c);
   int state5(int c);
   std::string FSMError;
+  std::stringstream FSMTemp;
 
 public:
   AbsPath(std::string &in);
+  std::string getFullPath();
+  std::string getFileName();
+  std::string getQueryString();
 };
 }
