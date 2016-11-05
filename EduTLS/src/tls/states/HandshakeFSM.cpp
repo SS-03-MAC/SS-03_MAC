@@ -168,6 +168,18 @@ void HandshakeFSM::ProcessClientHello(ClientHello *m) {
   this->state->pending_read_params->SetCipher(this->common.BulkCipherAlgorithm());
   this->state->pending_write_params->SetCipher(this->common.BulkCipherAlgorithm());
 
+  this->state->pending_read_params->client_random[0] = (m->random.gmt_unix_time >> 24) & 0xFF;
+  this->state->pending_read_params->client_random[1] = (m->random.gmt_unix_time >> 16) & 0xFF;
+  this->state->pending_read_params->client_random[2] = (m->random.gmt_unix_time >> 8) & 0xFF;
+  this->state->pending_read_params->client_random[3] = (m->random.gmt_unix_time >> 0) & 0xFF;
+  for (size_t i = 0; i < 28; i++) {
+    this->state->pending_read_params->client_random[4 + i] = m->random.random_bytes[i];
+  }
+
+  for (size_t i = 0; i < 32; i++) {
+    this->state->pending_write_params->client_random[i] = this->state->pending_read_params->client_random[i];
+  }
+
   this->ProcessServerHello();
 }
 
@@ -185,8 +197,8 @@ void HandshakeFSM::ProcessServerHello() {
   hello->server_version.major = 0x03;
   hello->server_version.minor = 0x03;
   hello->random.gmt_unix_time = (this->state->pending_write_params->server_random[0] << 24) |
-                                    (this->state->pending_write_params->server_random[1] << 16) |
-                                    (this->state->pending_write_params->server_random[2] << 8) ||
+                                (this->state->pending_write_params->server_random[1] << 16) |
+                                (this->state->pending_write_params->server_random[2] << 8) |
                                 this->state->pending_write_params->server_random[3];
 
   for (size_t i = 0; i < 28; i++) {
@@ -363,6 +375,12 @@ void HandshakeFSM::ProcessClientKeyExchange(ClientKeyExchange *cke) {
     premaster[i] = cke->random[i - 2];
   }
   i = 0;
+  printf("ClientKeyExchange random: \n");
+  for (i = 0; i < 48; i++) {
+    printf("%02x", premaster[i]);
+  }
+  printf("\n");
+  i = 0;
   seed[0] = 'm';
   seed[1] = 'a';
   seed[2] = 's';
@@ -376,19 +394,28 @@ void HandshakeFSM::ProcessClientKeyExchange(ClientKeyExchange *cke) {
   seed[10] = 'r';
   seed[11] = 'e';
   seed[12] = 't';
+  printf("Client random: \n");
   for (i = 13; i < 45; i++) {
     seed[i] = this->state->pending_read_params->client_random[i - 13];
+    printf("%02x", seed[i]);
   }
+  printf("\n");
+  printf("Server random: \n");
   for (i = 45; i < 77; i++) {
     seed[i] = this->state->pending_read_params->server_random[i - 45];
+    printf("%02x", seed[i]);
   }
+  printf("\n");
 
   prf_sha256 *prf = new prf_sha256(premaster, 48, seed, 77);
 
   prf->generate(this->state->pending_read_params->master_secret, 48);
+  printf("Master Secret: \n");
   for (i = 0; i < 48; i++) {
     this->state->pending_write_params->master_secret[i] = this->state->pending_read_params->master_secret[i];
+    printf("%02x", this->state->pending_write_params->master_secret[i]);
   }
+  printf("\n");
 
   delete prf;
   seed[0] = 'k';
@@ -437,15 +464,21 @@ void HandshakeFSM::ProcessClientKeyExchange(ClientKeyExchange *cke) {
     k_p++;
   }
 
+  printf("Read key: \n");
   for (i = 0; i < this->state->pending_read_params->enc_key_length; i++) {
     this->state->pending_read_params->cipher_key[i] = keydata[k_p];
+    printf("%02x", keydata[k_p]);
     k_p++;
   }
+  printf("\n");
 
+  printf("Write key: \n");
   for (i = 0; i < this->state->pending_write_params->enc_key_length; i++) {
     this->state->pending_write_params->cipher_key[i] = keydata[k_p];
+    printf("%02x", keydata[k_p]);
     k_p++;
   }
+  printf("\n");
 
   delete prf;
 

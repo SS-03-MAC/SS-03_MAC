@@ -117,15 +117,18 @@ void SecurityParameters::SetCipher(BulkCipherAlgorithm_e algo) {
   case BulkCipherAlgorithm_e::aes_256_cbc:
     this->fixed_iv_length = 16;
     this->block_length = 16;
+    this->record_iv_length = 16;
     break;
   case BulkCipherAlgorithm_e::des3_ede_cbc:
     this->fixed_iv_length = 8;
     this->block_length = 8;
+    this->record_iv_length = 8;
     break;
   case BulkCipherAlgorithm_e::rc4_128:
   default:
     this->fixed_iv_length = 0;
     this->block_length = 0;
+    this->record_iv_length = 0;
     break;
     break;
   }
