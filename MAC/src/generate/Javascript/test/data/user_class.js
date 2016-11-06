@@ -8,10 +8,10 @@ var User = function(Password, FullName, City){
 
   this.save = function(){
     var xhr = new XMLHttpRequest();
-    if(id == 0){
+    if(this.id == 0){
       xhr.open("POST", "/users/", true);
     } else{
-      xhr.open("POST", "/users/"+id);
+      xhr.open("PATCH", "/users/"+this.id);
     }
 
     xhr.setRequestHeader("Content-type", "application/json");
@@ -19,35 +19,35 @@ var User = function(Password, FullName, City){
     xhr.onreadystatechange = function(){
       if(xhr.readyState == 4){
         if(xhr.status == 200){
-          alert(xhr.responseText);
+          console.log(xhr.responseText);
         } else{
           throw new Error(xhr.statusText);
         }
       }
     };
 
-    var data = JSON.serialize(this);
+    var data = JSON.stringify(this);
     xhr.send(data);
   };
 
   this.delete = function(){
-    if(id == 0){
+    if(this.id == 0){
       return; //never saved to database, don't have to do anything
     }
 
     var xhr = new XMLHttpRequest();
+    xhr.open("DELETE", "/users/"+this.id, true);
     xhr.setRequestHeader("Content-type", "application/json");
     xhr.onreadystatechange = function() {
       if(xhr.readyState == 4){
         if(xhr.status == 200){
-          alert(xhr.responseText);
+          console.log(xhr.responseText);
         } else{
           throw new Error(xhr.statusText);
         }
       }
     };
 
-    xhr.open("DELETE", "/users/"+id, true);
     xhr.send(null);
   };
 };
