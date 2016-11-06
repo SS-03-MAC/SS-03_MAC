@@ -26,7 +26,8 @@ var User = function(Password, FullName, City){
       }
     };
 
-    xhr.send(serialize(this));
+    var data = JSON.serialize(this);
+    xhr.send(data);
   };
 
   this.delete = function(){
@@ -104,14 +105,4 @@ User.getAll = function(arr){
 
   xhr.open("GET", "/users.json", true);
   xhr.send(null);
-};
-
-serialize = function(obj){
-  var str = [];
-  for(var p in obj){
-    if(obj.hasOwnProperty(p)) {
-      str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
-    }
-  }
-  return str.join("&");
 };
