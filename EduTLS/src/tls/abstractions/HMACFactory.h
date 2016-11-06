@@ -23,23 +23,28 @@
 
 class HMAC_f {
 public:
-  static inline hmac *Construct(MACAlgorithm_e type, TLSSession *state) {
+  static inline hmac *Construct(MACAlgorithm_e type, uint8_t *key, size_t length) {
     hash *h = NULL;
     switch (type) {
     case MACAlgorithm_e::hmac_md5:
       h = new md5();
+      h->init();
       break;
     case MACAlgorithm_e::hmac_sha1:
       h = new sha1();
+      h->init();
       break;
     case MACAlgorithm_e::hmac_sha256:
       h = new sha2_256();
+      h->init();
       break;
     case MACAlgorithm_e::hmac_sha384:
       h = new sha2_384();
+      h->init();
       break;
     case MACAlgorithm_e::hmac_sha512:
       h = new sha2_512();
+      h->init();
       break;
     default:
       break;
@@ -50,8 +55,9 @@ public:
     }
 
     h->init();
-    return new hmac(h, state->current_read_params->mac_key, state->current_read_params->mac_key_length);
 
-    return NULL;
+    hmac *result = new hmac(h, key, length);
+
+    return result;
   };
 };

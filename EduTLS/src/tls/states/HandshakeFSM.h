@@ -13,6 +13,7 @@
 
 #pragma once
 
+#include "../../crypto/crypto.h"
 #include "../abstractions/PacketQueue.h"
 #include "../messages/ChangeCipherSpec.h"
 #include "../messages/ClientHello.h"
@@ -31,6 +32,9 @@ private:
 
   PacketQueue *pq;
 
+  hash *client_finished_hash;
+  hash *server_finished_hash;
+
   int current_state;
 
   void ProcessClientHello(ClientHello *m);
@@ -45,6 +49,7 @@ private:
 
 public:
   HandshakeFSM(TLSSession *state, TLSConfiguration *config);
+  ~HandshakeFSM();
 
   void ProcessMessage(uint8_t *data, size_t length);
   void InitialHandshake(PacketQueue *pq);

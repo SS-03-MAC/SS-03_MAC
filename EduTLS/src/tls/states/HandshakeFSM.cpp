@@ -41,10 +41,31 @@ HandshakeFSM::HandshakeFSM(TLSSession *state, TLSConfiguration *config) {
   this->config = config;
 
   this->current_state = 0;
+  this->server_finished_hash = NULL;
+  this->client_finished_hash = NULL;
+}
+
+HandshakeFSM::~HandshakeFSM() {
+  if (this->server_finished_hash != NULL) {
+    delete this->server_finished_hash;
+  }
+
+  if (this->client_finished_hash != NULL) {
+    delete this->client_finished_hash;
+  }
 }
 
 void HandshakeFSM::InitialHandshake(PacketQueue *pq) {
   this->pq = pq;
+
+  if (this->client_finished_hash == NULL) {
+    this->client_finished_hash = new sha2_256();
+  }
+  if (this->server_finished_hash == NULL) {
+    this->server_finished_hash = new sha2_256();
+  }
+  this->client_finished_hash->init();
+  this->server_finished_hash->init();
 
   // Once for ClientHello
   uint8_t buffer[65536];
@@ -95,12 +116,20 @@ void HandshakeFSM::ProcessMessage(uint8_t *data, size_t length) {
 
     switch (h->type) {
     case HandshakeType_e::client_hello:
+      this->client_finished_hash->update(p->fragment, p->length);
+      this->server_finished_hash->update(p->fragment, p->length);
+      printf("Added to SHA256 state...\n");
       this->ProcessClientHello(dynamic_cast<ClientHello *>(h->body));
       break;
     case HandshakeType_e::client_key_exchange:
+      this->client_finished_hash->update(p->fragment, p->length);
+      this->server_finished_hash->update(p->fragment, p->length);
+      printf("Added to SHA256 state...\n");
       this->ProcessClientKeyExchange(dynamic_cast<ClientKeyExchange *>(h->body));
       break;
     case HandshakeType_e::finished:
+      this->server_finished_hash->update(p->fragment, p->length);
+      printf("Added to Server SHA256 state...\n");
       this->ProcessClientFinished(dynamic_cast<Finished *>(h->body));
       break;
     default:
@@ -221,6 +250,9 @@ void HandshakeFSM::ProcessServerHello() {
   uint8_t data[65536];
   size_t length = handshake->encode_length();
   handshake->encode(data);
+  this->client_finished_hash->update(data, length);
+  this->server_finished_hash->update(data, length);
+  printf("Added to SHA256 state...\n");
   // printf("\nLength of handshake: %zu\n", length);
   TLSPlaintext *p = new TLSPlaintext(length, data);
   // printf("Plaintext length: %d\n", p->length);
@@ -280,6 +312,9 @@ void HandshakeFSM::ProcessServerCertificate() {
   size_t length = 0;
   length = handshake->encode_length();
   handshake->encode(data);
+  this->client_finished_hash->update(data, length);
+  this->server_finished_hash->update(data, length);
+  printf("Added to SHA256 state...\n");
   // printf("\nLength of handshake: %zu\n", length);
   TLSPlaintext *p = new TLSPlaintext(length, data);
   // printf("Plaintext length: %d\n", p->length);
@@ -327,6 +362,9 @@ void HandshakeFSM::ProcessServerHelloDone() {
   size_t length = 0;
   length = handshake->encode_length();
   handshake->encode(data);
+  this->client_finished_hash->update(data, length);
+  this->server_finished_hash->update(data, length);
+  printf("Added to SHA256 state...\n");
   // printf("\nLength of handshake: %zu\n", length);
   TLSPlaintext *p = new TLSPlaintext(length, data);
   // printf("Plaintext length: %d\n", p->length);
@@ -528,8 +566,43 @@ void HandshakeFSM::ProcessClientFinished(Finished *f) {
   }
   printf("\n");
 
-  this->current_state = 7;
-  this->ProcessServerChangeCipherSpec();
+  uint8_t hash_data[15 + this->client_finished_hash->output_size];
+  this->client_finished_hash->finalize(&(hash_data[15]));
+  hash_data[0] = 'c';
+  hash_data[1] = 'l';
+  hash_data[2] = 'i';
+  hash_data[3] = 'e';
+  hash_data[4] = 'n';
+  hash_data[5] = 't';
+  hash_data[6] = ' ';
+  hash_data[7] = 'f';
+  hash_data[8] = 'i';
+  hash_data[9] = 'n';
+  hash_data[10] = 'i';
+  hash_data[11] = 's';
+  hash_data[12] = 'h';
+  hash_data[13] = 'e';
+  hash_data[14] = 'd';
+
+  prf_sha256 *prf = new prf_sha256(this->state->current_read_params->master_secret, 48, hash_data,
+                                   15 + this->client_finished_hash->output_size);
+
+  uint8_t verify_data[f->verify_data_length];
+  prf->generate(verify_data, f->verify_data_length);
+
+  bool verify_ok = true;
+
+  printf("Server Side Validation (%d): \n", f->verify_data_length);
+  for (size_t i = 0; i < f->verify_data_length; i++) {
+    printf("%02x", verify_data[i]);
+    verify_ok = verify_ok && (verify_data[i] == f->verify_data[i]);
+  }
+  printf("\n");
+
+  if (verify_ok) {
+    this->current_state = 7;
+    this->ProcessServerChangeCipherSpec();
+  }
 }
 
 void HandshakeFSM::ProcessServerChangeCipherSpec() {

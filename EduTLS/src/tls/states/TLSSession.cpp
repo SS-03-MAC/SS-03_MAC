@@ -12,6 +12,7 @@
 //===----------------------------------------------------------------------===//
 
 #include "TLSSession.h"
+#include "../../crypto/crypto.h"
 
 TLSSession::TLSSession(ConnectionEnd_e entity) {
   this->session_id = NULL;
