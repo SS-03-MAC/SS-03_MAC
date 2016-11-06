@@ -24,6 +24,7 @@
 #include "../messages/ChangeCipherSpec.h"
 #include "../messages/ClientHello.h"
 #include "../messages/ClientKeyExchange.h"
+#include "../messages/Finished.h"
 #include "../messages/Handshake.h"
 #include "../messages/ServerHello.h"
 #include "../messages/ServerHelloDone.h"
@@ -99,7 +100,11 @@ void HandshakeFSM::ProcessMessage(uint8_t *data, size_t length) {
     case HandshakeType_e::client_key_exchange:
       this->ProcessClientKeyExchange(dynamic_cast<ClientKeyExchange *>(h->body));
       break;
+    case HandshakeType_e::finished:
+      this->ProcessClientFinished(dynamic_cast<Finished *>(h->body));
+      break;
     default:
+      printf("Unknown HandshakeType->type: %d\n", static_cast<int>(h->type));
       break;
     }
 
@@ -510,6 +515,38 @@ void HandshakeFSM::ProcessClientChangeCipherSpec(ChangeCipherSpec *ccs) {
     printf("Refusing to switch states.\n");
   }
 }
-void HandshakeFSM::ProcessClientFinished(uint8_t *, size_t) {}
-void HandshakeFSM::ProcessServerChangeCipherSpec() {}
-void HandshakeFSM::ProcessServerFinished() {}
+
+void HandshakeFSM::ProcessClientFinished(Finished *f) {
+  if (this->current_state != 6) {
+    printf("Bad state %d!\n", this->current_state);
+    return;
+  }
+
+  printf("Finished check (%d): \n", f->verify_data_length);
+  for (size_t i = 0; i < f->verify_data_length; i++) {
+    printf("%02x", f->verify_data[i]);
+  }
+  printf("\n");
+
+  this->current_state = 7;
+  this->ProcessServerChangeCipherSpec();
+}
+
+void HandshakeFSM::ProcessServerChangeCipherSpec() {
+  if (this->current_state != 7) {
+    printf("Bad state %d!\n", this->current_state);
+    return;
+  }
+
+  this->current_state = 8;
+  this->ProcessServerFinished();
+}
+
+void HandshakeFSM::ProcessServerFinished() {
+  if (this->current_state != 8) {
+    printf("Bad state %d!\n", this->current_state);
+    return;
+  }
+
+  this->current_state = 9;
+}

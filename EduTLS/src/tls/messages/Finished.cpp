@@ -19,7 +19,7 @@
 
 Finished::Finished() {
   this->verify_data = NULL;
-  this->verify_data_length = 12;
+  this->verify_data_length = 0;
 }
 Finished::~Finished() {
   if (this->verify_data != NULL) {
@@ -38,9 +38,9 @@ size_t Finished::encode_length() { return this->verify_data_length; }
 
 int Finished::decode(uint8_t *encoded, size_t length) {
   size_t i = 0;
-  this->verify_data = (uint8_t *)malloc(sizeof(uint8_t) * length);
   this->verify_data_length = length;
-  for (i = 0; i < 32 && i < length; i++) {
+  this->verify_data = (uint8_t *)malloc(sizeof(uint8_t) * this->verify_data_length);
+  for (i = 0; i < this->verify_data_length && i < length; i++) {
     this->verify_data[i] = encoded[i];
   }
   return 0;

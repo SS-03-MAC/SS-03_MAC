@@ -33,6 +33,8 @@ SecurityParameters::SecurityParameters() {
   this->mac_length = 0;
   this->mac_key_length = 0;
 
+  this->sequence_number = 0;
+
   for (i = 0; i < 32; i++) {
     server_random[i] = 0x00;
     client_random[i] = 0x00;

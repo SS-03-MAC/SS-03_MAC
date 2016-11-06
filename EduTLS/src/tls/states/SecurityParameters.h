@@ -46,6 +46,8 @@ public:
   uint8_t *mac_key;
   uint8_t *cipher_key;
 
+  uint64_t sequence_number;
+
   SecurityParameters();
   ~SecurityParameters();
 

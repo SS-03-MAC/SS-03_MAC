@@ -17,6 +17,7 @@
 #include "../messages/ChangeCipherSpec.h"
 #include "../messages/ClientHello.h"
 #include "../messages/ClientKeyExchange.h"
+#include "../messages/Finished.h"
 #include "./TLSConfiguration.h"
 #include "./TLSSession.h"
 #include <cstdint>
@@ -38,7 +39,7 @@ private:
   void ProcessServerHelloDone();
   void ProcessClientKeyExchange(ClientKeyExchange *m);
   void ProcessClientChangeCipherSpec(ChangeCipherSpec *ccs);
-  void ProcessClientFinished(uint8_t *data, size_t length);
+  void ProcessClientFinished(Finished *f);
   void ProcessServerChangeCipherSpec();
   void ProcessServerFinished();
 
