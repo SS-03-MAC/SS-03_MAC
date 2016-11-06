@@ -22,7 +22,7 @@
 
 class prf_sha256 final {
 private:
-  sha2_256 hasher;
+  sha2_256 *hasher;
   hmac *h;
 
   uint8_t *secret;

@@ -30,8 +30,9 @@ prf_sha256::prf_sha256(uint8_t *secret, size_t secret_length, uint8_t *seed, siz
   this->seed_length = seed_length;
   memcpy(this->seed, seed, seed_length);
 
-  this->hasher.init();
-  this->h = new hmac(&this->hasher, this->secret, this->secret_length);
+  this->hasher = new sha2_256();
+  this->hasher->init();
+  this->h = new hmac(this->hasher, this->secret, this->secret_length);
 }
 
 prf_sha256::~prf_sha256() {

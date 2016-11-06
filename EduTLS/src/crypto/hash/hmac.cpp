@@ -48,6 +48,8 @@ hmac::~hmac() {
   free(this->ipad);
   free(this->opad);
   free(this->key);
+
+  delete this->h;
 }
 
 void hmac::init() {
