@@ -31,6 +31,7 @@ public:
   TLSSession *state;
 
   GenericBlockCipher(TLSSession *state);
+  GenericBlockCipher(TLSSession *state, TLSCompressed *contents);
   ~GenericBlockCipher();
 
   int encode(uint8_t *);
