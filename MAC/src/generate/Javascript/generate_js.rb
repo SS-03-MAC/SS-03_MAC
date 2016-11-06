@@ -27,10 +27,13 @@ module Generation
     # used for constructor of javascript class
     def add_fields_str(in_hash)
       fields_str = ''
-      in_hash.each_key do |key|
-        fields_str += key + ', '
+      fields_str_quoted = ''
+      in_hash['fields'].each do |type|
+        fields_str += type['name'] + ', '
+        fields_str_quoted += '"' + type['name'] +'", '
       end
       out_hash = in_hash
+      out_hash['fields_str_quoted'] = fields_str_quoted[0..-3]
       out_hash['fields_str'] = fields_str[0..-3]
       out_hash
     end

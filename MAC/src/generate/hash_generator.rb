@@ -1,5 +1,7 @@
 require 'erb'
 require 'ostruct'
+require 'active_support/inflector'
+
 
 # This module allows us to generate source files using ERB
 module Generation
