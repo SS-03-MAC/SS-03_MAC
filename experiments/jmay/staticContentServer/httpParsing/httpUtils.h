@@ -5,13 +5,17 @@
 //#include <sstream>
 class httpUtils {
 private:
-  static char hexToChar(char c1, char c2);
-  static int hexToInt(char c);
-
-public:
+  static const char URI_EXTRA[];
+  static const char URI_PCHAR[];
   static const char URI_UNSAFE[];
+  static const char URI_SAFE[];
   static const char URL_RESERVED[];
 
+  static char hexToChar(char c1, char c2);
+  static int hexToInt(char c);
+  static bool charArrayContains(const char *c, int size, char search);
+
+public:
   inline static bool ingestLWS(std::istream *in) {
     bool hasCRLF;
     bool hasWSP;
@@ -84,9 +88,14 @@ public:
   }
 
   static bool isQueryStringSafe(char c);
-  static bool isUrlSafe(char c);
+  static bool isUriSafe(char c);
   static bool isUriUnsafe(char c);
   static bool isUriReserved(char c);
+  static bool isUriExtra(char c);
+  static bool isUriPchar(char c);
+  static bool isUriUchar(char c);
+  static bool isUriUnreserved(char c);
+  static bool isUriNational(char c);
 
   static std::string readToken(std::istream *in);
 

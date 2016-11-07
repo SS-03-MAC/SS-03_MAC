@@ -8,11 +8,12 @@
 
 int main() {
   httpParsing::AbsPath *p;
-  std::string test = "/t/test/t.php?hi=hello&test2&yes";
+  std::string test = "/t/test%20/t.php?hi=hel%20lo&test2&yes";
   try {
     p = new httpParsing::AbsPath(test);
-  } catch (const char *err) {
+  } catch (std::string err) {
     std::cout << err << std::endl;
+    return 1;
   }
   std::cout << p->getFullPath() << std::endl;
   std::cout << p->getFileName() << std::endl;

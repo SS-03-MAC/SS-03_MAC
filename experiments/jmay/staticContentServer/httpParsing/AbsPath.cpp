@@ -33,6 +33,7 @@ AbsPath::AbsPath(std::string &in) {
     }
   } while (state != 6);
   // todo?
+  queryString = httpUtils::uriDecode(queryString);
 }
 
 int AbsPath::state0(int c) {
@@ -59,7 +60,8 @@ int AbsPath::state1(int c) {
         return 5;
       }
     } else if (FSMTemp.str() != ".") {
-      elements.push_back(FSMTemp.str());
+      std::string tempStr = FSMTemp.str();
+      elements.push_back(httpUtils::uriDecode(tempStr));
     }
     FSMTemp.str("");
     if (c == EOF) {
@@ -69,7 +71,7 @@ int AbsPath::state1(int c) {
     } else { // c == '?'
       return 3;
     }
-  } else if (httpUtils::isUrlSafe((char) c)) {
+  } else if (httpUtils::isUriPchar((char) c)) {
     FSMTemp << (char) c;
     return 1;
   }
@@ -88,7 +90,7 @@ int AbsPath::state2(int c) {
   } else if (c == '?') {
     pathEndsInSlash = true;
     return 3;
-  } else if (httpUtils::isUrlSafe((char) c)) {
+  } else if (httpUtils::isUriPchar((char) c)) {
     FSMTemp << (char) c;
     return 1;
   }
@@ -137,7 +139,7 @@ int AbsPath::state4(int c) {
 int AbsPath::state5(int c) {
   std::cout << "state5" << std::endl;
   // Error state
-  throw FSMError.c_str();
+  throw FSMError;
 }
 
 std::string AbsPath::getFullPath() {

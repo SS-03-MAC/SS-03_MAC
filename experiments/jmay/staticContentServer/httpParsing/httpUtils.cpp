@@ -1,6 +1,9 @@
 #include "httpUtils.h"
 
+const char httpUtils::URI_EXTRA[] = {'!', '*', '\'', '(', ')', ','};
+const char httpUtils::URI_PCHAR[] = {':', '@', '&', '=', '+'}; // and UCHAR
 const char httpUtils::URI_UNSAFE[] = {'\127', ' ', '"', '#', '%', '<', '>'};// and CTL (0 through 31 and DEL(127))
+const char httpUtils::URI_SAFE[] = {'$', '-', '_', '.'};
 const char httpUtils::URL_RESERVED[] = {';', '/', '?', ':', '@', '&', '=', '+'};
 
 char httpUtils::hexToChar(char c1, char c2) {
@@ -18,6 +21,15 @@ int httpUtils::hexToInt(char c) {
     return (c - 'A') + 10;
   }
   throw "Invalid hex character.";
+}
+
+bool httpUtils::charArrayContains(const char *c, int size, char search) {
+  for (int i = 0; i < size; i++) {
+    if (c[i] == search) {
+      return true;
+    }
+  }
+  return false;
 }
 
 std::string httpUtils::readToken(std::istream *in) {
@@ -40,13 +52,11 @@ std::string httpUtils::readToken(std::istream *in) {
 }
 
 bool httpUtils::isQueryStringSafe(char c) {
-  // TODO
-  return true;
+  return isUriUchar(c) || isUriReserved(c);
 }
 
-bool httpUtils::isUrlSafe(char c) {
-  // TODO
-  return true;
+bool httpUtils::isUriSafe(char c) {
+  return charArrayContains(URI_SAFE, sizeof(URI_SAFE), c);
 }
 
 bool httpUtils::isUriUnsafe(char c) {
@@ -70,6 +80,27 @@ bool httpUtils::isUriReserved(char c) {
   return false;
 }
 
+bool httpUtils::isUriExtra(char c) {
+  return charArrayContains(URI_EXTRA, sizeof(URI_EXTRA), c);
+}
+
+bool httpUtils::isUriPchar(char c) {
+  return isUriUchar(c) || charArrayContains(URI_PCHAR, sizeof(URI_PCHAR), c);
+}
+
+bool httpUtils::isUriUchar(char c) {
+  // Warning: this is a partial check! The next two characters should be checked if it's escaped ('%').
+  return isUriUnreserved(c) || c == '%';
+}
+
+bool httpUtils::isUriUnreserved(char c) {
+  return isalnum(c) || isUriSafe(c) || isUriExtra(c) || isUriNational(c);
+}
+
+bool httpUtils::isUriNational(char c) {
+  return !(isalnum(c) || isUriReserved(c) || isUriExtra(c) || isUriSafe(c) || isUriUnsafe(c));
+}
+
 std::string httpUtils::uriDecode(std::string &uri) {
   std::stringstream decoded;
   for (int i = 0; i < uri.length(); i++) {
@@ -77,16 +108,11 @@ std::string httpUtils::uriDecode(std::string &uri) {
     case '%':
       // Validate % HEX HEX
       if (i + 2 < uri.length()) {
-        if (isxdigit(i + 1) && isxdigit(i + 2)) {
-          char decodedChar = hexToChar(uri[i], uri[i + 1]);
-          // Refuse unsafe and reserved characters
-          if (!isUriUnsafe(decodedChar) && !isUriReserved(decodedChar)) {
-            decoded << decodedChar;
-            i += 2;
-            break;
-          } else {
-            throw "Unsafe URI";
-          }
+        if (isxdigit(uri[i + 1]) && isxdigit(uri[i + 2])) {
+          char decodedChar = hexToChar(uri[i + 1], uri[i + 2]);
+          decoded << decodedChar;
+          i += 2;
+          break;
         }
       }
       // Intentional flow to default case
