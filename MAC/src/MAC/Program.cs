@@ -8,27 +8,20 @@ namespace ConsoleApplication
     {
         public static void Main(string[] args)
         {
-            MAC.Models.User user = new MAC.Models.User();
-            using (SqlConnection conn = new SqlConnection("Server=localhost;Database=MACDevlopment;Integrated Security=true"))
+            string requestMethod = Environment.GetEnvironmentVariable("REQUEST_METHOD");
+            if (requestMethod == "GET")
             {
-                conn.Open();
-                using(SqlCommand cmd = new SqlCommand())
-                {
-                    cmd.Connection = conn;
-                    cmd.CommandText = "SELECT * FROM Users where Id = 1";
-                    using (SqlDataReader reader = cmd.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
-                            user = (MAC.Models.User)MAC.Models.BaseModelFactory.FillModel(typeof(MAC.Models.User), reader);
-                        } 
-                    }
-                }
+                // Check if id exist if yes go to get one
+            } else if (requestMethod == "GET")
+            {
+                // Get All Here
             }
-            ;
-            Console.WriteLine(user.ToInsertStatement().CommandText);
-            Console.WriteLine(user.ToUpdateStatement().CommandText);
-            Console.ReadLine();
+            if (requestMethod == "POST")
+            {
+
+            }
+            
+
         }
     }
 }
