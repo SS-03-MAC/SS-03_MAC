@@ -630,7 +630,7 @@ void HandshakeFSM::ProcessServerChangeCipherSpec() {
   // printf("Ciphertext length: %d\n", m->length);
   m->version.major = 0x03;
   m->version.minor = 0x03;
-  m->type = ContentType_e::handshake;
+  m->type = ContentType_e::change_cipher_spec;
 
   m->encode(data);
   length = m->encode_length();
