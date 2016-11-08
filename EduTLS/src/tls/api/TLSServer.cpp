@@ -120,7 +120,7 @@ void TLSServer::Write(uint8_t *data, size_t length) {
   uint8_t buffer[65536];
   size_t buffer_length = 0;
 
-  TLSCiphertext *m = Sending_f::Construct(ContentType_e::handshake, data, length, this->state);
+  TLSCiphertext *m = Sending_f::Construct(ContentType_e::application_data, data, length, this->state);
 
   m->encode(buffer);
   buffer_length = m->encode_length();

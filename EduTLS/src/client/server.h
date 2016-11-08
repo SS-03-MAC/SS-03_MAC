@@ -114,6 +114,8 @@ inline int serve() {
     size_t length = srv->Read(buffer);
     buffer[length] = '\0';
     std::cout << "Received data of length: " << length << std::endl << buffer << std::endl;
+
+    srv->Write((uint8_t *)"Alex Was Here", 13);
   }
 
   delete srv;
