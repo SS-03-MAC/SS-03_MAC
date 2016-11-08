@@ -40,4 +40,20 @@ public:
 
     return NULL;
   };
+
+  static inline CipherFragment_t *Construct(CipherType_e type, TLSCompressed *c, TLSSession *state) {
+    switch (type) {
+    case CipherType_e::stream:
+      return new GenericStreamCipher(state, c);
+      break;
+    case CipherType_e::block:
+      return new GenericBlockCipher(state, c);
+      break;
+    case CipherType_e::aead:
+      return new GenericAEADCipher(state);
+      break;
+    }
+
+    return NULL;
+  };
 };
