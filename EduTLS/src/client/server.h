@@ -1,5 +1,6 @@
 #include "../crypto/crypto.h"
 #include "../encoding/encoding.h"
+#include "../tls/abstractions/ServerStream.h"
 #include "../tls/tls.h"
 
 #include <cstdio>
@@ -109,13 +110,17 @@ inline int serve() {
   srv->AcceptClient(c);
   srv->Handshake();
 
-  while (true) {
-    uint8_t buffer[65536];
-    size_t length = srv->Read(buffer);
-    buffer[length] = '\0';
-    std::cout << "Received data of length: " << length << std::endl << buffer << std::endl;
+  TLSServerStream *srv_s = new TLSServerStream(srv);
 
-    srv->Write((uint8_t *)"Alex Was Here", 13);
+  while (true) {
+    std::string s;
+    std::cout << "Received data\n" << srv_s << std::endl;
+
+    srv->Write(
+        (uint8_t *)"HTTP/1.1 200 OK\r\nDate: Mon, 27 Jul 2009 12:28:53 GMT\r\nServer: Apache/2.2.14 "
+                   "(Win32)\r\nLast-Modified: Wed, 22 Jul 2009 19:15:56 GMT\r\nContent-Length: 50\r\nContent-Type: "
+                   "text/html\r\nConnection: Closed\r\n\r\n<html><body><h1>Hello, World!</h1></body></html>\r\n",
+        248);
   }
 
   delete srv;
