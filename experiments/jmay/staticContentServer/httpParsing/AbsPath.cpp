@@ -27,7 +27,7 @@ AbsPath::AbsPath(std::string &in) {
       break;
     case 4:state = state4(currentChar);
       break;
-    case 5:state = state5(currentChar);
+    case 5:state = state5();
       break;
     default:throw "Finite state machine is broken";
     }
@@ -136,7 +136,7 @@ int AbsPath::state4(int c) {
   return 5;
 }
 
-int AbsPath::state5(int c) {
+int AbsPath::state5() {
   std::cout << "state5" << std::endl;
   // Error state
   throw FSMError;
@@ -144,7 +144,7 @@ int AbsPath::state5(int c) {
 
 std::string AbsPath::getFullPath() {
   std::stringstream out;
-  for (int i = 0; i < elements.size(); i++) {
+  for (unsigned int i = 0; i < elements.size(); i++) {
     out << '/' << elements[i];
   }
   return out.str();

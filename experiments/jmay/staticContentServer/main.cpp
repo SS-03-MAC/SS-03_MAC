@@ -56,7 +56,8 @@ void handleClient(int clientFd) {
   }
   std::cout << "Request: " << headers->toString() << std::endl;
 
-  std::ifstream *fileStream = getFile(headers->path); //new std::ifstream("c:\\test.txt", std::ifstream::in);
+  std::string path = headers->path->getFullPath();
+  std::ifstream *fileStream = getFile(path); //new std::ifstream("c:\\test.txt", std::ifstream::in);
 
   if (fileStream->fail()) {
     std::cout << "Error opening file" << std::endl;
@@ -67,7 +68,8 @@ void handleClient(int clientFd) {
   } else {
     httpResponseHeaderCollection resp("HTTP/1.1", 200, "Success");
 
-    resp.push_back(new httpHeader("Content-Length", std::to_string(getFileSize(headers->path))));
+    std::string path = headers->path->getFullPath();
+    resp.push_back(new httpHeader("Content-Length", std::to_string(getFileSize(path))));
 
     std::string headerString(resp.toString());
     write(clientFd, headerString.c_str(), headerString.length());

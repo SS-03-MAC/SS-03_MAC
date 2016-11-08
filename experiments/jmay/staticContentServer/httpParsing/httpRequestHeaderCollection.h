@@ -1,6 +1,7 @@
 #pragma once
 
 #include "httpHeaderCollection.h"
+#include "AbsPath.h"
 
 class httpRequestHeaderCollection : public httpHeaderCollection {
 private:
@@ -11,6 +12,7 @@ private:
 public:
   httpRequestHeaderCollection(std::istream *input);
   httpRequestHeaderCollection(std::string verb, std::string path, std::string httpVersion);
+  ~httpRequestHeaderCollection();
 
-  std::string path;
+  httpParsing::AbsPath *path;
 };

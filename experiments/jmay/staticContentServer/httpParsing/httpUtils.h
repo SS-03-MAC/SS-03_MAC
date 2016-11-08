@@ -69,7 +69,6 @@ public:
 
   inline static std::string readUntilEndOfVal(std::istream *in) {
     std::stringstream out;
-    bool headerDone = false;
     bool firstTime = true;
     ingestLWS(in);
 

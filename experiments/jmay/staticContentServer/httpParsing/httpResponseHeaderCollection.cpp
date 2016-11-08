@@ -20,9 +20,6 @@ void httpResponseHeaderCollection::parseFirstLine() {
   // Find separations
   versionEnd = firstLine.find(' ', 0);
   statusValEnd = firstLine.find(' ', versionEnd + 1);
-  if (versionEnd < 0 || statusValEnd < 0) {
-    throw "Response header status line is malformed";
-  }
   // Parse HTTP version
   httpVersion = firstLine.substr(0, versionEnd);
   // Parse status val

@@ -1,5 +1,6 @@
 #pragma once
 
+#include <sstream>
 #include <string>
 #include <vector>
 
@@ -16,7 +17,7 @@ private:
   int state2(int c);
   int state3(int c);
   int state4(int c);
-  int state5(int c);
+  int state5();
   std::string FSMError;
   std::stringstream FSMTemp;
 

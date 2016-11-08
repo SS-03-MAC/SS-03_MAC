@@ -63,7 +63,7 @@ bool httpUtils::isUriUnsafe(char c) {
   if (c < 32) {
     return true;
   }
-  for (int i = 0; i < sizeof(URI_UNSAFE); i++) {
+  for (unsigned int i = 0; i < sizeof(URI_UNSAFE); i++) {
     if (c == URI_UNSAFE[i]) {
       return true;
     }
@@ -72,7 +72,7 @@ bool httpUtils::isUriUnsafe(char c) {
 }
 
 bool httpUtils::isUriReserved(char c) {
-  for (int i = 0; i < sizeof(URL_RESERVED); i++) {
+  for (unsigned int i = 0; i < sizeof(URL_RESERVED); i++) {
     if (c == URL_RESERVED[i]) {
       return true;
     }
@@ -103,7 +103,7 @@ bool httpUtils::isUriNational(char c) {
 
 std::string httpUtils::uriDecode(std::string &uri) {
   std::stringstream decoded;
-  for (int i = 0; i < uri.length(); i++) {
+  for (unsigned int i = 0; i < uri.length(); i++) {
     switch (uri[i]) {
     case '%':
       // Validate % HEX HEX
@@ -125,7 +125,7 @@ std::string httpUtils::uriDecode(std::string &uri) {
 
 std::string httpUtils::uriEncode(std::string &uri) {
   std::stringstream out;
-  for (int i = 0; i < uri.length(); i++) {
+  for (unsigned int i = 0; i < uri.length(); i++) {
     if (isUriReserved(uri[i]) || isUriUnsafe(uri[i])) {
       out << '%';
       out << std::hex << (int) uri[i];

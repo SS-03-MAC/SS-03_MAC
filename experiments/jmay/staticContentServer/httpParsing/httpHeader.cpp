@@ -40,7 +40,7 @@ std::string httpHeader::toString() {
   std::stringstream out;
   out << key << ": ";
   // Replace LFs with (SP)CRLF
-  for (int i = 0; i < value.length(); i++) {
+  for (unsigned int i = 0; i < value.length(); i++) {
     if (value[i] == '\n') {
       out << "\r\n ";
     } else {
