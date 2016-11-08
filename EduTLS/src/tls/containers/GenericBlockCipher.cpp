@@ -51,6 +51,10 @@ GenericBlockCipher::GenericBlockCipher(TLSSession *state, TLSCompressed *content
   this->content = (uint8_t *)malloc(sizeof(uint8_t) * this->contents->encode_length());
   this->contents->encode(this->content);
 
+  this->iv = (uint8_t *)malloc(sizeof(uint8_t) * this->iv_length);
+
+  edutls_rand_bytes(this->iv, this->iv_length);
+
   size_t i = 0;
 
   hmac *h =
@@ -93,6 +97,15 @@ GenericBlockCipher::GenericBlockCipher(TLSSession *state, TLSCompressed *content
   }
   printf("\n");
 
+  size_t contents_size = this->content_length + this->mac_length;
+  this->padding_length = this->iv_length - (contents_size % this->iv_length) - 1;
+  this->padding = (uint8_t *)malloc(sizeof(uint8_t) * this->padding_length);
+  for (i = 0; i < this->padding_length; i++) {
+    this->padding[i] = this->padding_length;
+  }
+
+  printf("0 =?= %zu", (contents_size + padding_length + 1) % this->iv_length);
+
   delete h;
 }
 
@@ -111,8 +124,43 @@ GenericBlockCipher::~GenericBlockCipher() {
   }
 }
 
-int GenericBlockCipher::encode(uint8_t *) { return 0; }
-size_t GenericBlockCipher::encode_length() { return 0; }
+int GenericBlockCipher::encode(uint8_t *result) {
+  uint8_t ciphertext[this->iv_length + this->content_length + this->mac_length + this->padding_length + 1];
+  uint8_t plaintext[this->content_length + this->mac_length + this->padding_length + 1];
+
+  size_t i = 0;
+  size_t p_p = 0;
+  for (i = 0; i < this->content_length; i++) {
+    plaintext[p_p++] = this->content[i];
+  }
+  for (i = 0; i < this->mac_length; i++) {
+    plaintext[p_p++] = this->mac[i];
+  }
+  for (i = 0; i < this->padding_length; i++) {
+    plaintext[p_p++] = this->padding[i];
+  }
+  plaintext[p_p++] = this->padding_length;
+
+  aes *cipher =
+      new aes(this->state->current_write_params->cipher_key, this->state->current_write_params->enc_key_length);
+  cbc *block_mode = new cbc(cipher, this->iv);
+  block_mode->encrypt(&(ciphertext[this->iv_length]), plaintext,
+                      this->content_length + this->mac_length + this->padding_length + 1);
+
+  for (i = 0; i < this->iv_length; i++) {
+    ciphertext[i] = this->iv[i];
+  }
+
+  for (i = 0; i < this->iv_length + this->content_length + this->mac_length + this->padding_length + 1; i++) {
+    result[i] = ciphertext[i];
+  }
+
+  return 0;
+}
+
+size_t GenericBlockCipher::encode_length() {
+  return this->iv_length + this->content_length + this->mac_length + this->padding_length + 1;
+}
 
 int GenericBlockCipher::decode(uint8_t *encoded, size_t length) {
   bool valid_padding = true;
