@@ -51,6 +51,32 @@ GenericBlockCipher::GenericBlockCipher(TLSSession *state, TLSCompressed *content
   this->content = (uint8_t *)malloc(sizeof(uint8_t) * this->contents->encode_length());
   this->contents->encode(this->content);
 
+  size_t contents_size = this->content_length + this->mac_length;
+  this->padding_length = this->iv_length - (contents_size % this->iv_length) - 1;
+  this->padding = (uint8_t *)malloc(sizeof(uint8_t) * this->padding_length);
+  for (size_t i = 0; i < this->padding_length; i++) {
+    this->padding[i] = this->padding_length;
+  }
+
+  printf("0 =?= %zu\n", (contents_size + padding_length + 1) % this->iv_length);
+}
+
+GenericBlockCipher::~GenericBlockCipher() {
+  if (this->iv != NULL) {
+    free(this->iv);
+  }
+  if (this->content != NULL) {
+    free(this->content);
+  }
+  if (this->mac != NULL) {
+    free(this->mac);
+  }
+  if (this->padding != NULL) {
+    free(this->padding);
+  }
+}
+
+int GenericBlockCipher::encode(uint8_t *result) {
   this->iv = (uint8_t *)malloc(sizeof(uint8_t) * this->iv_length);
 
   edutls_rand_bytes(this->iv, this->iv_length);
@@ -73,10 +99,13 @@ GenericBlockCipher::GenericBlockCipher(TLSSession *state, TLSCompressed *content
   raw_data[5] = (this->state->current_write_params->sequence_number >> 16) & 0xFF;
   raw_data[6] = (this->state->current_write_params->sequence_number >> 8) & 0xFF;
   raw_data[7] = (this->state->current_write_params->sequence_number >> 0) & 0xFF;
-  // TODO pass these values in
-  raw_data[8] = 0x16;
-  raw_data[9] = 0x03;
-  raw_data[10] = 0x03;
+
+  printf("\n\n~~Interesting~~\nThis packet type: %d\nProtocol version %02x,%02x.\n", static_cast<uint8_t>(this->type),
+         this->version.major, this->version.minor);
+
+  raw_data[8] = static_cast<uint8_t>(this->type);
+  raw_data[9] = this->version.major;
+  raw_data[10] = this->version.minor;
   raw_data[11] = (this->content_length >> 8) & 0xFF;
   raw_data[12] = this->content_length & 0xFF;
   for (i = 0; i < this->content_length; i++) {
@@ -97,39 +126,13 @@ GenericBlockCipher::GenericBlockCipher(TLSSession *state, TLSCompressed *content
   }
   printf("\n");
 
-  size_t contents_size = this->content_length + this->mac_length;
-  this->padding_length = this->iv_length - (contents_size % this->iv_length) - 1;
-  this->padding = (uint8_t *)malloc(sizeof(uint8_t) * this->padding_length);
-  for (i = 0; i < this->padding_length; i++) {
-    this->padding[i] = this->padding_length;
-  }
-
-  printf("0 =?= %zu", (contents_size + padding_length + 1) % this->iv_length);
-
   delete h;
-}
 
-GenericBlockCipher::~GenericBlockCipher() {
-  if (this->iv != NULL) {
-    free(this->iv);
-  }
-  if (this->content != NULL) {
-    free(this->content);
-  }
-  if (this->mac != NULL) {
-    free(this->mac);
-  }
-  if (this->padding != NULL) {
-    free(this->padding);
-  }
-}
-
-int GenericBlockCipher::encode(uint8_t *result) {
   uint8_t ciphertext[this->iv_length + this->content_length + this->mac_length + this->padding_length + 1];
   uint8_t plaintext[this->content_length + this->mac_length + this->padding_length + 1];
 
-  size_t i = 0;
   size_t p_p = 0;
+  i = 0;
   for (i = 0; i < this->content_length; i++) {
     plaintext[p_p++] = this->content[i];
   }
@@ -154,6 +157,8 @@ int GenericBlockCipher::encode(uint8_t *result) {
   for (i = 0; i < this->iv_length + this->content_length + this->mac_length + this->padding_length + 1; i++) {
     result[i] = ciphertext[i];
   }
+
+  printf("Made it to end!\n");
 
   return 0;
 }
@@ -246,10 +251,9 @@ int GenericBlockCipher::decode(uint8_t *encoded, size_t length) {
     raw_data[5] = (this->state->current_read_params->sequence_number >> 16) & 0xFF;
     raw_data[6] = (this->state->current_read_params->sequence_number >> 8) & 0xFF;
     raw_data[7] = (this->state->current_read_params->sequence_number >> 0) & 0xFF;
-    // TODO pass these values in
-    raw_data[8] = 0x16;
-    raw_data[9] = 0x03;
-    raw_data[10] = 0x03;
+    raw_data[8] = static_cast<uint8_t>(this->type);
+    raw_data[9] = this->version.major;
+    raw_data[10] = this->version.minor;
     raw_data[11] = (this->content_length >> 8) & 0xFF;
     raw_data[12] = this->content_length & 0xFF;
     for (i = 0; i < this->content_length; i++) {
