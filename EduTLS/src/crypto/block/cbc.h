@@ -11,14 +11,14 @@
 ///
 //===----------------------------------------------------------------------===//
 
+#pragma once
+
 #include "../symmetric/symmetric.h"
 #include "../utils.h"
 #include <cstddef>
 #include <cstdint>
 #include <exception>
 #include <iostream>
-
-#pragma once
 
 class cbc final : public symmetric {
 private:
@@ -36,6 +36,7 @@ public:
     for (unsigned long i = 0; i < count / (this->cipher->block_size / 8); i++) {
       edutls_xor(output, input, prev, this->cipher->block_size / 8);
       this->cipher->encrypt(output, output, this->cipher->block_size / 8);
+      prev = output;
       output += this->cipher->block_size / 8;
       input += this->cipher->block_size / 8;
     }
@@ -53,6 +54,7 @@ public:
       this->cipher->decrypt(output, input, this->cipher->block_size / 8);
       edutls_xor(output, output, prev, this->cipher->block_size / 8);
       output += this->cipher->block_size / 8;
+      prev = input;
       input += this->cipher->block_size / 8;
     }
 

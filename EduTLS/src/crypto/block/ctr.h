@@ -11,13 +11,13 @@
 ///
 //===----------------------------------------------------------------------===//
 
+#pragma once
+
 #include "../symmetric/symmetric.h"
 #include <cstddef>
 #include <cstdint>
 #include <exception>
 #include <iostream>
-
-#pragma once
 
 class ctr final : public symmetric {
 private:

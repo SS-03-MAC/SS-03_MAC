@@ -12,23 +12,24 @@
 ///
 //===----------------------------------------------------------------------===//
 
+#pragma once
+
 #include "../../bignum/bigint.h"
 
 #include <cstddef>
 #include <cstdint>
-
-#pragma once
+#include <gmp.h>
 
 #define PUBLIC_KEY 1
 #define PRIVATE_KEY 2
 
 class rsa {
 private:
-  BigInt *n;
-  BigInt *e;
-  BigInt *d;
-  BigInt *p;
-  BigInt *q;
+  mpz_t n;
+  mpz_t e;
+  mpz_t d;
+  mpz_t p;
+  mpz_t q;
 
   uint16_t bits;
 
@@ -37,19 +38,19 @@ private:
   void gen_modulus();
 
 public:
-  void encrypt(BigInt *output, BigInt *input);
-  void decrypt(BigInt *output, BigInt *input);
-  void sign(BigInt *output, BigInt *input);
-  void verify(BigInt *output, BigInt *input);
+  void encrypt(mpz_t output, mpz_t input);
+  void decrypt(mpz_t output, mpz_t input);
+  void sign(mpz_t output, mpz_t input);
+  void verify(mpz_t output, mpz_t input);
 
-  void exponent(BigInt *e);
-  void priv(BigInt *d);
-  void priv(BigInt *p, BigInt *q);
-  void modulus(BigInt *n);
+  void exponent(mpz_t e);
+  void priv(mpz_t d);
+  void priv(mpz_t p, mpz_t q);
+  void modulus(mpz_t n);
 
   int get_types();
 
   rsa();
-  rsa(BigInt *p, BigInt *q, BigInt *e);
+  rsa(mpz_t p, mpz_t q, mpz_t e);
   ~rsa();
 };

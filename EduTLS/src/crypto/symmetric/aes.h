@@ -12,12 +12,12 @@
 ///
 //===----------------------------------------------------------------------===//
 
+#pragma once
+
 #include "symmetric.h"
 
 #include <cstddef>
 #include <cstdint>
-
-#pragma once
 
 class aes final : public symmetric {
 private:

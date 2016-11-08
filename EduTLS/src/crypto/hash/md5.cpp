@@ -135,11 +135,11 @@ void md5::init() {
   this->le_padding = true;
   this->t_len = 0;
   this->b_len = 0;
-  this->b_max = 64;
+  this->block_size = 64;
 
-  this->block = new uint8_t[this->b_max];
+  this->block = new uint8_t[this->block_size];
 
-  for (this->b_len = 0; this->b_len < this->b_max; this->b_len++) {
+  for (this->b_len = 0; this->b_len < this->block_size; this->b_len++) {
     this->block[this->b_len] = 0;
   }
 
