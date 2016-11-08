@@ -14,35 +14,9 @@
 #include <sys/socket.h>
 #include <unistd.h>
 
-inline int serve() {
-  int s = socket(AF_INET, SOCK_STREAM, 0);
-
-  int optval = 1;
-  setsockopt(s, SOL_SOCKET, SO_REUSEADDR, &optval, sizeof optval);
-
-  struct sockaddr_in addr;
-  addr.sin_family = AF_INET;
-  addr.sin_port = htons(8443);
-  addr.sin_addr.s_addr = htonl(INADDR_LOOPBACK);
-
-  if (s == -1) {
-    return -1;
-  }
-
-  int b = bind(s, (struct sockaddr *)&addr, sizeof(addr));
-  int l = listen(s, 1);
-  struct sockaddr_in client_addr;
-  std::cout << "Waiting for client..." << std::endl;
-  std::cout << b << l << std::endl;
-  if (b == -1 || l == -1) {
-    return -1;
-  }
-
-  socklen_t *clilen = (socklen_t *)sizeof(client_addr);
-  int c = accept(s, (sockaddr *)&client_addr, (socklen_t *)&clilen);
-
+inline void handle(int c) {
   TLSConfiguration *config = new TLSConfiguration();
-  config->debug = true;
+  config->debug = false;
   config->cert.certificate_length = 806;
   config->cert.certificate_data = (uint8_t *)malloc(sizeof(uint8_t) * 806);
   std::string cert =
@@ -110,27 +84,69 @@ inline int serve() {
   srv->AcceptClient(c);
   srv->Handshake();
 
-  TLSServerStream *srv_s = new TLSServerStream(srv);
+  uint8_t buffer[65536];
+  size_t length = srv->Read(buffer);
+  buffer[length] = '\0';
+  std::cout << "Received data of length: " << length << std::endl << buffer << std::endl;
 
-  while (true) {
-    std::string s;
-    std::cout << "Received data\n" << srv_s << std::endl;
+  srv->Write(
+      (uint8_t *)"HTTP/1.1 200 OK\r\nDate: Mon, 27 Jul 2009 12:28:53 GMT\r\nServer: Apache/2.2.14 "
+                 "(Win32)\r\nLast-Modified: Wed, 22 Jul 2009 19:15:56 GMT\r\nContent-Length: 50\r\nContent-Type: "
+                 "text/html\r\nConnection: Closed\r\n\r\n<html><body><h1>Hello, World!</h1></body></html>\r\n",
+      248);
 
-    srv->Write(
-        (uint8_t *)"HTTP/1.1 200 OK\r\nDate: Mon, 27 Jul 2009 12:28:53 GMT\r\nServer: Apache/2.2.14 "
-                   "(Win32)\r\nLast-Modified: Wed, 22 Jul 2009 19:15:56 GMT\r\nContent-Length: 50\r\nContent-Type: "
-                   "text/html\r\nConnection: Closed\r\n\r\n<html><body><h1>Hello, World!</h1></body></html>\r\n",
-        248);
-  }
+  srv->Close();
 
   delete srv;
   delete config;
   mpz_clear(key_n);
   mpz_clear(key_d);
   mpz_clear(key_e);
+  close(c);
+}
+
+inline void fork(int c) {
+  int child = fork();
+  if (child == -1) {
+    std::cout << "Forking a handling thread failed" << std::endl;
+  } else if (child == 0) {
+    handle(c);
+    exit(0);
+  }
+}
+
+inline int serve() {
+  int s = socket(AF_INET, SOCK_STREAM, 0);
+
+  int optval = 1;
+  setsockopt(s, SOL_SOCKET, SO_REUSEADDR, &optval, sizeof optval);
+
+  struct sockaddr_in addr;
+  addr.sin_family = AF_INET;
+  addr.sin_port = htons(8443);
+  addr.sin_addr.s_addr = htonl(INADDR_LOOPBACK);
+
+  if (s == -1) {
+    return -1;
+  }
+
+  int b = bind(s, (struct sockaddr *)&addr, sizeof(addr));
+  int l = listen(s, 1);
+  struct sockaddr_in client_addr;
+  std::cout << "Waiting for client..." << std::endl;
+  // std::cout << b << l << std::endl;
+  if (b == -1 || l == -1) {
+    return -1;
+  }
+
+  while (true) {
+    socklen_t *clilen = (socklen_t *)sizeof(client_addr);
+    int c = accept(s, (sockaddr *)&client_addr, (socklen_t *)&clilen);
+
+    fork(c);
+  }
 
   close(b);
-  close(c);
   close(s);
 
   return 0;
