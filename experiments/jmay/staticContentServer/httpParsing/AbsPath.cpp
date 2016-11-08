@@ -161,3 +161,11 @@ std::string AbsPath::getFileName() {
 std::string AbsPath::getQueryString() {
   return queryString;
 }
+
+bool AbsPath::beginsWith(std::string element) {
+  //TODO The path should be parsed now to prevent escaping "/"
+  if (elements.size() == 0) {
+    return element == "";
+  }
+  return element == elements[0];
+}

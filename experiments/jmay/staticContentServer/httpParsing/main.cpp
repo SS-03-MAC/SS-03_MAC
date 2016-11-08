@@ -15,6 +15,7 @@ int main() {
     std::cout << err << std::endl;
     return 1;
   }
+  std::cout << p->beginsWith("") << std::endl;
   std::cout << p->getFullPath() << std::endl;
   std::cout << p->getFileName() << std::endl;
   std::cout << p->getQueryString() << std::endl;

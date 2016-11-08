@@ -26,5 +26,6 @@ public:
   std::string getFullPath();
   std::string getFileName();
   std::string getQueryString();
+  bool beginsWith(std::string element);
 };
 }
