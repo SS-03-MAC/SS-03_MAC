@@ -17,7 +17,9 @@
 #include "../abstractions/SendingFactory.h"
 #include "../containers/GenericStreamCipher.h"
 #include "../containers/TLSCiphertext.h"
+#include "../enums/Alert.h"
 #include "../enums/ConnectionStates.h"
+#include "../messages/Alert.h"
 #include "../states/HandshakeFSM.h"
 #include "../states/TLSConfiguration.h"
 #include "../states/TLSSession.h"
@@ -39,6 +41,8 @@ TLSServer::TLSServer(TLSConfiguration *config) {
   this->socket = -1;
   this->pq = NULL;
   this->hs = NULL;
+
+  this->closed = false;
 }
 
 TLSServer::~TLSServer() {
@@ -49,6 +53,8 @@ TLSServer::~TLSServer() {
   if (this->hs != NULL) {
     delete this->hs;
   }
+
+  this->closed = true;
 }
 
 void TLSServer::Handshake() {
@@ -58,15 +64,23 @@ void TLSServer::Handshake() {
 
   this->hs->InitialHandshake(this->pq);
 
+  this->closed = false;
+
   return;
 }
 
 void TLSServer::AcceptClient(int client) {
   this->socket = client;
   this->pq = new PacketQueue(client, 3, 2);
+
+  this->closed = false;
 }
 
 size_t TLSServer::Read(uint8_t *output) {
+  if (this->closed || this->hs == NULL) {
+    return 0;
+  }
+
   uint8_t buffer[65536];
   size_t length = pq->ReadPacket(buffer);
 
@@ -78,7 +92,10 @@ size_t TLSServer::Read(uint8_t *output) {
     char hex[2 * length + 1];
     toHex(hex, buffer, length);
     hex[2 * length] = '\0';
-    std::cout << "Decoding message:\n" << hex << std::endl;
+
+    if (this->config->debug) {
+      std::cout << "Decoding message:\n" << hex << std::endl;
+    }
 
     c->decode(buffer, length);
     if (c->fragment == NULL) {
@@ -107,6 +124,7 @@ size_t TLSServer::Read(uint8_t *output) {
       if (this->hs == NULL) {
         this->hs = new HandshakeFSM(this->state, this->config);
       }
+      printf("Processing message as handshake...\n");
       this->hs->ProcessMessage(buffer, length);
 
       length = pq->ReadPacket(buffer);
@@ -117,6 +135,10 @@ size_t TLSServer::Read(uint8_t *output) {
 }
 
 void TLSServer::Write(uint8_t *data, size_t length) {
+  if (this->closed || this->hs == NULL) {
+    return;
+  }
+
   uint8_t buffer[65536];
   size_t buffer_length = 0;
 
@@ -128,4 +150,23 @@ void TLSServer::Write(uint8_t *data, size_t length) {
   this->pq->WritePacket(buffer, buffer_length);
 }
 
-void TLSServer::Close() {}
+void TLSServer::Close() {
+  uint8_t buffer[65536];
+  size_t buffer_length = 0;
+
+  Alert close;
+  close.level = AlertLevel_e::warning;
+  close.description = AlertDescription_e::close_notify;
+
+  buffer_length = close.encode_length();
+  close.encode(buffer);
+
+  TLSCiphertext *m = Sending_f::Construct(ContentType_e::alert, buffer, buffer_length, this->state);
+
+  m->encode(buffer);
+  buffer_length = m->encode_length();
+
+  this->pq->WritePacket(buffer, buffer_length);
+
+  this->closed = true;
+}

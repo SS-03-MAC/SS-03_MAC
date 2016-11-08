@@ -43,17 +43,8 @@ int TLSCiphertext::encode(uint8_t *result) {
   result[3] = (this->length >> 8) & 0xFF;
   result[4] = this->length & 0xFF;
 
-  printf("\n\n~~Interesting~~\nFragment packet type: %d\nProtocol version %02x,%02x.\n",
-         static_cast<uint8_t>(this->fragment->type), this->fragment->version.major, this->fragment->version.minor);
-
-  printf("\n\n~~Interesting~~\nCiphertext packet type: %d\nProtocol version %02x,%02x.\n",
-         static_cast<uint8_t>(this->type), this->version.major, this->version.minor);
-
   this->fragment->type = this->type;
   this->fragment->version = this->version;
-
-  printf("\n\n~~Interesting~~\nFragment packet type: %d\nProtocol version %02x,%02x.\n",
-         static_cast<uint8_t>(this->fragment->type), this->fragment->version.major, this->fragment->version.minor);
 
   return this->fragment->encode(&(result[5]));
 }
@@ -77,8 +68,6 @@ int TLSCiphertext::decode(uint8_t *encoded, size_t length) {
   if (this->length != length - 5) {
     return -3;
   }
-
-  printf("Current READ Cipher type: %d\n", static_cast<int>(this->state->current_read_params->cipher_type));
 
   this->fragment = CipherFragment_f::Construct(this->state->current_read_params->cipher_type, this->state);
   this->fragment->type = this->type;

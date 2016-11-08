@@ -30,9 +30,9 @@ private:
 
   int socket;
 
-  time_t last_packet;
-
   PacketQueue *pq;
+
+  bool closed;
 
 public:
   TLSServer(TLSConfiguration *config);

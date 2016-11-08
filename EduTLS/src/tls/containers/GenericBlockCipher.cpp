@@ -57,8 +57,6 @@ GenericBlockCipher::GenericBlockCipher(TLSSession *state, TLSCompressed *content
   for (size_t i = 0; i < this->padding_length; i++) {
     this->padding[i] = this->padding_length;
   }
-
-  printf("0 =?= %zu\n", (contents_size + padding_length + 1) % this->iv_length);
 }
 
 GenericBlockCipher::~GenericBlockCipher() {
@@ -90,7 +88,6 @@ int GenericBlockCipher::encode(uint8_t *result) {
   this->mac = (uint8_t *)malloc(sizeof(uint8_t) * this->mac_length);
 
   uint8_t raw_data[13 + this->content_length];
-  printf("Sequence Number: %zu\n", this->state->current_write_params->sequence_number);
   raw_data[0] = (this->state->current_write_params->sequence_number >> 56) & 0xFF;
   raw_data[1] = (this->state->current_write_params->sequence_number >> 48) & 0xFF;
   raw_data[2] = (this->state->current_write_params->sequence_number >> 40) & 0xFF;
@@ -100,9 +97,6 @@ int GenericBlockCipher::encode(uint8_t *result) {
   raw_data[6] = (this->state->current_write_params->sequence_number >> 8) & 0xFF;
   raw_data[7] = (this->state->current_write_params->sequence_number >> 0) & 0xFF;
 
-  printf("\n\n~~Interesting~~\nThis packet type: %d\nProtocol version %02x,%02x.\n", static_cast<uint8_t>(this->type),
-         this->version.major, this->version.minor);
-
   raw_data[8] = static_cast<uint8_t>(this->type);
   raw_data[9] = this->version.major;
   raw_data[10] = this->version.minor;
@@ -111,20 +105,11 @@ int GenericBlockCipher::encode(uint8_t *result) {
   for (i = 0; i < this->content_length; i++) {
     raw_data[13 + i] = this->content[i];
   }
-  printf("HMAC contents: \n");
   for (i = 0; i < this->content_length + 13; i++) {
-    printf("%02x", raw_data[i]);
   }
-  printf("\n");
 
   h->sum(this->mac, raw_data, this->content_length + 13);
   this->state->current_write_params->sequence_number += 1;
-
-  printf("Calculated Mac: \n");
-  for (i = 0; i < this->mac_length; i++) {
-    printf("%02x", this->mac[i]);
-  }
-  printf("\n");
 
   delete h;
 
@@ -158,8 +143,6 @@ int GenericBlockCipher::encode(uint8_t *result) {
     result[i] = ciphertext[i];
   }
 
-  printf("Made it to end!\n");
-
   return 0;
 }
 
@@ -188,49 +171,29 @@ int GenericBlockCipher::decode(uint8_t *encoded, size_t length) {
   block_mode->decrypt(data, &(encoded[this->iv_length]), data_length);
 
   i = 0;
-  printf("Decrypted Data:\n");
-  for (i = 0; i < data_length; i++) {
-    printf("%02x", data[i]);
-  }
-  printf("\n");
 
   this->padding_length = data[data_length - 1];
   this->padding = (uint8_t *)malloc(sizeof(uint8_t) * padding_length);
-  printf("Padding (len[%d])\n", this->padding_length);
   for (i = 0; i < padding_length; i++) {
     this->padding[i] = data[data_length - 2 - i];
     valid_padding = valid_padding && (this->padding[i] == this->padding_length);
-    printf("%02x", this->padding[i]);
   }
-  printf("\n");
 
   this->mac = (uint8_t *)malloc(sizeof(uint8_t) * this->mac_length);
   size_t data_mac_end = data_length - padding_length - 1;
   size_t o_p = 0;
-  printf("Mac (len[%zu])\n", this->mac_length);
   for (i = data_mac_end - this->mac_length; i < data_mac_end; i++) {
     this->mac[o_p] = data[i];
-    printf("%02x", this->mac[o_p]);
     o_p += 1;
   }
-  printf("\n");
 
   size_t data_finish = data_mac_end - mac_length;
   o_p = 0;
   this->content_length = data_finish;
   this->content = (uint8_t *)malloc(sizeof(uint8_t) * data_finish);
-  printf("Content (len[%zu])\n", this->content_length);
   for (i = 0; i < data_finish; i++) {
     this->content[i] = data[i];
-    printf("%02x", this->content[i]);
   }
-  printf("\n");
-
-  printf("MAC Key Length: %d\n", this->state->current_read_params->mac_key_length);
-  for (i = 0; i < this->state->current_read_params->mac_key_length; i++) {
-    printf("%02x", this->state->current_read_params->mac_key[i]);
-  }
-  printf("\n");
 
   hmac *h =
       HMAC_f::Construct(this->state->current_read_params->mac_algorithm, this->state->current_read_params->mac_key,
@@ -242,7 +205,6 @@ int GenericBlockCipher::decode(uint8_t *encoded, size_t length) {
     uint8_t calculated_mac[this->mac_length] = {0x00, 0x00, 0x00};
 
     uint8_t raw_data[13 + this->content_length];
-    printf("Sequence Number: %zu\n", this->state->current_read_params->sequence_number);
     raw_data[0] = (this->state->current_read_params->sequence_number >> 56) & 0xFF;
     raw_data[1] = (this->state->current_read_params->sequence_number >> 48) & 0xFF;
     raw_data[2] = (this->state->current_read_params->sequence_number >> 40) & 0xFF;
@@ -259,22 +221,14 @@ int GenericBlockCipher::decode(uint8_t *encoded, size_t length) {
     for (i = 0; i < this->content_length; i++) {
       raw_data[13 + i] = this->content[i];
     }
-    printf("HMAC contents: \n");
-    for (i = 0; i < this->content_length + 13; i++) {
-      printf("%02x", raw_data[i]);
-    }
-    printf("\n");
 
     h->sum(calculated_mac, raw_data, this->content_length + 13);
     this->state->current_read_params->sequence_number += 1;
 
     valid_mac = true;
-    printf("Calculated Mac: \n");
     for (i = 0; i < this->mac_length; i++) {
-      printf("%02x", calculated_mac[i]);
       valid_mac = valid_mac && (this->mac[i] == calculated_mac[i]);
     }
-    printf("\n");
 
     delete h;
   }

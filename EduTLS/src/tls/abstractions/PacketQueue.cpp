@@ -134,7 +134,6 @@ size_t PacketQueue::PeekPacket(uint8_t *packet) {
 void PacketQueue::WritePacket(uint8_t *data, size_t length) {
   int n = write(this->socket, data, length);
 
-  printf("Wrote: %d/%zu\n", n, length);
   if (n < 0) {
     printf("Error writing to socket!\n\n");
   }

@@ -90,10 +90,12 @@ void HandshakeFSM::InitialHandshake(PacketQueue *pq) {
 void HandshakeFSM::ProcessMessage(uint8_t *data, size_t length) {
   TLSCiphertext *c = new TLSCiphertext(this->state);
 
-  char hex[2 * length + 1];
-  toHex(hex, data, length);
-  hex[2 * length] = '\0';
-  std::cout << "Decoding message:\n" << hex << std::endl;
+  if (this->config->debug) {
+    char hex[2 * length + 1];
+    toHex(hex, data, length);
+    hex[2 * length] = '\0';
+    std::cout << "Decoding message:\n" << hex << std::endl;
+  }
 
   c->decode(data, length);
   if (c->fragment == NULL) {
@@ -114,24 +116,24 @@ void HandshakeFSM::ProcessMessage(uint8_t *data, size_t length) {
   if (c->type == ContentType_e::handshake) {
     HandshakeType *h = new HandshakeType();
 
-    printf("Decoding HandshakeType: %d\n", h->decode(p->fragment, p->length));
+    int decode = h->decode(p->fragment, p->length);
+    if (this->config->debug) {
+      printf("Decoding HandshakeType: %d\n", decode);
+    }
 
     switch (h->type) {
     case HandshakeType_e::client_hello:
       this->client_finished_hash->update(p->fragment, p->length);
       this->server_finished_hash->update(p->fragment, p->length);
-      printf("Added to SHA256 state...\n");
       this->ProcessClientHello(dynamic_cast<ClientHello *>(h->body));
       break;
     case HandshakeType_e::client_key_exchange:
       this->client_finished_hash->update(p->fragment, p->length);
       this->server_finished_hash->update(p->fragment, p->length);
-      printf("Added to SHA256 state...\n");
       this->ProcessClientKeyExchange(dynamic_cast<ClientKeyExchange *>(h->body));
       break;
     case HandshakeType_e::finished:
       this->server_finished_hash->update(p->fragment, p->length);
-      printf("Added to Server SHA256 state...\n");
       this->ProcessClientFinished(dynamic_cast<Finished *>(h->body));
       break;
     default:
@@ -142,13 +144,14 @@ void HandshakeFSM::ProcessMessage(uint8_t *data, size_t length) {
     delete h;
   } else if (c->type == ContentType_e::change_cipher_spec) {
     ChangeCipherSpec *ccs = new ChangeCipherSpec();
-    printf("Decoding ChangeCipherSpec: %d\n", ccs->decode(p->fragment, p->length));
+    int decode = ccs->decode(p->fragment, p->length);
+    if (this->config->debug) {
+      printf("Decoding ChangeCipherSpec: %d\n", decode);
+    }
     this->ProcessClientChangeCipherSpec(ccs);
 
     delete ccs;
   }
-
-  printf("\n\n");
 
   delete c;
 }
@@ -156,8 +159,6 @@ void HandshakeFSM::ProcessMessage(uint8_t *data, size_t length) {
 void HandshakeFSM::ProcessClientHello(ClientHello *m) {
   this->current_state = 0;
 
-  // printf("Received client hello! %d\n", m->random.gmt_unix_time);
-  // printf("Cipher suites: %d bytes, %d count\n", 2 * m->cipher_suites_lengths, m->cipher_suites_lengths);
   CipherSuite *ClientCipherSuites = CipherSuite::FromUint8(m->cipher_suites, 2 * m->cipher_suites_lengths);
 
   this->common = CipherSuite(0, 0);
@@ -254,26 +255,16 @@ void HandshakeFSM::ProcessServerHello() {
   handshake->encode(data);
   this->client_finished_hash->update(data, length);
   this->server_finished_hash->update(data, length);
-  printf("Added to SHA256 state...\n");
 
   TLSCiphertext *m = Sending_f::Construct(ContentType_e::handshake, data, length, this->state);
   m->encode(data);
   length = m->encode_length();
-  // char hex[2 * length + 1];
-  // toHex(hex, data, length);
-  // hex[2 * length] = '\0';
-
-  // printf("Sending packet: \n\t%s\n", hex);
-
-  // printf("Length of TLSCiphertext: %zu\n", length);
 
   this->pq->WritePacket(data, length);
 
   delete handshake;
   delete hello;
   delete m;
-
-  // printf("Sent server hello.\n");
 
   this->current_state = 2;
   this->ProcessServerCertificate();
@@ -304,20 +295,11 @@ void HandshakeFSM::ProcessServerCertificate() {
   handshake->encode(data);
   this->client_finished_hash->update(data, length);
   this->server_finished_hash->update(data, length);
-  printf("Added to SHA256 state...\n");
 
   TLSCiphertext *m = Sending_f::Construct(ContentType_e::handshake, data, length, this->state);
 
   m->encode(data);
   length = m->encode_length();
-
-  // char hex[2 * length + 1];
-  // toHex(hex, data, length);
-  // hex[2 * length] = '\0';
-
-  // printf("Sending packet: \n\t%s\n", hex);
-
-  // printf("Length of TLSCiphertext: %zu\n", length);
 
   this->pq->WritePacket(data, length);
 
@@ -354,10 +336,6 @@ void HandshakeFSM::ProcessServerHelloDone() {
   toHex(hex, data, length);
   hex[2 * length] = '\0';
 
-  // printf("Sending packet: \n\t%s\n", hex);
-
-  // printf("Length of TLSCiphertext: %zu\n", length);
-
   this->pq->WritePacket(data, length);
 
   delete handshake;
@@ -387,11 +365,13 @@ void HandshakeFSM::ProcessClientKeyExchange(ClientKeyExchange *cke) {
     premaster[i] = cke->random[i - 2];
   }
   i = 0;
-  printf("ClientKeyExchange random: \n");
-  for (i = 0; i < 48; i++) {
-    printf("%02x", premaster[i]);
+  if (this->config->debug) {
+    printf("ClientKeyExchange random: \n");
+    for (i = 0; i < 48; i++) {
+      printf("%02x", premaster[i]);
+    }
+    printf("\n");
   }
-  printf("\n");
   i = 0;
   seed[0] = 'm';
   seed[1] = 'a';
@@ -406,28 +386,44 @@ void HandshakeFSM::ProcessClientKeyExchange(ClientKeyExchange *cke) {
   seed[10] = 'r';
   seed[11] = 'e';
   seed[12] = 't';
-  printf("Client random: \n");
+  if (this->config->debug) {
+    printf("Client random: \n");
+  }
   for (i = 13; i < 45; i++) {
     seed[i] = this->state->pending_read_params->client_random[i - 13];
-    printf("%02x", seed[i]);
+    if (this->config->debug) {
+      printf("%02x", seed[i]);
+    }
   }
-  printf("\n");
-  printf("Server random: \n");
+  if (this->config->debug) {
+    printf("\n");
+    printf("Server random: \n");
+  }
   for (i = 45; i < 77; i++) {
     seed[i] = this->state->pending_read_params->server_random[i - 45];
-    printf("%02x", seed[i]);
+    if (this->config->debug) {
+      printf("%02x", seed[i]);
+    }
   }
-  printf("\n");
+  if (this->config->debug) {
+    printf("\n");
+  }
 
   prf_sha256 *prf = new prf_sha256(premaster, 48, seed, 77);
 
   prf->generate(this->state->pending_read_params->master_secret, 48);
-  printf("Master Secret: \n");
+  if (this->config->debug) {
+    printf("Master Secret: \n");
+  }
   for (i = 0; i < 48; i++) {
     this->state->pending_write_params->master_secret[i] = this->state->pending_read_params->master_secret[i];
-    printf("%02x", this->state->pending_write_params->master_secret[i]);
+    if (this->config->debug) {
+      printf("%02x", this->state->pending_write_params->master_secret[i]);
+    }
   }
-  printf("\n");
+  if (this->config->debug) {
+    printf("\n");
+  }
 
   delete prf;
   seed[0] = 'k';
@@ -443,18 +439,12 @@ void HandshakeFSM::ProcessClientKeyExchange(ClientKeyExchange *cke) {
   seed[10] = 'i';
   seed[11] = 'o';
   seed[12] = 'n';
-  printf("Server random: \n");
   for (i = 0; i < 32; i++) {
     seed[i + 13] = this->state->pending_read_params->server_random[i];
-    printf("%02x", seed[i + 13]);
   }
-  printf("\n");
-  printf("Client random: \n");
   for (i = 0; i < 32; i++) {
     seed[i + 45] = this->state->pending_read_params->client_random[i];
-    printf("%02x", seed[i + 45]);
   }
-  printf("\n");
 
   prf_sha256 *prf_2 = new prf_sha256(this->state->pending_read_params->master_secret, 48, seed, 77);
 
@@ -462,10 +452,12 @@ void HandshakeFSM::ProcessClientKeyExchange(ClientKeyExchange *cke) {
   prf_2->generate(keydata, 128);
 
   size_t k_p = 0;
+  if (this->config->debug) {
 
-  printf("rm: %d, wm: %d, rc: %d, wc: %d\n", this->state->pending_read_params->mac_key_length,
-         this->state->pending_write_params->mac_key_length, this->state->pending_read_params->enc_key_length,
-         this->state->pending_write_params->enc_key_length);
+    printf("rm: %d, wm: %d, rc: %d, wc: %d\n", this->state->pending_read_params->mac_key_length,
+           this->state->pending_write_params->mac_key_length, this->state->pending_read_params->enc_key_length,
+           this->state->pending_write_params->enc_key_length);
+  }
 
   this->state->pending_read_params->mac_key =
       (uint8_t *)malloc(sizeof(uint8_t) * this->state->pending_read_params->mac_key_length);
@@ -485,22 +477,31 @@ void HandshakeFSM::ProcessClientKeyExchange(ClientKeyExchange *cke) {
     this->state->pending_write_params->mac_key[i] = keydata[k_p];
     k_p++;
   }
-
-  printf("Read key: \n");
+  if (this->config->debug) {
+    printf("Read key: \n");
+  }
   for (i = 0; i < this->state->pending_read_params->enc_key_length; i++) {
     this->state->pending_read_params->cipher_key[i] = keydata[k_p];
-    printf("%02x", keydata[k_p]);
+    if (this->config->debug) {
+      printf("%02x", keydata[k_p]);
+    }
     k_p++;
   }
-  printf("\n");
+  if (this->config->debug) {
+    printf("\n");
 
-  printf("Write key: \n");
+    printf("Write key: \n");
+  }
   for (i = 0; i < this->state->pending_write_params->enc_key_length; i++) {
     this->state->pending_write_params->cipher_key[i] = keydata[k_p];
-    printf("%02x", keydata[k_p]);
+    if (this->config->debug) {
+      printf("%02x", keydata[k_p]);
+    }
     k_p++;
   }
-  printf("\n");
+  if (this->config->debug) {
+    printf("\n");
+  }
 
   delete prf;
 
@@ -516,10 +517,13 @@ void HandshakeFSM::ProcessClientChangeCipherSpec(ChangeCipherSpec *ccs) {
   if (ccs->value == ChangeCipherSpec_e::change_cipher_spec) {
     this->state->SwitchReadState();
     this->current_state = 6;
-
-    printf("Switched read states.\n");
+    if (this->config->debug) {
+      printf("Switched read states.\n");
+    }
   } else {
-    printf("Refusing to switch states.\n");
+    if (this->config->debug) {
+      printf("Refusing to switch states.\n");
+    }
   }
 }
 
@@ -528,12 +532,13 @@ void HandshakeFSM::ProcessClientFinished(Finished *f) {
     printf("Bad state %d!\n", this->current_state);
     return;
   }
-
-  printf("Finished check (%d): \n", f->verify_data_length);
-  for (size_t i = 0; i < f->verify_data_length; i++) {
-    printf("%02x", f->verify_data[i]);
+  if (this->config->debug) {
+    printf("Finished check (%d): \n", f->verify_data_length);
+    for (size_t i = 0; i < f->verify_data_length; i++) {
+      printf("%02x", f->verify_data[i]);
+    }
+    printf("\n");
   }
-  printf("\n");
 
   uint8_t hash_data[15 + this->client_finished_hash->output_size];
   this->client_finished_hash->finalize(&(hash_data[15]));
@@ -560,13 +565,18 @@ void HandshakeFSM::ProcessClientFinished(Finished *f) {
   prf->generate(verify_data, f->verify_data_length);
 
   bool verify_ok = true;
-
-  printf("Server Side Validation (%d): \n", f->verify_data_length);
+  if (this->config->debug) {
+    printf("Server Side Validation (%d): \n", f->verify_data_length);
+  }
   for (size_t i = 0; i < f->verify_data_length; i++) {
-    printf("%02x", verify_data[i]);
+    if (this->config->debug) {
+      printf("%02x", verify_data[i]);
+    }
     verify_ok = verify_ok && (verify_data[i] == f->verify_data[i]);
   }
-  printf("\n");
+  if (this->config->debug) {
+    printf("\n");
+  }
 
   if (verify_ok) {
     this->current_state = 7;
@@ -596,10 +606,6 @@ void HandshakeFSM::ProcessServerChangeCipherSpec() {
   char hex[2 * length + 1];
   toHex(hex, data, length);
   hex[2 * length] = '\0';
-
-  // printf("Sending packet: \n\t%s\n", hex);
-
-  // printf("Length of TLSCiphertext: %zu\n", length);
 
   this->pq->WritePacket(data, length);
 
@@ -667,10 +673,6 @@ void HandshakeFSM::ProcessServerFinished() {
   char hex[2 * length + 1];
   toHex(hex, data, length);
   hex[2 * length] = '\0';
-
-  // printf("Sending packet: \n\t%s\n", hex);
-
-  // printf("Length of TLSCiphertext: %zu\n", length);
 
   this->pq->WritePacket(data, length);
 
