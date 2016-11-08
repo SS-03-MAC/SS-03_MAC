@@ -14,6 +14,7 @@
 #pragma once
 
 #include "../abstractions/PacketQueue.h"
+#include "../states/HandshakeFSM.h"
 #include "../states/TLSConfiguration.h"
 #include "../states/TLSSession.h"
 
@@ -24,6 +25,8 @@ class TLSServer {
 private:
   TLSSession *state;
   TLSConfiguration *config;
+
+  HandshakeFSM *hs;
 
   int socket;
 
@@ -37,4 +40,8 @@ public:
 
   void Handshake();
   void AcceptClient(int client);
+
+  size_t Read(uint8_t *output);
+  void Write(uint8_t *data, size_t length);
+  void Close();
 };

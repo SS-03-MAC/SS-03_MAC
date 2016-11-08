@@ -109,6 +109,13 @@ inline int serve() {
   srv->AcceptClient(c);
   srv->Handshake();
 
+  while (true) {
+    uint8_t buffer[65536];
+    size_t length = srv->Read(buffer);
+    buffer[length] = '\0';
+    std::cout << "Received data of length: " << length << std::endl << buffer << std::endl;
+  }
+
   delete srv;
   delete config;
   mpz_clear(key_n);

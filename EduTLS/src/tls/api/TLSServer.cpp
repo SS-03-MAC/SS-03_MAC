@@ -12,6 +12,9 @@
 //===----------------------------------------------------------------------===//
 
 #include "./TLSServer.h"
+#include "../../crypto/crypto.h"
+#include "../../encoding/encoding.h"
+#include "../abstractions/SendingFactory.h"
 #include "../containers/GenericStreamCipher.h"
 #include "../containers/TLSCiphertext.h"
 #include "../enums/ConnectionStates.h"
@@ -35,6 +38,7 @@ TLSServer::TLSServer(TLSConfiguration *config) {
 
   this->socket = -1;
   this->pq = NULL;
+  this->hs = NULL;
 }
 
 TLSServer::~TLSServer() {
@@ -42,14 +46,17 @@ TLSServer::~TLSServer() {
   if (this->pq != NULL) {
     delete this->pq;
   }
+  if (this->hs != NULL) {
+    delete this->hs;
+  }
 }
 
 void TLSServer::Handshake() {
-  HandshakeFSM *hs = new HandshakeFSM(this->state, this->config);
+  if (this->hs == NULL) {
+    this->hs = new HandshakeFSM(this->state, this->config);
+  }
 
-  hs->InitialHandshake(this->pq);
-
-  delete hs;
+  this->hs->InitialHandshake(this->pq);
 
   return;
 }
@@ -58,3 +65,67 @@ void TLSServer::AcceptClient(int client) {
   this->socket = client;
   this->pq = new PacketQueue(client, 3, 2);
 }
+
+size_t TLSServer::Read(uint8_t *output) {
+  uint8_t buffer[65536];
+  size_t length = pq->ReadPacket(buffer);
+
+  bool found_application_packet = false;
+
+  while (!found_application_packet) {
+    TLSCiphertext *c = new TLSCiphertext(this->state);
+
+    char hex[2 * length + 1];
+    toHex(hex, buffer, length);
+    hex[2 * length] = '\0';
+    std::cout << "Decoding message:\n" << hex << std::endl;
+
+    c->decode(buffer, length);
+    if (c->fragment == NULL) {
+      printf("Unknown decoding error (1).");
+      return 0;
+    }
+    if (c->fragment->contents == NULL) {
+      printf("Unknown decoding error (2).");
+      return 0;
+    }
+    if (c->fragment->contents->contents == NULL) {
+      printf("Unknown decoding error (3).");
+      return 0;
+    }
+
+    TLSPlaintext *p = c->fragment->contents->contents;
+    if (c->type == ContentType_e::application_data) {
+      for (size_t i = 0; i < p->length; i++) {
+        output[i] = p->fragment[i];
+      }
+
+      found_application_packet = true;
+
+      return p->length;
+    } else {
+      if (this->hs == NULL) {
+        this->hs = new HandshakeFSM(this->state, this->config);
+      }
+      this->hs->ProcessMessage(buffer, length);
+
+      length = pq->ReadPacket(buffer);
+    }
+  }
+
+  return 0;
+}
+
+void TLSServer::Write(uint8_t *data, size_t length) {
+  uint8_t buffer[65536];
+  size_t buffer_length = 0;
+
+  TLSCiphertext *m = Sending_f::Construct(ContentType_e::handshake, data, length, this->state);
+
+  m->encode(buffer);
+  buffer_length = m->encode_length();
+
+  this->pq->WritePacket(buffer, buffer_length);
+}
+
+void TLSServer::Close() {}
