@@ -15,6 +15,7 @@
 #include "../../crypto/crypto.h"
 #include "../../encoding/hex.h"
 #include "../abstractions/PacketQueue.h"
+#include "../abstractions/SendingFactory.h"
 #include "../containers/GenericBlockCipher.h"
 #include "../containers/GenericStreamCipher.h"
 #include "../containers/TLSCiphertext.h"
@@ -153,9 +154,7 @@ void HandshakeFSM::ProcessMessage(uint8_t *data, size_t length) {
 }
 
 void HandshakeFSM::ProcessClientHello(ClientHello *m) {
-  if (this->current_state != 0) {
-    return;
-  }
+  this->current_state = 0;
 
   // printf("Received client hello! %d\n", m->random.gmt_unix_time);
   // printf("Cipher suites: %d bytes, %d count\n", 2 * m->cipher_suites_lengths, m->cipher_suites_lengths);
@@ -195,6 +194,8 @@ void HandshakeFSM::ProcessClientHello(ClientHello *m) {
   this->state->pending_write_params = new SecurityParameters();
   this->state->pending_read_params->entity = this->state->current_read_params->entity;
   this->state->pending_write_params->entity = this->state->current_write_params->entity;
+  this->state->current_read_params->client_version = m->client_version;
+  this->state->current_write_params->client_version = m->client_version;
   this->state->pending_read_params->client_version = m->client_version;
   this->state->pending_write_params->client_version = m->client_version;
 
@@ -254,22 +255,10 @@ void HandshakeFSM::ProcessServerHello() {
   this->client_finished_hash->update(data, length);
   this->server_finished_hash->update(data, length);
   printf("Added to SHA256 state...\n");
-  // printf("\nLength of handshake: %zu\n", length);
-  TLSPlaintext *p = new TLSPlaintext(length, data);
-  // printf("Plaintext length: %d\n", p->length);
-  TLSCompressed *c = new TLSCompressed(this->state, p);
-  // printf("Compressed length: %d\n", c->length);
-  GenericStreamCipher *gcs = new GenericStreamCipher(this->state, c);
-  // printf("GCS Length: %d + %d\n", gcs->contents_length, gcs->mac_length);
-  TLSCiphertext *m = new TLSCiphertext(this->state, gcs);
-  // printf("Ciphertext length: %d\n", m->length);
-  m->version.major = hello->server_version.major;
-  m->version.minor = hello->server_version.minor;
-  m->type = ContentType_e::handshake;
 
+  TLSCiphertext *m = Sending_f::Construct(ContentType_e::handshake, data, length, this->state);
   m->encode(data);
   length = m->encode_length();
-
   // char hex[2 * length + 1];
   // toHex(hex, data, length);
   // hex[2 * length] = '\0';
@@ -316,18 +305,8 @@ void HandshakeFSM::ProcessServerCertificate() {
   this->client_finished_hash->update(data, length);
   this->server_finished_hash->update(data, length);
   printf("Added to SHA256 state...\n");
-  // printf("\nLength of handshake: %zu\n", length);
-  TLSPlaintext *p = new TLSPlaintext(length, data);
-  // printf("Plaintext length: %d\n", p->length);
-  TLSCompressed *c = new TLSCompressed(this->state, p);
-  // printf("Compressed length: %d\n", c->length);
-  GenericStreamCipher *gcs = new GenericStreamCipher(this->state, c);
-  // printf("GCS Length: %d + %d\n", gcs->contents_length, gcs->mac_length);
-  TLSCiphertext *m = new TLSCiphertext(this->state, gcs);
-  // printf("Ciphertext length: %d\n", m->length);
-  m->version.major = 0x03;
-  m->version.minor = 0x03;
-  m->type = ContentType_e::handshake;
+
+  TLSCiphertext *m = Sending_f::Construct(ContentType_e::handshake, data, length, this->state);
 
   m->encode(data);
   length = m->encode_length();
@@ -365,19 +344,8 @@ void HandshakeFSM::ProcessServerHelloDone() {
   handshake->encode(data);
   this->client_finished_hash->update(data, length);
   this->server_finished_hash->update(data, length);
-  printf("Added to SHA256 state...\n");
-  // printf("\nLength of handshake: %zu\n", length);
-  TLSPlaintext *p = new TLSPlaintext(length, data);
-  // printf("Plaintext length: %d\n", p->length);
-  TLSCompressed *c = new TLSCompressed(this->state, p);
-  // printf("Compressed length: %d\n", c->length);
-  GenericStreamCipher *gcs = new GenericStreamCipher(this->state, c);
-  // printf("GCS Length: %d + %d\n", gcs->contents_length, gcs->mac_length);
-  TLSCiphertext *m = new TLSCiphertext(this->state, gcs);
-  // printf("Ciphertext length: %d\n", m->length);
-  m->version.major = 0x03;
-  m->version.minor = 0x03;
-  m->type = ContentType_e::handshake;
+
+  TLSCiphertext *m = Sending_f::Construct(ContentType_e::handshake, data, length, this->state);
 
   m->encode(data);
   length = m->encode_length();
@@ -619,18 +587,8 @@ void HandshakeFSM::ProcessServerChangeCipherSpec() {
   size_t length = 0;
   length = ccs->encode_length();
   ccs->encode(data);
-  // printf("\nLength of handshake: %zu\n", length);
-  TLSPlaintext *p = new TLSPlaintext(length, data);
-  // printf("Plaintext length: %d\n", p->length);
-  TLSCompressed *c = new TLSCompressed(this->state, p);
-  // printf("Compressed length: %d\n", c->length);
-  GenericStreamCipher *gcs = new GenericStreamCipher(this->state, c);
-  // printf("GCS Length: %d + %d\n", gcs->contents_length, gcs->mac_length);
-  TLSCiphertext *m = new TLSCiphertext(this->state, gcs);
-  // printf("Ciphertext length: %d\n", m->length);
-  m->version.major = 0x03;
-  m->version.minor = 0x03;
-  m->type = ContentType_e::change_cipher_spec;
+
+  TLSCiphertext *m = Sending_f::Construct(ContentType_e::change_cipher_spec, data, length, this->state);
 
   m->encode(data);
   length = m->encode_length();
@@ -700,18 +658,8 @@ void HandshakeFSM::ProcessServerFinished() {
   size_t length = 0;
   length = handshake->encode_length();
   handshake->encode(data);
-  // printf("\nLength of handshake: %zu\n", length);
-  TLSPlaintext *p = new TLSPlaintext(length, data);
-  // printf("Plaintext length: %d\n", p->length);
-  TLSCompressed *c = new TLSCompressed(this->state, p);
-  // printf("Compressed length: %d\n", c->length);
-  GenericBlockCipher *gbs = new GenericBlockCipher(this->state, c);
-  // printf("GCS Length: %d + %d\n", gcs->contents_length, gcs->mac_length);
-  TLSCiphertext *m = new TLSCiphertext(this->state, gbs);
-  // printf("Ciphertext length: %d\n", m->length);
-  m->version.major = 0x03;
-  m->version.minor = 0x03;
-  m->type = ContentType_e::handshake;
+
+  TLSCiphertext *m = Sending_f::Construct(ContentType_e::handshake, data, length, this->state);
 
   m->encode(data);
   length = m->encode_length();
