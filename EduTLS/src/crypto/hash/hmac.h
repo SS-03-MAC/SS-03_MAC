@@ -26,8 +26,6 @@ private:
   uint8_t *opad;
   uint8_t *key;
 
-  size_t key_length;
-
 public:
   hmac(hash *h, uint8_t *key, size_t key_length);
   ~hmac();
