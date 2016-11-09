@@ -70,6 +70,7 @@ void handleClient(int clientFd) {
   __gnu_cxx::stdio_filebuf<char> filebuf(clientFd, std::ios::in);
   std::istream clientStream(&filebuf);
   httpRequestHeaderCollection *headers;
+  std::string cgiPath;
   try {
     headers = new httpRequestHeaderCollection(&clientStream);
   } catch (const char *err) {
@@ -79,8 +80,13 @@ void handleClient(int clientFd) {
   }
   std::cout << "Request: " << headers->toString() << std::endl;
 
-  serveCGI(clientStream, clientFd, *headers->path, "dir", *headers);
-  //serveFile(clientFd, *headers->path);
+  if (serverSettings.getScriptForPath(*headers->path, cgiPath)) {
+    std::cout << "Serving via cgi" << std::endl;
+    serveCGI(clientStream, clientFd, *headers->path, cgiPath.c_str(), *headers);
+  } else {
+    std::cout << "Serving static file" << std::endl;
+    serveFile(clientFd, *headers->path);
+  }
 
   shutdown(clientFd, SHUT_RDWR);
 }
