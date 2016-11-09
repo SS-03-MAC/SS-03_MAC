@@ -16,6 +16,9 @@
 #include "../interfaces/encodable.h"
 #include "Handshake.h"
 
+// Currently unused; bad practice to send a HelloRequest to the client before it
+// sends an initial ClientHello.
+
 class HelloRequest final : public HandshakeContents_t {
 public:
   int encode(uint8_t *result);

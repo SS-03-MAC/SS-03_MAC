@@ -22,6 +22,8 @@
 #include <cstdio>
 #include <cstdlib>
 
+// AEAD ciphers not required and therefore not implemented yet.
+
 GenericAEADCipher::GenericAEADCipher(TLSSession *state) { this->state = state; }
 GenericAEADCipher::~GenericAEADCipher() {}
 

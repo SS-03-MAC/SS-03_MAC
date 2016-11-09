@@ -34,8 +34,8 @@ void md5::core() {
   uint32_t s[4];
 
   for (i = 0; i < 16; i++) {
-    x[i] = (((uint32_t) this->block[i * 4 + 3]) << 24) | (((uint32_t) this->block[i * 4 + 2]) << 16) |
-           (((uint32_t) this->block[i * 4 + 1]) << 8) | (((uint32_t) this->block[i * 4 + 0]) << 0);
+    x[i] = (((uint32_t)this->block[i * 4 + 3]) << 24) | (((uint32_t)this->block[i * 4 + 2]) << 16) |
+           (((uint32_t)this->block[i * 4 + 1]) << 8) | (((uint32_t)this->block[i * 4 + 0]) << 0);
   }
 
   s[0] = this->s[0];
