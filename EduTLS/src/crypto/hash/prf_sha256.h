@@ -27,7 +27,6 @@ private:
 
   uint8_t *secret;
   uint8_t *seed;
-  uint8_t *A;
 
   size_t secret_length;
   size_t seed_length;

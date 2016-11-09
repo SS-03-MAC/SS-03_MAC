@@ -66,6 +66,7 @@ void HandshakeFSM::InitialHandshake(PacketQueue *pq) {
   if (this->server_finished_hash == NULL) {
     this->server_finished_hash = new sha2_256();
   }
+
   this->client_finished_hash->init();
   this->server_finished_hash->init();
 
@@ -161,6 +162,12 @@ void HandshakeFSM::ProcessClientHello(ClientHello *m) {
 
   CipherSuite *ClientCipherSuites = CipherSuite::FromUint8(m->cipher_suites, 2 * m->cipher_suites_lengths);
 
+  if (m->client_version.major != 3 || m->client_version.minor < 2) {
+    std::cout << "No common SSL version found!" << std::endl;
+    throw 0;
+    return;
+  }
+
   this->common = CipherSuite(0, 0);
   bool found = false;
   for (size_t i = 0; i < m->cipher_suites_lengths && !found; i++) {
@@ -183,6 +190,7 @@ void HandshakeFSM::ProcessClientHello(ClientHello *m) {
       std::cout << "\t[" << i << "]: " << this->config->SupportedCipherSuites[i].String() << std::endl;
     }
 
+    throw 0;
     return;
   }
 
@@ -503,7 +511,7 @@ void HandshakeFSM::ProcessClientKeyExchange(ClientKeyExchange *cke) {
     printf("\n");
   }
 
-  delete prf;
+  delete prf_2;
 
   this->current_state = 5;
 }

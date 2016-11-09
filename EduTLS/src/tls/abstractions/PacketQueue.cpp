@@ -11,8 +11,8 @@
 ///
 //===----------------------------------------------------------------------===//
 
-#include "./Packet.h"
 #include "./PacketQueue.h"
+#include "./Packet.h"
 
 #include <cstdio>
 #include <cstdlib>

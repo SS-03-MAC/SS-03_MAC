@@ -202,7 +202,7 @@ int GenericBlockCipher::decode(uint8_t *encoded, size_t length) {
   if (h == NULL) {
     valid_mac = true;
   } else {
-    uint8_t calculated_mac[this->mac_length] = {0x00, 0x00, 0x00};
+    uint8_t calculated_mac[this->mac_length];
 
     uint8_t raw_data[13 + this->content_length];
     raw_data[0] = (this->state->current_read_params->sequence_number >> 56) & 0xFF;
