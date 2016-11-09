@@ -100,4 +100,6 @@ public:
 
   static std::string uriDecode(std::string &uri);
   static std::string uriEncode(std::string &uri);
+
+  static bool equalsCaseInsensitive(std::string &s1, std::string &s2);
 };

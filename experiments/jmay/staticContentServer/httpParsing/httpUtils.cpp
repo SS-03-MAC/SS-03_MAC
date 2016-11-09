@@ -135,3 +135,15 @@ std::string httpUtils::uriEncode(std::string &uri) {
   }
   return out.str();
 }
+
+bool httpUtils::equalsCaseInsensitive(std::string &s1, std::string &s2) {
+  if (s1.size() != s2.size()) {
+    return false;
+  }
+  for (int i = 0; i < s1.size(); i++) {
+    if (tolower(s1[i]) != tolower(s2[i])) {
+      return false;
+    }
+  }
+  return true;
+}

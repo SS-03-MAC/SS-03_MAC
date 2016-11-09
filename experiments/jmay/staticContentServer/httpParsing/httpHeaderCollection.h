@@ -18,6 +18,9 @@ public:
   httpHeaderCollection(std::string httpVersion);
 
   std::string toString();
+  int getIntVal(std::string key);
+  int64_t getInt64Value(std::string key);
+  bool keyExists(std::string key);
 };
 
 std::ostream &operator<<(std::ostream &os, httpHeaderCollection &headerCollection);

@@ -4,6 +4,7 @@
 #include <unistd.h>
 #include <cstring>
 #include <ext/stdio_filebuf.h>
+#include "pexec/pexec.h"
 #include "network/TcpServer.h"
 #include "httpParsing/httpRequestHeaderCollection.h"
 #include "httpParsing/httpResponseHeaderCollection.h"
@@ -13,8 +14,19 @@
 void forkClient(int clientFd);
 void handleClient(int clientFd);
 int serveFile(int clientFd, httpParsing::AbsPath &path);
+int serveCGI(std::istream &tcpistream,
+             int clientFd,
+             httpParsing::AbsPath &path,
+             std::string script,
+             httpRequestHeaderCollection &requestHeaders);
 bool getFileFromPath(httpParsing::AbsPath &path, std::string &outFile);
 void redirectClient(int clientFd, std::string path);
+ssize_t passData(std::istream &tcpisteram,
+                 int *cgiPipes,
+                 int clientFd,
+                 size_t requestContentLen,
+                 uint8_t *buf,
+                 int bufSize);
 
 httpServer::settings serverSettings;
 //std::string basePath;
@@ -67,7 +79,8 @@ void handleClient(int clientFd) {
   }
   std::cout << "Request: " << headers->toString() << std::endl;
 
-  serveFile(clientFd, *headers->path);
+  serveCGI(clientStream, clientFd, *headers->path, "dir", *headers);
+  //serveFile(clientFd, *headers->path);
 
   shutdown(clientFd, SHUT_RDWR);
 }
@@ -75,7 +88,8 @@ void handleClient(int clientFd) {
 int serveFile(int clientFd, httpParsing::AbsPath &path) {
   std::string fileToServe;
   bool fileExists = getFileFromPath(path, fileToServe);
-  std::ifstream *fileStream = new std::ifstream(fileToServe, std::ifstream::in); //new std::ifstream("c:\\test.txt", std::ifstream::in);
+  std::ifstream *fileStream =
+      new std::ifstream(fileToServe, std::ifstream::in); //new std::ifstream("c:\\test.txt", std::ifstream::in);
 
   if (!fileExists || fileStream->fail()) {
     std::cout << "Error opening file" << std::endl;
@@ -98,6 +112,26 @@ int serveFile(int clientFd, httpParsing::AbsPath &path) {
   return 0;
 }
 
+int serveCGI(std::istream &tcpistream,
+             int clientFd,
+             httpParsing::AbsPath &path,
+             std::string script,
+             httpRequestHeaderCollection &requestHeaders) {
+  uint8_t buf[10240];
+  int cgiPipes[3];
+  char *argv[] = {(char *) script.c_str(), NULL};
+  ssize_t sizeFromClient;
+  size_t requestContentLen = 0;
+  if (requestHeaders.keyExists("Content-Length")) {
+    requestContentLen = (size_t) requestHeaders.getInt64Value("Content-Length");
+  }
+  std::cout << "Request content len" << requestContentLen << std::endl;
+
+  // cgi out
+  pexec(script.c_str(), cgiPipes, argv, environ);
+  sizeFromClient = passData(tcpistream, cgiPipes, clientFd, requestContentLen, buf, sizeof(buf));
+}
+
 bool getFileFromPath(httpParsing::AbsPath &path, std::string &outFile) {
   //Is it a folder
   // - Does the path end in a slash
@@ -118,8 +152,7 @@ bool getFileFromPath(httpParsing::AbsPath &path, std::string &outFile) {
     case httpServer::filesystemObject_t::folder:
       //TODO redirect the client to "<path>/"
       return false;
-    case httpServer::filesystemObject_t::nonexistent:
-      return false;
+    case httpServer::filesystemObject_t::nonexistent:return false;
     default:break;
     }
   }
@@ -139,4 +172,36 @@ bool getFileFromPath(httpParsing::AbsPath &path, std::string &outFile) {
   std::cout << "trying to serve " << fileToServe << std::endl;
   outFile = fileToServe;
   return true;
+}
+
+/*void sendLine(int fd, char *str, ssize_t len) {
+  char const *crlf = "\r\n";
+  write(fd, str, len);
+  write(fd, crlf, 2);
+}*/
+
+ssize_t passData(std::istream &tcpistream,
+                 int *cgiPipes,
+                 int clientFd,
+                 size_t requestContentLen,
+                 uint8_t *buf,
+                 int bufSize) {
+  ssize_t r;
+  ssize_t bufPos = 0;
+  // tcp in
+  while (requestContentLen > 0) {
+    tcpistream.read((char *) buf, requestContentLen);
+    write(cgiPipes[1], buf, (size_t) tcpistream.gcount());
+    requestContentLen -= tcpistream.gcount();
+  }
+
+  // cgi in
+  r = read(cgiPipes[0], buf, bufSize - 1);
+  do {
+    // tcp out
+    write(clientFd, buf + bufPos, r);
+    bufPos += r;
+    r = read(cgiPipes[0], buf + bufPos, bufSize - bufPos);
+  } while (r > 0);
+  return bufPos;
 }

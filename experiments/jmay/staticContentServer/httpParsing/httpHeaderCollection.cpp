@@ -47,6 +47,25 @@ void httpHeaderCollection::getLineAndTrim(std::istream &input, std::string &out)
   httpHeaderCollection::trimTrailingCR(out);
 }
 
+int64_t httpHeaderCollection::getInt64Value(std::string key) {
+  for (int i = 0; i < this->size(); i++) {
+    if (httpUtils::equalsCaseInsensitive((*this)[i]->key, key)) {
+      // TODO is this safe?
+      return atoll((*this)[i]->value.c_str());
+    }
+  }
+  throw "Key not found";
+}
+
+bool httpHeaderCollection::keyExists(std::string key) {
+  for (int i = 0; i < this->size(); i++) {
+    if (httpUtils::equalsCaseInsensitive((*this)[i]->key, key)) {
+      return true;
+    }
+  }
+  return false;
+}
+
 std::ostream &operator<<(std::ostream &os, httpHeaderCollection &headerCollection) {
   return os << headerCollection.toString();
 }
