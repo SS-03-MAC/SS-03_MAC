@@ -43,10 +43,14 @@ int main(int argc, char *argv[]) {
   serverSettings.defaultDocuments.push_back("test2.txt");
   serverSettings.defaultDocuments.push_back("index.html");
   struct httpServer::cgiEndpoint_t ep1;
+  struct httpServer::cgiEndpoint_t ep2;
   ep1.pathElement = "api";
   ep1.cgiPath = "echo";
   ep1.cgiArguments = "hi";
+  ep2.pathElement = "env";
+  ep2.cgiPath = "printenv";
   serverSettings.cgiEndpoints.push_back(ep1);
+  serverSettings.cgiEndpoints.push_back(ep2);
 
   int tcp = network::tcp_start(serverSettings.port);
   int client;
