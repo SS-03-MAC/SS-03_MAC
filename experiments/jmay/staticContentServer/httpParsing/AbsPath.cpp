@@ -67,7 +67,7 @@ int AbsPath::state1(int c) {
     if (c == EOF) {
       return 6;
     } else if (c == '/') {
-      return 1;
+      return 2;
     } else { // c == '?'
       return 3;
     }
@@ -142,10 +142,21 @@ int AbsPath::state5() {
   throw FSMError;
 }
 
+std::string AbsPath::getPathAndQueryString() {
+  if (queryString.length() == 0) {
+    return getFullPath();
+  } else {
+    return getFullPath() + "?" + getQueryString();
+  }
+}
+
 std::string AbsPath::getFullPath() {
   std::stringstream out;
   for (unsigned int i = 0; i < elements.size(); i++) {
     out << '/' << elements[i];
+  }
+  if (pathEndsInSlash) {
+    out << "/";
   }
   return out.str();
 }
@@ -168,4 +179,8 @@ bool AbsPath::beginsWith(std::string element) {
     return element == "";
   }
   return element == elements[0];
+}
+
+std::ostream &operator<<(std::ostream &os, AbsPath &path) {
+  return os << path.getPathAndQueryString();
 }

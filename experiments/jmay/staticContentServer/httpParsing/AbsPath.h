@@ -23,9 +23,13 @@ private:
 
 public:
   AbsPath(std::string &in);
+  std::string getPathAndQueryString();
   std::string getFullPath();
   std::string getFileName();
   std::string getQueryString();
   bool beginsWith(std::string element);
+  inline bool endsInSlash() { return pathEndsInSlash; }
 };
+
+std::ostream &operator<<(std::ostream &os, AbsPath &path);
 }

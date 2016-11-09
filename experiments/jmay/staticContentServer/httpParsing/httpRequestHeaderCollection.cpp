@@ -14,7 +14,7 @@ httpRequestHeaderCollection::httpRequestHeaderCollection(std::string verb, std::
 
 std::string httpRequestHeaderCollection::firstLineToString() {
   std::stringstream out;
-  out << verb << ' ' << path << ' ' << httpVersion;
+  out << verb << ' ' << path->getPathAndQueryString() << ' ' << httpVersion;
   return out.str();
 }
 
