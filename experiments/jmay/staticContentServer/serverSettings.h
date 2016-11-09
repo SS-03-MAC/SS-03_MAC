@@ -8,6 +8,7 @@ namespace httpServer {
 struct cgiEndpoint_t {
   std::string pathElement;
   std::string cgiPath;
+  std::string cgiArguments;
 };
 
 class settings {
@@ -16,7 +17,7 @@ public:
   uint16_t port;
   std::string basePath;
   std::vector<struct cgiEndpoint_t> cgiEndpoints;
-  bool getScriptForPath(httpParsing::AbsPath &path, std::string &script);
+  bool getScriptForPath(httpParsing::AbsPath &path, httpServer::cgiEndpoint_t &cgiEndpoint);
 };
 
 }

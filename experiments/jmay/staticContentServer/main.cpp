@@ -17,7 +17,7 @@ int serveFile(int clientFd, httpParsing::AbsPath &path);
 int serveCGI(std::istream &tcpistream,
              int clientFd,
              httpParsing::AbsPath &path,
-             std::string script,
+             httpServer::cgiEndpoint_t cgiEndpoint,
              httpRequestHeaderCollection &requestHeaders);
 bool getFileFromPath(httpParsing::AbsPath &path, std::string &outFile);
 void redirectClient(int clientFd, std::string path);
@@ -44,7 +44,8 @@ int main(int argc, char *argv[]) {
   serverSettings.defaultDocuments.push_back("index.html");
   struct httpServer::cgiEndpoint_t ep1;
   ep1.pathElement = "api";
-  ep1.cgiPath = "dir";
+  ep1.cgiPath = "echo";
+  ep1.cgiArguments = "hi";
   serverSettings.cgiEndpoints.push_back(ep1);
 
   int tcp = network::tcp_start(serverSettings.port);
@@ -70,7 +71,7 @@ void handleClient(int clientFd) {
   __gnu_cxx::stdio_filebuf<char> filebuf(clientFd, std::ios::in);
   std::istream clientStream(&filebuf);
   httpRequestHeaderCollection *headers;
-  std::string cgiPath;
+  httpServer::cgiEndpoint_t cgiEndpoint;
   try {
     headers = new httpRequestHeaderCollection(&clientStream);
   } catch (const char *err) {
@@ -80,9 +81,9 @@ void handleClient(int clientFd) {
   }
   std::cout << "Request: " << headers->toString() << std::endl;
 
-  if (serverSettings.getScriptForPath(*headers->path, cgiPath)) {
+  if (serverSettings.getScriptForPath(*headers->path, cgiEndpoint)) {
     std::cout << "Serving via cgi" << std::endl;
-    serveCGI(clientStream, clientFd, *headers->path, cgiPath.c_str(), *headers);
+    serveCGI(clientStream, clientFd, *headers->path, cgiEndpoint, *headers);
   } else {
     std::cout << "Serving static file" << std::endl;
     serveFile(clientFd, *headers->path);
@@ -121,20 +122,23 @@ int serveFile(int clientFd, httpParsing::AbsPath &path) {
 int serveCGI(std::istream &tcpistream,
              int clientFd,
              httpParsing::AbsPath &path,
-             std::string script,
+             httpServer::cgiEndpoint_t cgiEndpoint,
              httpRequestHeaderCollection &requestHeaders) {
   uint8_t buf[10240];
   int cgiPipes[3];
-  char *argv[] = {(char *) script.c_str(), NULL};
+  char *argv[] = {(char *) cgiEndpoint.cgiPath.c_str(), NULL, NULL};
   ssize_t sizeFromClient;
   size_t requestContentLen = 0;
+  if (cgiEndpoint.cgiArguments.length() > 0) {
+    argv[1] = (char *) cgiEndpoint.cgiArguments.c_str();
+  }
   if (requestHeaders.keyExists("Content-Length")) {
     requestContentLen = (size_t) requestHeaders.getInt64Value("Content-Length");
   }
   std::cout << "Request content len" << requestContentLen << std::endl;
 
   // cgi out
-  pexec(script.c_str(), cgiPipes, argv, environ);
+  pexec(cgiEndpoint.cgiPath.c_str(), cgiPipes, argv, environ);
   sizeFromClient = passData(tcpistream, cgiPipes, clientFd, requestContentLen, buf, sizeof(buf));
 }
 
