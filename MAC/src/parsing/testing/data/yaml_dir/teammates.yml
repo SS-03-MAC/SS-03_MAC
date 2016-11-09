@@ -1,0 +1,13 @@
+---
+- name: Matthew Slane
+  role: Documentation
+  language: Ruby
+- name: Matthew Burket
+  role: Scrum Master
+  language: Ruby
+- name: Alexander Scheel
+  role: Testing
+  language: C++
+- name: Joel May
+  role: Webmaster
+  language: C++

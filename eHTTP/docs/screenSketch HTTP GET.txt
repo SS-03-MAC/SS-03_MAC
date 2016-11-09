@@ -1,0 +1,31 @@
+# Sample network traffic
+# Screen 1
+# Joel May
+
+# (1)
+> GET /users/5 HTTP/1.1 # (5)
+> Host: example.com
+> Cookie: Token=abc1337 # (4)
+>
+# (2)
+< HTTP/1.1 200 OK
+< Cache-Control: max-age=0
+< Last-Modified: Thu, 08 Sep 2016 12:00:00 GMT
+< Server: MAC 1.0
+< Date: Sun, 11 Sep 2016 01:00:00 GMT
+< Content-Length: 44
+<
+# (3)
+< { "FullName": "John Smith", "City": "Ames" }
+
+# Purpose of File
+# This file shows an example TCP conversation between a client (>) and
+# eHTTP (<).  This example shows the HTTP 1.1 request (1) from the browser or
+# app without TLS.  The server tracks the session using a cookie (4).  This
+# request (1) is requesting information for a user with the ID of 5.  The body
+# (3) of the response is a JSON object containing the user information available
+# to the user of the current session.  The response headers (2) are simply
+# standard HTTP response headers.
+# The different API endpoints can be reached by changing the URL (5).  The
+# returned data is filtered through the ACLs of the current user that has been
+# authenticated previously.

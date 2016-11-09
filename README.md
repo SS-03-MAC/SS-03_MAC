@@ -24,7 +24,7 @@ Writing a custom HTTP and TLS server allows MAC to uniquely handle API
 endpoints and map them to back end server code. This HTTP server is written in
 C++ for speed and flexibility, using a CGI-inspired backend to process data.
 For auto-generated endpoints, the HTTP server can validate inputs before
-handing off to back-end scrips.
+handing off to back-end scripts.
 
 Lastly, the custom model design language is also used to create back-end
 data models, enforcing server side content validation. Thus, by default, a
@@ -34,4 +34,7 @@ After completion, MAC will be used to create a replacement AccessPlus. This
 application will fall along the standard CRUD lines, which MAC facilitates.
 
 ## Team
-Matthew Burket
+- Matthew Burket
+- Joel May
+- Alexander Scheel
+- Matt Slane
