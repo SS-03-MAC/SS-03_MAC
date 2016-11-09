@@ -4,6 +4,7 @@
 #include <unistd.h>
 #include <cstring>
 #include <ext/stdio_filebuf.h>
+#include <map>
 #include "pexec/pexec.h"
 #include "network/TcpServer.h"
 #include "httpParsing/httpRequestHeaderCollection.h"
@@ -141,8 +142,22 @@ int serveCGI(std::istream &tcpistream,
   }
   std::cout << "Request content len" << requestContentLen << std::endl;
 
+  // Set up environment
+  char **env = (char **) malloc(3);
+  std::string temp;
+  temp = "REQUEST_METHOD=";
+  temp += requestHeaders.getVerb();
+  env[0] = (char *) malloc(temp.length());
+  strcpy(env[0], temp.c_str());
+
+  temp = "SCRIPT_PATH=";
+  temp += requestHeaders.path->getScriptPath();
+  env[1] = (char *) malloc(temp.length());
+  strcpy(env[1], temp.c_str());
+  env[2] = NULL;
+
   // cgi out
-  pexec(cgiEndpoint.cgiPath.c_str(), cgiPipes, argv, environ);
+  pexec(cgiEndpoint.cgiPath.c_str(), cgiPipes, argv, env);
   sizeFromClient = passData(tcpistream, cgiPipes, clientFd, requestContentLen, buf, sizeof(buf));
 }
 

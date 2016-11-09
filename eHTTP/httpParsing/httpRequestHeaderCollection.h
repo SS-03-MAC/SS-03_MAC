@@ -15,4 +15,5 @@ public:
   ~httpRequestHeaderCollection();
 
   httpParsing::AbsPath *path;
+  std::string getVerb();
 };

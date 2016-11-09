@@ -41,3 +41,6 @@ void httpRequestHeaderCollection::parseFirstLine() {
 httpRequestHeaderCollection::~httpRequestHeaderCollection() {
   delete path;
 }
+std::string httpRequestHeaderCollection::getVerb() {
+  return verb;
+}

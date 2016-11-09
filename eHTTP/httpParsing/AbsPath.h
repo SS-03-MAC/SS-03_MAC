@@ -25,6 +25,7 @@ public:
   AbsPath(std::string &in);
   std::string getPathAndQueryString();
   std::string getFullPath();
+  std::string getScriptPath();
   std::string getFileName();
   std::string getQueryString();
   bool beginsWith(std::string element);
