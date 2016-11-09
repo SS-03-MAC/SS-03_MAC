@@ -45,12 +45,12 @@ PacketQueue::~PacketQueue() {
   }
 }
 
-void PacketQueue::Read() {
+int PacketQueue::Read() {
   ssize_t read_length =
       read(this->socket, &(this->buffer[this->buffer_offset]), this->buffer_length - this->buffer_offset);
 
   if (read_length <= 0) {
-    return;
+    return -1;
   }
 
   this->buffer_offset += read_length;
@@ -59,7 +59,7 @@ void PacketQueue::Read() {
     read_length = read(this->socket, &(this->buffer[this->buffer_offset]), this->buffer_length - this->buffer_offset);
 
     if (read_length <= 0) {
-      return;
+      return -1;
     }
 
     this->buffer_offset += read_length;
@@ -96,11 +96,15 @@ void PacketQueue::Read() {
       length = this->buffer_length;
     }
   }
+
+  return 0;
 }
 
 size_t PacketQueue::ReadPacket(uint8_t *packet) {
   while (this->data.size() == 0) {
-    this->Read();
+    if (this->Read() == -1) {
+      return 0;
+    }
   }
 
   Packet *p = this->data.front();
