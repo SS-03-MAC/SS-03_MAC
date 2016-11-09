@@ -7,24 +7,35 @@
 #include "network/TcpServer.h"
 #include "httpParsing/httpRequestHeaderCollection.h"
 #include "httpParsing/httpResponseHeaderCollection.h"
+#include "serverSettings.h"
+#include "filesystemUtils.h"
 
 void forkClient(int clientFd);
 void handleClient(int clientFd);
-std::ifstream *getFile(std::string &path);
-long getFileSize(std::string &path);
+int serveFile(int clientFd, httpParsing::AbsPath &path);
+bool getFileFromPath(httpParsing::AbsPath &path, std::string &outFile);
+void redirectClient(int clientFd, std::string path);
 
-std::string basePath;
+httpServer::settings serverSettings;
+//std::string basePath;
 
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wmissing-noreturn"
 int main(int argc, char *argv[]) {
   if (argc > 1) {
-    basePath = argv[1];
+    serverSettings.basePath = argv[1];
   } else {
-    basePath = "c:";
+    serverSettings.basePath = "c:";
   }
+  serverSettings.port = 8000;
+  serverSettings.defaultDocuments.push_back("test2.txt");
+  serverSettings.defaultDocuments.push_back("index.html");
+  struct httpServer::cgiEndpoint_t ep1;
+  ep1.pathElement = "api";
+  ep1.cgiPath = "dir";
+  serverSettings.cgiEndpoints.push_back(ep1);
 
-  int tcp = network::tcp_start();
+  int tcp = network::tcp_start(serverSettings.port);
   int client;
   while (true) {
     client = network::tcp_accept(tcp);
@@ -56,46 +67,76 @@ void handleClient(int clientFd) {
   }
   std::cout << "Request: " << headers->toString() << std::endl;
 
-  std::string path = headers->path->getFullPath();
-  std::ifstream *fileStream = getFile(path); //new std::ifstream("c:\\test.txt", std::ifstream::in);
+  serveFile(clientFd, *headers->path);
 
-  if (fileStream->fail()) {
+  shutdown(clientFd, SHUT_RDWR);
+}
+
+int serveFile(int clientFd, httpParsing::AbsPath &path) {
+  std::string fileToServe;
+  bool fileExists = getFileFromPath(path, fileToServe);
+  std::ifstream *fileStream = new std::ifstream(fileToServe, std::ifstream::in); //new std::ifstream("c:\\test.txt", std::ifstream::in);
+
+  if (!fileExists || fileStream->fail()) {
     std::cout << "Error opening file" << std::endl;
     httpResponseHeaderCollection resp("HTTP/1.1", 404, "Not Found");
     std::string errorText(resp.toString());
     errorText += "Error opening file";
     write(clientFd, errorText.c_str(), errorText.length());
+    return 1;
   } else {
     httpResponseHeaderCollection resp("HTTP/1.1", 200, "Success");
 
-    std::string path = headers->path->getFullPath();
-    resp.push_back(new httpHeader("Content-Length", std::to_string(getFileSize(path))));
+    ssize_t fileSize = httpServer::filesystemUtils::fileSize(fileToServe);
+    resp.push_back(new httpHeader("Content-Length", std::to_string(fileSize)));
 
     std::string headerString(resp.toString());
     write(clientFd, headerString.c_str(), headerString.length());
     network::write_stream(clientFd, *fileStream);
   }
   fileStream->close();
-  shutdown(clientFd, SHUT_RDWR);
+  return 0;
 }
 
-std::ifstream *getFile(std::string &path) {
-  std::string processedPath(basePath);
-  if (path == "/") {
-    processedPath += "/index.html";
+bool getFileFromPath(httpParsing::AbsPath &path, std::string &outFile) {
+  //Is it a folder
+  // - Does the path end in a slash
+  // - Is the path a folder
+  //If folder
+  // - Append defualtDocuments
+  // - Is new path a file
+  std::string fullPath = serverSettings.basePath + "/" + path.getFullPath();
+  std::string fileToServe;
+  std::cout << "file to serve before processing: " << fullPath << std::endl;
+  std::cout << "ends in slash: " << path.endsInSlash() << std::endl;
+  bool folder = false;
+  if (path.endsInSlash()) {
+    folder = true;
   } else {
-    processedPath += path;
+    httpServer::filesystemObject_t fInfo = httpServer::filesystemUtils::info(fullPath);
+    switch (fInfo) {
+    case httpServer::filesystemObject_t::folder:
+      //TODO redirect the client to "<path>/"
+      return false;
+    case httpServer::filesystemObject_t::nonexistent:
+      return false;
+    default:break;
+    }
   }
-  return new std::ifstream(processedPath, std::ifstream::in);
-}
-
-long getFileSize(std::string &path) {
-  std::string processedPath(basePath);
-  if (path == "/") {
-    processedPath += "/index.html";
+  if (folder) {
+    bool isFile = false;
+    for (int i = 0; !isFile && i < serverSettings.defaultDocuments.size(); i++) {
+      fileToServe = fullPath + serverSettings.defaultDocuments[i];
+      std::cout << "searching for: " << fileToServe << std::endl;
+      isFile = httpServer::filesystemUtils::info(fileToServe) == httpServer::filesystemObject_t::file;
+    }
+    if (!isFile) {
+      return false;
+    }
   } else {
-    processedPath += path;
+    fileToServe = fullPath;
   }
-  std::ifstream in(processedPath, std::ios::ate | std::ios::binary);
-  return in.tellg();
+  std::cout << "trying to serve " << fileToServe << std::endl;
+  outFile = fileToServe;
+  return true;
 }

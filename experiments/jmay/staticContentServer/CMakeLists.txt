@@ -6,6 +6,6 @@ add_subdirectory(network)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 
-set(SOURCE_FILES main.cpp)
+set(SOURCE_FILES main.cpp serverSettings.cpp serverSettings.h filesystemUtils.cpp filesystemUtils.h)
 add_executable(staticContentServer ${SOURCE_FILES})
 target_link_libraries(staticContentServer httpParsing network)

@@ -1,8 +1,20 @@
-//
-// Created by JoelM on 2016-11-08.
-//
+#pragma once
 
-#ifndef STATICCONTENTSERVER_SERVERSETTINGS_H
-#define STATICCONTENTSERVER_SERVERSETTINGS_H
+#include <vector>
+#include <string>
+namespace httpServer {
 
-#endif //STATICCONTENTSERVER_SERVERSETTINGS_H
+struct cgiEndpoint_t {
+  std::string pathElement;
+  std::string cgiPath;
+};
+
+class settings {
+public:
+  std::vector<std::string> defaultDocuments;
+  uint16_t port;
+  std::string basePath;
+  std::vector<struct cgiEndpoint_t> cgiEndpoints;
+};
+
+}

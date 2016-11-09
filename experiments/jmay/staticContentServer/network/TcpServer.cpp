@@ -11,11 +11,11 @@
 
 namespace network {
 
-int tcp_start() {
+int tcp_start(uint16_t port) {
   int s = socket(AF_INET, SOCK_STREAM, 0);
   struct sockaddr_in addr;
   addr.sin_family = AF_INET;
-  addr.sin_port = htons(8000);
+  addr.sin_port = htons(port);
   addr.sin_addr.s_addr = htonl(INADDR_LOOPBACK);
 
   bind(s, (struct sockaddr *) &addr, sizeof(addr));
