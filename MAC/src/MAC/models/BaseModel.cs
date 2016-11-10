@@ -1,10 +1,10 @@
-using System;
-using System.Reflection;
-using MAC.Types;
 using MAC.Models.Attributes;
+using MAC.Models.Exceptions;
+using MAC.Types;
+using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Diagnostics;
+using System.Reflection;
 
 namespace MAC.Models
 {
@@ -38,7 +38,7 @@ namespace MAC.Models
         /// <summary>
         /// Get all records in the database for the model
         /// </summary>
-        /// <returns></returns>
+        /// <returns>All users in the table</returns>
         public static List<T> Get()
         {
             SqlDataReader reader = Query.Get(GetStaticTableName());
@@ -60,6 +60,13 @@ namespace MAC.Models
         /// </summary>
         /// <param name="id">The ID of the record to fetch</param>
         /// <returns>The record</returns>
+        /// <example>
+        ///  Let's say you have an user model and you want to get the user with
+        ///  the id of 10. In order to that you would write the following.
+        ///  <code>
+        /// User u = User.get(10) 
+        /// </code>
+        /// </example>
         public static T Get(int id)
         {
             SqlDataReader reader = Query.Get(GetStaticTableName(), id);
@@ -80,8 +87,15 @@ namespace MAC.Models
         /// This means that if you pass raw unflitered user input inotot where your 
         /// application will have a SQL injection vulnerability 
         /// </remarks>
-        /// <param name="where"></param>
-        /// <returns></returns>
+        /// <param name="where">A vaild T-SQL where clause</param>
+        /// <returns>The object matching the where clause</returns>
+        /// <example>
+        /// Let's say you have an user model and you want to find all the users
+        /// whose CreatedAt is grater than 11/08/2016 You would do the following:
+        /// <code>
+        /// User.Get("CreatedAT > 11/08/2016 00:00:00.000")
+        /// </code>
+        /// </example>
         public static List<T> Get(string where)
         {
             SqlDataReader reader = Query.Get(GetStaticTableName(), where);
@@ -167,7 +181,7 @@ namespace MAC.Models
 
             foreach (PropertyInfo property in properties)
             {
-
+                // TODO: Finish me
             }
 
             return true;
