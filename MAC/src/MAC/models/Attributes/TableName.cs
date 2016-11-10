@@ -8,6 +8,16 @@ namespace MAC.Models.Attributes
         /// <summary>
         /// Name of table
         /// </summary>
+        /// <example>
+        /// For example if User model and the data was stored in the ysers table
+        /// you would do the following:
+        /// <code>
+        ///     [TableName("Users")]
+        ///     public class User : BaseModel<Users> {
+        ///         // Model Code here
+        ///     }
+        /// </code>
+        /// </example>
         public string Name { get; }
 
         /// <summary>
