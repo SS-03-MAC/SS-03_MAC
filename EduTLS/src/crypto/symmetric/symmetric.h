@@ -11,10 +11,10 @@
 ///
 //===----------------------------------------------------------------------===//
 
+#pragma once
+
 #include <cstddef>
 #include <cstdint>
-
-#pragma once
 
 class symmetric {
 public:

@@ -51,8 +51,8 @@ void sha2_224::core() {
       0x748f82ee, 0x78a5636f, 0x84c87814, 0x8cc70208, 0x90befffa, 0xa4506ceb, 0xbef9a3f7, 0xc67178f2};
 
   for (t = 0; t < 16; t++) {
-    w[t] = (((uint32_t) this->block[t * 4 + 0]) << 24) | (((uint32_t) this->block[t * 4 + 1]) << 16) |
-           (((uint32_t) this->block[t * 4 + 2]) << 8) | (((uint32_t) this->block[t * 4 + 3]) << 0);
+    w[t] = (((uint32_t)this->block[t * 4 + 0]) << 24) | (((uint32_t)this->block[t * 4 + 1]) << 16) |
+           (((uint32_t)this->block[t * 4 + 2]) << 8) | (((uint32_t)this->block[t * 4 + 3]) << 0);
   }
 
   for (t = 16; t < 64; t++) {
@@ -106,11 +106,11 @@ void sha2_224::init() {
   this->le_padding = false;
   this->t_len = 0;
   this->b_len = 0;
-  this->b_max = 64;
+  this->block_size = 64;
 
-  this->block = new uint8_t[this->b_max];
+  this->block = new uint8_t[this->block_size];
 
-  for (this->b_len = 0; this->b_len < this->b_max; this->b_len++) {
+  for (this->b_len = 0; this->b_len < this->block_size; this->b_len++) {
     this->block[this->b_len] = 0;
   }
 

@@ -12,12 +12,12 @@
 ///
 //===----------------------------------------------------------------------===//
 
+#pragma once
+
 #include "../../bignum/bigint.h"
 
 #include <cstddef>
 #include <cstdint>
-
-#pragma once
 
 class dh {
 private:

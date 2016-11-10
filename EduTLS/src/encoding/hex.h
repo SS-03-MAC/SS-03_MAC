@@ -12,6 +12,8 @@
 ///
 //===----------------------------------------------------------------------===//
 
+#pragma once
+
 const char hex_charset[16] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
 
 static inline void toHex(char *dest, uint8_t *src, size_t length) {

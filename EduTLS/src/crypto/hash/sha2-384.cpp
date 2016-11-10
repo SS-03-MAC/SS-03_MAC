@@ -58,10 +58,10 @@ void sha2_384::core() {
       0x431D67C49C100D4Cll, 0x4CC5D4BECB3E42B6ll, 0x597F299CFC657E2All, 0x5FCB6FAB3AD6FAECll, 0x6C44198C4A475817ll};
 
   for (t = 0; t < 16; t++) {
-    w[t] = (((uint64_t) this->block[t * 8 + 0]) << 56) | (((uint64_t) this->block[t * 8 + 1]) << 48) |
-           (((uint64_t) this->block[t * 8 + 2]) << 40) | (((uint64_t) this->block[t * 8 + 3]) << 32) |
-           (((uint64_t) this->block[t * 8 + 4]) << 24) | (((uint64_t) this->block[t * 8 + 5]) << 16) |
-           (((uint64_t) this->block[t * 8 + 6]) << 8) | (((uint64_t) this->block[t * 8 + 7]) << 0);
+    w[t] = (((uint64_t)this->block[t * 8 + 0]) << 56) | (((uint64_t)this->block[t * 8 + 1]) << 48) |
+           (((uint64_t)this->block[t * 8 + 2]) << 40) | (((uint64_t)this->block[t * 8 + 3]) << 32) |
+           (((uint64_t)this->block[t * 8 + 4]) << 24) | (((uint64_t)this->block[t * 8 + 5]) << 16) |
+           (((uint64_t)this->block[t * 8 + 6]) << 8) | (((uint64_t)this->block[t * 8 + 7]) << 0);
   }
 
   for (t = 16; t < 80; t++) {
@@ -119,11 +119,11 @@ void sha2_384::init() {
   this->le_padding = false;
   this->t_len = 0;
   this->b_len = 0;
-  this->b_max = 128;
+  this->block_size = 128;
 
-  this->block = new uint8_t[this->b_max];
+  this->block = new uint8_t[this->block_size];
 
-  for (this->b_len = 0; this->b_len < this->b_max; this->b_len++) {
+  for (this->b_len = 0; this->b_len < this->block_size; this->b_len++) {
     this->block[this->b_len] = 0;
   }
 

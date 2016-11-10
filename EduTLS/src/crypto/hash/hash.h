@@ -11,14 +11,17 @@
 ///
 //===----------------------------------------------------------------------===//
 
+#pragma once
+
 #include <cstddef>
 #include <cstdint>
 
-#pragma once
-
 class hash {
 public:
-  uint8_t output_size;
+  size_t output_size;
+  size_t block_size;
+
+  virtual ~hash(){};
 
   virtual void init() = 0;
   virtual void update(uint8_t *input, size_t count) = 0;

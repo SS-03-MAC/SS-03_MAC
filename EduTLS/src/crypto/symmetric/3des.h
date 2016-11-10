@@ -12,13 +12,13 @@
 ///
 //===----------------------------------------------------------------------===//
 
+#pragma once
+
 #include "des.h"
 #include "symmetric.h"
 
 #include <cstddef>
 #include <cstdint>
-
-#pragma once
 
 class des3 final : public symmetric {
 private:

@@ -13,89 +13,90 @@
 //===----------------------------------------------------------------------===//
 
 #include "rsa.h"
+#include <gmp.h>
 
 rsa::rsa() {
-  this->n = new BigInt();
-  this->e = new BigInt();
-  this->d = new BigInt();
-  this->p = new BigInt();
-  this->q = new BigInt();
+  mpz_init(this->n);
+  mpz_init(this->e);
+  mpz_init(this->d);
+  mpz_init(this->p);
+  mpz_init(this->q);
   this->type = 0;
 }
 
-rsa::rsa(BigInt *p, BigInt *q, BigInt *e) {
-  this->n = new BigInt();
-  this->e = new BigInt();
-  this->d = new BigInt();
-  this->p = new BigInt();
-  this->q = new BigInt();
+rsa::rsa(mpz_t p, mpz_t q, mpz_t e) {
+  mpz_init(this->n);
+  mpz_init_set(this->e, e);
+  mpz_init(this->d);
+  mpz_init_set(this->p, p);
+  mpz_init_set(this->q, q);
 
-  this->p->copy(p);
-  this->q->copy(q);
-  this->e->copy(e);
   this->type = PUBLIC_KEY | PRIVATE_KEY;
 }
 
 rsa::~rsa() {
-  delete this->n;
-  delete this->e;
-  delete this->d;
-  delete this->p;
-  delete this->q;
+  mpz_clear(this->n);
+  mpz_clear(this->e);
+  mpz_clear(this->d);
+  mpz_clear(this->p);
+  mpz_clear(this->q);
 }
 
-void rsa::encrypt(BigInt *output, BigInt *input) {
-  if (this->n->cmp(input) <= 0) {
+void rsa::encrypt(mpz_t output, mpz_t input) {
+  if (mpz_cmp(this->n, input) <= 0) {
     throw - 1;
   }
 
-  BigInt *result = input->modexp(this->e, this->n);
-  output->copy(result);
+  mpz_powm(output, input, this->e, this->n);
 }
 
-void rsa::decrypt(BigInt *output, BigInt *input) {
-  if (this->n->cmp(input) <= 0) {
+void rsa::decrypt(mpz_t output, mpz_t input) {
+  if (mpz_cmp(this->n, input) <= 0) {
     throw - 1;
   }
 
-  BigInt *result = input->modexp(this->d, this->n);
-  output->copy(result);
+  mpz_powm(output, input, this->d, this->n);
 }
 
-void rsa::sign(BigInt *output, BigInt *input) {
-  if (this->n->cmp(input) <= 0) {
+void rsa::sign(mpz_t output, mpz_t input) {
+  if (mpz_cmp(this->n, input) <= 0) {
     throw - 1;
   }
 
-  BigInt *result = input->modexp(this->d, this->n);
-  output->copy(result);
+  mpz_powm(output, input, this->d, this->n);
 }
 
-void rsa::verify(BigInt *output, BigInt *input) {
-  if (this->n->cmp(input) <= 0) {
+void rsa::verify(mpz_t output, mpz_t input) {
+  if (mpz_cmp(this->n, input) <= 0) {
     throw - 1;
   }
 
-  BigInt *result = input->modexp(this->e, this->n);
-  output->copy(result);
+  mpz_powm(output, input, this->e, this->n);
 }
 
 int rsa::get_types() { return this->type; }
 
-void rsa::exponent(BigInt *e) {
-  this->e->copy(e);
+void rsa::exponent(mpz_t e) {
+  mpz_clear(this->e);
+  mpz_init_set(this->e, e);
   this->type = this->type | PUBLIC_KEY;
 }
 
-void rsa::priv(BigInt *d) {
-  this->d->copy(d);
+void rsa::priv(mpz_t d) {
+  mpz_clear(this->d);
+  mpz_init_set(this->d, d);
   this->type = this->type | PRIVATE_KEY;
 }
 
-void rsa::priv(BigInt *p, BigInt *q) {
-  this->q->copy(p);
-  this->p->copy(q);
+void rsa::priv(mpz_t p, mpz_t q) {
+  mpz_clear(this->p);
+  mpz_init_set(this->p, p);
+  mpz_clear(this->q);
+  mpz_init_set(this->q, q);
   this->type = PUBLIC_KEY | PRIVATE_KEY;
 }
 
-void rsa::modulus(BigInt *n) { this->n->copy(n); }
+void rsa::modulus(mpz_t n) {
+  mpz_clear(this->n);
+  mpz_init_set(this->n, n);
+}
