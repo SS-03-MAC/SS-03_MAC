@@ -5,6 +5,7 @@ using MAC.Types.User;
 namespace MAC.Models
 {
     [TableName("Users")]
+    [UrlName("users")]
     public partial class User : BaseModel<User>
     {
         /// <summary>
@@ -38,5 +39,10 @@ namespace MAC.Models
         /// </summary>
         [DatabaseField("City")]
         public String City { get; set; }
+
+        public static void CanYouSeeMe()
+        {
+            return;
+        }
     }
 }
