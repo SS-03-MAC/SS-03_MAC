@@ -2805,6 +2805,7 @@
         "dependencies": {
           "BCrypt.Net-Core": "1.1.0",
           "Microsoft.NETCore.App": "1.0.0",
+          "Newtonsoft.Json": "9.0.1",
           "System.Data.SqlClient": "4.1.0",
           "System.Diagnostics.StackTrace": "4.0.1",
           "System.Net.Mail": "1.0.0-rtm-00002",
