@@ -35,14 +35,9 @@ namespace MAC.Models
         public Password PasswordDigest { get; set; }
 
         /// <summary>
-        /// City 
+        /// City
         /// </summary>
         [DatabaseField("City")]
         public String City { get; set; }
-
-        public static void CanYouSeeMe()
-        {
-            return;
-        }
     }
 }
