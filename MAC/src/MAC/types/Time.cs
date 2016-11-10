@@ -11,6 +11,9 @@ namespace MAC.Types
     /// </summary>
     public class Time : BaseType<Time, TimeSpan>
     {
+        /// <summary>
+        /// Data stored as a Timespan
+        /// </summary>
         private TimeSpan Data;
 
         /// <summary>

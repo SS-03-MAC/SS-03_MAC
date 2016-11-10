@@ -11,6 +11,9 @@ namespace MAC.Types
     /// </summary>
     public class DateTime : BaseType<DateTime, System.DateTime>
     {
+        /// <summary>
+        /// Data that is stored in the type represented in as bool
+        /// </summary>
         private System.DateTime Data;
 
         /// <summary>

@@ -10,6 +10,9 @@ namespace MAC.Types
     /// </summary>
     public class Boolean : BaseType<Boolean, bool>
     {
+        /// <summary>
+        /// Data that is stored in the type represented in as bool
+        /// </summary>
         private bool Data;
 
         /// <summary>

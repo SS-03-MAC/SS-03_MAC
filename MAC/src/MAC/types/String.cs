@@ -10,6 +10,9 @@ namespace MAC.Types
     /// </summary>
     public class String : BaseType<String,string>
     {
+        /// <summary>
+        /// Data stored as string
+        /// </summary>
         protected string Data;
 
         /// <summary>
