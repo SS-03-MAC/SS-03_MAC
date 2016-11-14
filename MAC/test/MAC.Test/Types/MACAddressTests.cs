@@ -54,5 +54,16 @@ namespace MAC.Test.Types.Internet
 
             Assert.True(address1.Equals(address2));
         }
+
+        [Fact]
+        public void NotEqualsTest()
+        {
+            MAC.Types.Internet.MACAddress address1 =
+                new MAC.Types.Internet.MACAddress("012.345.678.9AA");
+            MAC.Types.Internet.MACAddress address2 =
+                new MAC.Types.Internet.MACAddress("01:23:45:67:89:AB");
+
+            Assert.False(address1.Equals(address2));
+        }
     }
 }
