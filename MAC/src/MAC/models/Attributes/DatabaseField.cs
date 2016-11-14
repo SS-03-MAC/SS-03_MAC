@@ -2,11 +2,14 @@
 
 namespace MAC.Models.Attributes
 {
+    /// <summary>
+    /// Tells MAC where the field is stored in the database
+    /// </summary>
     [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property, AllowMultiple = false)]
     public class DatabaseField : Attribute
     {
         /// <summary>
-        /// Name of the table
+        /// Name of the Database field
         /// </summary>
         public string Name { get; }
 

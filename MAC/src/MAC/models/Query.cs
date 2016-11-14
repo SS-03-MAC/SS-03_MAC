@@ -27,7 +27,11 @@ namespace MAC.Models
             }
         }
 
-
+        /// <summary>
+        /// Run a given SQL Command
+        /// </summary>
+        /// <param name="cmd">SQL command to run </param>
+        /// <returns>Number of row effected by the insert</returns>
         public static int RunInsertQuery(SqlCommand cmd)
         {
             using (SqlConnection conn = new SqlConnection(ConnectionString))

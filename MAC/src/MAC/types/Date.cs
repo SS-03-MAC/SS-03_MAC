@@ -13,6 +13,9 @@ namespace MAC.Types
     /// </summary>
     public class Date : BaseType<Date, System.DateTime>
     {
+        /// <summary>
+        /// Data that is stored in the type represented in as System.DateTime
+        /// </summary>
         private System.DateTime Data;
 
         /// <summary>

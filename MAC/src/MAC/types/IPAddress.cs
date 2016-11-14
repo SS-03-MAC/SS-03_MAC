@@ -9,7 +9,9 @@ namespace MAC.Types.Internet
     /// </summary>
     public class IPAddress : BaseType<IPAddress, System.Net.IPAddress>
     {
-
+        /// <summary>
+        /// Data that is stored in the model represented in as string
+        /// </summary>
         private string Data;
         private System.Net.IPAddress Address;
 
