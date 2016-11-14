@@ -1,33 +1,46 @@
 require 'optparse'
+require_relative './../../generate/Javascript/generate_js.rb'
+require_relative './../../generate/SQL/generate_sql.rb'
+require_relative './../../generate/CSharp/generate_csharp.rb'
+require_relative './../../parsing/parser.rb'
 
 module MacCLI
   ##
   # Build for MacCLI
   class Build
-    def build(args, js_path, cs_path, sql_path)
+    include Generation
+    include Parser
+    def build(args, js_path, cs_path, sql_path, yml_path)
       opts = option_parser(args)
+      model_hash = Parser.parse_dir(yml_path)
       unless opts['js'] == false
-        build_js(js_path)
+        build_js(js_path, model_hash)
       end
 
       unless opts['sql'] == false
-        build_sql(sql_path)
+        build_sql(sql_path, model_hash)
       end
 
       unless opts['cs'] == false
-        build_cs(cs_path)
+        build_cs(cs_path, model_hash)
       end
     end
 
-    def build_js(path)
-      puts "doing js"
+    def build_js(path, models)
+      gen = GenerateJavascript.new
+      models.each_value do |type_list|
+        type_list.each do |type|
+          model_name = type['name']
+          gen.write_class(type, path + model_name + '.js')
+        end
+      end
     end
 
-    def build_cs(path)
+    def build_cs(path, models)
       puts "doing cs"
     end
 
-    def build_sql(path)
+    def build_sql(path, models)
       puts "doing SQL"
     end
     
