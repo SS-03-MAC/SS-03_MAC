@@ -12,7 +12,7 @@ module MacCLI
     require './commands/build'
     ARGV.shift
     build = Build.new
-    build.option_parser(ARGV)
+    build.build(ARGV, './models/cs', './models/csharp', './models/sql')
     exit
   elsif ARGV[0] == 'init'
     require './commands/init'
