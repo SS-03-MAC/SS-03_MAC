@@ -37,11 +37,23 @@ module MacCLI
     end
 
     def build_cs(path, models)
-      puts "doing cs"
+      gen = GenerateCSharp.new
+      models.each_value do |type_list|
+        type_list.each do |type|
+          model_name = type['name']
+          gen.write_class(type, path + model_name + '.cs')
+        end
+      end
     end
 
     def build_sql(path, models)
-      puts "doing SQL"
+      gen = GenerateSQL.new
+      models.each_value do |type_list|
+        type_list.each do |type|
+          model_name = type['name']
+          gen.write_class(type, path + model_name + '.cs')
+        end
+      end
     end
     
     def option_parser(args)
