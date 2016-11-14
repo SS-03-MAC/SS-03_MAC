@@ -1,7 +1,8 @@
 ﻿using System;
 
-namespace MAC.Models.Attributes
+namespace MAC.Models.Attributes.Validations
 {
+    [AttributeUsage(AttributeTargets.Field|AttributeTargets.Property)]
     public class Length : Attribute
     {
         /// <summary>
