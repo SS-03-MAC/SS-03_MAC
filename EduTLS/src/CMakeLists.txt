@@ -7,4 +7,4 @@ file(GLOB EDUTLS_SOURCE_FILES bignum/*.cpp crypto/*/*.cpp tls/*/*.cpp)
 
 add_library(edutls ${EDUTLS_SOURCE_FILES})
 SET_TARGET_PROPERTIES(edutls PROPERTIES LINKER_LANGUAGE CXX)
-target_link_libraries(edutls gmp libgmp)
+target_link_libraries(edutls gmp)
