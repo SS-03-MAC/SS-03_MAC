@@ -62,7 +62,7 @@ static inline void edutls_rand_bytes(uint8_t *output, size_t count) {
 }
 #endif
 
-#ifdef __linux__
+#if defined(__linux__) || defined(__CYGWIN64__) || defined(__CYGWIN32__)
 #include <errno.h>
 #include <exception>
 #include <linux/random.h>
@@ -97,6 +97,32 @@ static inline void edutls_rand_check(uint8_t *buffer, int result, int err) {
     edutls_rand_check(buffer, result, errno);
   }
 }
+
+static inline void edutls_rand_bytes(uint8_t *output, size_t count) {
+  size_t o_p = 0;
+  size_t b_p = 0;
+  uint8_t buffer[255];
+  int result = syscall(SYS_getrandom, buffer, 255, 0);
+  edutls_rand_check(buffer, result, errno);
+
+  while (o_p < count) {
+    output[o_p] = buffer[b_p];
+    o_p += 1;
+    b_p += 1;
+
+    if (o_p != count) {
+      if (b_p == 255) {
+        b_p = 0;
+
+        int result = syscall(SYS_getrandom, buffer, 255, 0);
+        edutls_rand_check(buffer, result, errno);
+      }
+    }
+  }
+}
+#endif
+
+#ifdef _WIN32
 
 static inline void edutls_rand_bytes(uint8_t *output, size_t count) {
   size_t o_p = 0;

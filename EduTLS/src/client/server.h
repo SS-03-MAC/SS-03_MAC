@@ -16,7 +16,7 @@
 
 inline void handle(int c) {
   TLSConfiguration *config = new TLSConfiguration();
-  config->debug = false;
+  config->debug = true;
   config->cert.certificate_length = 806;
   config->cert.certificate_data = (uint8_t *)malloc(sizeof(uint8_t) * 806);
   std::string cert =
