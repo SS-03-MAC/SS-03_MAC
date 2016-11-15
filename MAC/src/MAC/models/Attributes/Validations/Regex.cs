@@ -9,7 +9,7 @@ namespace MAC.Models.Attributes.Validations
     /// Validate a given 
     /// </summary>
     [AttributeUsage(AttributeTargets.Field|AttributeTargets.Property)]
-    public class Regex : Attribute
+    public class Regex : BaseValidation
     {
         public string regex { get; set; }
         public Regex(string regex)
