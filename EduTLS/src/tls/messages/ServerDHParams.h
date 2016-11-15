@@ -16,6 +16,8 @@
 #include "../interfaces/encodable.h"
 #include "./ServerKeyExchange.h"
 
+// Currently unused as server does not negotiate DH.
+
 class ServerDHParams final : public ServerKeyExchange {
 public:
   size_t dh_p_length;

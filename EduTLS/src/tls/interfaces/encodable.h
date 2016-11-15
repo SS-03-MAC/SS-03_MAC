@@ -16,6 +16,8 @@
 #include <cstdint>
 #include <cstdlib>
 
+// Encodable interface for use with handshake messages and packet containers.
+
 class encodable_i {
   virtual int encode(uint8_t *result) = 0;
   virtual size_t encode_length() = 0;

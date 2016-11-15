@@ -1,6 +1,7 @@
 ﻿using System;
 using Xunit;
 using MAC.Models;
+using MAC.Models.Exceptions;
 using System.Data.SqlClient;
 using System.Collections.Generic;
 

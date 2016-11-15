@@ -31,7 +31,7 @@ private:
   size_t size_offset;
   size_t size_length;
 
-  void Read();
+  int Read();
 
 public:
   PacketQueue(int socket, int offset, int length);

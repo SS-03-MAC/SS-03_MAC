@@ -9,6 +9,9 @@ namespace MAC.Types
     /// </summary>
     public class Integer : BaseType<Integer, int>
     {
+        /// <summary>
+        /// Data that is stored in the model represented in as int
+        /// </summary>
         private int Data;
 
         /// <summary>

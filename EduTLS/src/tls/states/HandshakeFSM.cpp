@@ -73,18 +73,34 @@ void HandshakeFSM::InitialHandshake(PacketQueue *pq) {
   // Once for ClientHello
   uint8_t buffer[65536];
   size_t length = pq->ReadPacket(buffer);
+  if (length == 0) {
+    return;
+  }
+
   this->ProcessMessage(buffer, length);
 
   // Once for ClientKeyExchange
   length = pq->ReadPacket(buffer);
+  if (length == 0) {
+    return;
+  }
+
   this->ProcessMessage(buffer, length);
 
   // Once for ChangeCipherSpec
   length = pq->ReadPacket(buffer);
+  if (length == 0) {
+    return;
+  }
+
   this->ProcessMessage(buffer, length);
 
   // Once for Finished
   length = pq->ReadPacket(buffer);
+  if (length == 0) {
+    return;
+  }
+
   this->ProcessMessage(buffer, length);
 }
 
@@ -114,6 +130,7 @@ void HandshakeFSM::ProcessMessage(uint8_t *data, size_t length) {
 
   TLSPlaintext *p = c->fragment->contents->contents;
 
+  // Two types of client messages to handle: Handshake and ChangeCipherSpec
   if (c->type == ContentType_e::handshake) {
     HandshakeType *h = new HandshakeType();
 
@@ -157,6 +174,7 @@ void HandshakeFSM::ProcessMessage(uint8_t *data, size_t length) {
   delete c;
 }
 
+// Initial state: process a Client Hello
 void HandshakeFSM::ProcessClientHello(ClientHello *m) {
   this->current_state = 0;
 

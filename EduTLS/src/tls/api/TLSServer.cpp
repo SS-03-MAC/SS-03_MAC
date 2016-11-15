@@ -35,6 +35,9 @@
 #include <unistd.h>
 
 TLSServer::TLSServer(TLSConfiguration *config) {
+  // Assume one "server" per client; sessions are unique to remote clients.
+  // Config can be shared globally between multiple TLSServer instances.
+
   this->state = new TLSSession(ConnectionEnd_e::server);
   this->config = config;
 
@@ -58,10 +61,15 @@ TLSServer::~TLSServer() {
 }
 
 void TLSServer::Handshake() {
+  if (this->closed) {
+    return;
+  }
+
   if (this->hs == NULL) {
     this->hs = new HandshakeFSM(this->state, this->config);
   }
 
+  // Perform initial handshake with client.
   this->hs->InitialHandshake(this->pq);
 
   this->closed = false;
@@ -80,6 +88,10 @@ size_t TLSServer::Read(uint8_t *output) {
   if (this->closed || this->hs == NULL) {
     return 0;
   }
+
+  // Read application data; may have handshake and/or alert data interspersed,
+  // so pass this data on to the FSM to handle. Block until application data
+  // is finally returned.
 
   uint8_t buffer[65536];
   size_t length = pq->ReadPacket(buffer);
@@ -112,6 +124,8 @@ size_t TLSServer::Read(uint8_t *output) {
     }
 
     TLSPlaintext *p = c->fragment->contents->contents;
+
+    // Determine type of packet contents.
     if (c->type == ContentType_e::application_data) {
       for (size_t i = 0; i < p->length; i++) {
         output[i] = p->fragment[i];
@@ -139,6 +153,8 @@ void TLSServer::Write(uint8_t *data, size_t length) {
     return;
   }
 
+  // Constructs container and writes encrypted application data to packet buffer.
+
   uint8_t buffer[65536];
   size_t buffer_length = 0;
 
@@ -151,6 +167,10 @@ void TLSServer::Write(uint8_t *data, size_t length) {
 }
 
 void TLSServer::Close() {
+  // Close the server by sending a close alert.
+  // Cannot reopen the session; the only logical final step is to deconstruct
+  // the object. But: may receive additional data (ignored), so best to leave
+  // socket open.
   uint8_t buffer[65536];
   size_t buffer_length = 0;
 

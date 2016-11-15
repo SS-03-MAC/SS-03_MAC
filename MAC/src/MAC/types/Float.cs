@@ -10,6 +10,9 @@ namespace MAC.Types
     /// </summary>
     public class Float : BaseType<Float, double>
     {
+        /// <summary>
+        /// Data that is stored in the model represented in as float
+        /// </summary>
         private double Data;
 
         /// <summary>

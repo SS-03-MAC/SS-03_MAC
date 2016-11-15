@@ -7,10 +7,13 @@ namespace MAC.Types.User {
      /// Stores and vaildates 
      /// </summary>
      public class Email : BaseType<Email,string> {
+        /// <summary>
+        /// Data that is stored in the model represented in as string
+        /// </summary>
         private string Data;
 
         /// <summary>
-        /// 
+        ///  Create an email type with an email as a strign
         /// </summary>
         /// <param name="email">An email address</param>
         public Email(string email)

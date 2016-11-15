@@ -24,7 +24,11 @@
 #include <cstdio>
 #include <cstdlib>
 
+// The block cipher AES IS required and therefore implemented.
+
 GenericBlockCipher::GenericBlockCipher(TLSSession *state) {
+  // For decryption
+
   this->state = state;
   this->iv_length = this->state->current_read_params->record_iv_length;
   this->mac_length = this->state->current_read_params->mac_length;
@@ -37,6 +41,8 @@ GenericBlockCipher::GenericBlockCipher(TLSSession *state) {
 }
 
 GenericBlockCipher::GenericBlockCipher(TLSSession *state, TLSCompressed *contents) {
+  // For encryption
+
   this->state = state;
   this->iv_length = this->state->current_read_params->record_iv_length;
   this->mac_length = this->state->current_read_params->mac_length;

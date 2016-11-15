@@ -103,15 +103,15 @@ inline void handle(int c) {
   mpz_clear(key_d);
   mpz_clear(key_e);
   close(c);
+  _Exit(0);
 }
 
-inline void fork(int c) {
+inline void doFork(int c) {
   int child = fork();
   if (child == -1) {
     std::cout << "Forking a handling thread failed" << std::endl;
   } else if (child == 0) {
     handle(c);
-    exit(0);
   }
 }
 
@@ -143,7 +143,7 @@ inline int serve() {
     socklen_t *clilen = (socklen_t *)sizeof(client_addr);
     int c = accept(s, (sockaddr *)&client_addr, (socklen_t *)&clilen);
 
-    fork(c);
+    doFork(c);
   }
 
   close(b);

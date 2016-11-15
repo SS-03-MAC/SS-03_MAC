@@ -10,6 +10,9 @@ namespace MAC.Types
     /// </summary>
     public class Currency : BaseType<Currency, decimal>
     {
+        /// <summary>
+        /// Data that is stored in the type represented in as decimal
+        /// </summary>
         private decimal Data;
 
         /// <summary>

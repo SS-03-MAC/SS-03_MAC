@@ -22,6 +22,9 @@
 #include <cstdio>
 #include <cstdlib>
 
+// Currently only implements the NULL cipher; extend later to RC4 and AES-CTR
+// if desired.
+
 GenericStreamCipher::GenericStreamCipher(TLSSession *state) {
   this->ciphertext = NULL;
   this->mac_length = 0;
@@ -57,6 +60,7 @@ int GenericStreamCipher::encode(uint8_t *result) {
 }
 
 size_t GenericStreamCipher::encode_length() { return this->contents_length + this->mac_length; }
+
 int GenericStreamCipher::decode(uint8_t *encoded, size_t length) {
   size_t i = 0;
   this->contents_length = length - this->mac_length;
