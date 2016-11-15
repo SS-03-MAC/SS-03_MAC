@@ -1,4 +1,5 @@
 using MAC.Models.Attributes;
+using MAC.Models.Attributes.Validations;
 using MAC.Types;
 using MAC.Types.User;
 

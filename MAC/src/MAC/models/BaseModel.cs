@@ -1,4 +1,5 @@
 using MAC.Models.Attributes;
+using MAC.Models.Attributes.Validations;
 using MAC.Models.Exceptions;
 using MAC.Types;
 using System;
@@ -117,7 +118,7 @@ namespace MAC.Models
         /// Deletes the given record with the given id
         /// </summary>
         /// <param name="id">If the record was deleted</param>
-        /// <returns></returns>
+        /// <returns>If the record has deleted</returns>
         public static bool Delete(int id)
         {
             return Query.Delete(GetStaticTableName(), id);
@@ -181,7 +182,24 @@ namespace MAC.Models
 
             foreach (PropertyInfo property in properties)
             {
-                // TODO: Finish me
+                if (property.GetValue(this) == null)
+                {
+                    continue;
+                }
+                var ValidateMethod = property.GetValue(this).GetType().GetTypeInfo().GetMethod("Validate");
+                if (ValidateMethod != null)
+                {
+                    bool obt = (bool)ValidateMethod.Invoke(property.GetValue(this), new object[] { });
+                    if (!obt)
+                    {
+                        return false;
+                    }
+                }
+                var attributes = property.GetCustomAttributes<BaseValidation>();
+                foreach (BaseValidation bv in attributes)
+                {
+
+                }
             }
 
             return true;

@@ -91,5 +91,33 @@ namespace MAC.Test.Models
             Assert.Equal(expectedUser.Id, users[0].Id);
 
         }
+
+        [Fact]
+        public void NoEmail()
+        {
+            string email = "";
+            User u = new User { FullName = new MAC.Types.String("Matthew"), City = new MAC.Types.String("Ames"), Email = new MAC.Types.User.Email(email), PasswordDigest = new MAC.Types.User.Password("apple", false) };
+            Assert.False(u.Validate());
+
+        }
+
+        [Fact]
+        public void TestingInvalidType()
+        {
+            string email = "mburket at iastate dot edu";
+            User u = new User { FullName = new MAC.Types.String("Matthew"), City = new MAC.Types.String("Ames"), Email = new MAC.Types.User.Email(email), PasswordDigest = new MAC.Types.User.Password("apple", false) };
+            Assert.False(u.Validate());
+
+        }
+
+
+        [Fact]
+        public void NoFullName()
+        {
+            string email = "matthew" + DateTime.Now.Ticks + "GetOne@assignitapp.com";
+            User u = new User { FullName = new MAC.Types.String(""), City = new MAC.Types.String("Ames"), Email = new MAC.Types.User.Email(email), PasswordDigest = new MAC.Types.User.Password("apple", false) };
+            Assert.False(u.Validate());
+
+        }
     }
 }
