@@ -198,7 +198,7 @@ namespace MAC.Models
                 var attributes = property.GetCustomAttributes<BaseValidation>();
                 foreach (BaseValidation bv in attributes)
                 {
-                    if (!bv.IsValid(property.GetValue(this)))
+                    if (!bv.IsValid(property.GetValue(this) as BaseType))
                     {
                         return false;
                     }
