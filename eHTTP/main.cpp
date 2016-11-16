@@ -1,80 +1,42 @@
 #include <iostream>
 #include <fstream>
-#include <sys/socket.h>
-#include <unistd.h>
 #include <cstring>
-#include <ext/stdio_filebuf.h>
-#include "pexec/pexec.h"
-#include "network/TcpServer.h"
-#include "httpParsing/httpRequestHeaderCollection.h"
-#include "httpParsing/httpResponseHeaderCollection.h"
-#include "server/settings.h"
-#include "utils/filesystem.h"
 
+#include "httpParsing/httpRequestHeaderCollection.h"
+#include "server/settings.h"
 #include "../EduTLS/src/crypto/crypto.h"
 #include "../EduTLS/src/encoding/encoding.h"
 #include "../EduTLS/src/tls/tls.h"
-#include "../EduTLS/src/tls/abstractions/ServerStream.h"
-#include <gmp.h>
+#include "server/server.h"
 
 void initTls();
-void forkClient(int clientFd);
-void handleClient(int clientFd);
-int serveFile(int clientFd, httpParsing::AbsPath &path);
-int serveCGI(std::istream &tcpistream,
-             int clientFd,
-             httpParsing::AbsPath &path,
-             eHTTP::server::cgiEndpoint_t cgiEndpoint,
-             httpRequestHeaderCollection &requestHeaders);
-bool getFileFromPath(httpParsing::AbsPath &path, std::string &outFile);
-void redirectClient(int clientFd, std::string path);
-ssize_t passData(std::istream &tcpisteram,
-                 int *cgiPipes,
-                 int clientFd,
-                 size_t requestContentLen,
-                 uint8_t *buf,
-                 int bufSize);
 
-eHTTP::server::settings serverSettings;
 TLSConfiguration *tlsConfig;
 
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wmissing-noreturn"
 int main(int argc, char *argv[]) {
-  initTls();
+  //initTls();
+  std::string basePath;
+  eHTTP::server::server *server;
 
   if (argc > 1) {
-    serverSettings.basePath = argv[1];
+    basePath = argv[1];
   } else {
-    serverSettings.basePath = "c:";
+    basePath = "c:";
   }
-  serverSettings.port = 8000;
-  serverSettings.defaultDocuments.push_back("test2.txt");
-  serverSettings.defaultDocuments.push_back("index.html");
-  struct eHTTP::server::cgiEndpoint_t ep1;
-  struct eHTTP::server::cgiEndpoint_t ep2;
-  ep1.pathElement = "api";
-  ep1.cgiPath = "echo";
-  ep1.cgiArguments = "hi";
-  ep2.pathElement = "env";
-  ep2.cgiPath = "printenv";
-  serverSettings.cgiEndpoints.push_back(ep1);
-  serverSettings.cgiEndpoints.push_back(ep2);
+  server = new eHTTP::server::server(8000, basePath);
+  server->addDefaultDocument("test2.txt");
 
-  int tcp = network::tcp_start(serverSettings.port);
-  int client;
-  while (true) {
-    client = network::tcp_accept(tcp);
-    forkClient(client);
-  }
+  server->addCgiEndpoint("api", "echo", "hi");
+  server->addCgiEndpoint("env", "printenv", "");
+
+  server->serve();
 }
-#pragma clang diagnostic pop
 
 void initTls() {
   tlsConfig = new TLSConfiguration();
   tlsConfig->debug = true;
   tlsConfig->cert.certificate_length = 806;
-  tlsConfig->cert.certificate_data = (uint8_t *)malloc(sizeof(uint8_t) * 806);
+  tlsConfig->cert.certificate_data = (uint8_t *) malloc(sizeof(uint8_t) * 806);
   std::string cert =
       "MIIDIjCCAgoCCQCAHbmNOfRXmTANBgkqhkiG9w0BAQsFADBTMQswCQYDVQQGEwJVUzENMAsGA1UECAwESW93YTENMAsGA1UEBwwEQW1lczESMBAG"
           "A1UECgwJQ09NIFMgMzA5MRIwEAYDVQQDDAlsb2NhbGhvc3QwHhcNMTYxMDMwMTgyODEzWhcNMTkwODIwMTgyODEzWjBTMQswCQYDVQQGEwJVUzEN"
@@ -88,7 +50,7 @@ void initTls() {
           "+KculJP9XLwmNH2NknScz7x3/"
           "FeMWEvjGJGq0MyZx15W6w6EgnUTKGQDmrBMGuL8TSUvGLkidQ6b797uw1rO8ccaZCB6R2OcySdwXUv3Rs+"
           "kod1YVXpeV9aQz2zOPIhqqc0fFxPhc=";
-  fromBase64(tlsConfig->cert.certificate_data, (char *)cert.c_str(), 1076);
+  fromBase64(tlsConfig->cert.certificate_data, (char *) cert.c_str(), 1076);
 
   uint8_t n[256] = {
       0x9e, 0xc0, 0x8c, 0xa3, 0x66, 0xef, 0x7b, 0x58, 0x24, 0xe9, 0xfd, 0x3a, 0xb0, 0x4f, 0x87, 0x19, 0x5f, 0x53, 0x8b,
@@ -135,172 +97,4 @@ void initTls() {
   tlsConfig->key.exponent(key_e);
   tlsConfig->key.priv(key_d);
   tlsConfig->key.modulus(key_n);
-}
-
-void forkClient(int clientFd) {
-  int child = fork();
-  if (child == -1) {
-    std::cout << "Forking a handling thread failed" << std::endl;
-  } else if (child == 0) {
-    handleClient(clientFd);
-    exit(0);
-  }
-}
-
-void handleClient(int clientFd) {
-  TLSServer *srv = new TLSServer(tlsConfig);
-  srv->AcceptClient(clientFd);
-  srv->Handshake();
-  TLSServerStream *ss = new TLSServerStream(srv);
-  int c = ss->get();
-  std::cout << "read from client: " << (char) ss->get() << std::endl;
-  delete ss;
-  delete srv;
-/*
-  __gnu_cxx::stdio_filebuf<char> filebuf(clientFd, std::ios::in);
-  std::istream clientStream(&filebuf);
-  httpRequestHeaderCollection *headers;
-  eHTTP::cgiEndpoint_t cgiEndpoint;
-  try {
-    headers = new httpRequestHeaderCollection(&clientStream);
-  } catch (const char *err) {
-    std::cout << "Error handling request: " << err << std::endl;
-    shutdown(clientFd, SHUT_RDWR);
-    return;
-  }
-  std::cout << "Request: " << headers->toString() << std::endl;
-
-  if (serverSettings.getScriptForPath(*headers->path, cgiEndpoint)) {
-    std::cout << "Serving via cgi" << std::endl;
-    serveCGI(clientStream, clientFd, *headers->path, cgiEndpoint, *headers);
-  } else {
-    std::cout << "Serving static file" << std::endl;
-    serveFile(clientFd, *headers->path);
-  }*/
-
-  shutdown(clientFd, SHUT_RDWR);
-}
-
-int serveFile(int clientFd, httpParsing::AbsPath &path) {
-  std::string fileToServe;
-  bool fileExists = getFileFromPath(path, fileToServe);
-  std::ifstream *fileStream =
-      new std::ifstream(fileToServe, std::ifstream::in); //new std::ifstream("c:\\test.txt", std::ifstream::in);
-
-  if (!fileExists || fileStream->fail()) {
-    std::cout << "Error opening file" << std::endl;
-    httpResponseHeaderCollection resp("HTTP/1.1", 404, "Not Found");
-    std::string errorText(resp.toString());
-    errorText += "Error opening file";
-    write(clientFd, errorText.c_str(), errorText.length());
-    return 1;
-  } else {
-    httpResponseHeaderCollection resp("HTTP/1.1", 200, "Success");
-
-    ssize_t fileSize = eHTTP::utils::filesystem::fileSize(fileToServe);
-    resp.push_back(new httpHeader("Content-Length", std::to_string(fileSize)));
-
-    std::string headerString(resp.toString());
-    write(clientFd, headerString.c_str(), headerString.length());
-    network::write_stream(clientFd, *fileStream);
-  }
-  fileStream->close();
-  return 0;
-}
-
-int serveCGI(std::istream &tcpistream,
-             int clientFd,
-             httpParsing::AbsPath &path,
-             eHTTP::server::cgiEndpoint_t cgiEndpoint,
-             httpRequestHeaderCollection &requestHeaders) {
-  uint8_t buf[10240];
-  int cgiPipes[3];
-  char *argv[] = {(char *) cgiEndpoint.cgiPath.c_str(), NULL, NULL};
-  ssize_t sizeFromClient;
-  size_t requestContentLen = 0;
-  if (cgiEndpoint.cgiArguments.length() > 0) {
-    argv[1] = (char *) cgiEndpoint.cgiArguments.c_str();
-  }
-  if (requestHeaders.keyExists("Content-Length")) {
-    requestContentLen = (size_t) requestHeaders.getInt64Value("Content-Length");
-  }
-  std::cout << "Request content len" << requestContentLen << std::endl;
-
-  // cgi out
-  pexec(cgiEndpoint.cgiPath.c_str(), cgiPipes, argv, environ);
-  sizeFromClient = passData(tcpistream, cgiPipes, clientFd, requestContentLen, buf, sizeof(buf));
-}
-
-bool getFileFromPath(httpParsing::AbsPath &path, std::string &outFile) {
-  //Is it a folder
-  // - Does the path end in a slash
-  // - Is the path a folder
-  //If folder
-  // - Append defualtDocuments
-  // - Is new path a file
-  std::string fullPath = serverSettings.basePath + "/" + path.getFullPath();
-  std::string fileToServe;
-  std::cout << "file to serve before processing: " << fullPath << std::endl;
-  std::cout << "ends in slash: " << path.endsInSlash() << std::endl;
-  bool folder = false;
-  if (path.endsInSlash()) {
-    folder = true;
-  } else {
-    eHTTP::utils::filesystemObject_t fInfo = eHTTP::utils::filesystem::info(fullPath);
-    switch (fInfo) {
-    case eHTTP::utils::filesystemObject_t::folder:
-      //TODO redirect the client to "<path>/"
-      return false;
-    case eHTTP::utils::filesystemObject_t::nonexistent:return false;
-    default:break;
-    }
-  }
-  if (folder) {
-    bool isFile = false;
-    for (int i = 0; !isFile && i < serverSettings.defaultDocuments.size(); i++) {
-      fileToServe = fullPath + serverSettings.defaultDocuments[i];
-      std::cout << "searching for: " << fileToServe << std::endl;
-      isFile = eHTTP::utils::filesystem::info(fileToServe) == eHTTP::utils::filesystemObject_t::file;
-    }
-    if (!isFile) {
-      return false;
-    }
-  } else {
-    fileToServe = fullPath;
-  }
-  std::cout << "trying to serve " << fileToServe << std::endl;
-  outFile = fileToServe;
-  return true;
-}
-
-/*void sendLine(int fd, char *str, ssize_t len) {
-  char const *crlf = "\r\n";
-  write(fd, str, len);
-  write(fd, crlf, 2);
-}*/
-
-ssize_t passData(std::istream &tcpistream,
-                 int *cgiPipes,
-                 int clientFd,
-                 size_t requestContentLen,
-                 uint8_t *buf,
-                 int bufSize) {
-  ssize_t r;
-  ssize_t bufPos = 0;
-  // tcp in
-  while (requestContentLen > 0) {
-    tcpistream.read((char *) buf, requestContentLen);
-    write(cgiPipes[1], buf, (size_t) tcpistream.gcount());
-    requestContentLen -= tcpistream.gcount();
-  }
-
-  // cgi in
-  r = read(cgiPipes[0], buf, bufSize - 1);
-  do {
-    // tcp out
-    write(clientFd, buf + bufPos, r);
-    bufPos += r;
-    r = read(cgiPipes[0], buf + bufPos, bufSize - bufPos);
-  } while (r > 0);
-  return bufPos;
 }

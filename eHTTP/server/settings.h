@@ -40,7 +40,9 @@ public:
   // TODO this should be a vector.
   /// The port for the HTTP server to listen on.
   uint16_t port;
-  // TODO add a TLS port vector
+  // TODO this should be a vector.
+  /// The port for the HTTP server to listen for TLS clients.
+  uint16_t portTls;
   /// The path on the filesystem to serve static content from.
   std::string basePath;
   /// A vector of CGI endpoint mappings.

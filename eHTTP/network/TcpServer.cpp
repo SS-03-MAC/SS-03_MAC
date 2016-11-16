@@ -43,15 +43,45 @@ int tcp_accept(int sockfd) {
   return c;
 }
 
-int write_stream(int netStreamFd, std::istream &inStream) {
+long long write_stream(int netStreamFd, std::istream &inStream) {
   char buffer[1024];
-  int count = 0;
+  long long count = 0;
   while (!inStream.eof()) {
     inStream.read(buffer, sizeof(buffer));
     write(netStreamFd, buffer, (unsigned int) inStream.gcount());
     count += inStream.gcount();
   }
   return count;
+}
+
+long long passData(std::istream &tcpIstream,
+                 int clientFd,
+                 int cgiStdout,
+                 int cgiStdin,
+                 size_t requestContentLen,
+                 size_t bufSize) {
+  ssize_t r;
+  long long total = 0;
+  char buffer[bufSize];
+  ssize_t toRead;
+  // TCP in
+  while (requestContentLen > 0) {
+    // toRead = min(requestContentLen, bufSize)
+    toRead = requestContentLen > bufSize ? bufSize : requestContentLen;
+    tcpIstream.read(buffer, toRead);
+    write(cgiStdin, buffer, (size_t) tcpIstream.gcount());
+    requestContentLen -= tcpIstream.gcount();
+  }
+
+  // CGI in
+  r = read(cgiStdout, buffer, bufSize);
+  do {
+    // TCP out
+    total += r;
+    write(clientFd, buffer, (size_t) r);
+    r = read(cgiStdout, buffer, bufSize);
+  } while (r > 0);
+  return total;
 }
 
 }
