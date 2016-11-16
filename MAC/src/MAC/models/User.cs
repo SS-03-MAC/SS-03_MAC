@@ -27,7 +27,7 @@ namespace MAC.Models
         /// </summary>
         [MaxLength(72)]
         [MinLength(8)]
-        public string LengthChecker { get; set; }
+        public String LengthChecker { get; set; }
         /// <summary>
         /// How the Password is stored in the database
         /// </summary>
@@ -40,5 +40,8 @@ namespace MAC.Models
         /// </summary>
         [DatabaseField("City")]
         public String City { get; set; }
+
+        [Regex("hello")]
+        public String Regex { get; set; }
     }
 }

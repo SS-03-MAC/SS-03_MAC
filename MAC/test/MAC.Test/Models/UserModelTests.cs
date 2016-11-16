@@ -168,11 +168,11 @@ namespace MAC.Test.Models
             string email = "matthew" + DateTime.Now.Ticks + "GetOne@assignitapp.com";
             User u = new User
             {
-                FullName = new MAC.Types.String(""),
+                FullName = new MAC.Types.String("Apple"),
                 City = new MAC.Types.String("Ames"),
                 Email = new MAC.Types.User.Email(email),
                 PasswordDigest = new MAC.Types.User.Password("apple", false),
-                LengthChecker = "123"
+                LengthChecker = new MAC.Types.String("Apple")
             };
             Assert.False(u.Validate());
         }
@@ -183,13 +183,14 @@ namespace MAC.Test.Models
             string email = "matthew" + DateTime.Now.Ticks + "GetOne@assignitapp.com";
             User u = new User
             {
-                FullName = new MAC.Types.String(""),
+                FullName = new MAC.Types.String("Apple"),
                 City = new MAC.Types.String("Ames"),
                 Email = new MAC.Types.User.Email(email),
                 PasswordDigest = new MAC.Types.User.Password("apple", false),
-                LengthChecker = "1234567890"
+                LengthChecker = new MAC.Types.String("1234567890"),
+                Regex = new MAC.Types.String("hello")
             };
-            Assert.False(u.Validate());
+            Assert.True(u.Validate());
         }
 
         [Fact]
@@ -202,9 +203,24 @@ namespace MAC.Test.Models
                 City = new MAC.Types.String("Ames"),
                 Email = new MAC.Types.User.Email(email),
                 PasswordDigest = new MAC.Types.User.Password("apple", false),
-                LengthChecker = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+                LengthChecker = new MAC.Types.String("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
             };
             Assert.False(u.Validate());
+        }
+
+        [Fact]
+        public void RegexMatch()
+        {
+            string email = "matthew" + DateTime.Now.Ticks + "GetOne@assignitapp.com";
+            User u = new User
+            {
+                FullName = new MAC.Types.String("Apple"),
+                City = new MAC.Types.String("Ames"),
+                Email = new MAC.Types.User.Email(email),
+                PasswordDigest = new MAC.Types.User.Password("apple", false),
+                Regex = new MAC.Types.String("hello")
+            };
+            Assert.True(u.Validate());
         }
     }
 }
