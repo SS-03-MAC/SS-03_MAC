@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MAC.Types;
+using System;
 
 namespace MAC.Models.Attributes.Validations
 {
@@ -24,47 +25,17 @@ namespace MAC.Models.Attributes.Validations
 
         /// <summary>
         /// Override of <see cref="BaseValidation.IsValid(object)"/> 
+        /// Underlineing check uses <see cref="System.ComponentModel.DataAnnotations.MaxLengthAttribute"/>.
         /// </summary>
         /// <param name="o">object to test</param>
         /// <returns>
         ///  <c>false</c> if the given value's length is too long
         ///  <c>true</c> if the given value's length is shorter or equal to the max length
         /// </returns>
-        public override bool IsValid(object o)
+        public override bool IsValid(BaseType o)
         {
-            CheckLenth();
-
-            // RequiredField is be used for null check
-            if (o == null)
-            {
-                return true;
-            }
-
-            if (Length != 0 && o == null && AllowBlank)
-            {
-                return false;
-            }
-
-            string value = o as string;
-
-            if (value != null && value.Length < 0)
-            {
-                return false;
-            }
-
-            return true;
-        }
-
-        /// <summary>
-        /// Checks if the valdations has a valid length
-        /// </summary>
-        /// <exception cref="InvalidOperationException">If length is zero or less</exception>
-        private void CheckLenth()
-        {
-            if (Length <= 0)
-            {
-              throw new  InvalidOperationException("Length must be > 0");
-            }
+            var attr = new System.ComponentModel.DataAnnotations.MaxLengthAttribute(Length);
+            return attr.IsValid(o.GetRawObject());
         }
     }
 }
