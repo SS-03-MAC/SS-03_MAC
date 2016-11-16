@@ -20,18 +20,14 @@ namespace MAC.Models.Attributes.Validations
         /// <returns></returns>
         public override bool IsValid(object o)
         {
-            if (o == null)
+            if (o is MAC.Types.String)
             {
-                return false;
+                MAC.Types.String a = (MAC.Types.String) o;
+                o = a.Value as object;
             }
 
-            string value = o as string;
-            if (value != null && !AllowEmptyString)
-            {
-                return value.Trim().Length != 0;
-            }
-
-            return true;
+            var attr = new System.ComponentModel.DataAnnotations.RequiredAttribute();
+            return attr.IsValid(o);
         }
     }
 }
