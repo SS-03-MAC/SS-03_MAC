@@ -39,6 +39,10 @@ namespace MAC.Models.Attributes.Validations
         /// </returns>
         public override bool IsValid(BaseType o)
         {
+            if (o == null)
+            {
+                return true;
+            }
             var attr = new System.ComponentModel.DataAnnotations.RegularExpressionAttribute(Pattern);
             return attr.IsValid(o.GetRawObject());
         }

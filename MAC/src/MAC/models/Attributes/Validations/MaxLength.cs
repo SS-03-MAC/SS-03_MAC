@@ -34,6 +34,10 @@ namespace MAC.Models.Attributes.Validations
         /// </returns>
         public override bool IsValid(BaseType o)
         {
+            if (o == null)
+            {
+                return true;
+            }
             var attr = new System.ComponentModel.DataAnnotations.MaxLengthAttribute(Length);
             return attr.IsValid(o.GetRawObject());
         }

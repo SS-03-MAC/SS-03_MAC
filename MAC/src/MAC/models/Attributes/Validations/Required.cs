@@ -25,6 +25,10 @@ namespace MAC.Models.Attributes.Validations
         /// </returns>
         public override bool IsValid(BaseType o)
         {
+            if (o == null)
+            {
+                return false;
+            }
             var attr = new System.ComponentModel.DataAnnotations.RequiredAttribute();
             return attr.IsValid(o.GetRawObject());
         }

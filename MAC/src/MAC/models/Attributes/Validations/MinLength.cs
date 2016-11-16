@@ -32,21 +32,13 @@ namespace MAC.Models.Attributes.Validations
         /// </returns>
         public override bool IsValid(BaseType o)
         {
+            if (o == null)
+            {
+                return true;
+            }
             var attr = new System.ComponentModel.DataAnnotations.MinLengthAttribute(Length);
             return attr.IsValid(o.GetRawObject());
-          
-        }
 
-        /// <summary>
-        /// Checks if the valdations has a valid length
-        /// </summary>
-        /// <exception cref="InvalidOperationException">If length is zero or less</exception>
-        private void CheckLenth()
-        {
-            if (Length <= 0)
-            {
-                throw new InvalidOperationException("Length must be > 0");
-            }
         }
     }
 }
