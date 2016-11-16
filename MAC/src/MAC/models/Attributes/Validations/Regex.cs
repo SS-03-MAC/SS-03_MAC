@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MAC.Types;
+using System;
 
 namespace MAC.Models.Attributes.Validations
 {
@@ -12,14 +13,20 @@ namespace MAC.Models.Attributes.Validations
         /// Regex to check with
         /// Must a a valid .NET Regex
         /// </summary>
-        public string regex { get; set; }
-        public Regex(string regex)
+        public string Pattern { get; set; }
+
+        /// <summary>
+        ///  Setup the regex validation
+        /// </summary>
+        /// <param name="pattern">Regex to create</param>
+        /// <exception cref="ArgumentException">Pattern is null</exception>
+        public Regex(string pattern)
         {
-            if (regex == null)
+            if (pattern == null)
             {
                 throw new ArgumentException("Regex can't be null!");
             }
-            this.regex = regex;
+            Pattern = pattern;
         }
 
         /// <summary>
@@ -30,15 +37,10 @@ namespace MAC.Models.Attributes.Validations
         /// <c>false</c> if o is null or doesn't match <paramref name="regex"/>
         /// <c>true</c> if o match's <paramref name="regex"/>
         /// </returns>
-        public override bool IsValid(object o)
+        public override bool IsValid(BaseType o)
         {
-           if (o == null) {
-                return false;
-            }
-
-            string value = o as string;
-            System.Text.RegularExpressions.Regex regexChecker = new System.Text.RegularExpressions.Regex(regex);
-            return value != null && regexChecker.IsMatch(value);
+            var attr = new System.ComponentModel.DataAnnotations.RegularExpressionAttribute(Pattern);
+            return attr.IsValid(o.GetRawObject());
         }
     }
 }
