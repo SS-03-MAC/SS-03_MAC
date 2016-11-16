@@ -1,4 +1,5 @@
 ﻿using System;
+using MAC.Types;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -20,6 +21,6 @@ namespace MAC.Models.Attributes.Validations
         /// <c>false</c> if the object is not valid
         /// <c>true</c> if the object is valid
         /// </returns>
-        public abstract bool IsValid(object o);
+        public abstract bool IsValid(BaseType o);
     }
 }
