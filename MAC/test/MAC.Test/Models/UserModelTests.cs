@@ -92,7 +92,8 @@ namespace MAC.Test.Models
             };
             u.Save();
             User u2 = User.Get(u.Id.Value);
-            //Assert.Equal(u, u2);
+            Assert.Equal(u.Email, u2.Email);
+            Assert.Equal(u.FullName, u2.FullName);
         }
 
         [Fact]
