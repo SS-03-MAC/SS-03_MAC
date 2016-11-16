@@ -22,17 +22,9 @@ namespace MAC.Models.Attributes.Validations
         /// </returns>
         public override bool IsValid(object o)
         {
-            CheckLength();
-            // RequiredField is be used for null check
-            if (o == null)
-            {
-                return true;
-            }
-
-            if (o == null)
-            {
-                return true;
-            }
+            var attr = new System.ComponentModel.DataAnnotations.MinLengthAttribute(Length);
+            return attr.IsValid(o);
+          
         }
 
         /// <summary>
