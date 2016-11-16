@@ -31,8 +31,10 @@ namespace MAC.Models.Attributes.Validations
 
         /// <summary>
         /// Override of <typeparamref name="BaseValidation"/>
+        /// 
+        /// Underlining check is <see cref="System.ComponentModel.DataAnnotations.RegularExpressionAttribute"/>
         /// </summary>
-        /// <param name="o"></param>
+        /// <param name="o">object to check</param>
         /// <returns>
         /// <c>false</c> if o is null or doesn't match <paramref name="regex"/>
         /// <c>true</c> if o match's <paramref name="regex"/>
