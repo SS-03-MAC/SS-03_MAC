@@ -2,19 +2,36 @@
 
 namespace MAC.Models.Attributes.Validations
 {
-    [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
-    public class Required : BaseValidation
+    /// <summary>
+    /// Marks a field as required
+    /// </summary>
+    public class RequiredField : BaseValidation
     {
-        private bool required;
 
-        public Required()
-        {
-            required = true;
-        }
+        /// <summary>
+        /// Allow empty strings
+        /// </summary>
+        public bool AllowEmptyString { get; set; }
 
-        public Required(bool required)
+        /// <summary>
+        /// Override of <see cref="BaseValidation.IsValid(object)"/> 
+        /// </summary>
+        /// <param name="o"></param>
+        /// <returns></returns>
+        public override bool IsValid(object o)
         {
-            this.required = required;
+            if (o == null)
+            {
+                return false;
+            }
+
+            string value = o as string;
+            if (value != null && !AllowEmptyString)
+            {
+                return value.Trim().Length != 0;
+            }
+
+            return true;
         }
     }
 }
