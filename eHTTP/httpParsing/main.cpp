@@ -1,3 +1,5 @@
+/// \file Test for httpParsing library.
+
 #include <iostream>
 #include <sstream>
 #include "httpHeader.h"

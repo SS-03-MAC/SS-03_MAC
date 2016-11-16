@@ -1,8 +1,20 @@
+//===-- eHTTP/httpParsing/httpHeader.cpp ------------------------*- C++ -*-===//
+//
+//                     eHTTP - Web Server with CGI
+//
+// This file is distributed under the MIT License. See LICENSE.TXT for details.
+//
+//===----------------------------------------------------------------------===//
+///
+/// \file
+/// This file contains a representation of a HTTP header.
+///
+//===----------------------------------------------------------------------===//
 
 #include <algorithm>
-#include <cctype>
 #include <string>
 #include <iostream>
+
 #include "httpHeader.h"
 #include "httpUtils.h"
 
@@ -50,7 +62,7 @@ std::string httpHeader::toString() {
   return out.str();
 }
 
-std::ostream &operator << (std::ostream &os, httpHeader &header){
+std::ostream &operator<<(std::ostream &os, httpHeader &header) {
   os << header.toString();
   return os;
 }

@@ -1,3 +1,18 @@
+//===-- eHTTP/httpParsing/httpHeaderCollection.cpp --------------*- C++ -*-===//
+//
+//                     eHTTP - Web Server with CGI
+//
+// This file is distributed under the MIT License. See LICENSE.TXT for details.
+//
+//===----------------------------------------------------------------------===//
+///
+/// \file
+/// This file contains an implementation of a HTTP header collection.  It's
+/// designed to be extended with request and response implementations to handle
+/// the first line.
+///
+//===----------------------------------------------------------------------===//
+
 #include "httpHeaderCollection.h"
 #include "httpUtils.h"
 

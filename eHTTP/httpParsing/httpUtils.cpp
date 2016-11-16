@@ -1,3 +1,17 @@
+//===-- eHTTP/httpParsing/httpUtils.cpp -------------------------*- C++ -*-===//
+//
+//                     eHTTP - Web Server with CGI
+//
+// This file is distributed under the MIT License. See LICENSE.TXT for details.
+//
+//===----------------------------------------------------------------------===//
+///
+/// \file
+/// This file contains utilities that are helpful for HTTP request and response
+/// parsing.
+///
+//===----------------------------------------------------------------------===//
+
 #include "httpUtils.h"
 
 const char httpUtils::URI_EXTRA[] = {'!', '*', '\'', '(', ')', ','};
@@ -116,8 +130,7 @@ std::string httpUtils::uriDecode(std::string &uri) {
         }
       }
       // Intentional flow to default case
-    default:
-      decoded << uri[i];
+    default:decoded << uri[i];
     }
   }
   return decoded.str();

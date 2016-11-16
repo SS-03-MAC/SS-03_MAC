@@ -1,4 +1,19 @@
+//===-- eHTTP/httpParsing/httpRequestHeaderCollection.cpp -------*- C++ -*-===//
+//
+//                     eHTTP - Web Server with CGI
+//
+// This file is distributed under the MIT License. See LICENSE.TXT for details.
+//
+//===----------------------------------------------------------------------===//
+///
+/// \file
+/// This file contains a implementation of the httpHeaderCollection for a HTTP
+/// request.
+///
+//===----------------------------------------------------------------------===//
+
 #include <sstream>
+
 #include "httpRequestHeaderCollection.h"
 #include "httpUtils.h"
 
@@ -7,7 +22,7 @@ httpRequestHeaderCollection::httpRequestHeaderCollection(std::istream *input) : 
 }
 
 httpRequestHeaderCollection::httpRequestHeaderCollection(std::string verb, std::string path, std::string httpVersion)
-: httpHeaderCollection(httpVersion) {
+    : httpHeaderCollection(httpVersion) {
   this->verb = verb;
   this->path = new httpParsing::AbsPath(path);
 }

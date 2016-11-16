@@ -1,6 +1,4 @@
-//
-// Created by JoelM on 2016-10-03.
-//
+/// \file Test file for network library.
 
 #include <iostream>
 #include <unistd.h>

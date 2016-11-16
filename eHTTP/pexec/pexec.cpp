@@ -1,16 +1,28 @@
+//===-- eHTTP/pexec/pexec.cpp -----------------------------------*- C++ -*-===//
+//
+//                     eHTTP - Web Server with CGI
+//
+// This file is distributed under the MIT License. See LICENSE.TXT for details.
+//
+//===----------------------------------------------------------------------===//
+///
+/// \file
+/// This file contains a method for forking a program and hooking to its stdio.
+///
+//===----------------------------------------------------------------------===//
+
 #include <unistd.h>
-#include <cstdlib>
 #include <iostream>
+
 #include "pexec.h"
 
-/**
- * Copies the values from envp to environ.  Preserves PATH.
- * @param envp NULL terminated array of environment variables
- */
+/// Copies the values from envp to the environment.  Preserves PATH.
+/// \param envp NULL terminated array of environment variables
 void setEnviron(char **envp);
 
 // 0 - read, 1 - write, 2 read_err
 int pexec(const char *file_name, int pipefd[3], char **argv, char **envp) {
+  // TODO this method is too large.  It should be broken into smaller functions.
   pid_t fork_status;
   int pipe_to_child[2];
   int pipe_from_child[2];

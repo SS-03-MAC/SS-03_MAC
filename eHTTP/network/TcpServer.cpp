@@ -1,12 +1,21 @@
+//===-- eHTTP/network/TcpServer.cpp -----------------------------*- C++ -*-===//
 //
-// Created by JoelM on 2016-10-03.
+//                     eHTTP - Web Server with CGI
 //
+// This file is distributed under the MIT License. See LICENSE.TXT for details.
+//
+//===----------------------------------------------------------------------===//
+///
+/// \file
+/// This file contains methods for working with the TCP sockets.
+///
+//===----------------------------------------------------------------------===//
 
 #include <sys/socket.h>
 #include <netinet/ip.h>
 #include <iostream>
 #include <unistd.h>
-#include <cstring>
+
 #include "TcpServer.h"
 
 namespace network {
@@ -27,6 +36,7 @@ int tcp_accept(int sockfd) {
   struct sockaddr_in client_addr;
   socklen_t *clilen = (socklen_t *) sizeof(client_addr);
   std::cout << "Waiting for client..." << std::endl;
+  // TODO use select() to also listen for sigkill.
   int c = accept(sockfd, (sockaddr *) &client_addr, (socklen_t *) &clilen);
   std::cout << "Client connected from " << htonl(client_addr.sin_addr.s_addr) << std::endl;
 

@@ -1,3 +1,17 @@
+//===-- eHTTP/httpParsing/AbsPath.cpp ---------------------------*- C++ -*-===//
+//
+//                     eHTTP - Web Server with CGI
+//
+// This file is distributed under the MIT License. See LICENSE.TXT for details.
+//
+//===----------------------------------------------------------------------===//
+///
+/// \file
+/// This file contains the implementation of parsing for a AbsPath as defined
+/// in RFC 2616.
+///
+//===----------------------------------------------------------------------===//
+
 #include <sstream>
 #include <iostream>
 #include "AbsPath.h"
@@ -32,7 +46,6 @@ AbsPath::AbsPath(std::string &in) {
     default:throw "Finite state machine is broken";
     }
   } while (state != 6);
-  // todo?
   queryString = httpUtils::uriDecode(queryString);
 }
 

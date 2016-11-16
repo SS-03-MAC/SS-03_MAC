@@ -8,8 +8,8 @@
 #include "network/TcpServer.h"
 #include "httpParsing/httpRequestHeaderCollection.h"
 #include "httpParsing/httpResponseHeaderCollection.h"
-#include "serverSettings.h"
-#include "filesystemUtils.h"
+#include "server/settings.h"
+#include "utils/filesystem.h"
 
 #include "../EduTLS/src/crypto/crypto.h"
 #include "../EduTLS/src/encoding/encoding.h"
@@ -24,7 +24,7 @@ int serveFile(int clientFd, httpParsing::AbsPath &path);
 int serveCGI(std::istream &tcpistream,
              int clientFd,
              httpParsing::AbsPath &path,
-             httpServer::cgiEndpoint_t cgiEndpoint,
+             eHTTP::server::cgiEndpoint_t cgiEndpoint,
              httpRequestHeaderCollection &requestHeaders);
 bool getFileFromPath(httpParsing::AbsPath &path, std::string &outFile);
 void redirectClient(int clientFd, std::string path);
@@ -35,7 +35,7 @@ ssize_t passData(std::istream &tcpisteram,
                  uint8_t *buf,
                  int bufSize);
 
-httpServer::settings serverSettings;
+eHTTP::server::settings serverSettings;
 TLSConfiguration *tlsConfig;
 
 #pragma clang diagnostic push
@@ -51,8 +51,8 @@ int main(int argc, char *argv[]) {
   serverSettings.port = 8000;
   serverSettings.defaultDocuments.push_back("test2.txt");
   serverSettings.defaultDocuments.push_back("index.html");
-  struct httpServer::cgiEndpoint_t ep1;
-  struct httpServer::cgiEndpoint_t ep2;
+  struct eHTTP::server::cgiEndpoint_t ep1;
+  struct eHTTP::server::cgiEndpoint_t ep2;
   ep1.pathElement = "api";
   ep1.cgiPath = "echo";
   ep1.cgiArguments = "hi";
@@ -152,6 +152,7 @@ void handleClient(int clientFd) {
   srv->AcceptClient(clientFd);
   srv->Handshake();
   TLSServerStream *ss = new TLSServerStream(srv);
+  int c = ss->get();
   std::cout << "read from client: " << (char) ss->get() << std::endl;
   delete ss;
   delete srv;
@@ -159,7 +160,7 @@ void handleClient(int clientFd) {
   __gnu_cxx::stdio_filebuf<char> filebuf(clientFd, std::ios::in);
   std::istream clientStream(&filebuf);
   httpRequestHeaderCollection *headers;
-  httpServer::cgiEndpoint_t cgiEndpoint;
+  eHTTP::cgiEndpoint_t cgiEndpoint;
   try {
     headers = new httpRequestHeaderCollection(&clientStream);
   } catch (const char *err) {
@@ -196,7 +197,7 @@ int serveFile(int clientFd, httpParsing::AbsPath &path) {
   } else {
     httpResponseHeaderCollection resp("HTTP/1.1", 200, "Success");
 
-    ssize_t fileSize = httpServer::filesystemUtils::fileSize(fileToServe);
+    ssize_t fileSize = eHTTP::utils::filesystem::fileSize(fileToServe);
     resp.push_back(new httpHeader("Content-Length", std::to_string(fileSize)));
 
     std::string headerString(resp.toString());
@@ -210,7 +211,7 @@ int serveFile(int clientFd, httpParsing::AbsPath &path) {
 int serveCGI(std::istream &tcpistream,
              int clientFd,
              httpParsing::AbsPath &path,
-             httpServer::cgiEndpoint_t cgiEndpoint,
+             eHTTP::server::cgiEndpoint_t cgiEndpoint,
              httpRequestHeaderCollection &requestHeaders) {
   uint8_t buf[10240];
   int cgiPipes[3];
@@ -245,12 +246,12 @@ bool getFileFromPath(httpParsing::AbsPath &path, std::string &outFile) {
   if (path.endsInSlash()) {
     folder = true;
   } else {
-    httpServer::filesystemObject_t fInfo = httpServer::filesystemUtils::info(fullPath);
+    eHTTP::utils::filesystemObject_t fInfo = eHTTP::utils::filesystem::info(fullPath);
     switch (fInfo) {
-    case httpServer::filesystemObject_t::folder:
+    case eHTTP::utils::filesystemObject_t::folder:
       //TODO redirect the client to "<path>/"
       return false;
-    case httpServer::filesystemObject_t::nonexistent:return false;
+    case eHTTP::utils::filesystemObject_t::nonexistent:return false;
     default:break;
     }
   }
@@ -259,7 +260,7 @@ bool getFileFromPath(httpParsing::AbsPath &path, std::string &outFile) {
     for (int i = 0; !isFile && i < serverSettings.defaultDocuments.size(); i++) {
       fileToServe = fullPath + serverSettings.defaultDocuments[i];
       std::cout << "searching for: " << fileToServe << std::endl;
-      isFile = httpServer::filesystemUtils::info(fileToServe) == httpServer::filesystemObject_t::file;
+      isFile = eHTTP::utils::filesystem::info(fileToServe) == eHTTP::utils::filesystemObject_t::file;
     }
     if (!isFile) {
       return false;
