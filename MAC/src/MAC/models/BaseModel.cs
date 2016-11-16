@@ -125,6 +125,10 @@ namespace MAC.Models
         }
     }
 
+    /// <summary>
+    /// Base model. Models should not based off this class. The should be based off of 
+    /// <see cref="BaseModel{T}"/> 
+    /// </summary>
     public class BaseModel : IBaseModel
     {
         /// <summary>
@@ -160,16 +164,26 @@ namespace MAC.Models
             }
             if (Id == null)
             {
-                CreatedAt = new Types.DateTime(System.DateTime.Now);
-                UpdatedAt = CreatedAt;
-                Id = new Integer(Query.RunInsertQuery(ToInsertStatement()));
-                return Id.Value > 0;
+                return ProcessCreatedAt();
             }
             else
             {
-                UpdatedAt = new Types.DateTime(System.DateTime.Now);
-                return Query.RunNonQuery(ToUpdateStatement()) == 1;
+                return ProcessUpdate();
             }
+        }
+
+        private bool ProcessUpdate()
+        {
+            UpdatedAt = new Types.DateTime(System.DateTime.Now);
+            return Query.RunNonQuery(ToUpdateStatement()) == 1;
+        }
+
+        private bool ProcessCreatedAt()
+        {
+            CreatedAt = new Types.DateTime(System.DateTime.Now);
+            UpdatedAt = CreatedAt;
+            Id = new Integer(Query.RunInsertQuery(ToInsertStatement()));
+            return Id.Value > 0;
         }
 
         /// <summary>

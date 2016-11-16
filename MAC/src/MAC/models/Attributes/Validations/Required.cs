@@ -20,8 +20,8 @@ namespace MAC.Models.Attributes.Validations
         /// </summary>
         /// <param name="o">object to check</param>
         /// <returns>
-        /// <c>false</c> If emtpy 
-        /// <c>true</c> If Defined
+        /// <c>false</c> If empty 
+        /// <c>true</c> If defined
         /// </returns>
         public override bool IsValid(BaseType o)
         {

@@ -13,11 +13,6 @@ namespace MAC.Models.Attributes.Validations
         /// </summary>
         public int Length { get; set; }
 
-        /// <summary>
-        /// Allow blank, only check length if there is content
-        /// </summary>
-        public bool AllowBlank { get; set; }
-
         public MaxLength(int length)
         {
             Length = length;
