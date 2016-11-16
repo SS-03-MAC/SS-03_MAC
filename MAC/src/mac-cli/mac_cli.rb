@@ -1,4 +1,4 @@
-##
+
 # Mac CLI start
 module MacCLI
   if ARGV.length.zero?
