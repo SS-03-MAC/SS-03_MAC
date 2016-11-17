@@ -4,7 +4,7 @@ require 'yaml'
 # all its chlidren, parsing all documents that are valid YAML (includeing JSON)
 module Parser
   # checks if a file could be YAML and parses it
-  def parse_file(path)
+  def self.parse_file(path)
     # checks if the file is valid YAML (includes JSON), if not, returns nil
     accepted_formats = ['.yml', '.yaml', '.json']
     ext = File.extname(path)
@@ -19,17 +19,17 @@ module Parser
     end
   end
 
-  def parse_dir(path)
+  def self.parse_dir(path)
     path += '/' unless path[-1] == '/'
     parse_dir_recursive(path, '')
   end
 
-  def add_dir_to_hash(base, path, hash)
+  def self.add_dir_to_hash(base, path, hash)
     cur_dir_hash = parse_dir_recursive(base, path)
     hash.merge(cur_dir_hash)
   end
 
-  def add_file_to_hash(base, path, hash)
+  def self.add_file_to_hash(base, path, hash)
     parsed_yaml = parse_file(base + path)
     hash[path] = parsed_yaml unless parsed_yaml.nil?
     hash
@@ -38,7 +38,7 @@ module Parser
   # finds all YAML files in a directory and parses them into a hash of Objects,
   # keys are file names, values are parsed YAML objects.
   # can and should initially be called with no second argument
-  def parse_dir_recursive(base_dir, cur_dir = '')
+  def self.parse_dir_recursive(base_dir, cur_dir = '')
     result = {}
 
     Dir.foreach(base_dir + cur_dir) do |item|
