@@ -69,7 +69,7 @@ module MacCLI
           flags['sql'] = false
         end
         opts.on('--no-cs', 'Does not update C# models') do
-          flags['js'] = false
+          flags['cs'] = false
         end
         opts.on('-h', '--help', 'Shows this help message.') do
           puts opt_parser
