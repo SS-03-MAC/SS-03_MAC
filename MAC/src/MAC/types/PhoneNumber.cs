@@ -53,13 +53,13 @@ namespace MAC.Types.User
         /// <summary>
         /// Compare the phone nnumbers
         /// </summary>
-        /// <param name="other"></param>
+        /// <param name="other">other object to compare to</param>
         /// <returns></returns>
         public override int CompareTo(object other)
         {
             if (other is PhoneNumber)
             {
-                return Data.CompareTo(((String)other).Value);
+                return Data.CompareTo(((PhoneNumber)other).Value);
             }
             throw new ArgumentException();
         }

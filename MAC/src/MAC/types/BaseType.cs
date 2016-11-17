@@ -39,6 +39,9 @@ namespace MAC.Types
         /// <param name="context"></param>
         public BaseType(SerializationInfo info, StreamingContext context) { }
 
+        /// <summary>
+        /// The underlineing value that is stored
+        /// </summary>
         public abstract V Value { get; set; }
     }
 

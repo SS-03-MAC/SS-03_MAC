@@ -1,4 +1,5 @@
 using MAC.Models.Attributes;
+using MAC.Models.Attributes.Validations;
 using MAC.Models.Exceptions;
 using MAC.Types;
 using System;
@@ -117,13 +118,17 @@ namespace MAC.Models
         /// Deletes the given record with the given id
         /// </summary>
         /// <param name="id">If the record was deleted</param>
-        /// <returns></returns>
+        /// <returns>If the record has deleted</returns>
         public static bool Delete(int id)
         {
             return Query.Delete(GetStaticTableName(), id);
         }
     }
 
+    /// <summary>
+    /// Base model. Models should not based off this class. The should be based off of 
+    /// <see cref="BaseModel{T}"/> 
+    /// </summary>
     public class BaseModel : IBaseModel
     {
         /// <summary>
@@ -159,16 +164,26 @@ namespace MAC.Models
             }
             if (Id == null)
             {
-                CreatedAt = new Types.DateTime(System.DateTime.Now);
-                UpdatedAt = CreatedAt;
-                Id = new Integer(Query.RunInsertQuery(ToInsertStatement()));
-                return Id.Value > 0;
+                return ProcessCreatedAt();
             }
             else
             {
-                UpdatedAt = new Types.DateTime(System.DateTime.Now);
-                return Query.RunNonQuery(ToUpdateStatement()) == 1;
+                return ProcessUpdate();
             }
+        }
+
+        private bool ProcessUpdate()
+        {
+            UpdatedAt = new Types.DateTime(System.DateTime.Now);
+            return Query.RunNonQuery(ToUpdateStatement()) == 1;
+        }
+
+        private bool ProcessCreatedAt()
+        {
+            CreatedAt = new Types.DateTime(System.DateTime.Now);
+            UpdatedAt = CreatedAt;
+            Id = new Integer(Query.RunInsertQuery(ToInsertStatement()));
+            return Id.Value > 0;
         }
 
         /// <summary>
@@ -181,7 +196,27 @@ namespace MAC.Models
 
             foreach (PropertyInfo property in properties)
             {
-                // TODO: Finish me
+                if (property.GetValue(this) == null)
+                {
+                    continue;
+                }
+                var ValidateMethod = property.GetValue(this).GetType().GetTypeInfo().GetMethod("Validate");
+                if (ValidateMethod != null)
+                {
+                    bool obt = (bool)ValidateMethod.Invoke(property.GetValue(this), new object[] { });
+                    if (!obt)
+                    {
+                        return false;
+                    }
+                }
+                var attributes = property.GetCustomAttributes<BaseValidation>();
+                foreach (BaseValidation bv in attributes)
+                {
+                    if (!bv.IsValid(property.GetValue(this) as BaseType))
+                    {
+                        return false;
+                    }
+                }
             }
 
             return true;

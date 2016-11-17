@@ -28,5 +28,32 @@ namespace MAC.Tests.Types
             Assert.Equal(0, s.CompareTo(s2));
         }
 
+        [Fact]
+        public void CompareNotEqual()
+        {
+            MAC.Types.String s = new MAC.Types.String("apple2");
+            MAC.Types.String s2 = new MAC.Types.String("apple");
+            Assert.Equal(1, s.CompareTo(s2));
+        }
+
+        [Fact]
+        public void Equal()
+        {
+            MAC.Types.String s = new MAC.Types.String("apple");
+            MAC.Types.String s2 = new MAC.Types.String("apple");
+            Assert.True(s.Equals(s2));
+        }
+
+        [Fact]
+        public void NotEqual()
+        {
+            MAC.Types.String s = new MAC.Types.String("apple2");
+            MAC.Types.String s2 = new MAC.Types.String("apple");
+            Assert.False(s.Equals(s2));
+        }
+
+
+
+
     }
 }

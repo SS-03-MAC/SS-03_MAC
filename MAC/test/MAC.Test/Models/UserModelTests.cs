@@ -19,7 +19,13 @@ namespace MAC.Test.Models
         [Fact]
         public void Save()
         {
-            User u = new User { FullName = new MAC.Types.String("Matthew"), City = new MAC.Types.String("Ames"), Email = new MAC.Types.User.Email("matthew@assignitapp.com"), PasswordDigest = new MAC.Types.User.Password("apple", false) };
+            User u = new User
+            {
+                FullName = new MAC.Types.String("Matthew"),
+                City = new MAC.Types.String("Ames"),
+                Email = new MAC.Types.User.Email("matthew@assignitapp.com"),
+                PasswordDigest = new MAC.Types.User.Password("apple", false)
+            };
             Assert.True(u.Save());
         }
 
@@ -27,7 +33,13 @@ namespace MAC.Test.Models
         public void Update()
         {
             string email = "matthew" + DateTime.Now.Ticks + "@assignitapp.com";
-            User u = new User { FullName = new MAC.Types.String("Matthew"), City = new MAC.Types.String("Ames"), Email = new MAC.Types.User.Email(email), PasswordDigest = new MAC.Types.User.Password("apple", false) };
+            User u = new User
+            {
+                FullName = new MAC.Types.String("Matthew"),
+                City = new MAC.Types.String("Ames"),
+                Email = new MAC.Types.User.Email(email),
+                PasswordDigest = new MAC.Types.User.Password("apple", false)
+            };
             u.Save();
             u.FullName = new MAC.Types.String("Joel");
             Assert.True(u.Save());
@@ -37,7 +49,13 @@ namespace MAC.Test.Models
         public void Delete()
         {
             string email = "matthew" + DateTime.Now.Ticks + "@assignitapp.com";
-            User u = new User { FullName = new MAC.Types.String("Matthew"), City = new MAC.Types.String("Ames"), Email = new MAC.Types.User.Email(email), PasswordDigest = new MAC.Types.User.Password("apple", false) };
+            User u = new User
+            {
+                FullName = new MAC.Types.String("Matthew"),
+                City = new MAC.Types.String("Ames"),
+                Email = new MAC.Types.User.Email(email),
+                PasswordDigest = new MAC.Types.User.Password("apple", false)
+            };
             u.Save();
             Assert.True(u.Delete());
         }
@@ -65,17 +83,30 @@ namespace MAC.Test.Models
         public void GetOneFound()
         {
             string email = "matthew" + DateTime.Now.Ticks + "GetOne@assignitapp.com";
-            User u = new User { FullName = new MAC.Types.String("Matthew"), City = new MAC.Types.String("Ames"), Email = new MAC.Types.User.Email(email), PasswordDigest = new MAC.Types.User.Password("apple", false) };
+            User u = new User
+            {
+                FullName = new MAC.Types.String("Matthew"),
+                City = new MAC.Types.String("Ames"),
+                Email = new MAC.Types.User.Email(email),
+                PasswordDigest = new MAC.Types.User.Password("apple", false)
+            };
             u.Save();
             User u2 = User.Get(u.Id.Value);
-            //Assert.Equal(u, u2);
+            Assert.Equal(u.Email, u2.Email);
+            Assert.Equal(u.FullName, u2.FullName);
         }
 
         [Fact]
         public void BasicWhere()
         {
             string email = "matthew" + DateTime.Now.Ticks + "GetOne@assignitapp.com";
-            User u = new User { FullName = new MAC.Types.String("Matthew"), City = new MAC.Types.String("Ames"), Email = new MAC.Types.User.Email(email), PasswordDigest = new MAC.Types.User.Password("apple", false) };
+            User u = new User
+            {
+                FullName = new MAC.Types.String("Matthew"),
+                City = new MAC.Types.String("Ames"),
+                Email = new MAC.Types.User.Email(email),
+                PasswordDigest = new MAC.Types.User.Password("apple", false)
+            };
             u.Save();
             SqlDataReader expectedReader = Query.RunQuery("select * from users where email='" + u.Email + "'");
             int rows = 0;
@@ -90,6 +121,107 @@ namespace MAC.Test.Models
             User expectedUser = (User)BaseModelFactory.FillModel(typeof(User), expectedReader);
             Assert.Equal(expectedUser.Id, users[0].Id);
 
+        }
+
+        [Fact]
+        public void NoEmail()
+        {
+            string email = "";
+            User u = new User { FullName = new MAC.Types.String("Matthew"), City = new MAC.Types.String("Ames"), Email = new MAC.Types.User.Email(email), PasswordDigest = new MAC.Types.User.Password("apple", false) };
+            Assert.False(u.Validate());
+
+        }
+
+        [Fact]
+        public void TestingInvalidType()
+        {
+            string email = "mburket at iastate dot edu";
+            User u = new User
+            {
+                FullName = new MAC.Types.String("Matthew"),
+                City = new MAC.Types.String("Ames"),
+                Email = new MAC.Types.User.Email(email),
+                PasswordDigest = new MAC.Types.User.Password("apple", false)
+            };
+            Assert.False(u.Validate());
+
+        }
+
+
+        [Fact]
+        public void NoFullName()
+        {
+            string email = "matthew" + DateTime.Now.Ticks + "GetOne@assignitapp.com";
+            User u = new User
+            {
+                FullName = new MAC.Types.String(""),
+                City = new MAC.Types.String("Ames"),
+                Email = new MAC.Types.User.Email(email),
+                PasswordDigest = new MAC.Types.User.Password("apple", false)
+            };
+            Assert.False(u.Validate());
+        }
+
+
+        [Fact]
+        public void LengthTooShort()
+        {
+            string email = "matthew" + DateTime.Now.Ticks + "GetOne@assignitapp.com";
+            User u = new User
+            {
+                FullName = new MAC.Types.String("Apple"),
+                City = new MAC.Types.String("Ames"),
+                Email = new MAC.Types.User.Email(email),
+                PasswordDigest = new MAC.Types.User.Password("apple", false),
+                LengthChecker = new MAC.Types.String("Apple")
+            };
+            Assert.False(u.Validate());
+        }
+
+        [Fact]
+        public void LengthFine()
+        {
+            string email = "matthew" + DateTime.Now.Ticks + "GetOne@assignitapp.com";
+            User u = new User
+            {
+                FullName = new MAC.Types.String("Apple"),
+                City = new MAC.Types.String("Ames"),
+                Email = new MAC.Types.User.Email(email),
+                PasswordDigest = new MAC.Types.User.Password("apple", false),
+                LengthChecker = new MAC.Types.String("1234567890"),
+                Regex = new MAC.Types.String("hello")
+            };
+            Assert.True(u.Validate());
+        }
+
+        [Fact]
+        public void LengthTooLong()
+        {
+            string email = "matthew" + DateTime.Now.Ticks + "GetOne@assignitapp.com";
+            User u = new User
+            {
+                FullName = new MAC.Types.String(""),
+                City = new MAC.Types.String("Ames"),
+                Email = new MAC.Types.User.Email(email),
+                PasswordDigest = new MAC.Types.User.Password("apple", false),
+                LengthChecker = new MAC.Types.String("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
+            };
+            Assert.False(u.Validate());
+        }
+
+        [Fact]
+        public void RegexMatch()
+        {
+            string email = "matthew" + DateTime.Now.Ticks + "GetOne@assignitapp.com";
+            User u = new User
+            {
+                FullName = new MAC.Types.String("Apple"),
+                City = new MAC.Types.String("Ames"),
+                Email = new MAC.Types.User.Email(email),
+                PasswordDigest = new MAC.Types.User.Password("apple", false),
+                Regex = new MAC.Types.String("hello")
+            };
+            Assert.True(u.Validate());
         }
     }
 }
