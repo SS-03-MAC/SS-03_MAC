@@ -48,12 +48,24 @@ public:
 
   int_type underflow() {
     if (this->i_p == this->i_l) {
+      if (this->s->IsClosed()) {
+        return EOF;
+      }
+
       this->i_l = this->s->Read(this->inbuf);
       this->i_p = 0;
     }
 
     return this->inbuf[this->i_p++];
   };
+
+  int uflow() {
+    if (underflow() == EOF) {
+      return EOF;
+    }
+
+    return this->inbuf[this->i_p++];
+  }
 
   int_type overflow(int_type ch) {
     if (ch == traits_type::eof()) {

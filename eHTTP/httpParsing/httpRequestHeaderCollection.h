@@ -32,4 +32,5 @@ public:
 
   /// The path of this HTTP request.
   httpParsing::AbsPath *path;
+  std::string getVerb();
 };

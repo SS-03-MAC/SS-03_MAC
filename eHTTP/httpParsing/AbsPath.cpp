@@ -174,6 +174,17 @@ std::string AbsPath::getFullPath() {
   return out.str();
 }
 
+std::string AbsPath::getScriptPath() {
+  std::stringstream out;
+  for (unsigned int i = 1; i < elements.size(); i++) {
+    out << "/" << elements[i];
+  }
+  if (pathEndsInSlash) {
+    out << "/";
+  }
+  return out.str();
+}
+
 std::string AbsPath::getFileName() {
   if (pathEndsInSlash) {
     // Path ends in '/', so there is no file name

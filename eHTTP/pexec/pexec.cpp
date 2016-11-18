@@ -77,11 +77,15 @@ void setEnviron(char **envp) {
 
   // Allocate memory (+1 for the PATH)
   newEnv = (char **) malloc((count + 1) * sizeof(char *));
-
   // Copy data
   int i;
-  for (i = 0; i < count; i++) {
+  for (i = 0; i < count - 1; i++) {
     newEnv[i] = envp[i];
   }
-  newEnv[i] = (char *) path.c_str();
+  newEnv[i] = (char *) malloc(path.length());
+  strcpy(newEnv[i], path.c_str());
+  i++;
+  newEnv[i] = NULL;
+
+  environ = newEnv;
 }
