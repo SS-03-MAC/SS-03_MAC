@@ -56,7 +56,7 @@ public:
       this->i_p = 0;
     }
 
-    return this->inbuf[this->i_p++];
+    return this->inbuf[this->i_p];
   };
 
   int uflow() {
