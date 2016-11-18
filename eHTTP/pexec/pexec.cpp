@@ -13,6 +13,7 @@
 
 #include <unistd.h>
 #include <iostream>
+#include <cstring>
 
 #include "pexec.h"
 

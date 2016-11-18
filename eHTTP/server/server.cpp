@@ -80,7 +80,11 @@ void server::handleClientTls(int clientFd) {
   TLSServerStream *ss = new TLSServerStream(srv);
 
   // TODO serve a file or CGI
-  std::cout << "Read from TLS client: " << (char) ss->get() << std::endl;
+  std::cout << "Read from TLS client: ";
+  while (!ss->eof()) {
+    std::cout << (char) ss->get();
+  }
+  std::cout << std::endl;
 
   srv->Close();
   delete ss;
@@ -199,7 +203,7 @@ void server::serve() {
   int client;
   while (true) {
     client = network::tcp_accept(tcp);
-    forkHandler(client, &eHTTP::server::server::handleClient);
+    forkHandler(client, &eHTTP::server::server::handleClientTls);
   }
 }
 #pragma clang diagnostic pop

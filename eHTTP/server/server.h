@@ -55,6 +55,10 @@ public:
   void addDefaultDocument(std::string document);
   /// Endless loop handling client requests.
   void serve();
+  /// Sets the TLS configruation.  Keeps a pointer to the provided configuration.
+  void setTlsConfiguration(TLSConfiguration *config) {
+    this->tlsConfig = config;
+  }
 };
 
 }
