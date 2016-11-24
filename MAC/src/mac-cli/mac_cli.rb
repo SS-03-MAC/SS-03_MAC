@@ -1,4 +1,4 @@
-##
+
 # Mac CLI start
 module MacCLI
   if ARGV.length.zero?
@@ -12,7 +12,7 @@ module MacCLI
     require './commands/build'
     ARGV.shift
     build = Build.new
-    build.option_parser(ARGV)
+    build.build(ARGV, './models/js/', './models/csharp/', './models/sql/', './yaml')
     exit
   elsif ARGV[0] == 'init'
     require './commands/init'

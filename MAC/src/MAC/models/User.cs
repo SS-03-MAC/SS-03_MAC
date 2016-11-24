@@ -1,4 +1,5 @@
 using MAC.Models.Attributes;
+using MAC.Models.Attributes.Validations;
 using MAC.Types;
 using MAC.Types.User;
 
@@ -12,21 +13,21 @@ namespace MAC.Models
         /// A basic string field
         /// </summary>
         /// <returns></returns>
-        [Required]
+        [RequiredField]
         [DatabaseField("Email")]
         public Email Email { get; set; }
 
 
-        [Required]
+        [RequiredField]
         [DatabaseField("FullName")]
         public String FullName { get; set; }
 
         /// <summary>
         /// On set will set PasswordDigest to the BCrypt Password
         /// </summary>
-        [Required]
-        [Length(Minimum = 10, Maximum = 72)]
-        public virtual string Password { get; set; }
+        [MaxLength(72)]
+        [MinLength(8)]
+        public String LengthChecker { get; set; }
         /// <summary>
         /// How the Password is stored in the database
         /// </summary>
@@ -39,5 +40,8 @@ namespace MAC.Models
         /// </summary>
         [DatabaseField("City")]
         public String City { get; set; }
+
+        [Regex("hello")]
+        public String Regex { get; set; }
     }
 }

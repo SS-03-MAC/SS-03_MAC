@@ -4,6 +4,7 @@
 #include <fstream>
 #include <ext/stdio_filebuf.h>
 #include <sys/socket.h>
+#include <cstring>
 
 #include "server.h"
 #include "../utils/filesystem.h"
@@ -163,11 +164,25 @@ long long server::serveCgi(std::istream &tcpIstream,
   }
   std::cout << "Request content length: " << requestContentLen << std::endl;
 
-  // TODO set environment variables
+    // Set up environment
+    // TODO Should be in known method
+    char **env = (char **) malloc(3);
+    std::string temp;
+    temp = "REQUEST_METHOD=";
+    temp += requestHeaders.getVerb();
+    env[0] = (char *) malloc(temp.length());
+    strcpy(env[0], temp.c_str());
 
-  // CGI out
+    temp = "SCRIPT_PATH=";
+    temp += requestHeaders.path->getScriptPath();
+    env[1] = (char *) malloc(temp.length());
+    strcpy(env[1], temp.c_str());
+    env[2] = NULL;
+
+
+    // CGI out
   // TODO NULL instead of environ?
-  pexec(cgiEndpoint.cgiPath.c_str(), cgiPipes, argv, environ);
+  pexec(cgiEndpoint.cgiPath.c_str(), cgiPipes, argv, env);
   return network::passData(tcpIstream, clientFd, cgiPipes[0], cgiPipes[1], requestContentLen, 1024);
 }
 

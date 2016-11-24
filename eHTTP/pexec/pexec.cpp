@@ -83,7 +83,7 @@ void setEnviron(char **envp) {
   for (i = 0; i < count - 1; i++) {
     newEnv[i] = envp[i];
   }
-  newEnv[i] = (char *) malloc(path.length());
+  newEnv[i] = (char *) malloc(path.length() + 1);
   strcpy(newEnv[i], path.c_str());
   i++;
   newEnv[i] = NULL;

@@ -18,8 +18,15 @@ namespace MAC.Models.Attributes
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
     public class UrlName : Attribute
     {
+        /// <summary>
+        /// The url to match
+        /// </summary>
         public string Url { get; }
 
+        /// <summary>
+        /// Setup attribute
+        /// </summary>
+        /// <param name="url">url part to match</param>
         public UrlName(string url)
         {
             Url = url;

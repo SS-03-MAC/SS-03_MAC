@@ -48,5 +48,13 @@ namespace MAC.Test.Types
             Email e2 = new Email("mburket@iastate.edu");
             Assert.True(e.Equals(e2));
         }
+
+        [Fact]
+        public void notEqual()
+        {
+            Email e = new Email("mburke2t@iastate.edu");
+            Email e2 = new Email("mburket@iastate.edu");
+            Assert.False(e.Equals(e2));
+        }
     }
 }
