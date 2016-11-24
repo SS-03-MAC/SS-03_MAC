@@ -197,3 +197,14 @@ bool AbsPath::beginsWith(std::string element) {
 std::ostream &operator<<(std::ostream &os, AbsPath &path) {
   return os << path.getPathAndQueryString();
 }
+
+std::string AbsPath::getScriptPath() {
+  std::stringstream out;
+  for (unsigned int i = 1; i < elements.size(); i++) {
+    out << "/" << elements[i];
+  }
+  if (pathEndsInSlash) {
+    out << "/";
+  }
+  return out.str();
+}

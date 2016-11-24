@@ -54,6 +54,7 @@ public:
   bool beginsWith(std::string element);
   /// \returns whether the path ends with a slash, usually indicating that the server must search the default documents.
   inline bool endsInSlash() { return pathEndsInSlash; }
+  std::string getScriptPath();
 };
 
 std::ostream &operator<<(std::ostream &os, AbsPath &path);
