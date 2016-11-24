@@ -29,6 +29,7 @@ public:
   httpRequestHeaderCollection(std::istream *input);
   httpRequestHeaderCollection(std::string verb, std::string path, std::string httpVersion);
   ~httpRequestHeaderCollection();
+  inline std::string getVerb() { return verb; }
 
   /// The path of this HTTP request.
   httpParsing::AbsPath *path;

@@ -6,12 +6,14 @@ using System.Text;
 using Newtonsoft.Json;
 using System.Reflection;
 using MAC.Models.Attributes;
+
 namespace ConsoleApplication
 {
     public class Program
     {
         public static void Main(string[] args)
         {
+            System.Threading.Thread.Sleep(35000);
             Type t = GetTypeFromString("users");
             string contentString = string.Empty; //GetFormContentets();
             string requestMethod = Environment.GetEnvironmentVariable("REQUEST_METHOD");
