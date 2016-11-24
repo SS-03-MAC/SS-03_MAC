@@ -37,13 +37,13 @@ server::~server() {
 }
 
 void server::forkHandler(int clientFd, void (eHTTP::server::server:: *handler)(int)) {
-  int child = fork();
+  /*int child = fork();
   if (child == -1) {
     std::cout << "Forking a handling thread failed" << std::endl;
-  } else if (child == 0) {
+  } else if (child == 0) {*/
     (this->*handler)(clientFd);
-    exit(0);
-  }
+    /*exit(0);
+  }*/
 }
 
 // ===== FUNCTIONS =====
@@ -77,17 +77,44 @@ void server::handleClientTls(int clientFd) {
   TLSServer *srv = new TLSServer(tlsConfig);
   srv->AcceptClient(clientFd);
   srv->Handshake();
-  TLSServerStream *ss = new TLSServerStream(srv);
+  TLSServerStream *clientStream = new TLSServerStream(srv);
 
+  static bool first = true;
+  if (first) {
+    first = false;
+    return;
+  }
   // TODO serve a file or CGI
-  std::cout << "Read from TLS client: ";
-  while (!ss->eof()) {
-    std::cout << (char) ss->get();
+  /*std::cout << "Read from TLS client: ";
+  while (!clientStream->eof()) {
+    std::cout << (char) clientStream->get();
   }
   std::cout << std::endl;
+  return;*/
+
+  httpRequestHeaderCollection *headers;
+  eHTTP::server::cgiEndpoint_t cgiEndpoint;
+  try {
+    headers = new httpRequestHeaderCollection(clientStream);
+  } catch (const char *err) {
+    std::cout << "Error handling request: " << err << std::endl;
+    shutdown(clientFd, SHUT_RDWR);
+    return;
+  }
+  std::cout << "Request: " << headers->toString() << std::endl;
+
+  if (settings->getScriptForPath(*headers->path, cgiEndpoint)) {
+    std::cout << "Serving via CGI: " << headers->path->getPathAndQueryString() << std::endl;
+    serveCgi(*clientStream, clientFd, *headers->path, cgiEndpoint, *headers);
+  } else {
+    std::cout << "Serving static file" << std::endl;
+    serveFile(clientFd, *headers->path);
+  }
+
+
 
   srv->Close();
-  delete ss;
+  delete clientStream;
   delete srv;
 }
 
