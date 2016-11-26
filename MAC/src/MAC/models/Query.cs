@@ -2,7 +2,7 @@
 
 namespace MAC.Models
 {
-    public static class Query
+    internal static class Query
     {
         /// <summary>
         /// A connection string. Should be moved. Here for dev purposes
