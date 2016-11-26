@@ -14,47 +14,53 @@ namespace ConsoleApplication
         public static void Main(string[] args)
         {
             System.Threading.Thread.Sleep(35000);
-            Type t = GetTypeFromString("users");
             string contentString = string.Empty; //GetFormContentets();
             string requestMethod = Environment.GetEnvironmentVariable("REQUEST_METHOD");
             List<KeyValuePair<string, string>> formData = new List<KeyValuePair<string, string>>(); //SetupFormInput(contentString);
-            // The Idea for model path is format model/id
             string modelPath = Environment.GetEnvironmentVariable("SCRIPT_PATH");
-            string model = string.Empty;
+            string model = GetModelFromModelPath(modelPath);
+            Type modelType = GetTypeFromString(model);
             int id = GetIdFromModelPath(modelPath);
-            if (requestMethod == "GET" && id < 0)
+            if (requestMethod.ToUpper() == "GET" && id < 0)
             {
-                ProcessGetAll(model);
+                ProcessGetAll(modelType);
             }
-            else if (requestMethod == "GET")
+            else if (requestMethod.ToUpper() == "GET")
             {
-                ProcessGetOne(model, id);
+                ProcessGetOne(modelType, id);
             }
-            else if (requestMethod == "POST")
+            else if (requestMethod.ToUpper() == "POST")
             {
-                ProcessCreate(model, formData);
+                ProcessCreate(modelType, formData);
             }
-            else if (requestMethod == "PATCH")
+            else if (requestMethod.ToUpper() == "PATCH")
             {
-                ProcessUpdate(model, id, formData);
+                ProcessUpdate(modelType, id, formData);
             }
-            else if (requestMethod == "DELETE")
+            else if (requestMethod.ToUpper() == "DELETE")
             {
-                ProcessDelete(model, id);
+                ProcessDelete(modelType, id);
             }
         }
 
-        private static void ProcessCreate(string model, List<KeyValuePair<string, string>> formData)
+        private static string GetModelFromModelPath(string modelPath)
+        {
+            modelPath = modelPath.Remove(0, 1);
+            string[] splitPath = modelPath.Split('/');
+            return splitPath[0];
+        }
+
+        private static void ProcessCreate(Type model, List<KeyValuePair<string, string>> formData)
         {
             throw new NotImplementedException();
         }
 
-        private static void ProcessUpdate(string model, int id, List<KeyValuePair<string, string>> formData)
+        private static void ProcessUpdate(Type model, int id, List<KeyValuePair<string, string>> formData)
         {
             throw new NotImplementedException();
         }
 
-        private static void ProcessDelete(string model, int id)
+        private static void ProcessDelete(Type model, int id)
         {
             throw new NotImplementedException();
         }
@@ -70,7 +76,7 @@ namespace ConsoleApplication
             return list;
         }
 
-        private static void ProcessGetOne(string model, int id)
+        private static void ProcessGetOne(Type model, int id)
         {
             User u = User.Get(id);
             BasicHeaders();
@@ -81,6 +87,7 @@ namespace ConsoleApplication
         private static int GetIdFromModelPath(string modelPath)
         {
             int id = -1;
+            modelPath = modelPath.Remove(0, 1);
             string[] splitPath = modelPath.Split('/');
             if (modelPath.Contains("/") && !string.IsNullOrWhiteSpace(splitPath[1]))
             {
@@ -90,11 +97,11 @@ namespace ConsoleApplication
             return id;
         }
 
-        private static void ProcessGetAll(string model)
+        private static void ProcessGetAll(Type model)
         {
-            List<User> users = User.Get();
+            List<dynamic> objs = (List<dynamic>)model.GetTypeInfo().GetMethod("Get", BindingFlags.Static | BindingFlags.Public | BindingFlags.FlattenHierarchy, null, new Type[0], null).Invoke(null, new object[0]);
             BasicHeaders();
-            Console.Write(JsonConvert.SerializeObject(users));
+            Console.Write(JsonConvert.SerializeObject(objs));
 
         }
 
