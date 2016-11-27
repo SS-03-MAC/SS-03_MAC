@@ -18,7 +18,7 @@ module MacCLI
     require './commands/init'
     ARGV.shift
     init = Init.new
-    init.option_parser(ARGV)
+    init.init(ARGV)
     exit
   elsif ARGV[0] == 'run'
     require './commands/run'
