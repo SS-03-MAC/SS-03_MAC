@@ -79,7 +79,11 @@ namespace ConsoleApplication
 
         private static void ProcessGetOne(Type model, int id)
         {
-            User u = User.Get(id);
+            var method = model.GetMethods(BindingFlags.Public | BindingFlags.Static |
+                                          BindingFlags.FlattenHierarchy).
+                Where(x => x.Name == "Get").
+                First(x => x.GetGenericArguments().Length == 1 && x.GetGenericArguments().
+                    First() == typeof(int));
             BasicHeaders();
             Console.WriteLine(JsonConvert.SerializeObject(u));
 
