@@ -6,6 +6,7 @@ using System.Text;
 using Newtonsoft.Json;
 using System.Reflection;
 using MAC.Models.Attributes;
+using System.Linq;
 
 namespace ConsoleApplication
 {
@@ -99,7 +100,9 @@ namespace ConsoleApplication
 
         private static void ProcessGetAll(Type model)
         {
-            List<dynamic> objs = (List<dynamic>)model.GetTypeInfo().GetMethod("Get", BindingFlags.Static | BindingFlags.Public | BindingFlags.FlattenHierarchy, null, new Type[0], null).Invoke(null, new object[0]);
+            var method = model.GetMethods(BindingFlags.Static | BindingFlags.Public | BindingFlags.FlattenHierarchy).Where(x => x.Name == "Get").First(x => x.GetGenericArguments().Length == 0);
+            dynamic objs = method.Invoke(null, new Type[0]);
+            //List<dynamic> objs = (List<dynamic>)model.GetTypeInfo().GetMethod("Get", BindingFlags.Static | BindingFlags.Public | BindingFlags.FlattenHierarch).Invoke(null, new object[0]);
             BasicHeaders();
             Console.Write(JsonConvert.SerializeObject(objs));
 
