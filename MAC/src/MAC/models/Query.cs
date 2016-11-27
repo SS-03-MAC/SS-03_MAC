@@ -2,7 +2,10 @@
 
 namespace MAC.Models
 {
-    internal static class Query
+    /// <summary>
+    /// This class is for talking with the database 
+    /// </summary>
+    public static class Query
     {
         /// <summary>
         /// A connection string. Should be moved. Here for dev purposes
