@@ -1,12 +1,11 @@
-using MAC.Models;
+using MAC.Models.Attributes;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Text;
-using Newtonsoft.Json;
-using System.Reflection;
-using MAC.Models.Attributes;
 using System.Linq;
+using System.Reflection;
+using System.Text;
 
 namespace ConsoleApplication
 {
