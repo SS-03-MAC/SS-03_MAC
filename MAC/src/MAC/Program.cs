@@ -44,11 +44,22 @@ namespace ConsoleApplication
             }
         }
 
-        private static string GetModelFromModelPath(string modelPath)
+        private static void ProcessGetAll(Type model)
         {
-            modelPath = modelPath.Remove(0, 1);
-            string[] splitPath = modelPath.Split('/');
-            return splitPath[0];
+            var method = model.GetMethods(BindingFlags.Static | BindingFlags.Public | BindingFlags.FlattenHierarchy).Where(x => x.Name == "Get").First(x => x.GetParameters().Length == 0);
+            dynamic objs = method.Invoke(null, new Type[0]);
+            BasicHeaders();
+            Console.Write(JsonConvert.SerializeObject(objs));
+        }
+
+        private static void ProcessGetOne(Type model, int id)
+        {
+            var method = model.GetMethods(BindingFlags.Public | BindingFlags.Static |
+                                          BindingFlags.FlattenHierarchy).
+                Where(x => x.Name == "Get").
+                First(x => x.GetParameters().Length == 1 && x.GetParameters().First().ParameterType == typeof(int));
+            BasicHeaders();
+            Console.WriteLine(JsonConvert.SerializeObject(method.Invoke(null, new object[] { id })));
         }
 
         private static void ProcessCreate(Type model, List<KeyValuePair<string, string>> formData)
@@ -63,7 +74,12 @@ namespace ConsoleApplication
 
         private static void ProcessDelete(Type model, int id)
         {
-            throw new NotImplementedException();
+            var method = model.GetMethods(BindingFlags.Public | BindingFlags.Static |
+                                      BindingFlags.FlattenHierarchy).
+            Where(x => x.Name == "Delete").
+            First(x => x.GetParameters().Length == 1 && x.GetParameters().First().ParameterType == typeof(int));
+            BasicHeaders();
+            Console.WriteLine(JsonConvert.SerializeObject(method.Invoke(null, new object[] { id })));
         }
 
         private static List<KeyValuePair<string, string>> SetupFormInput(string contentString)
@@ -77,18 +93,6 @@ namespace ConsoleApplication
             return list;
         }
 
-        private static void ProcessGetOne(Type model, int id)
-        {
-            var method = model.GetMethods(BindingFlags.Public | BindingFlags.Static |
-                                          BindingFlags.FlattenHierarchy).
-                Where(x => x.Name == "Get").
-                First(x => x.GetGenericArguments().Length == 1 && x.GetGenericArguments().
-                    First() == typeof(int));
-            BasicHeaders();
-            Console.WriteLine(JsonConvert.SerializeObject(u));
-
-        }
-
         private static int GetIdFromModelPath(string modelPath)
         {
             int id = -1;
@@ -100,16 +104,6 @@ namespace ConsoleApplication
             }
 
             return id;
-        }
-
-        private static void ProcessGetAll(Type model)
-        {
-            var method = model.GetMethods(BindingFlags.Static | BindingFlags.Public | BindingFlags.FlattenHierarchy).Where(x => x.Name == "Get").First(x => x.GetGenericArguments().Length == 0);
-            dynamic objs = method.Invoke(null, new Type[0]);
-            //List<dynamic> objs = (List<dynamic>)model.GetTypeInfo().GetMethod("Get", BindingFlags.Static | BindingFlags.Public | BindingFlags.FlattenHierarch).Invoke(null, new object[0]);
-            BasicHeaders();
-            Console.Write(JsonConvert.SerializeObject(objs));
-
         }
 
         private static void BasicHeaders()
@@ -143,7 +137,7 @@ namespace ConsoleApplication
 
         }
 
-        public static Type GetTypeFromString(string urlName)
+        private static Type GetTypeFromString(string urlName)
         {
             Type[] klasses = Assembly.GetEntryAssembly().GetTypes();
             foreach (Type t in klasses)
@@ -158,6 +152,13 @@ namespace ConsoleApplication
                 }
             }
             return null;
+        }
+
+        private static string GetModelFromModelPath(string modelPath)
+        {
+            modelPath = modelPath.Remove(0, 1);
+            string[] splitPath = modelPath.Split('/');
+            return splitPath[0];
         }
 
     }
