@@ -14,8 +14,8 @@ namespace ConsoleApplication
         public static void Main(string[] args)
         {
             System.Threading.Thread.Sleep(35000);
-            string contentString = string.Empty; //GetFormContentets();
-            string requestMethod = Environment.GetEnvironmentVariable("REQUEST_METHOD");
+            string contentString = GetFormContentets();
+            string requestMethod = Environment.GetEnvironmentVariable("REQEST_METHOD");
             List<KeyValuePair<string, string>> formData = new List<KeyValuePair<string, string>>(); //SetupFormInput(contentString);
             string modelPath = Environment.GetEnvironmentVariable("SCRIPT_PATH");
             string model = GetModelFromModelPath(modelPath);
@@ -120,7 +120,15 @@ namespace ConsoleApplication
         /// <returns></returns>
         private static string GetFormContentets()
         {
-            int contentLength = int.Parse(Environment.GetEnvironmentVariable("CONTENT_LENGTH"));
+            if (string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable("CONTENT-LENGTH")))
+            {
+                return string.Empty;
+            }
+            int contentLength = int.Parse(Environment.GetEnvironmentVariable("CONTENT-LENGTH"));
+            if (contentLength < 1)
+            {
+                return string.Empty;
+            }
             List<char> contents = new List<char>();
             using (Stream stdin = Console.OpenStandardInput())
             {
