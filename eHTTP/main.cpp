@@ -14,7 +14,7 @@ void initTls();
 TLSConfiguration *tlsConfig;
 
 int main(int argc, char *argv[]) {
-  //initTls();
+  initTls();
   std::string basePath;
   eHTTP::server::server *server;
 
@@ -28,6 +28,7 @@ int main(int argc, char *argv[]) {
 
   server->addCgiEndpoint("api", "dotnet", "C:\\Users\\mburket\\Source\\Repos\\SS-03_MAC\\MAC\\src\\MAC\\bin\\Debug\\netcoreapp1.0\\publish\\MAC.dll");
   server->addCgiEndpoint("env", "printenv", "");
+  server->setTlsConfiguration(tlsConfig);
 
   server->serve();
 }
