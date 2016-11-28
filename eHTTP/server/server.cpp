@@ -5,6 +5,7 @@
 #include <ext/stdio_filebuf.h>
 #include <sys/socket.h>
 #include <cstring>
+#include <algorithm>
 
 #include "server.h"
 #include "../utils/filesystem.h"
@@ -164,25 +165,10 @@ long long server::serveCgi(std::istream &tcpIstream,
   }
   std::cout << "Request content length: " << requestContentLen << std::endl;
 
-    // Set up environment
-    // TODO Should be in known method
-    char **env = (char **) malloc(3);
-    std::string temp;
-    temp = "REQUEST_METHOD=";
-    temp += requestHeaders.getVerb();
-    env[0] = (char *) malloc(temp.length());
-    strcpy(env[0], temp.c_str());
-
-    temp = "SCRIPT_PATH=";
-    temp += requestHeaders.path->getScriptPath();
-    env[1] = (char *) malloc(temp.length());
-    strcpy(env[1], temp.c_str());
-    env[2] = NULL;
-
-
-    // CGI out
-  // TODO NULL instead of environ?
+  // CGI out
+  char **env = headersToEnvArray(requestHeaders);
   pexec(cgiEndpoint.cgiPath.c_str(), cgiPipes, argv, env);
+  freeEnvArray(env);
   return network::passData(tcpIstream, clientFd, cgiPipes[0], cgiPipes[1], requestContentLen, 1024);
 }
 
@@ -225,6 +211,47 @@ bool server::getFileFromPath(httpParsing::AbsPath &path, std::string &outFile) {
   return true;
 }
 
+char** server::headersToEnvArray(httpRequestHeaderCollection &headers) {
+  // Set up environment
+  char **env = (char **) malloc(3 + headers.size());
+  int i;
+  std::string temp;
+
+  for (i = 0; i < headers.size(); i++) {
+    temp = headers[i]->key;
+    std::transform(temp.begin(), temp.end(), temp.begin(), ::toupper);
+    temp += "=";
+    temp += headers[i]->value;
+    env[i] = (char *) malloc(temp.length() + 1);
+    strcpy(env[i], temp.c_str());
+  }
+
+  //TODO more headers such as HTTP version?
+
+  temp = "REQUEST_METHOD=";
+  temp += headers.getVerb();
+  env[i] = (char *) malloc(temp.length() + 1);
+  strcpy(env[i++], temp.c_str());
+
+  temp = "SCRIPT_PATH=";
+  temp += headers.path->getScriptPath();
+  env[i] = (char *) malloc(temp.length() + 1);
+  strcpy(env[i++], temp.c_str());
+
+  env[i] = NULL;
+  return env;
+}
+
+void server::freeEnvArray(char **env) {
+  int i = 0;
+  //TODO why does this not work?  i gets changed.
+  /*while (env[i] != NULL) {
+    free(env[i]);
+    i++;
+  }
+  free(env);*/
+}
+
 void server::addCgiEndpoint(std::string pathElement, std::string cgiPath, std::string cgiArguments) {
   eHTTP::server::cgiEndpoint_t newEP;
   newEP.pathElement = pathElement;
@@ -245,7 +272,7 @@ void server::serve() {
   int client;
   while (true) {
     client = network::tcp_accept(tcp);
-    forkHandler(client, &eHTTP::server::server::handleClientTls);
+    forkHandler(client, &eHTTP::server::server::handleClient);
   }
 }
 #pragma clang diagnostic pop

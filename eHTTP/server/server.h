@@ -40,6 +40,11 @@ private:
   /// \param outFile is where the filesystem path will be stored if a file has been found.
   /// \returns true if a file has been found at the path. False if no file is found.
   bool getFileFromPath(httpParsing::AbsPath &path, std::string &outFile);
+  /// Converts the header collection to a NULL-terminated array of strings for giving to the environment.
+  /// \param headers the header collection to convert
+  static char** headersToEnvArray(httpRequestHeaderCollection &headers);
+  /// Frees the memory reserved for the environment array from \p headersToEnvArray
+  static void freeEnvArray(char** env);
 
 public:
   /// Constructs a HTTP server with no TLS.  Default document of index.html only.
