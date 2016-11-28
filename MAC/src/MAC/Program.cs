@@ -16,7 +16,7 @@ namespace ConsoleApplication
             System.Threading.Thread.Sleep(35000);
             string contentString = GetFormContentets();
             string requestMethod = Environment.GetEnvironmentVariable("REQEST_METHOD");
-            List<KeyValuePair<string, string>> formData = SetupFormInput(contentString);
+            object formData = SetupFormInput(contentString);
             string modelPath = Environment.GetEnvironmentVariable("SCRIPT_PATH");
             string model = GetModelFromModelPath(modelPath);
             Type modelType = GetTypeFromString(model);
@@ -61,12 +61,12 @@ namespace ConsoleApplication
             Console.WriteLine(JsonConvert.SerializeObject(method.Invoke(null, new object[] { id })));
         }
 
-        private static void ProcessCreate(Type model, List<KeyValuePair<string, string>> formData)
+        private static void ProcessCreate(Type model, object formData)
         {
             throw new NotImplementedException();
         }
 
-        private static void ProcessUpdate(Type model, int id, List<KeyValuePair<string, string>> formData)
+        private static void ProcessUpdate(Type model, int id, object formData)
         {
             throw new NotImplementedException();
         }
