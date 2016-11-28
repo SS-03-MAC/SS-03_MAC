@@ -41,6 +41,8 @@ public:
   void Handshake();
   void AcceptClient(int client);
 
+  bool IsClosed() { return this->closed; }
+
   size_t Read(uint8_t *output);
   void Write(uint8_t *data, size_t length);
   void Close();

@@ -5,6 +5,7 @@
 #include <ext/stdio_filebuf.h>
 #include <sys/socket.h>
 #include <cstring>
+#include <algorithm>
 
 #include "server.h"
 #include "../utils/filesystem.h"
@@ -38,14 +39,13 @@ server::~server() {
 }
 
 void server::forkHandler(int clientFd, void (eHTTP::server::server:: *handler)(int)) {
-  int child = fork();
+  /*int child = fork();
   if (child == -1) {
     std::cout << "Forking a handling thread failed" << std::endl;
-  } else if (child == 0) {
+  } else if (child == 0) {*/
     (this->*handler)(clientFd);
-    exit(0);
-  }
-    std::cout << "PID?:" << child << std::endl;
+    /*exit(0);
+  }*/
 }
 
 // ===== FUNCTIONS =====
@@ -79,13 +79,44 @@ void server::handleClientTls(int clientFd) {
   TLSServer *srv = new TLSServer(tlsConfig);
   srv->AcceptClient(clientFd);
   srv->Handshake();
-  TLSServerStream *ss = new TLSServerStream(srv);
+  TLSServerStream *clientStream = new TLSServerStream(srv);
 
+  static bool first = true;
+  if (first) {
+    first = false;
+    return;
+  }
   // TODO serve a file or CGI
-  std::cout << "Read from TLS client: " << (char) ss->get() << std::endl;
+  /*std::cout << "Read from TLS client: ";
+  while (!clientStream->eof()) {
+    std::cout << (char) clientStream->get();
+  }
+  std::cout << std::endl;
+  return;*/
+
+  httpRequestHeaderCollection *headers;
+  eHTTP::server::cgiEndpoint_t cgiEndpoint;
+  try {
+    headers = new httpRequestHeaderCollection(clientStream);
+  } catch (const char *err) {
+    std::cout << "Error handling request: " << err << std::endl;
+    shutdown(clientFd, SHUT_RDWR);
+    return;
+  }
+  std::cout << "Request: " << headers->toString() << std::endl;
+
+  if (settings->getScriptForPath(*headers->path, cgiEndpoint)) {
+    std::cout << "Serving via CGI: " << headers->path->getPathAndQueryString() << std::endl;
+    serveCgi(*clientStream, clientFd, *headers->path, cgiEndpoint, *headers);
+  } else {
+    std::cout << "Serving static file" << std::endl;
+    serveFile(clientFd, *headers->path);
+  }
+
+
 
   srv->Close();
-  delete ss;
+  delete clientStream;
   delete srv;
 }
 
@@ -134,25 +165,10 @@ long long server::serveCgi(std::istream &tcpIstream,
   }
   std::cout << "Request content length: " << requestContentLen << std::endl;
 
-    // Set up environment
-    // TODO Should be in known method
-    char **env = (char **) malloc(3);
-    std::string temp;
-    temp = "REQUEST_METHOD=";
-    temp += requestHeaders.getVerb();
-    env[0] = (char *) malloc(temp.length());
-    strcpy(env[0], temp.c_str());
-
-    temp = "SCRIPT_PATH=";
-    temp += requestHeaders.path->getScriptPath();
-    env[1] = (char *) malloc(temp.length());
-    strcpy(env[1], temp.c_str());
-    env[2] = NULL;
-
-
-    // CGI out
-  // TODO NULL instead of environ?
+  // CGI out
+  char **env = headersToEnvArray(requestHeaders);
   pexec(cgiEndpoint.cgiPath.c_str(), cgiPipes, argv, env);
+  freeEnvArray(env);
   return network::passData(tcpIstream, clientFd, cgiPipes[0], cgiPipes[1], requestContentLen, 1024);
 }
 
@@ -193,6 +209,47 @@ bool server::getFileFromPath(httpParsing::AbsPath &path, std::string &outFile) {
   }
   outFile = fileToServe;
   return true;
+}
+
+char** server::headersToEnvArray(httpRequestHeaderCollection &headers) {
+  // Set up environment
+  char **env = (char **) malloc(3 + headers.size());
+  int i;
+  std::string temp;
+
+  for (i = 0; i < headers.size(); i++) {
+    temp = headers[i]->key;
+    std::transform(temp.begin(), temp.end(), temp.begin(), ::toupper);
+    temp += "=";
+    temp += headers[i]->value;
+    env[i] = (char *) malloc(temp.length() + 1);
+    strcpy(env[i], temp.c_str());
+  }
+
+  //TODO more headers such as HTTP version?
+
+  temp = "REQUEST_METHOD=";
+  temp += headers.getVerb();
+  env[i] = (char *) malloc(temp.length() + 1);
+  strcpy(env[i++], temp.c_str());
+
+  temp = "SCRIPT_PATH=";
+  temp += headers.path->getScriptPath();
+  env[i] = (char *) malloc(temp.length() + 1);
+  strcpy(env[i++], temp.c_str());
+
+  env[i] = NULL;
+  return env;
+}
+
+void server::freeEnvArray(char **env) {
+  int i = 0;
+  //TODO why does this not work?  i gets changed.
+  /*while (env[i] != NULL) {
+    free(env[i]);
+    i++;
+  }
+  free(env);*/
 }
 
 void server::addCgiEndpoint(std::string pathElement, std::string cgiPath, std::string cgiArguments) {
