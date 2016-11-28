@@ -26,7 +26,7 @@ int main(int argc, char *argv[]) {
   server = new eHTTP::server::server(8000, basePath);
   server->addDefaultDocument("test2.txt");
 
-  server->addCgiEndpoint("api", "echo", "hi");
+  server->addCgiEndpoint("api", "dotnet", "C:\\Users\\mburket\\Source\\Repos\\SS-03_MAC\\MAC\\src\\MAC\\bin\\Debug\\netcoreapp1.0\\publish\\MAC.dll");
   server->addCgiEndpoint("env", "printenv", "");
 
   server->serve();
