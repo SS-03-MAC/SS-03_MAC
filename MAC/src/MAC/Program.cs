@@ -16,7 +16,7 @@ namespace ConsoleApplication
             System.Threading.Thread.Sleep(35000);
             string contentString = GetFormContentets();
             string requestMethod = Environment.GetEnvironmentVariable("REQEST_METHOD");
-            List<KeyValuePair<string, string>> formData = new List<KeyValuePair<string, string>>(); //SetupFormInput(contentString);
+            List<KeyValuePair<string, string>> formData = SetupFormInput(contentString);
             string modelPath = Environment.GetEnvironmentVariable("SCRIPT_PATH");
             string model = GetModelFromModelPath(modelPath);
             Type modelType = GetTypeFromString(model);
@@ -81,15 +81,9 @@ namespace ConsoleApplication
             Console.WriteLine(JsonConvert.SerializeObject(method.Invoke(null, new object[] { id })));
         }
 
-        private static List<KeyValuePair<string, string>> SetupFormInput(string contentString)
+        private static object SetupFormInput(string contentString)
         {
-            string[] contentStringBeforeProcesssing = contentString.Split('=');
-            List<KeyValuePair<string, string>> list = new List<KeyValuePair<string, string>>();
-            for (int i = 0; i < contentStringBeforeProcesssing.Length; i += 2)
-            {
-                list.Add(new KeyValuePair<string, string>(contentStringBeforeProcesssing[i], contentStringBeforeProcesssing[i + 1]));
-            }
-            return list;
+            return JsonConvert.DeserializeObject(contentString);
         }
 
         private static int GetIdFromModelPath(string modelPath)
