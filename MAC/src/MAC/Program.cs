@@ -132,15 +132,16 @@ namespace ConsoleApplication
             List<char> contents = new List<char>();
             using (Stream stdin = Console.OpenStandardInput())
             {
-                byte[] buffer = new byte[2048];
-                int bytes;
-                while ((bytes = stdin.Read(buffer, 0, buffer.Length)) > 0)
-                {
-                    contents.AddRange(Encoding.UTF8.GetChars(buffer));
-                }
+                byte[] buffer = new byte[contentLength];
+                stdin.Read(buffer, 0, buffer.Length);
+                contents.AddRange(Encoding.UTF8.GetChars(buffer));
             }
-
-            return contents.ToString();
+            string result = string.Empty;
+            foreach(char c in contents)
+            {
+                result += c;
+            }
+            return result; 
 
         }
 
