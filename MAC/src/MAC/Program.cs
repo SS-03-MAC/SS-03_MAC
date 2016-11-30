@@ -1,3 +1,4 @@
+using MAC.Models;
 using MAC.Models.Attributes;
 using Newtonsoft.Json;
 using System;
@@ -15,11 +16,11 @@ namespace ConsoleApplication
         {
             System.Threading.Thread.Sleep(35000);
             string contentString = GetFormContentets();
-            string requestMethod = Environment.GetEnvironmentVariable("REQEST_METHOD");
-            object formData = SetupFormInput(contentString);
+            string requestMethod = Environment.GetEnvironmentVariable("REQUEST_METHOD");
             string modelPath = Environment.GetEnvironmentVariable("SCRIPT_PATH");
             string model = GetModelFromModelPath(modelPath);
             Type modelType = GetTypeFromString(model);
+            BaseModel formData = SetupFormInput(contentString, modelType);
             int id = GetIdFromModelPath(modelPath);
             if (requestMethod.ToUpper() == "GET" && id < 0)
             {
@@ -31,11 +32,11 @@ namespace ConsoleApplication
             }
             else if (requestMethod.ToUpper() == "POST")
             {
-                ProcessCreate(modelType, formData);
+                ProcessCreate(formData);
             }
             else if (requestMethod.ToUpper() == "PATCH")
             {
-                ProcessUpdate(modelType, id, formData);
+                ProcessUpdate(formData, id);
             }
             else if (requestMethod.ToUpper() == "DELETE")
             {
@@ -61,14 +62,18 @@ namespace ConsoleApplication
             Console.WriteLine(JsonConvert.SerializeObject(method.Invoke(null, new object[] { id })));
         }
 
-        private static void ProcessCreate(Type model, object formData)
+        private static void ProcessCreate(BaseModel model)
         {
-            throw new NotImplementedException();
+            model.Save();
         }
 
-        private static void ProcessUpdate(Type model, int id, object formData)
+        private static void ProcessUpdate(BaseModel model, int id)
         {
-            throw new NotImplementedException();
+            if (model.Id.Value != id)
+            {
+                throw new InvalidOperationException("The given Id and model's Id do not match");
+            }
+            model.Save();
         }
 
         private static void ProcessDelete(Type model, int id)
@@ -81,9 +86,9 @@ namespace ConsoleApplication
             Console.WriteLine(JsonConvert.SerializeObject(method.Invoke(null, new object[] { id })));
         }
 
-        private static object SetupFormInput(string contentString)
+        private static BaseModel SetupFormInput(string contentString, Type type)
         {
-            return JsonConvert.DeserializeObject(contentString);
+            return (BaseModel) JsonConvert.DeserializeObject(contentString, type);
         }
 
         private static int GetIdFromModelPath(string modelPath)
