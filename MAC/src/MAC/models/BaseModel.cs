@@ -233,7 +233,7 @@ namespace MAC.Models
             List<KeyValuePair<string, BaseType>> values = GetDatabaseFields();
             foreach (KeyValuePair<string, BaseType> kvPair in values)
             {
-                if (kvPair.Key.ToLower() == "id")
+                if (kvPair.Key.ToLower() == "id" || kvPair.Value == null)
                 {
                     continue;
                 }
@@ -275,7 +275,7 @@ namespace MAC.Models
         {
             foreach (KeyValuePair<string, BaseType> kvPair in values)
             {
-                if (kvPair.Key.ToLower() == "id")
+                if (kvPair.Key.ToLower() == "id" || kvPair.Value == null)
                 {
                     continue;
                 }
@@ -296,13 +296,13 @@ namespace MAC.Models
         /// <returns></returns>
         private static string GetValuesForInsert(string query, List<KeyValuePair<string, BaseType>> values)
         {
-            foreach (KeyValuePair<string, BaseType> key in values)
+            foreach (KeyValuePair<string, BaseType> kvPair in values)
             {
-                if (key.Key.ToLower() == "id")
+                if (kvPair.Key.ToLower() == "id" || kvPair.Value == null)
                 {
                     continue;
                 }
-                query += "@" + key.Key + ",";
+                query += "@" + kvPair.Key + ",";
             }
             query = query.Remove(query.LastIndexOf(','));
             return query;
@@ -311,18 +311,18 @@ namespace MAC.Models
         /// <summary>
         /// Get the column names in comma sperated list
         /// </summary>
-        /// <param name="query">The </param>
-        /// <param name="values"></param>
+        /// <param name="query">The query the is being made</param>
+        /// <param name="values">The value of the model</param>
         /// <returns></returns>
         private static string GetColumnNames(string query, List<KeyValuePair<string, BaseType>> values)
         {
-            foreach (KeyValuePair<string, BaseType> key in values)
+            foreach (KeyValuePair<string, BaseType> keyValuePair in values)
             {
-                if (key.Key.ToLower() == "id")
+                if (keyValuePair.Key.ToLower() == "id" || keyValuePair.Value == null)
                 {
                     continue;
                 }
-                query += key.Key + ",";
+                query += keyValuePair.Key + ",";
             }
             query = query.Remove(query.LastIndexOf(','));
             return query;
