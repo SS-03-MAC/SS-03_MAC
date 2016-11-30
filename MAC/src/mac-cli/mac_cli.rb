@@ -1,13 +1,17 @@
 
 # Mac CLI start
 module MacCLI
-  if ARGV.length.zero?
+  # Banner for usage. Displayed when no command are found, or if the first argument is help
+  if ARGV.length.zero? or ARGV[0] == '--help' or ARGV[0] == '-h'
     puts 'Useage: mac-cli'
+    puts 'init: creates the directory tree for a new MAC project'
+    puts 'build: populates models in a MAC project'
+    puts 'run: runs the current project'
     exit
   end
 
   # Modules
-  # TODO: Make this more rubish
+  # Each command has its own argument class. Details are fleshed out in their respective classes
   if ARGV[0] == 'build'
     require_relative './commands/build'
     ARGV.shift
