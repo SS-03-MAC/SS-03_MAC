@@ -1,27 +1,31 @@
 
 # Mac CLI start
 module MacCLI
-  if ARGV.length.zero?
+  # Banner for usage. Displayed when no command are found, or if the first argument is help
+  if ARGV.length.zero? or ARGV[0] == '--help' or ARGV[0] == '-h'
     puts 'Useage: mac-cli'
+    puts 'init: creates the directory tree for a new MAC project'
+    puts 'build: populates models in a MAC project'
+    puts 'run: runs the current project'
     exit
   end
 
   # Modules
-  # TODO: Make this more rubish
+  # Each command has its own argument class. Details are fleshed out in their respective classes
   if ARGV[0] == 'build'
-    require './commands/build'
+    require_relative './commands/build'
     ARGV.shift
     build = Build.new
-    build.build(ARGV, './models/js/', './models/csharp/', './models/sql/', './yaml')
+    build.build(ARGV, './public/', './app/', './db/', './config/models/')
     exit
   elsif ARGV[0] == 'init'
-    require './commands/init'
+    require_relative './commands/init'
     ARGV.shift
     init = Init.new
-    init.option_parser(ARGV)
+    init.init(ARGV)
     exit
   elsif ARGV[0] == 'run'
-    require './commands/run'
+    require_relative './commands/run'
     ARGV.shift
     run = Run.new
     run.option_parser(ARGV)

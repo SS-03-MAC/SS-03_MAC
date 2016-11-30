@@ -57,7 +57,7 @@ module MacCLI
     end
 
     # parses options. currently supports options for excluding javascript
-    # excluding C#, excluding SQL, and shoing help
+    # excluding C#, excluding SQL, and showing help
     def option_parser(args)
       flags = {}
       opt_parser = OptionParser.new do |opts|
