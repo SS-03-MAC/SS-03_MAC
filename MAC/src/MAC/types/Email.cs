@@ -2,11 +2,13 @@ using System;
 using System.Runtime.Serialization;
 using System.Net.Mail;
 
-namespace MAC.Types.User {
-     /// <summary>
-     /// Stores and vaildates 
-     /// </summary>
-     public class Email : BaseType<Email,string> {
+namespace MAC.Types.User
+{
+    /// <summary>
+    /// Stores and vaildates 
+    /// </summary>
+    public class Email : BaseType<Email, string>
+    {
         /// <summary>
         /// Data that is stored in the model represented in as string
         /// </summary>
@@ -22,13 +24,21 @@ namespace MAC.Types.User {
             DatabaseFieldType = DatabaseFieldTypes.nvarchar;
         }
 
+        /// <summary>
+        /// Default constructor
+        /// </summary>
+        public Email()
+        {
+
+        }
 
         /// <summary>
         /// This will check the email address with .NET class
         /// MailAddress
         /// </summary>
         /// <returns>If the stored email is valid</returns>
-        public override bool Validate() {
+        public override bool Validate()
+        {
             if (string.IsNullOrWhiteSpace(Data))
             {
                 return false;
@@ -49,7 +59,8 @@ namespace MAC.Types.User {
         /// </summary> 
         /// <param name="other"></param>
         /// <returns></returns>
-        public override int CompareTo(object other) {
+        public override int CompareTo(object other)
+        {
             if (other is Email)
             {
                 return Data.CompareTo(((Email)other).Data);
@@ -62,7 +73,8 @@ namespace MAC.Types.User {
         /// </summary>
         /// <param name="other"></param>
         /// <returns></returns>
-        public override bool Equals(object other) {
+        public override bool Equals(object other)
+        {
             return CompareTo(other) == 0;
         }
 
@@ -76,7 +88,8 @@ namespace MAC.Types.User {
         /// </summary>
         /// <param name="info"></param>
         /// <param name="context"></param>
-        public override void GetObjectData(SerializationInfo info, StreamingContext context) {
+        public override void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
             throw new NotImplementedException();
         }
 
@@ -101,7 +114,7 @@ namespace MAC.Types.User {
 
             set
             {
-                Data = value; 
+                Data = value;
             }
         }
 
@@ -114,4 +127,4 @@ namespace MAC.Types.User {
             return Data as object;
         }
     }
- }
+}

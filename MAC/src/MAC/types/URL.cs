@@ -26,13 +26,17 @@ namespace MAC.Types.Internet
             }
 
             return Data.IsAbsoluteUri;
-
         }
 
         public Url(Uri uri)
         {
             Data = uri;
             DatabaseFieldType = DatabaseFieldTypes.nvarchar;
+        }
+
+        public Url()
+        {
+
         }
 
         public Url(SerializationInfo info, StreamingContext context)

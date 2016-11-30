@@ -26,6 +26,14 @@ namespace MAC.Types
         }
 
         /// <summary>
+        /// Default constructor
+        /// </summary>
+        public String()
+        {
+
+        }
+
+        /// <summary>
         /// Constructs String from SerializationInfo
         /// </summary>
         /// <param name="info"></param>

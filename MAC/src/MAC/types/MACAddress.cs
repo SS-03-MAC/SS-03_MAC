@@ -29,6 +29,14 @@ namespace MAC.Types.Internet
         }
 
         /// <summary>
+        /// Default constructor
+        /// </summary>
+        public MACAddress()
+        {
+
+        }
+
+        /// <summary>
         /// Initializes a MACAddress from SerializationInfo
         /// </summary>
         /// <param name="info"></param>

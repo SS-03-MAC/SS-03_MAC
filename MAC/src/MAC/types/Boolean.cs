@@ -26,6 +26,14 @@ namespace MAC.Types
         }
 
         /// <summary>
+        /// Default constructor
+        /// </summary>
+        public Boolean()
+        {
+
+        }
+
+        /// <summary>
         /// Initializes a Boolean from SerializationInfo
         /// </summary>
         /// <param name="info"></param>

@@ -36,6 +36,11 @@ namespace MAC.Types.User
         {
         }
 
+        public Password()
+        {
+
+        }
+
         /// <summary>
         /// Compares the hashes
         /// </summary>
