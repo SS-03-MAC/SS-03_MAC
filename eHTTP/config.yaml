@@ -1,0 +1,9 @@
+port: 8000
+portTls: 8433
+basePath: "c:"
+cgiEndpoints:
+  - pathElement: api
+    cgiPath: echo
+    cgiArguments: hi
+  - pathElement: env
+    cgiPath: printenv

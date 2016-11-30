@@ -14,9 +14,16 @@ void initTls();
 TLSConfiguration *tlsConfig;
 
 int main(int argc, char *argv[]) {
-  initTls();
+  //initTls();
   std::string basePath;
   eHTTP::server::server *server;
+  /*eHTTP::server::settings *settings;
+  try {
+    settings = new eHTTP::server::settings("eHTTP/config.yaml");
+  } catch (const char *err) {
+    std::cout << "Error loading settings: " << err << std::endl;
+    return 1;
+  }*/
 
   if (argc > 1) {
     basePath = argv[1];
@@ -28,7 +35,9 @@ int main(int argc, char *argv[]) {
 
   server->addCgiEndpoint("api", "echo", "hi");
   server->addCgiEndpoint("env", "printenv", "");
-  server->setTlsConfiguration(tlsConfig);
+  //server->setTlsConfiguration(tlsConfig);
+
+  //server = new eHTTP::server::server(*settings, *tlsConfig);
 
   server->serve();
 }
