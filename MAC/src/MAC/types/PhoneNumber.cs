@@ -32,6 +32,14 @@ namespace MAC.Types.User
         }
 
         /// <summary>
+        /// Default constructor
+        /// </summary>
+        public PhoneNumber()
+        {
+
+        }
+
+        /// <summary>
         /// Create a new phone number
         /// </summary>
         /// <param name="PhoneNumber">Phone number in E.164 Format as a string</param>

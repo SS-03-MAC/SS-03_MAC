@@ -2,6 +2,9 @@
 
 namespace MAC.Models
 {
+    /// <summary>
+    /// This class is for talking with the database 
+    /// </summary>
     public static class Query
     {
         /// <summary>

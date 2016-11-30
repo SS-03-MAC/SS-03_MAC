@@ -1,6 +1,7 @@
 using System;
 using System.Runtime.Serialization;
-
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace MAC.Types
 {
@@ -23,6 +24,36 @@ namespace MAC.Types
             DatabaseFieldType = DatabaseFieldTypes.int_t;
             Data = input;
         }
+
+        /// <summary>
+        /// Default constructor
+        /// </summary>
+        public Integer()
+        {
+
+        }
+
+        /// <summary>
+        /// Convert int 64 to int 32
+        /// </summary>
+        /// <param name="data">64 bit</param>
+        public Integer(long data)
+        {
+            DatabaseFieldType = DatabaseFieldTypes.int_t;
+            Data = (int)data;
+        }
+
+        /// <summary>
+        /// Set the value of Data from a string
+        /// </summary>
+        /// <param name="value">integer as a string</param>
+
+        public Integer(string value)
+        {
+            DatabaseFieldType = DatabaseFieldTypes.int_t;
+            Data = int.Parse(value);
+        }
+
 
         /// <summary>
         /// Constructs Integer from SerializationInfo
@@ -124,6 +155,20 @@ namespace MAC.Types
         public override object GetRawObject()
         {
             return Data as object;
+        }
+
+        /// <summary>
+        /// This is for JSON Converting
+        /// </summary>
+        /// <param name="l">long to cast</param>
+        public static explicit operator Integer(long l)
+        {
+            return new Integer(l);
+        }
+
+        public static explicit operator long(Integer i)
+        {
+            return (long)i.Data;
         }
     }
 }

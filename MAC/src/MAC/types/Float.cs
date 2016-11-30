@@ -26,6 +26,14 @@ namespace MAC.Types
         }
 
         /// <summary>
+        /// Default constructor
+        /// </summary>
+        public Float()
+        {
+
+        }
+
+        /// <summary>
         /// Constructs a Float from SerializationInfo
         /// </summary>
         /// <param name="info"></param>

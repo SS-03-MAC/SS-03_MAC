@@ -26,6 +26,14 @@ namespace MAC.Types.Internet
         }
 
         /// <summary>
+        /// Default constructor
+        /// </summary>
+        public IPAddress()
+        {
+
+        }
+
+        /// <summary>
         /// Constructs an IPAddress from a C# IPAddress Object
         /// </summary>
         /// <param name="input"></param>

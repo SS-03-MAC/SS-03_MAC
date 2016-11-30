@@ -27,6 +27,14 @@ namespace MAC.Types
         }
 
         /// <summary>
+        /// Default constructor
+        /// </summary>
+        public Currency()
+        {
+
+        }
+
+        /// <summary>
         /// Constructs Currency from SerializationInfo
         /// </summary>
         /// <param name="info"></param>

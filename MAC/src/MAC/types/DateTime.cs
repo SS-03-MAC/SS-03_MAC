@@ -27,6 +27,14 @@ namespace MAC.Types
         }
 
         /// <summary>
+        /// Default constructor
+        /// </summary>
+        public DateTime()
+        {
+
+        }
+
+        /// <summary>
         /// Initializes aDateTime from SerializationInfo
         /// </summary>
         /// <param name="info"></param>

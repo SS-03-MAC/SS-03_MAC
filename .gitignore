@@ -163,3 +163,4 @@ Session.vim
 obj
 /MAC/test/MAC.Test/obj
 /MAC/test/MAC.Test/bin
+/eHTTP/cmake-build-debug
