@@ -168,7 +168,17 @@ namespace MAC.Types
 
         public static explicit operator long(Integer i)
         {
-            return (long)i.Data;
+            return i.Data;
+        }
+
+        public static explicit operator Integer(int l)
+        {
+            return new Integer(l);
+        }
+
+        public static explicit operator int(Integer i)
+        {
+            return i.Data;
         }
     }
 }
