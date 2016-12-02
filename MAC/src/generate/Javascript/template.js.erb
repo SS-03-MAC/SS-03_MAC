@@ -6,12 +6,12 @@ var <%= name.capitalize %> = function(<%= fields_str %>){
   this.CreatedAt = Date.now();
   this.UpdatedAt = Date.now();
 
-  this.save = function(){
+  this.save = function(path){
     var xhr = new XMLHttpRequest();
     if(this.id == 0){
-      xhr.open("POST", <%= "\"/" + name.pluralize + "/\"" %>, true);
+      xhr.open("POST", <%= "\"/\" + path + \"" + name.pluralize + "/\"" %>, true);
     } else{
-      xhr.open("PATCH", <%= "\"/" + name.pluralize + "/\"+"%>this.id);
+      xhr.open("PATCH", <%= "\"/\" + path + \"" + name.pluralize + "/\"+"%>this.id);
     }
 
     xhr.setRequestHeader("Content-type", "application/json");
@@ -30,13 +30,13 @@ var <%= name.capitalize %> = function(<%= fields_str %>){
     xhr.send(data);
   };
 
-  this.delete = function(){
+  this.delete = function(path){
     if(this.id == 0){
       return; //never saved to database, don't have to do anything
     }
 
     var xhr = new XMLHttpRequest();
-    xhr.open("DELETE", <%= "\"/" + name.pluralize + "/\"+" %>this.id, true);
+    xhr.open("DELETE", <%= "\"/\" + path + \"" + name.pluralize + "/\"+" %>this.id, true);
     xhr.setRequestHeader("Content-type", "application/json");
     xhr.onreadystatechange = function() {
       if(xhr.readyState == 4){
@@ -52,7 +52,7 @@ var <%= name.capitalize %> = function(<%= fields_str %>){
   };
 };
 
-<%= name.capitalize %>.get = function(id, ret){
+<%= name.capitalize %>.get = function(id, ret, path){
   var xhr = new XMLHttpRequest();
 
   xhr.onreadystatechange = function() {
@@ -73,11 +73,11 @@ var <%= name.capitalize %> = function(<%= fields_str %>){
     }
   };
 
-  xhr.open("GET", <%= "\"/" + name.pluralize + "/\"+" %>id, true);
+  xhr.open("GET", <%= "\"/\" + path + \"" + name.pluralize + "/\"+" %>id, true);
   xhr.send(null);
 };
 
-<%= name.capitalize %>.getAll = function(arr){
+<%= name.capitalize %>.getAll = function(arr, path){
   var xhr = new XMLHttpRequest();
 
   xhr.onreadystatechange = function() {
@@ -103,6 +103,6 @@ var <%= name.capitalize %> = function(<%= fields_str %>){
     }
   };
 
-  xhr.open("GET", <%="\"/" + name.pluralize + ".json\"" %>, true);
+  xhr.open("GET", <%="\"/\" + path + \"" + name.pluralize + ".json\"" %>, true);
   xhr.send(null);
 };
