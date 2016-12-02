@@ -1,5 +1,14 @@
 CREATE TABLE <%= table_name %> (
+Id int NOT NULL,
+CONSTRAINT PK_<%= table_name %>_ID PRIMARY KEY CLUSTERED (Id)
 <% fields.each do |field| %>
-  <%= field["name"] + " " + field["type"] + "," %>
+  <% if field.key?("relationship") && field["relationship"] == true  %>
+    <%= field["name"].camelize + "Id"  + " int,"  %>
+    CONSTRAINT <%= table_name + "_" +  field["name"] %> FOREIGN KEY (<%= field["name"].camelize + "Id" %>)
+      REFERENCES <%= field["name"] %> (Id)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE
+  <% else %>
+    <%= field["name"]. + " " + field["type"] + "," %>
 <% end %>
 );
