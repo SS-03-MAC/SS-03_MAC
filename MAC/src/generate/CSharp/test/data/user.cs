@@ -4,6 +4,7 @@ using Mac.Types;
 
 [TableName("users")]
 public class User : BaseModel<User> {
+  public int Id { get; set; }
   
 
     

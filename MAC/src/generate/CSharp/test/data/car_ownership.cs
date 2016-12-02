@@ -4,6 +4,7 @@ using Mac.Types;
 
 [TableName("car_ownerships")]
 public class CarOwnership : BaseModel<CarOwnership> {
+  public int Id { get; set; }
   
 
     
