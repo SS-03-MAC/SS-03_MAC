@@ -6,12 +6,12 @@ var User = function(Password, FullName, City){
   this.CreatedAt = Date.now();
   this.UpdatedAt = Date.now();
 
-  this.save = function(){
+  this.save = function(path){
     var xhr = new XMLHttpRequest();
     if(this.id == 0){
-      xhr.open("POST", "/users/", true);
+      xhr.open("POST", "/" + path + "users/", true);
     } else{
-      xhr.open("PATCH", "/users/"+this.id);
+      xhr.open("PATCH", "/" + path + "users/"+this.id);
     }
 
     xhr.setRequestHeader("Content-type", "application/json");
@@ -30,13 +30,13 @@ var User = function(Password, FullName, City){
     xhr.send(data);
   };
 
-  this.delete = function(){
+  this.delete = function(path){
     if(this.id == 0){
       return; //never saved to database, don't have to do anything
     }
 
     var xhr = new XMLHttpRequest();
-    xhr.open("DELETE", "/users/"+this.id, true);
+    xhr.open("DELETE", "/" + path + "users/"+this.id, true);
     xhr.setRequestHeader("Content-type", "application/json");
     xhr.onreadystatechange = function() {
       if(xhr.readyState == 4){
@@ -52,7 +52,7 @@ var User = function(Password, FullName, City){
   };
 };
 
-User.get = function(id, ret){
+User.get = function(id, ret, path){
   var xhr = new XMLHttpRequest();
 
   xhr.onreadystatechange = function() {
@@ -73,11 +73,11 @@ User.get = function(id, ret){
     }
   };
 
-  xhr.open("GET", "/users/"+id, true);
+  xhr.open("GET", "/" + path + "users/"+id, true);
   xhr.send(null);
 };
 
-User.getAll = function(arr){
+User.getAll = function(arr, path){
   var xhr = new XMLHttpRequest();
 
   xhr.onreadystatechange = function() {
@@ -103,6 +103,6 @@ User.getAll = function(arr){
     }
   };
 
-  xhr.open("GET", "/users.json", true);
+  xhr.open("GET", "/" + path + "users.json", true);
   xhr.send(null);
 };
