@@ -3,7 +3,7 @@ using Mac.Types;
 
 
 [TableName("cars")]
-public class Car : BaseModel {
+public class Car : BaseModel<Car> {
   
 
     
