@@ -23,7 +23,7 @@ class TestSQLGen < Test::Unit::TestCase
     yaml = YAML.load(File.open(in_path))
     gen = GenerateSQL.new
     gen.write_table(yaml[2], out_path)
-    
+
     assert(true)
   end
 end
