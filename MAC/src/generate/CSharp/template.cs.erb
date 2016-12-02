@@ -4,6 +4,7 @@ using Mac.Types;
 
 [TableName("<%= table_name %>")]
 public class <%= name.camelize %> : BaseModel {
+  public int Id { get; set; }
   <% fields.each do |field| %>
 
     <% if field.key?("relationship") && field["relationship"] == true  %>
