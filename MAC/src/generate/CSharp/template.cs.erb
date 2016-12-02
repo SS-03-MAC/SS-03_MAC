@@ -3,9 +3,24 @@ using Mac.Types;
 
 
 [TableName("<%= table_name %>")]
-public class <%= name %> : BaseModel {
+public class <%= name.camelize %> : BaseModel {
   <% fields.each do |field| %>
-    [DatabaseField("<%= field["type"] %>")]
-    public <%= field["type"] %> <%= field["name"] %> { get; set; }
+
+    <% if field.key?("relationship") && field["relationship"] == true  %>
+    [DatabaseField("<%= field["name"] %>")]
+    public int <%= field["name"].camelize + "Id" %> { get; set; }
+    public virtual <%= field["name"].camelize %> <%= field["name"].camelize %> {
+      get {
+        return <%= field["name"].camelize %>.Get(<%= field["name"] + "Id" %>);
+      }
+
+      set {
+        <%= field["name"].camelize + "Id" %> = value.Id;
+      }
+    }
+    <% else %>
+    [DatabaseField("<%= field["name"] %>")]
+    public <%= field["type"] %> <%= field["name"].camelize %> { get; set; }
+    <% end %>
   <% end %>
 }
