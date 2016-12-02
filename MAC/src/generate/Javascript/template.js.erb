@@ -1,4 +1,4 @@
-var <%= name.capitalize %> = function(<%= fields_str %>){
+var <%= name.camelize %> = function(<%= fields_str %>){
 <% fields.each do |field| %>
   <%= "this." + field["name"] + " = " + field["name"] + ";" %>
 <% end %>
@@ -60,7 +60,7 @@ var <%= name.capitalize %> = function(<%= fields_str %>){
       if(xhr.status == 200){
         var fields = ["id", "CreatedAt", "UpdatedAt", <%= fields_str_quoted %>];
         var result = JSON.parse(xhr.responseText);
-        
+
         for(var field in result){
           if(fields.indexOf(field) !== -1){
             ret[field] = result[field];
@@ -85,7 +85,7 @@ var <%= name.capitalize %> = function(<%= fields_str %>){
       if(xhr.status == 200){
         var fields = ["id", "CreatedAt", "UpdatedAt", <%= fields_str_quoted %>];
         var result = JSON.parse(xhr.responseText);
-        
+
         for(var i = 0; i < result.length; i++){
           tmp = new <%= name.capitalize %>();
           obj = result[i];
