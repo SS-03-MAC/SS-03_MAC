@@ -60,7 +60,7 @@ User.get = function(id, ret, path){
       if(xhr.status == 200){
         var fields = ["id", "CreatedAt", "UpdatedAt", "Password", "FullName", "City"];
         var result = JSON.parse(xhr.responseText);
-        
+
         for(var field in result){
           if(fields.indexOf(field) !== -1){
             ret[field] = result[field];
@@ -85,7 +85,7 @@ User.getAll = function(arr, path){
       if(xhr.status == 200){
         var fields = ["id", "CreatedAt", "UpdatedAt", "Password", "FullName", "City"];
         var result = JSON.parse(xhr.responseText);
-        
+
         for(var i = 0; i < result.length; i++){
           tmp = new User();
           obj = result[i];
