@@ -23,3 +23,25 @@
       acl:
         read: self, admin
         write: self, admin
+-
+  name: car
+  fields:
+    -
+      name: name
+      type: string
+      validations:
+        required: true
+
+-
+  name: car_ownership
+  fields:
+    -
+      name: car
+      relationship: true
+      table: car
+      unique: true
+    -
+      name: user
+      relationship: true
+      table: user
+      unique: false
