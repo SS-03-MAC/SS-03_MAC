@@ -3,15 +3,24 @@ using Mac.Types;
 
 
 [TableName("users")]
-public class user : BaseModel {
+public class User : BaseModel {
   
-    [DatabaseField("MAC.User.Password")]
+
+    
+    [DatabaseField("Password")]
     public MAC.User.Password Password { get; set; }
+    
   
-    [DatabaseField("string")]
+
+    
+    [DatabaseField("FullName")]
     public string FullName { get; set; }
+    
   
-    [DatabaseField("string")]
+
+    
+    [DatabaseField("City")]
     public string City { get; set; }
+    
   
 }
