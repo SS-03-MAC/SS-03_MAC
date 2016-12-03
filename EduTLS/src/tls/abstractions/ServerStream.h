@@ -54,6 +54,10 @@ public:
 
       this->i_l = this->s->Read(this->inbuf);
       this->i_p = 0;
+
+      if (this->i_p == this->i_l) {
+        return EOF;
+      }
     }
 
     return this->inbuf[this->i_p];
@@ -65,6 +69,18 @@ public:
     }
 
     return this->inbuf[this->i_p++];
+  }
+
+  int_type sputbackc(int_type c) {
+    if (this->i_p != 0) {
+      if (this->inbuf[this->i_p - 1] != c) {
+        return EOF;
+      }
+      this->i_p -= 1;
+      return c;
+    } else {
+      return EOF;
+    }
   }
 
   int_type overflow(int_type ch) {
@@ -90,11 +106,18 @@ public:
 
     return 0;
   };
+
+  int pbackfail (int c) {
+    return sputbackc(c);
+    //return EOF;
+  }
 };
 
 class TLSServerStream : public std::iostream {
 public:
-  TLSServerStream(TLSServer *s) : std::iostream(new TLSServerStreamBuf(s)){};
+
+  TLSServerStream(TLSServer *s) : std::iostream(new TLSServerStreamBuf(s)){
+  };
 
   ~TLSServerStream(){};
 };
