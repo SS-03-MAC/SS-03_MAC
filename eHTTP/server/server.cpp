@@ -66,7 +66,7 @@ void server::handleClient(int clientFd) {
 
   if (settings->getScriptForPath(*headers->path, cgiEndpoint)) {
     std::cout << "Serving via CGI: " << headers->path->getPathAndQueryString() << std::endl;
-    serveCgi(clientStream, clientFd, *headers->path, cgiEndpoint, *headers);
+    serveCgi(clientStream, (void *) &clientFd, *headers->path, cgiEndpoint, *headers, false);
   } else {
     std::cout << "Serving static file" << std::endl;
     serveFile(clientFd, *headers->path);
@@ -81,19 +81,6 @@ void server::handleClientTls(int clientFd) {
   srv->Handshake();
   TLSServerStream *clientStream = new TLSServerStream(srv);
 
-  static bool first = true;
-  if (first) {
-    first = false;
-    return;
-  }
-  // TODO serve a file or CGI
-  /*std::cout << "Read from TLS client: ";
-  while (!clientStream->eof()) {
-    std::cout << (char) clientStream->get();
-  }
-  std::cout << std::endl;
-  return;*/
-
   httpRequestHeaderCollection *headers;
   eHTTP::server::cgiEndpoint_t cgiEndpoint;
   try {
@@ -107,13 +94,11 @@ void server::handleClientTls(int clientFd) {
 
   if (settings->getScriptForPath(*headers->path, cgiEndpoint)) {
     std::cout << "Serving via CGI: " << headers->path->getPathAndQueryString() << std::endl;
-    serveCgi(*clientStream, clientFd, *headers->path, cgiEndpoint, *headers);
+    serveCgi(*clientStream, (void *) srv, *headers->path, cgiEndpoint, *headers, true);
   } else {
     std::cout << "Serving static file" << std::endl;
-    serveFile(clientFd, *headers->path);
+    serveFileTls(*srv, *headers->path);
   }
-
-
 
   srv->Close();
   delete clientStream;
@@ -148,11 +133,40 @@ long long server::serveFile(int clientFd, httpParsing::AbsPath &path) {
   return dataTransmitted;
 }
 
+long long server::serveFileTls(TLSServer &client, httpParsing::AbsPath &path) {
+  std::string fileToServe;
+  bool fileExists = getFileFromPath(path, fileToServe);
+  std::ifstream *fileStream = new std::ifstream(fileToServe, std::ifstream::in);
+  long long dataTransmitted;
+
+  if (!fileExists || fileStream->fail()) {
+    std::cout << "Error opening file: " << fileToServe << std::endl;
+    httpResponseHeaderCollection resp("HTTP/1.1", 404, "Not Found");
+    std::string errorText(resp.toString());
+    errorText += "Error opening file";
+    client.Write((uint8_t *) errorText.c_str(), errorText.length());
+    return -1;
+  } else {
+    httpResponseHeaderCollection resp("HTTP/1.1", 200, "Success");
+
+    ssize_t fileSize = eHTTP::utils::filesystem::fileSize(fileToServe);
+    resp.push_back(new httpHeader("Content-Length", std::to_string(fileSize)));
+
+    std::string headerString(resp.toString());
+    client.Write((uint8_t *) headerString.c_str(), headerString.length());
+    dataTransmitted = network::write_stream_tls(client, *fileStream);
+  }
+  fileStream->close();
+  delete fileStream;
+  return dataTransmitted;
+}
+
 long long server::serveCgi(std::istream &tcpIstream,
-                           int clientFd,
+                           void *client,
                            httpParsing::AbsPath &path,
                            eHTTP::server::cgiEndpoint_t cgiEndpoint,
-                           httpRequestHeaderCollection &requestHeaders) {
+                           httpRequestHeaderCollection &requestHeaders,
+                           bool tls) {
   int cgiPipes[3];
   ssize_t requestContentLen = 0;
   // TODO use CGI arguments as NULL terminated vector.
@@ -167,9 +181,14 @@ long long server::serveCgi(std::istream &tcpIstream,
 
   // CGI out
   char **env = headersToEnvArray(requestHeaders);
+  std::cout << "env 0: " << env[0] << std::endl;
   pexec(cgiEndpoint.cgiPath.c_str(), cgiPipes, argv, env);
   freeEnvArray(env);
-  return network::passData(tcpIstream, clientFd, cgiPipes[0], cgiPipes[1], requestContentLen, 1024);
+  if (tls) {
+    return network::passDataTls(tcpIstream, (TLSServer *) client, cgiPipes[0], cgiPipes[1], requestContentLen, 1024);
+  } else {
+    return network::passData(tcpIstream, (int *) client, cgiPipes[0], cgiPipes[1], requestContentLen, 1024);
+  }
 }
 
 bool server::getFileFromPath(httpParsing::AbsPath &path, std::string &outFile) {
@@ -213,7 +232,7 @@ bool server::getFileFromPath(httpParsing::AbsPath &path, std::string &outFile) {
 
 char** server::headersToEnvArray(httpRequestHeaderCollection &headers) {
   // Set up environment
-  char **env = (char **) malloc(3 + headers.size());
+  char **env = (char **) malloc(sizeof(char *) * (3 + headers.size()));
   int i;
   std::string temp;
 
@@ -222,7 +241,7 @@ char** server::headersToEnvArray(httpRequestHeaderCollection &headers) {
     std::transform(temp.begin(), temp.end(), temp.begin(), ::toupper);
     temp += "=";
     temp += headers[i]->value;
-    env[i] = (char *) malloc(temp.length() + 1);
+    env[i] = (char *) malloc(sizeof(char) * (temp.length() + 1));
     strcpy(env[i], temp.c_str());
   }
 

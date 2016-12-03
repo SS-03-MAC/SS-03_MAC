@@ -61,7 +61,6 @@ public:
 
   /// Reads a \\r\\n if available.
   inline static bool ingestCRLF(std::istream *in) {
-    std::cout << "peek: " << in->peek() << std::endl;
     if (in->peek() == '\r') {
       in->get();
       if (in->peek() == '\n') {
@@ -82,7 +81,6 @@ public:
   /// Checks if what's available in \p in is a \\r\\n, but does not move the istream position.
   inline static bool isCRLF(std::istream *in) {
     bool returnVal = false;
-    std::cout << "Peek: " << (char) in->peek() << std::endl;
     if (in->peek() == '\r') {
       in->get();
       if (in->peek() == '\n') {
