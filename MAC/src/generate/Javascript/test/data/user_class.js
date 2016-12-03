@@ -50,6 +50,10 @@ var User = function(Password, FullName, City){
 
     xhr.send(null);
   };
+
+  
+  
+  
 };
 
 User.get = function(id, ret, path){

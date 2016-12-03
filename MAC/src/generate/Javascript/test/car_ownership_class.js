@@ -1,11 +1,6 @@
-var <%= name.camelize %> = function(<%= fields_str %>){
-<% fields.each do |field| %>
-<% if field.key?("relationship") && field["relationship"] == true %>
-  <%= "this." + field["name"] + "Id = " + field["name"] + ";" %>
-<% else %>
-  <%= "this." + field["name"].camelize + " = " + field["name"] + ";" %>
-<% end %>
-<% end %>
+var CarOwnership = function(car, user){
+  this.carId = car;
+  this.userId = user;
   this.id = 0;
   this.CreatedAt = Date.now();
   this.UpdatedAt = Date.now();
@@ -13,9 +8,9 @@ var <%= name.camelize %> = function(<%= fields_str %>){
   this.save = function(path){
     var xhr = new XMLHttpRequest();
     if(this.id == 0){
-      xhr.open("POST", <%= "\"/\" + path + \"" + name.pluralize + "/\"" %>, true);
+      xhr.open("POST", "/" + path + "car_ownerships/", true);
     } else{
-      xhr.open("PATCH", <%= "\"/\" + path + \"" + name.pluralize + "/\"+"%>this.id);
+      xhr.open("PATCH", "/" + path + "car_ownerships/"+this.id);
     }
 
     xhr.setRequestHeader("Content-type", "application/json");
@@ -40,7 +35,7 @@ var <%= name.camelize %> = function(<%= fields_str %>){
     }
 
     var xhr = new XMLHttpRequest();
-    xhr.open("DELETE", <%= "\"/\" + path + \"" + name.pluralize + "/\"+" %>this.id, true);
+    xhr.open("DELETE", "/" + path + "car_ownerships/"+this.id, true);
     xhr.setRequestHeader("Content-type", "application/json");
     xhr.onreadystatechange = function() {
       if(xhr.readyState == 4){
@@ -55,24 +50,29 @@ var <%= name.camelize %> = function(<%= fields_str %>){
     xhr.send(null);
   };
 
-<% fields.each do |field| %>
-  <% if field.key?("relationship") && field["relationship"] == true%>
-  this.get<%= field["name"].camelize %> = function(path){
-    var ret = new <%= field["name"].camelize %>();
-    <%= field["name"].camelize %>.get(<%= "this." + field["name"].camelize + "Id" %>, ret, path);
+  
+  this.getCar = function(path){
+    var ret = new Car();
+    Car.get(this.CarId, ret, path);
     return ret;
   };
-  <% end %>
-<% end %>
+  
+  
+  this.getUser = function(path){
+    var ret = new User();
+    User.get(this.UserId, ret, path);
+    return ret;
+  };
+  
 };
 
-<%= name.camelize %>.get = function(id, ret, path){
+CarOwnership.get = function(id, ret, path){
   var xhr = new XMLHttpRequest();
 
   xhr.onreadystatechange = function() {
     if(xhr.readyState == 4){
       if(xhr.status == 200){
-        var fields = ["id", "CreatedAt", "UpdatedAt", <%= fields_str_quoted %>];
+        var fields = ["id", "CreatedAt", "UpdatedAt", "car", "user"];
         var result = JSON.parse(xhr.responseText);
 
         for(var field in result){
@@ -87,21 +87,21 @@ var <%= name.camelize %> = function(<%= fields_str %>){
     }
   };
 
-  xhr.open("GET", <%= "\"/\" + path + \"" + name.pluralize + "/\"+" %>id, true);
+  xhr.open("GET", "/" + path + "car_ownerships/"+id, true);
   xhr.send(null);
 };
 
-<%= name.camelize %>.getAll = function(arr, path){
+CarOwnership.getAll = function(arr, path){
   var xhr = new XMLHttpRequest();
 
   xhr.onreadystatechange = function() {
     if(xhr.readyState == 4){
       if(xhr.status == 200){
-        var fields = ["id", "CreatedAt", "UpdatedAt", <%= fields_str_quoted %>];
+        var fields = ["id", "CreatedAt", "UpdatedAt", "car", "user"];
         var result = JSON.parse(xhr.responseText);
 
         for(var i = 0; i < result.length; i++){
-          tmp = new <%= name.capitalize %>();
+          tmp = new Car_ownership();
           obj = result[i];
           for(var field in obj){
             if(fields.indexOf(field) !== -1){
@@ -117,6 +117,6 @@ var <%= name.camelize %> = function(<%= fields_str %>){
     }
   };
 
-  xhr.open("GET", <%="\"/\" + path + \"" + name.pluralize + ".json\"" %>, true);
+  xhr.open("GET", "/" + path + "car_ownerships.json", true);
   xhr.send(null);
 };
