@@ -263,12 +263,11 @@ char** server::headersToEnvArray(httpRequestHeaderCollection &headers) {
 
 void server::freeEnvArray(char **env) {
   int i = 0;
-  //TODO why does this not work?  i gets changed.
-  /*while (env[i] != NULL) {
+  while (env[i] != NULL) {
     free(env[i]);
     i++;
   }
-  free(env);*/
+  free(env);
 }
 
 void server::addCgiEndpoint(std::string pathElement, std::string cgiPath, std::string cgiArguments) {
@@ -286,12 +285,25 @@ void server::addDefaultDocument(std::string document) {
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wmissing-noreturn"
 void server::serve() {
-  // TODO listen on TLS port too
   int tcp = network::tcp_start(settings->port);
+  int tcpTls = network::tcp_start(settings->portTls);
   int client;
-  while (true) {
-    client = network::tcp_accept(tcp);
-    forkHandler(client, &eHTTP::server::server::handleClientTls);
+  switch (fork()) {
+  case -1:
+    std::cout << "Error forking TLS listener." << std::endl;
+    throw "Error forking TLS listener.";
+  case 0:
+    std::cout << "Listening for client on port: " << settings->port << std::endl;
+    while (true) {
+      client = network::tcp_accept(tcp);
+      forkHandler(client, &eHTTP::server::server::handleClient);
+    }
+  default:
+    std::cout << "Listening for TLS client on port: " << settings->portTls << std::endl;
+    while (true) {
+      client = network::tcp_accept(tcpTls);
+      forkHandler(client, &eHTTP::server::server::handleClientTls);
+    }
   }
 }
 #pragma clang diagnostic pop
