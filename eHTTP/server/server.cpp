@@ -272,7 +272,7 @@ void server::serve() {
   int client;
   while (true) {
     client = network::tcp_accept(tcp);
-    forkHandler(client, &eHTTP::server::server::handleClient);
+    forkHandler(client, &eHTTP::server::server::handleClientTls);
   }
 }
 #pragma clang diagnostic pop
