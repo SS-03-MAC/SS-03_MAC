@@ -50,6 +50,10 @@ var Post = function(Title, Body, PublishedAt){
 
     xhr.send(null);
   };
+
+  
+  
+  
 };
 
 Post.get = function(id, ret, path){
@@ -60,7 +64,7 @@ Post.get = function(id, ret, path){
       if(xhr.status == 200){
         var fields = ["id", "CreatedAt", "UpdatedAt", "Title", "Body", "PublishedAt"];
         var result = JSON.parse(xhr.responseText);
-        
+
         for(var field in result){
           if(fields.indexOf(field) !== -1){
             ret[field] = result[field];
@@ -85,7 +89,7 @@ Post.getAll = function(arr, path){
       if(xhr.status == 200){
         var fields = ["id", "CreatedAt", "UpdatedAt", "Title", "Body", "PublishedAt"];
         var result = JSON.parse(xhr.responseText);
-        
+
         for(var i = 0; i < result.length; i++){
           tmp = new Post();
           obj = result[i];

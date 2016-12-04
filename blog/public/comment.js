@@ -51,6 +51,11 @@ var Comment = function(FullName, Email, Website, Body){
 
     xhr.send(null);
   };
+
+  
+  
+  
+  
 };
 
 Comment.get = function(id, ret, path){
@@ -61,7 +66,7 @@ Comment.get = function(id, ret, path){
       if(xhr.status == 200){
         var fields = ["id", "CreatedAt", "UpdatedAt", "FullName", "Email", "Website", "Body"];
         var result = JSON.parse(xhr.responseText);
-        
+
         for(var field in result){
           if(fields.indexOf(field) !== -1){
             ret[field] = result[field];
@@ -86,7 +91,7 @@ Comment.getAll = function(arr, path){
       if(xhr.status == 200){
         var fields = ["id", "CreatedAt", "UpdatedAt", "FullName", "Email", "Website", "Body"];
         var result = JSON.parse(xhr.responseText);
-        
+
         for(var i = 0; i < result.length; i++){
           tmp = new Comment();
           obj = result[i];

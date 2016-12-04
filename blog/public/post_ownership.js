@@ -1,6 +1,6 @@
-var Post_ownership = function(post, user){
-  this.post = post;
-  this.user = user;
+var PostOwnership = function(post, user){
+  this.postId = post;
+  this.userId = user;
   this.id = 0;
   this.CreatedAt = Date.now();
   this.UpdatedAt = Date.now();
@@ -49,9 +49,24 @@ var Post_ownership = function(post, user){
 
     xhr.send(null);
   };
+
+  
+  this.getPost = function(path){
+    var ret = new Post();
+    Post.get(this.PostId, ret, path);
+    return ret;
+  };
+  
+  
+  this.getUser = function(path){
+    var ret = new User();
+    User.get(this.UserId, ret, path);
+    return ret;
+  };
+  
 };
 
-Post_ownership.get = function(id, ret, path){
+PostOwnership.get = function(id, ret, path){
   var xhr = new XMLHttpRequest();
 
   xhr.onreadystatechange = function() {
@@ -59,7 +74,7 @@ Post_ownership.get = function(id, ret, path){
       if(xhr.status == 200){
         var fields = ["id", "CreatedAt", "UpdatedAt", "post", "user"];
         var result = JSON.parse(xhr.responseText);
-        
+
         for(var field in result){
           if(fields.indexOf(field) !== -1){
             ret[field] = result[field];
@@ -76,7 +91,7 @@ Post_ownership.get = function(id, ret, path){
   xhr.send(null);
 };
 
-Post_ownership.getAll = function(arr, path){
+PostOwnership.getAll = function(arr, path){
   var xhr = new XMLHttpRequest();
 
   xhr.onreadystatechange = function() {
@@ -84,7 +99,7 @@ Post_ownership.getAll = function(arr, path){
       if(xhr.status == 200){
         var fields = ["id", "CreatedAt", "UpdatedAt", "post", "user"];
         var result = JSON.parse(xhr.responseText);
-        
+
         for(var i = 0; i < result.length; i++){
           tmp = new Post_ownership();
           obj = result[i];
