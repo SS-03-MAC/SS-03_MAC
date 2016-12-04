@@ -9,7 +9,7 @@
       type: MAC.User.Password
     -
       name: FullName
-      type: string
+      type: MAC.Types.String
       validations:
         required: true
       acl:
@@ -17,9 +17,31 @@
         write: self, admin
     -
       name: City
-      type: string
+      type: MAC.Types.String
       validations:
         required: false
       acl:
         read: self, admin
         write: self, admin
+-
+  name: car
+  fields:
+    -
+      name: name
+      type: MAC.Types.String
+      validations:
+        required: true
+
+-
+  name: car_ownership
+  fields:
+    -
+      name: car
+      relationship: true
+      table: car
+      unique: true
+    -
+      name: user
+      relationship: true
+      table: user
+      unique: false

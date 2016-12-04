@@ -13,6 +13,17 @@ class TestCSGen < Test::Unit::TestCase
     yaml = YAML.load(File.open(in_path))
     gen = GenerateCSharp.new
     gen.write_model(yaml[0], out_path)
+
+    out_path = './data/car.cs'
+    yaml = YAML.load(File.open(in_path))
+    gen = GenerateCSharp.new
+    gen.write_model(yaml[1], out_path)
+
+    out_path = './data/car_ownership.cs'
+    yaml = YAML.load(File.open(in_path))
+    gen = GenerateCSharp.new
+    gen.write_model(yaml[2], out_path)
+
     assert(true)
   end
 end
