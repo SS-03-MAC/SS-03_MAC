@@ -1,39 +1,45 @@
 using System;
-using Mac.Types;
+using MAC.Types;
+using MAC.Types.User;
+using MAC.Types.Internet;
+using MAC.Models.Attributes;
+using MAC.Models.Attributes.Validations;
 
-
-[TableName("car_ownerships")]
-public class CarOwnership : BaseModel<CarOwnership> {
-  public int Id { get; set; }
-  
-
+namespace MAC.Models {
+  [TableName("car_ownerships")]
+  [UrlName("car_ownerships")]
+  public partial class CarOwnership : BaseModel<CarOwnership> {
     
-    [DatabaseField("car")]
-    public int CarId { get; set; }
-    public virtual Car Car {
-      get {
-        return Car.Get(carId);
-      }
 
-      set {
-        CarId = value.Id;
-      }
-    }
-    
-  
+      
+      [DatabaseField("car")]
+      public int CarId { get; set; }
+      public virtual Car A_Car {
+        get {
+          return Car.Get(CarId);
+        }
 
-    
-    [DatabaseField("user")]
-    public int UserId { get; set; }
-    public virtual User User {
-      get {
-        return User.Get(userId);
+        set {
+          CarId = (int) value.Id;
+        }
       }
+      
+    
 
-      set {
-        UserId = value.Id;
+      
+      [DatabaseField("user")]
+      public int UserId { get; set; }
+      public virtual User A_User {
+        get {
+          return User.Get(UserId);
+        }
+
+        set {
+          UserId = (int) value.Id;
+        }
       }
-    }
+      
     
-  
+  }
+
 }

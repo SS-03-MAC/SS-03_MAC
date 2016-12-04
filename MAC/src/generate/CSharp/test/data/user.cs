@@ -1,27 +1,33 @@
 using System;
-using Mac.Types;
+using MAC.Types;
+using MAC.Types.User;
+using MAC.Types.Internet;
+using MAC.Models.Attributes;
+using MAC.Models.Attributes.Validations;
 
+namespace MAC.Models {
+  [TableName("users")]
+  [UrlName("users")]
+  public partial class User : BaseModel<User> {
+    
 
-[TableName("users")]
-public class User : BaseModel<User> {
-  public int Id { get; set; }
-  
+      
+      [DatabaseField("Password")]
+      public MAC.User.Password Password { get; set; }
+      
+    
 
+      
+      [DatabaseField("FullName")]
+      public MAC.Types.String FullName { get; set; }
+      
     
-    [DatabaseField("Password")]
-    public MAC.User.Password Password { get; set; }
-    
-  
 
+      
+      [DatabaseField("City")]
+      public MAC.Types.String City { get; set; }
+      
     
-    [DatabaseField("FullName")]
-    public string FullName { get; set; }
-    
-  
+  }
 
-    
-    [DatabaseField("City")]
-    public string City { get; set; }
-    
-  
 }

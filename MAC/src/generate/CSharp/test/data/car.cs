@@ -1,15 +1,21 @@
 using System;
-using Mac.Types;
+using MAC.Types;
+using MAC.Types.User;
+using MAC.Types.Internet;
+using MAC.Models.Attributes;
+using MAC.Models.Attributes.Validations;
 
-
-[TableName("cars")]
-public class Car : BaseModel<Car> {
-  public int Id { get; set; }
-  
-
+namespace MAC.Models {
+  [TableName("cars")]
+  [UrlName("cars")]
+  public partial class Car : BaseModel<Car> {
     
-    [DatabaseField("name")]
-    public string Name { get; set; }
+
+      
+      [DatabaseField("name")]
+      public MAC.Types.String Name { get; set; }
+      
     
-  
+  }
+
 }
