@@ -15,6 +15,7 @@
 #include <netinet/ip.h>
 #include <iostream>
 #include <unistd.h>
+#include <arpa/inet.h>
 
 #include "TcpServer.h"
 #include "../../EduTLS/src/tls/api/TLSServer.h"
@@ -30,7 +31,7 @@ int tcp_start(uint16_t port) {
   struct sockaddr_in addr;
   addr.sin_family = AF_INET;
   addr.sin_port = htons(port);
-  addr.sin_addr.s_addr = htonl(INADDR_LOOPBACK);
+  addr.sin_addr.s_addr = htonl(INADDR_ANY);
 
   bind(s, (struct sockaddr *) &addr, sizeof(addr));
   listen(s, 1);

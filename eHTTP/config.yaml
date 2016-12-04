@@ -1,9 +1,9 @@
 port: 8000
-portTls: 8433
-basePath: "c:"
+portTls: 8443
+basePath: "."
 cgiEndpoints:
   - pathElement: api
-    cgiPath: echo
-    cgiArguments: hi
+    cgiPath: dotnet
+    cgiArguments: "MAC\\src\\MAC\\bin\\Debug\\netcoreapp1.0\\publish\\MAC.dll"
   - pathElement: env
     cgiPath: printenv

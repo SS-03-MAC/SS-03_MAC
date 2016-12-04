@@ -39,13 +39,13 @@ server::~server() {
 }
 
 void server::forkHandler(int clientFd, void (eHTTP::server::server:: *handler)(int)) {
-  /*int child = fork();
+  int child = fork();
   if (child == -1) {
     std::cout << "Forking a handling thread failed" << std::endl;
-  } else if (child == 0) {*/
+  } else if (child == 0) {
     (this->*handler)(clientFd);
-    /*exit(0);
-  }*/
+    exit(0);
+  }
 }
 
 // ===== FUNCTIONS =====
