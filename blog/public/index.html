@@ -64,7 +64,7 @@
           <p class="clog-latest-description">
             {clog_latest_description}
           </p>
-          <p>To read more, click <a class="clog-latest-link red-text text-darken-4" href="articles.html"> here</a>.</p>
+          <p>To read more posts, click <a class="clog-latest-link red-text text-darken-4" href="articles.html"> here</a>.</p>
         </div>
       </div>
     </div>
@@ -73,11 +73,10 @@
     <script type="text/javascript" src="js/materialize.min.js"></script>
     <script type="text/javascript" src="js/post.js"></script>
     <script type="text/javascript">
-      var clogPost = new Post();
       var clogAllPosts = [];
       var clogLatestPost = new Post();
-      clogPost.getAll(clogAllposts, MacAPI);
       console.log(clogAllPosts);
+      Post.getAll(clogAllposts, MacAPI);
       clogAllPosts.sort(function comparePostStructure(a, b) {
         if (a.PublishedAt > Date.now()) {
           return -1;
@@ -95,10 +94,16 @@
       });
       console.log(clogAllPosts);
       clogLatestPost = clogAllPosts[clogAllPosts.length - 1];
-      console.log(clogLatestPost);
-      $('.clog-latest-link').html(clogLatestPost.Title);
-      $('.clog-latest-link').attr('href', 'article.html?id=' + clogLatestPost.id);
-      $('.clog-latest-description').html(clogLatestPost.Body);
+      if (clogAllPost.PublishedAt < Date.now()) {
+        console.log(clogLatestPost);
+        $('.clog-latest-link').html(clogLatestPost.Title);
+        $('.clog-latest-link').attr('href', 'article.html?id=' + clogLatestPost.id);
+        $('.clog-latest-description').html(clogLatestPost.Body);
+      } else {
+        $('.clog-latest-link').html("No Published Posts");
+        $('.clog-latest-link').attr('href', 'index.html');
+        $('.clog-latest-description').html('If you are an admin, log in <a href="admin/login.html">here</a> to publish posts.');
+      }
     </script>
   </body>
 </html>

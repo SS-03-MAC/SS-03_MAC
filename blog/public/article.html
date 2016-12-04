@@ -6,6 +6,11 @@
     <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link type="text/css" href="css/materialize.min.css" rel="stylesheet">
 
+    <script type="text/javascript">
+      DomainName = "Clog, a SS-03_MAC production";
+      MacAPI = "/api/";
+    </script>
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
   </head>
   <body>
@@ -30,41 +35,31 @@
       </div>
     </nav>
 
-    <div id="home" class="section grey lighten-4">
-      <div class="row container section">
-        <div class="col m8 s12">
-            <h1 class="header center red-text text-darken-4">Clog</h1>
-            <p>Some paragraph about why ISU needs our COMS 309 MAClog blogging Software.</p>
-        </div>
-        <div class="col m4 s12">
-          <form onsubmit="events_subscribe(event);">
-            <div class="input-field">
-              <input placeholder="jdoe76@iastate.edu" id="home-email" type="email" class="validate">
-              <label for="home-email">Email Address</label>
-            </div>
-            <button class="btn waves-effect waves-light red darken-4" type="submit" name="action">Subscribe
-              <i class="material-icons right">send</i>
-            </button>
-          </form>
-        </div>
-      </div>
-    </div>
-
     <div id="latest" class="section red lighten-4">
       <div class="row container section">
         <div class="col m5 s12">
-          <h3 class="clog-latest-title"><a class="clog-latest-link red-text text-darken-4" href="articles.html">{clog_latest_title}</a></h3>
+          <h3 class="clog-post-title"><a class="clog-post-link red-text text-darken-4" href="articles.html">{clog_post_title}</a></h3>
         </div>
         <div class="col m7 s12">
-          <p class="clog-latest-description">
-            {clog_latest_description}
+          <p class="clog-post-description">
+            {clog_post_description}
           </p>
-          <p>To read more, click <a class="clog-latest-link red-text text-darken-4" href="articles.html"> here</a>.</p>
         </div>
       </div>
     </div>
 
     <script type="text/javascript" src="js/jquery-3.1.1.js"></script>
     <script type="text/javascript" src="js/materialize.min.js"></script>
+    <script type="text/javascript" src="js/utils.js"></script>
+    <script type="text/javascript" src="js/post.js"></script>
+    <script type="text/javascript">
+      var clogPost = new Post();
+      var clogPostId = getParameterByName("id");
+      Post.get(clogPostid, clogPost, MacAPI);
+      console.log(clogPost);
+      $('.clog-post-link').html(clogLatestPost.Title);
+      $('.clog-post-link').attr('href', 'article.html?id=' + clogLatestPost.id);
+      $('.clog-post-description').html(clogLatestPost.Body);
+    </script>
   </body>
 </html>
