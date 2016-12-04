@@ -1,15 +1,10 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Home | Clog, a SS-03_MAC production</title>
+    <title>Admin | Clog, a SS-03_MAC production</title>
 
     <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link type="text/css" href="css/materialize.min.css" rel="stylesheet">
-
-    <script type="text/javascript">
-      DomainName = "Clog, a SS-03_MAC production";
-      MacAPI = "/api/";
-    </script>
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
   </head>
@@ -71,34 +66,5 @@
 
     <script type="text/javascript" src="js/jquery-3.1.1.js"></script>
     <script type="text/javascript" src="js/materialize.min.js"></script>
-    <script type="text/javascript" src="js/post.js"></script>
-    <script type="text/javascript">
-      var clogPost = new Post();
-      var clogAllPosts = [];
-      var clogLatestPost = new Post();
-      clogPost.getAll(clogAllposts, MacAPI);
-      console.log(clogAllPosts);
-      clogAllPosts.sort(function comparePostStructure(a, b) {
-        if (a.PublishedAt > Date.now()) {
-          return -1;
-        }
-        if (b.PublisedAt > Date.now()) {
-          return 1;
-        }
-
-        if (a.PublishedAt < b.PublishedAt) {
-          return -1;
-        } else if (a.PublishedAt > b.PublishedAt) {
-          return 1;
-        }
-        return 0;
-      });
-      console.log(clogAllPosts);
-      clogLatestPost = clogAllPosts[clogAllPosts.length - 1];
-      console.log(clogLatestPost);
-      $('.clog-latest-link').html(clogLatestPost.Title);
-      $('.clog-latest-link').attr('href', 'article.html?id=' + clogLatestPost.id);
-      $('.clog-latest-description').html(clogLatestPost.Body);
-    </script>
   </body>
 </html>
