@@ -18,9 +18,9 @@ module MacCLI
 
       build_js(js_path, model_hash) unless opts['js'] == false
 
-      build_sql(sql_path, model_hash) unless opts['sql'] == false
+      #build_sql(sql_path, model_hash) unless opts['sql'] == false
 
-      build_cs(cs_path, model_hash) unless opts['cs'] == false
+      #build_cs(cs_path, model_hash) unless opts['cs'] == false
     end
 
     # generates the JavaScript frontend endpoints for the provided models
