@@ -1,4 +1,4 @@
-# This applcaiton is using the base model for 
+# This applcaiton is using the base model for users
 -
   name: post
   fields:
@@ -50,3 +50,17 @@
       relationship: true
       table: user
       unique: false
+
+-
+  name: comments_post_ownerships
+  fields:
+    -
+      name: post
+      relationship: true
+      table: post
+      unique: false
+    -
+      name: comments
+      relationship: true
+      table: comments
+      unique: true
