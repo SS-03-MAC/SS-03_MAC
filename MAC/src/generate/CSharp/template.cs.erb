@@ -1,27 +1,29 @@
 using System;
 using Mac.Types;
+using MAC.Models.Attributes;
 
+namespace MAC.models {
+  [TableName("<%= table_name %>")]
+  public class <%= name.camelize %> : BaseModel<<%= name.camelize %>> {
+    <% fields.each do |field| %>
 
-[TableName("<%= table_name %>")]
-public class <%= name.camelize %> : BaseModel<<%= name.camelize %>> {
-  public int Id { get; set; }
-  <% fields.each do |field| %>
+      <% if field.key?("relationship") && field["relationship"] == true  %>
+      [DatabaseField("<%= field["name"] %>")]
+      public int <%= field["name"].camelize + "Id" %> { get; set; }
+      public virtual <%= field["name"].camelize %> <%= field["name"].camelize %> {
+        get {
+          return <%= field["name"].camelize %>.Get(<%= field["name"] + "Id" %>);
+        }
 
-    <% if field.key?("relationship") && field["relationship"] == true  %>
-    [DatabaseField("<%= field["name"] %>")]
-    public int <%= field["name"].camelize + "Id" %> { get; set; }
-    public virtual <%= field["name"].camelize %> <%= field["name"].camelize %> {
-      get {
-        return <%= field["name"].camelize %>.Get(<%= field["name"] + "Id" %>);
+        set {
+          <%= field["name"].camelize + "Id" %> = value.Id;
+        }
       }
-
-      set {
-        <%= field["name"].camelize + "Id" %> = value.Id;
-      }
-    }
-    <% else %>
-    [DatabaseField("<%= field["name"] %>")]
-    public <%= field["type"] %> <%= field["name"].camelize %> { get; set; }
+      <% else %>
+      [DatabaseField("<%= field["name"] %>")]
+      public <%= field["type"] %> <%= field["name"].camelize %> { get; set; }
+      <% end %>
     <% end %>
-  <% end %>
+  }
+
 }
