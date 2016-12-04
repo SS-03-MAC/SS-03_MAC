@@ -88,12 +88,17 @@
         }
         return 0;
       });
+      clogAllPosts.reverse();
       console.log(clogAllPosts);
-      clogLatestPost = clogAllPosts[clogAllPosts.length - 1];
-      console.log(clogLatestPost);
-      $('.clog-latest-link').html(clogLatestPost.Title);
-      $('.clog-latest-link').attr('href', 'article.html?id=' + clogLatestPost.id);
-      $('.clog-latest-description').html(clogLatestPost.Body);
+      $('#clog-all-posts').html('');
+      for (var i in clogAllPosts) {
+        if (clogAllPosts[i].PublishedAt < Date.now()) {
+          $('#clog-all-posts').append('<div id="clog-all-posts-' + clogAllPosts[i].id + '-post" class="section red lighten-4"><div class="row container section"><div class="col m5 s12"><h3 class="clog-all-posts-' + clogAllPosts[i].id + '-title"><a class="clog-all-posts-' + clogAllPosts[i].id + '-link red-text text-darken-4" href="articles.html">{clog_all_posts_title}</a></h3></div><div class="col m7 s12"><p class="clog-all-posts-' + clogAllPosts[i].id + '-description">{clog_all_posts_description}</p></div></div></div>');
+          $('.clog-all-posts-' + clogAllPosts[i].id + '-link').html(clogAllPosts[i].Title);
+          $('.clog-all-posts-' + clogAllPosts[i].id + '-link').attr('href', 'article.html?id=' + clogAllPosts[i].id);
+          $('.clog-all-posts-' + clogAllPosts[i].id + '-description').html(clogAllPosts[i].Body);
+        }
+      }
     </script>
   </body>
 </html>
