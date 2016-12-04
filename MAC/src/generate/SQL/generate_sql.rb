@@ -1,5 +1,5 @@
 require_relative '../hash_generator.rb'
-require 'active_support/Inflector'
+require 'active_support/inflector'
 
 module Generation
   # This class alows us to generate SQL source files using an ERB template and
