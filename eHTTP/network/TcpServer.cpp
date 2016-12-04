@@ -17,11 +17,16 @@
 #include <unistd.h>
 
 #include "TcpServer.h"
+#include "../../EduTLS/src/tls/api/TLSServer.h"
 
 namespace network {
 
 int tcp_start(uint16_t port) {
   int s = socket(AF_INET, SOCK_STREAM, 0);
+
+  int optval = 1;
+  setsockopt(s, SOL_SOCKET, SO_REUSEADDR, &optval, sizeof optval);
+
   struct sockaddr_in addr;
   addr.sin_family = AF_INET;
   addr.sin_port = htons(port);
@@ -54,8 +59,19 @@ long long write_stream(int netStreamFd, std::istream &inStream) {
   return count;
 }
 
+long long write_stream_tls(TLSServer &client, std::istream &inStream) {
+  char buffer[1024];
+  long long count = 0;
+  while (!inStream.eof()) {
+    inStream.read(buffer, sizeof(buffer));
+    client.Write((uint8_t *) buffer, (size_t) inStream.gcount());
+    count += inStream.gcount();
+  }
+  return count;
+}
+
 long long passData(std::istream &tcpIstream,
-                 int clientFd,
+                 int *clientFd,
                  int cgiStdout,
                  int cgiStdin,
                  size_t requestContentLen,
@@ -78,7 +94,39 @@ long long passData(std::istream &tcpIstream,
   do {
     // TCP out
     total += r;
-    write(clientFd, buffer, (size_t) r);
+    write(*clientFd, buffer, (size_t) r);
+    r = read(cgiStdout, buffer, bufSize);
+  } while (r > 0);
+  return total;
+}
+
+long long passDataTls(std::istream &tcpIstream,
+                      TLSServer *client,
+                      int cgiStdout,
+                      int cgiStdin,
+                      size_t requestContentLen,
+                      size_t bufSize) {
+  ssize_t r;
+  long long total = 0;
+  char buffer[bufSize];
+  ssize_t  toRead;
+  // TCP in
+  while (requestContentLen > 0) {
+    toRead = requestContentLen > bufSize ? bufSize : requestContentLen;
+    tcpIstream.read(buffer, toRead);
+
+    buffer[tcpIstream.gcount()] = 0;
+
+    client->Write((uint8_t *) buffer, (size_t) tcpIstream.gcount());
+    requestContentLen -= tcpIstream.gcount();
+  }
+
+  // CGI in
+  r = read(cgiStdout, buffer, bufSize);
+  do {
+    // TCP out
+    total += r;
+    client->Write((uint8_t *) buffer, (size_t) r);
     r = read(cgiStdout, buffer, bufSize);
   } while (r > 0);
   return total;

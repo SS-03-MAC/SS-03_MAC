@@ -4,6 +4,7 @@
 #include "../../EduTLS/src/tls/states/TLSConfiguration.h"
 #include "settings.h"
 #include "../httpParsing/httpRequestHeaderCollection.h"
+#include "../../EduTLS/src/tls/api/TLSServer.h"
 
 namespace eHTTP {
 namespace server {
@@ -22,6 +23,7 @@ private:
   void handleClient(int clientFd);
   void handleClientTls(int clientFd);
   long long serveFile(int clientFd, httpParsing::AbsPath &path);
+  long long serveFileTls(TLSServer &client, httpParsing::AbsPath &path);
   /// Executes \p cgiEndpoint and transmits the data between the client and the CGI endpoint.
   /// \param tcpIstream is the stream for reading from the TCP client.
   /// \param clientFd is the file descriptor for writing to the TCP client.
@@ -30,10 +32,11 @@ private:
   /// \param requestHeaders are the request headers sent by the client.
   /// \returns the number of bytes passed from the CGI script to the client.  (overflows are not caught.)
   long long serveCgi(std::istream &tcpIstream,
-                     int clientFd,
+                     void *client,
                      httpParsing::AbsPath &path,
                      eHTTP::server::cgiEndpoint_t cgiEndpoint,
-                     httpRequestHeaderCollection &requestHeaders);
+                     httpRequestHeaderCollection &requestHeaders,
+                     bool tls);
   /// Tries to get a file name on the filesystem from \p path and \p settings.basePath.  It will search the default
   /// documents from the settings if \p is a folder.
   /// \param path is the requested path from the client.

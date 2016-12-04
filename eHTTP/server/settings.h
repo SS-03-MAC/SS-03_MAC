@@ -13,6 +13,7 @@
 
 #pragma once
 
+#include <yaml-cpp/yaml.h>
 #include <vector>
 #include <string>
 
@@ -34,7 +35,16 @@ struct cgiEndpoint_t {
 
 /// The settings for the HTTP server.
 class settings {
+private:
+  /// Parses a yaml map into a \p cgiEndpoint_t
+  static cgiEndpoint_t mapToEndpoint(YAML::Node map);
 public:
+  /// Constructs a default \p settings object.
+  inline settings() {};
+  /// Loads settings from the yaml file specified.
+  /// \param yamlConfigPath the path to the yaml configuration file.
+  settings(std::string yamlConfigPath);
+
   /// A vector of default documents to search when a client requests a path.
   std::vector<std::string> defaultDocuments;
   // TODO this should be a vector.
