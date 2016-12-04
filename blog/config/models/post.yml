@@ -1,0 +1,66 @@
+# This applcaiton is using the base model for users
+-
+  name: post
+  fields:
+    -
+      name: Title
+      type: MAC.Types.String
+      validations:
+        required: true
+    -
+      name: Body
+      type: MAC.Types.String
+    -
+      name: PublishedAt
+      type: DateTime
+
+-
+  name: comment
+  fields:
+    -
+      name: FullName
+      type: MAC.Types.String
+      validations:
+        required: true
+    -
+      name: Email
+      type: Email
+      validations:
+        required: true
+    -
+      name: Website
+      type: Url
+
+    -
+      name: Body
+      type: MAC.Types.String
+      validations:
+        required: true
+
+-
+  name: post_ownership
+  fields:
+    -
+      name: post
+      relationship: true
+      table: post
+      unique: true
+    -
+      name: user
+      relationship: true
+      table: user
+      unique: false
+
+-
+  name: comments_post_ownerships
+  fields:
+    -
+      name: post
+      relationship: true
+      table: post
+      unique: false
+    -
+      name: comments
+      relationship: true
+      table: comments
+      unique: true
