@@ -39,12 +39,25 @@
           <h2 class="red-text text-darken-4">Log In</h2>
         </div>
         <div class="col m7 s12">
-
+          <form onsubmit="events_login(event);">
+            <div class="input-field">
+              <input placeholder="jdoe76" id="admin-username" type="text" class="validate">
+              <label for="admin-username">Username</label>
+            </div>
+            <div class="input-field">
+              <input placeholder="supers3cret!" id="admin-password" type="password" class="validate">
+              <label data-error="Invalid username or password." for="admin-password">Password</label>
+            </div>
+            <button class="btn waves-effect waves-light red darken-4" type="submit" name="action">Login
+              <i class="material-icons right">send</i>
+            </button>
+          </form>
         </div>
       </div>
     </div>
 
     <script type="text/javascript" src="../js/jquery-3.1.1.js"></script>
     <script type="text/javascript" src="../js/materialize.min.js"></script>
+    <script type="text/javascript" src="../js/user.js"></script>
   </body>
 </html>
