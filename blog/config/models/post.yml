@@ -23,7 +23,7 @@
         required: true
     -
       name: Email
-      type: Mac.User.Email
+      type: Email
       validations:
         required: true
     -
@@ -36,16 +36,16 @@
       validations:
         required: true
 
--
-  name: post_ownership
-  fields:
-    -
-      name: post
-      relationship: true
-      table: post
-      unique: true
-    -
-      name: user
-      relationship: true
-      table: user
-      unique: false
+# -
+#   name: post_ownership
+#   fields:
+#     -
+#       name: post
+#       relationship: true
+#       table: post
+#       unique: true
+#     -
+#       name: user
+#       relationship: true
+#       table: user
+#       unique: false
