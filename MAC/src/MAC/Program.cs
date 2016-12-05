@@ -70,7 +70,7 @@ namespace ConsoleApplication
             model.Save();
             Console.WriteLine("\r");
             Console.WriteLine("\r");
-            Console.WriteLine("{true}");
+            Console.WriteLine("{\"Id\":"+ model.Id + ", \"Type\": \"create\", \"Response\": \"redirect\"}");
         }
 
         private static void ProcessUpdate(BaseModel model, int id)
@@ -80,6 +80,7 @@ namespace ConsoleApplication
                 throw new InvalidOperationException("The given Id and model's Id do not match");
             }
             model.Save();
+            Console.Write(("{ \"Type\": \"create\", \"Response\": \"redirect\"}"));
         }
 
         private static void ProcessDelete(Type model, int id)
