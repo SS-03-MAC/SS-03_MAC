@@ -128,5 +128,15 @@ namespace MAC.Types.Internet
         {
             return Data as object;
         }
+
+        public static explicit operator string(MAC.Types.Internet.Url s)
+        {
+            return s.Data.OriginalString;
+        }
+
+        public static explicit operator MAC.Types.Internet.Url(string s)
+        {
+            return new Url(new Uri(s));
+        }
     }
 }
