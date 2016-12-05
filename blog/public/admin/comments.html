@@ -82,11 +82,11 @@
 
         for (var j in clogAllCommentPostRelationships) {
           for (var i in clogAllPosts) {
-            if (clogAllComments[i].id == clogAllCommentPostRelationships[j].commentsId) {
+            if (clogAllComments[i].Id == clogAllCommentPostRelationships[j].commentsId) {
               clogAllComments[i].postId = clogAllCommentPostRelationships[j].commentsId;
 
               for (var k in clogAllPosts) {
-                if (clogAllComments[i].postId == clogAllPosts[k].id) {
+                if (clogAllComments[i].postId == clogAllPosts[k].Id) {
                   clogAllComments[i].post = clogAllPosts[k];
                   break;
                 }
@@ -101,7 +101,7 @@
         console.log(clogAllComments);
         $('#clog-all-posts').html('');
         for (var i in clogAllComments) {
-          $('#clog-all-posts').append('<tr><td>' + clogAllComments[i].id + '</td><td>' + clogAllComments[i].post.Title + '</td><td>' + clogAllComments[i].FullName + '</td><td>' + clogAllComments[i].Email + '</td><td>' + clogAllComments[i].Website + '</td><td>' + clogAllComments[i].CreatedAt + '</td><td><a href="#" onclick="EventEditComment(' + clogAllComments[i].id + ');"><i class="material-icons">mode_edit</i></a><a href="#" onclick="EventDeleteComment(' + clogAllComments[i].id + ');"><i class="material-icons">delete</i></a></td></tr>');
+          $('#clog-all-posts').append('<tr><td>' + clogAllComments[i].Id + '</td><td>' + clogAllComments[i].post.Title + '</td><td>' + clogAllComments[i].FullName + '</td><td>' + clogAllComments[i].Email + '</td><td>' + clogAllComments[i].Website + '</td><td>' + clogAllComments[i].CreatedAt + '</td><td><a href="#" onclick="EventEditComment(' + clogAllComments[i].Id + ');"><i class="material-icons">mode_edit</i></a><a href="#" onclick="EventDeleteComment(' + clogAllComments[i].Id + ');"><i class="material-icons">delete</i></a></td></tr>');
         }
       });
 

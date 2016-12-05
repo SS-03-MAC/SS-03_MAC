@@ -74,7 +74,7 @@
           $('#clog-all-posts').html('');
 
           for (var i in clogAllPosts) {
-            $('#clog-all-posts').append('<tr><td>' + clogAllPosts[i].id + '</td><td>' + clogAllPosts[i].Title + '</td><td class="clog-post-body" style="overflow: hidden;">'  + clogAllPosts[i].Body +  '</td><td>' + clogAllPosts[i].updatedAt + '</td><td><a href="#" onclick="EventEditPost(' + clogAllPosts[i].id + ');"><i class="material-icons">mode_edit</i></a><a href="#" onclick="EventDeletePost(' + clogAllPosts[i].id + ');"><i class="material-icons">delete</i></a></td></tr>');
+            $('#clog-all-posts').append('<tr><td>' + clogAllPosts[i].Id + '</td><td>' + clogAllPosts[i].Title + '</td><td class="clog-post-body" style="overflow: hidden;">'  + clogAllPosts[i].Body +  '</td><td>' + clogAllPosts[i].updatedAt + '</td><td><a href="#" onclick="EventEditPost(' + clogAllPosts[i].Id + ');"><i class="material-icons">mode_edit</i></a><a href="#" onclick="EventDeletePost(' + clogAllPosts[i].Id + ');"><i class="material-icons">delete</i></a></td></tr>');
           }
         });
       });
