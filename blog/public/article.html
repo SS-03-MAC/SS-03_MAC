@@ -105,7 +105,7 @@
     <script type="text/javascript" src="js/utils.js"></script>
     <script type="text/javascript" src="js/post.js"></script>
     <script type="text/javascript" src="js/comment.js"></script>
-    <script type="text/javascript" src="js/comments_post_ownerships.js"></script>
+    <script type="text/javascript" src="js/comment_post_ownerships.js"></script>
     <script type="text/javascript">
       $(document).ready(function() {
         clogPost = new Post();
@@ -120,7 +120,7 @@
         });
 
         clogAllCommentRelationships = [];
-        CommentsPostOwnerships.getAll(clogAllCommentRelationships, MacAPI, function GetAllCommentRelationshipSuccess() {
+        CommentPostOwnerships.getAll(clogAllCommentRelationships, MacAPI, function GetAllCommentRelationshipSuccess() {
           clogAllCommentRelationships.sort(function compare(a, b) {
             if (Date.parse(a.CreatedAt) < Date.parse(b.CreatedAt)) {
               return -1;
@@ -133,9 +133,10 @@
 
           $('#clog-all-comments').html('');
 
-          for (var i = 0; i < clogAllCommentRelationships; i++) {
+          for (var i in clogAllCommentRelationships) {
            if (clogAllCommentRelationships[i].PostId == clogPostId) {
-             var ReadComment = clogAllCommentRelationships.getComments(MacAPI, function GetCommentSuccessHandler(xhr, NewComment) {
+             console.log("Loading comment " + i);
+             var ReadComment = clogAllCommentRelationships[i].getComment(MacAPI, function GetCommentSuccessHandler(xhr, NewComment) {
                console.log(NewComment);
                $('#clog-all-comments').append('<div class="row container section"><div class="col m4 s12"><div class="input-field"><p>' + NewComment.FullName + '</p></div><div class="input-field"><p>' + NewComment.Email + '</p></div><div class="input-field"><p><a href="' + NewComment.Website + '">' + NewComment.Website + '</a></p></div></div><div class="col m8 s12"><div class="input-field"><p>' + NewComent.Body + '</p></div></div></div>');
              }, function GetCommentFailureHandler() {
@@ -145,7 +146,7 @@
          }
        }, function GetAllCommentRelationshipFailure() {
          console.log("Error retreiving relationships.");
-       })
+       });
       });
 
       function CreateComment() {
@@ -157,10 +158,10 @@
 
         NewComment.save(MacAPI, function CommentSuccess() {
           console.log(NewComment.Id);
-          NewCommentsPostOwnerships = new CommentsPostOwnerships();
-          NewCommentsPostOwnerships.PostId = clogPostId;
-          NewCommentsPostOwnerships.CommentsId = NewComment.Id;
-          NewCommentsPostOwnerships.save(MacAPI, function LinkSuccess() {
+          NewCommentPostOwnerships = new CommentPostOwnerships();
+          NewCommentPostOwnerships.PostId = clogPostId;
+          NewCommentPostOwnerships.CommentId = NewComment.Id;
+          NewCommentPostOwnerships.save(MacAPI, function LinkSuccess() {
             window.location.href = window.location.href;
           }, function LinkFailure() {
             Materialize.toast('Temporary failure to save comment.', 10000);
