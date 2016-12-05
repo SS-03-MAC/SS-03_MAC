@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>New Post | Clog, a SS-03_MAC production</title>
+    <title>Edit Post | Clog, a SS-03_MAC production</title>
 
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link type="text/css" href="../css/materialize.min.css" rel="stylesheet">
@@ -64,25 +64,34 @@
     <script type="text/javascript" src="../js/jquery-3.1.1.js"></script>
     <script type="text/javascript" src="../js/materialize.min.js"></script>
     <script type="text/javascript" src="../js/post.js"></script>
+    <script type="text/javascript" src="../js/utils.js"></script>
     <script src="https://cdn.tinymce.com/4/tinymce.min.js"></script>
     <script>
       $( document ).ready(function() {
         tinymce.init({ selector:'textarea', height: "500" });
 
-        window.NewPost = Post();
+        window.EditPost = Post();
+        var clogPostId = getParameterByName("id");
+        
+        Post.get(clogPostId, window.EditPost, MacAPI, function EditPostOnPageLoadFetch(xhr) {
+          $('#clog-post-title').val(window.EditPost.Title);
+          $('#clog-post-body').val(window.EditPost.Body);
+          console.log("Success!");
+        });
       });
 
       function SavePost() {
-        window.NewPost.Title = $('#clog-post-title').val();
-        window.NewPost.Body = $('#clog-post-body').val();
-        window.NewPost.PublishedAt = Date.now().setFullYear(Date.now().getFullYear() + 35);
-        window.NewPost.save(MacAPI);
+        window.EditPost.Title = $('#clog-post-title').val();
+        window.EditPost.Body = $('#clog-post-body').val();
+        window.EditPost.PublishedAt = Date.now().setFullYear(Date.now().getFullYear() + 35);
+        window.EditPost.save(MacAPI);
       };
+
       function PublishPost() {
-        window.NewPost.Title = $('#clog-post-title').val();
-        window.NewPost.Body = $('#clog-post-body').val();
-        window.NewPost.PublishedAt = Date.now();
-        window.NewPost.save(MacAPI, function NewPostPublishSuccess(xhr) {
+        window.EditPost.Title = $('#clog-post-title').val();
+        window.EditPost.Body = $('#clog-post-body').val();
+        window.EditPost.PublishedAt = Date.now();
+        window.EditPost.save(MacAPI, function NewPostPublishSuccess(xhr) {
           if (xhr.readyState == 4) {
             if (xhr.status == 200) {
               window.location.href = "posts.html";

@@ -6,7 +6,7 @@ var Post = function(Title, Body, PublishedAt){
   this.CreatedAt = Date.now();
   this.UpdatedAt = Date.now();
 
-  this.save = function(path){
+  this.save = function(path, success){
     var xhr = new XMLHttpRequest();
     if(this.id == 0){
       xhr.open("POST", "/" + path + "posts/", true);
@@ -25,6 +25,10 @@ var Post = function(Title, Body, PublishedAt){
         }
       }
     };
+
+    if (success !== undefined) {
+      xhr.onreadystatechange = success;
+    }
 
     var data = JSON.stringify(this);
     xhr.send(data);
@@ -51,12 +55,12 @@ var Post = function(Title, Body, PublishedAt){
     xhr.send(null);
   };
 
-  
-  
-  
+
+
+
 };
 
-Post.get = function(id, ret, path){
+Post.get = function(id, ret, path, success){
   var xhr = new XMLHttpRequest();
 
   xhr.onreadystatechange = function() {
@@ -69,6 +73,10 @@ Post.get = function(id, ret, path){
           if(fields.indexOf(field) !== -1){
             ret[field] = result[field];
           }
+        }
+
+        if (success !== undefined) {
+          success();
         }
 
       } else{
