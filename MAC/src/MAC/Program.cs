@@ -46,10 +46,21 @@ namespace ConsoleApplication
 
         private static void ProcessGetAll(Type model)
         {
-            var method = model.GetMethods(BindingFlags.Static | BindingFlags.Public | BindingFlags.FlattenHierarchy).Where(x => x.Name == "Get").First(x => x.GetParameters().Length == 0);
-            dynamic objs = method.Invoke(null, new Type[0]);
-            BasicHeaders();
-            Console.Write(JsonConvert.SerializeObject(objs));
+            if (model == typeof(Auth))
+            {
+                string token = Environment.GetEnvironmentVariable("COOKIE");
+                token = token.Remove(0, 10);
+                BasicHeaders();
+                // TODO: This should be done better
+                JsonConvert.SerializeObject(Auth.Get("token = " + token));
+            }
+            else
+            {
+                var method = model.GetMethods(BindingFlags.Static | BindingFlags.Public | BindingFlags.FlattenHierarchy).Where(x => x.Name == "Get").First(x => x.GetParameters().Length == 0);
+                dynamic objs = method.Invoke(null, new Type[0]);
+                BasicHeaders();
+                Console.Write(JsonConvert.SerializeObject(objs));
+            }
         }
 
         private static void ProcessGetOne(Type model, int id)
