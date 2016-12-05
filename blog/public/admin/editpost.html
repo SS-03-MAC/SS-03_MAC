@@ -1,10 +1,15 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Comments | Clog, a SS-03_MAC production</title>
+    <title>Edit Post | Clog, a SS-03_MAC production</title>
 
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link type="text/css" href="../css/materialize.min.css" rel="stylesheet">
+
+    <script type="text/javascript">
+      DomainName = "Clog, a SS-03_MAC production";
+      MacAPI = "/api/";
+    </script>
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
   </head>
@@ -30,35 +35,72 @@
       </div>
     </nav>
 
-    <div id="latest" class="section red lighten-4">
+    <div id="new-post-wrapper" class="section red lighten-4">
       <div class="row container section">
-        <form class="col m12 s12">
+        <div class="col m12 s12">
           <div class="row">
             <div class="col m12 s12 input-field">
-              <input id="clog_post_title" type="text">
-              <label for="clog_post_title">Blog Post Title</label>
+              <input id="clog-post-title" type="text">
+              <label for="clog-post-title">Blog Post Title</label>
             </div>
           </div>
           <div class="row">
             <div class="col m12 s12 input-field">
-              <textarea id="clog_post_body"></textarea>
+              <textarea id="clog-post-body"></textarea>
             </div>
           </div>
           <div class="row">
-            <button class="btn waves-effect waves-light red darken-4" type="submit" name="action">Save
+            <button class="btn waves-effect waves-light red darken-4" type="submit" name="action" onclick="SavePost();">Save
               <i class="material-icons right">assignment</i>
             </button>
-            <button class="btn waves-effect waves-light red darken-4" type="submit" name="action">Publish
+            <button class="btn waves-effect waves-light red darken-4" type="submit" name="action" onclick="PublishPost();">Publish
               <i class="material-icons right">send</i>
             </button>
           </div>
-        </form>
+        </div>
       </div>
     </div>
 
     <script type="text/javascript" src="../js/jquery-3.1.1.js"></script>
     <script type="text/javascript" src="../js/materialize.min.js"></script>
+    <script type="text/javascript" src="../js/post.js"></script>
+    <script type="text/javascript" src="../js/utils.js"></script>
     <script src="https://cdn.tinymce.com/4/tinymce.min.js"></script>
-    <script>tinymce.init({ selector:'textarea', height: "500" });</script>
+    <script>
+      $( document ).ready(function() {
+        tinymce.init({ selector:'textarea', height: "500" });
+
+        window.EditPost = Post();
+        var clogPostId = getParameterByName("id");
+        
+        Post.get(clogPostId, window.EditPost, MacAPI, function EditPostOnPageLoadFetch(xhr) {
+          $('#clog-post-title').val(window.EditPost.Title);
+          $('#clog-post-body').val(window.EditPost.Body);
+          console.log("Success!");
+        });
+      });
+
+      function SavePost() {
+        window.EditPost.Title = $('#clog-post-title').val();
+        window.EditPost.Body = $('#clog-post-body').val();
+        window.EditPost.PublishedAt = Date.now().setFullYear(Date.now().getFullYear() + 35);
+        window.EditPost.save(MacAPI);
+      };
+
+      function PublishPost() {
+        window.EditPost.Title = $('#clog-post-title').val();
+        window.EditPost.Body = $('#clog-post-body').val();
+        window.EditPost.PublishedAt = Date.now();
+        window.EditPost.save(MacAPI, function NewPostPublishSuccess(xhr) {
+          if (xhr.readyState == 4) {
+            if (xhr.status == 200) {
+              window.location.href = "posts.html";
+            } else {
+              throw new Error(xhr.statusText);
+            }
+          }
+        });
+      };
+    </script>
   </body>
 </html>

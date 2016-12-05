@@ -1,70 +1,154 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Admin | Clog, a SS-03_MAC production</title>
+    <title>Overview | Clog, a SS-03_MAC production</title>
 
-    <link href="//fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link type="text/css" href="css/materialize.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link type="text/css" href="../css/materialize.min.css" rel="stylesheet">
+
+    <style>
+
+  .bar{
+    fill: #B71C1C;
+  }
+
+  .bar:hover{
+    fill: #F44336;
+  }
+
+	.axis {
+	  font: 10px sans-serif;
+	}
+
+	.axis path,
+	.axis line {
+	  fill: none;
+	  stroke: #000;
+	  shape-rendering: crispEdges;
+	}
+
+  </style>
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
   </head>
   <body>
     <nav class="red darken-4" role="navigation" style="z-index: 10000 !important">
       <div class="nav-wrapper container">
-        <a href="index.html" class="brand-logo"><img src="img/logo.png" alt="." width="26" height="26">Clog</a>
+        <a href="../index.html" class="brand-logo"><img src="../img/logo.png" alt="." width="26" height="26">Clog</a>
         <a href="#" data-activates="nav-mobile" class="button-collapse"><i class="material-icons">menu</i></a>
         <ul class="right hide-on-med-and-down">
-          <li><a href="index.html">Home</a></li>
-          <li><a href="search.html">Search <i class="material-icons left">search</i></a></li>
-          <li><a href="articles.html">Articles</a></li>
-          <li><a href="categories.html">Categories</a></li>
-          <li><a class="clog-admin-only" href="admin.html">Admin</a></li>
+          <li><a href="overview.html">Overview<i class="material-icons left">trending_up</i></a></li>
+          <li><a href="posts.html">Articles<i class="material-icons left">library_books</i></a></li>
+          <li><a href="newpost.html">New Article<i class="material-icons left">library_add</i></a></li>
+          <li><a href="comments.html">Comments <i class="material-icons left">message</i></a></li>
+          <li><a class="clog-admin-only" href="logout.html">Logout <i class="material-icons left">lock</i></a></li>
         </ul>
         <ul class="side-nav" id="nav-mobile">
-          <li><a href="index.html">Home</a></li>
-          <li><a href="search.html">Search <i class="material-icons left">search</i></a></li>
-          <li><a href="articles.html">Articles</a></li>
-          <li><a href="categories.html">Categories</a></li>
-          <li><a class="clog-admin-only" href="admin.html">Admin</a></li>
+          <li><a href="overview.html">Overview<i class="material-icons left">trending_up</i></a></li>
+          <li><a href="posts.html">Articles<i class="material-icons left">library_books</i></a></li>
+          <li><a href="newpost.html">New Article<i class="material-icons left">library_add</i></a></li>
+          <li><a href="comments.html">Comments <i class="material-icons left">message</i></a></li>
+          <li><a class="clog-admin-only" href="logout.html">Logout <i class="material-icons left">lock</i></a></li>
         </ul>
       </div>
     </nav>
 
-    <div id="home" class="section grey lighten-4">
-      <div class="row container section">
-        <div class="col m8 s12">
-            <h1 class="header center red-text text-darken-4">Clog</h1>
-            <p>Some paragraph about why ISU needs our COMS 309 MAClog blogging Software.</p>
+    <div id="overview-section" class="section red lighten-4">
+        <div class="row container section">
+          <div id="overview" class="center"></div>
         </div>
-        <div class="col m4 s12">
-          <form onsubmit="events_subscribe(event);">
-            <div class="input-field">
-              <input placeholder="jdoe76@iastate.edu" id="home-email" type="email" class="validate">
-              <label for="home-email">Email Address</label>
-            </div>
-            <button class="btn waves-effect waves-light red darken-4" type="submit" name="action">Subscribe
-              <i class="material-icons right">send</i>
-            </button>
-          </form>
-        </div>
-      </div>
     </div>
 
-    <div id="latest" class="section red lighten-4">
-      <div class="row container section">
-        <div class="col m5 s12">
-          <h3 class="clog-latest-title"><a class="clog-latest-link red-text text-darken-4" href="articles.html">{clog_latest_title}</a></h3>
-        </div>
-        <div class="col m7 s12">
-          <p class="clog-latest-description">
-            {clog_latest_description}
-          </p>
-          <p>To read more, click <a class="clog-latest-link red-text text-darken-4" href="articles.html"> here</a>.</p>
-        </div>
-      </div>
-    </div>
+    <script type="text/javascript" src="../js/jquery-3.1.1.js"></script>
+    <script type="text/javascript" src="../js/materialize.min.js"></script>
+  	<script type="text/javascript" src="http://d3js.org/d3.v2.js"></script>
+    <script type="text/javascript">
 
-    <script type="text/javascript" src="js/jquery-3.1.1.js"></script>
-    <script type="text/javascript" src="js/materialize.min.js"></script>
+      $( document ).ready(function() {
+        var RealData = [
+          { "type": "posts",
+            "quantity": 33
+          },
+          { "type": "comments",
+            "quantity": 55
+          }
+        ];
+
+        // set the dimensions of the canvas
+        var margin = {top: 80, right: 80, bottom: 80, left: 80},
+        width = 600 - margin.left - margin.right,
+        height = 300 - margin.top - margin.bottom;
+
+
+        // set the ranges
+        var x = d3.scale.ordinal().rangeRoundBands([0, width], .05);
+
+        var y = d3.scale.linear().range([height, 0]);
+
+        // define the axis
+        var xAxis = d3.svg.axis()
+        .scale(x)
+        .orient("bottom")
+
+
+        var yAxis = d3.svg.axis()
+        .scale(y)
+        .orient("left")
+        .ticks(10);
+
+
+        // add the SVG element
+        var svg = d3.select("#overview").append("svg")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+        .attr("transform",
+          "translate(" + margin.left + "," + margin.top + ")");
+
+        (function(data) {
+        data.forEach(function(d) {
+          d.Letter = d.Letter;
+          d.Freq = +d.Freq;
+        });
+
+        // scale the range of the data
+        x.domain(data.map(function(d) { return d.type; }));
+        y.domain([0, d3.max(data, function(d) { return d.quantity; })]);
+
+        // add axis
+        svg.append("g")
+          .attr("class", "x axis")
+          .attr("transform", "translate(0," + height + ")")
+          .call(xAxis)
+          .selectAll("text")
+          .style("text-anchor", "end")
+          .attr("dx", "-.8em")
+          .attr("dy", "-.55em")
+          .attr("transform", "rotate(-90)" );
+
+        svg.append("g")
+          .attr("class", "y axis")
+          .call(yAxis)
+          .append("text")
+          .attr("transform", "rotate(-90)")
+          .attr("y", 5)
+          .attr("dy", ".71em")
+          .style("text-anchor", "end")
+          .text("Quantity");
+
+
+        // Add bar chart
+        svg.selectAll("bar")
+          .data(data)
+          .enter().append("rect")
+          .attr("class", "bar")
+          .attr("x", function(d) { return x(d.type); })
+          .attr("width", x.rangeBand())
+          .attr("y", function(d) { return y(d.quantity); })
+          .attr("height", function(d) { return height - y(d.quantity); });
+
+        }(RealData));
+      });
+    </script>
   </body>
 </html>
