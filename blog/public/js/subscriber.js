@@ -94,7 +94,7 @@ Subscriber.get = function(id, ret, path, successHandler, failureHandler){
   xhr.send(null);
 };
 
-Subscriber.getAll = function(arr, path){
+Subscriber.getAll = function(arr, path, successHandler, failureHandler){
   var xhr = new XMLHttpRequest();
 
   xhr.onreadystatechange = function() {

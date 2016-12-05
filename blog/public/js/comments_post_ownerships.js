@@ -108,7 +108,7 @@ CommentsPostOwnerships.get = function(id, ret, path, successHandler, failureHand
   xhr.send(null);
 };
 
-CommentsPostOwnerships.getAll = function(arr, path){
+CommentsPostOwnerships.getAll = function(arr, path, successHandler, failureHandler){
   var xhr = new XMLHttpRequest();
 
   xhr.onreadystatechange = function() {

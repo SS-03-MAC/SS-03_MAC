@@ -96,7 +96,7 @@ Auth.get = function(id, ret, path, successHandler, failureHandler){
   xhr.send(null);
 };
 
-Auth.getAll = function(arr, path){
+Auth.getAll = function(arr, path, successHandler, failureHandler){
   var xhr = new XMLHttpRequest();
 
   xhr.onreadystatechange = function() {

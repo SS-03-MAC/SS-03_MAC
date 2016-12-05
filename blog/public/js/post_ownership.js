@@ -108,7 +108,7 @@ PostOwnership.get = function(id, ret, path, successHandler, failureHandler){
   xhr.send(null);
 };
 
-PostOwnership.getAll = function(arr, path){
+PostOwnership.getAll = function(arr, path, successHandler, failureHandler){
   var xhr = new XMLHttpRequest();
 
   xhr.onreadystatechange = function() {
