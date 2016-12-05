@@ -79,10 +79,10 @@
 
           clogAllPosts.sort(function comparePostStructure(a, b) {
             if (Date.parse(a.PublishedAt) > Date.now()) {
-              return -1;
+              return 1;
             }
             if (Date.parse(b.PublisedAt) > Date.now()) {
-              return 1;
+              return -1;
             }
 
             if (Date.parse(a.PublishedAt) < Date.parse(b.PublishedAt)) {
