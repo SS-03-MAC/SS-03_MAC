@@ -73,12 +73,12 @@
         clogPost = new Post();
         clogPostId = getParameterByName("id");
 
-        Post.get(clogPostid, clogPost, MacAPI, function CurrentPostSuccess(xhr) {
+        Post.get(clogPostId, clogPost, MacAPI, function CurrentPostSuccess(xhr) {
           console.log(clogPost);
 
-          $('.clog-post-link').html(clogLatestPost.Title);
-          $('.clog-post-link').attr('href', 'article.html?id=' + clogLatestPost.Id);
-          $('.clog-post-description').html(clogLatestPost.Body);
+          $('.clog-post-link').html(clogPost.Title);
+          $('.clog-post-link').attr('href', 'article.html?id=' + clogPost.Id);
+          $('.clog-post-description').html(clogPost.Body);
         });
       });
     </script>
