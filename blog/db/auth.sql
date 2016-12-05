@@ -7,7 +7,7 @@ CREATE TABLE auths (
     
   
     
-      OnwerId int_t,
+      OwnerId int_t,
     
   
 );
