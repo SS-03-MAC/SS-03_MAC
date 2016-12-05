@@ -7,6 +7,7 @@ var CommentsPostOwnerships = function(post, comments){
 
   this.save = function(path, successHandler, failureHandler){
     var xhr = new XMLHttpRequest();
+    ret = this;
     if(this.Id == 0){
       xhr.open("POST", path + "/comments_post_ownerships/", true);
     } else{
@@ -20,7 +21,7 @@ var CommentsPostOwnerships = function(post, comments){
         if(xhr.status == 200){
           var result = JSON.parse(xhr.responseText);
           if (result.Type === 'create' && result.Response === 'success') {
-            this.Id = result.Id;
+            ret.Id = result.Id;
           }
 
           if(successHandler !== undefined) {

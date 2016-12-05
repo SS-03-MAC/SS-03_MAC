@@ -8,6 +8,7 @@ var Comment = function(FullName, Email, Website, Body){
   this.UpdatedAt = Date.now();
 
   this.save = function(path, successHandler, failureHandler){
+    ret = this;
     var xhr = new XMLHttpRequest();
     if(this.Id == 0){
       xhr.open("POST", path + "/comments/", true);
@@ -23,7 +24,7 @@ var Comment = function(FullName, Email, Website, Body){
           window.result = JSON.parse(xhr.responseText);
           console.log(result);
           if (result.Type === 'create' && result.Response === 'success') {
-            this.Id = result.Id;
+            ret.Id = result.Id;
           }
 
           if(successHandler !== undefined) {
