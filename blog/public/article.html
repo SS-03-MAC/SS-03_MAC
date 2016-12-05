@@ -113,16 +113,24 @@
       });
 
       function CreateComment() {
-        var NewComment = new Comment();
+        NewComment = new Comment();
         NewComment.FullName = $('#comment-fullname').val();
         NewComment.Email = $('#comment-email').val();
         NewComment.Website = $('#comment-website').val();
         NewComment.Body = $('#comment-body').val();
 
         NewComment.save(MacAPI, function CommentSuccess() {
-          window.location.href = window.location.href;
+          console.log(NewComment.Id);
+          NewCommentsPostOwnerships = new CommentsPostOwnerships();
+          NewCommentsPostOwnerships.postId = clogPostId;
+          NewCommentsPostOwnerships.commentsId = NewComment.Id;
+          NewCommentsPostOwnerships.save(MacAPI, function LinkSuccess() {
+            window.location.href = window.location.href;
+          }, function LinkFailure() {
+            Materialize.toast('Temporary failure to save comment.', 10000);
+          });
         }, function CommentFailure() {
-           Materialize.toast('Temporary failure to save comment.', 10000);
+          Materialize.toast('Temporary failure to save comment.', 10000);
         });
       }
     </script>
