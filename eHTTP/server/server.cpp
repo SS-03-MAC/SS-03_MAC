@@ -44,7 +44,8 @@ void server::forkHandler(int clientFd, void (eHTTP::server::server:: *handler)(i
     std::cout << "Forking a handling thread failed. errno: " << errno << std::endl;
   } else if (child == 0) {
     (this->*handler)(clientFd);
-      exit(0);
+    std::cout << "Handling thread exiting." << std::endl;
+    exit(0);
   }
 }
 
@@ -100,9 +101,11 @@ void server::handleClientTls(int clientFd) {
     serveFileTls(*srv, *headers->path);
   }
 
+  std::cout << "Serving TLS done, closing connection." << std::endl;
   srv->Close();
   delete clientStream;
   delete srv;
+  std::cout << "Cleaned up TLS." << std::endl;
 }
 
 long long server::serveFile(int clientFd, httpParsing::AbsPath &path) {
