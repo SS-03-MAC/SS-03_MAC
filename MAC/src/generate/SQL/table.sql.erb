@@ -7,7 +7,7 @@ CREATE TABLE <%= table_name %> (
       CONSTRAINT <%= table_name + "_" +  field["name"] %> FOREIGN KEY (<%= field["name"].camelize + "Id" %>)
         REFERENCES <%= field["name"] %> (Id)
           ON DELETE NO ACTION
-          ON UPDATE NO ACTION
+          ON UPDATE NO ACTION,
     <% else %>
       <%= field["name"] + " " + field["type"] + "," %>
     <% end %>

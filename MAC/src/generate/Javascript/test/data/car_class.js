@@ -7,9 +7,9 @@ var Car = function(name){
   this.save = function(path){
     var xhr = new XMLHttpRequest();
     if(this.id == 0){
-      xhr.open("POST", "/" + path + "cars/", true);
+      xhr.open("POST", path + "/cars/", true);
     } else{
-      xhr.open("PATCH", "/" + path + "cars/"+this.id);
+      xhr.open("PATCH", path + "/cars/"+this.id);
     }
 
     xhr.setRequestHeader("Content-type", "application/json");
@@ -34,7 +34,7 @@ var Car = function(name){
     }
 
     var xhr = new XMLHttpRequest();
-    xhr.open("DELETE", "/" + path + "cars/"+this.id, true);
+    xhr.open("DELETE", path + "/cars/"+this.id, true);
     xhr.setRequestHeader("Content-type", "application/json");
     xhr.onreadystatechange = function() {
       if(xhr.readyState == 4){
@@ -73,7 +73,7 @@ Car.get = function(id, ret, path){
     }
   };
 
-  xhr.open("GET", "/" + path + "cars/"+id, true);
+  xhr.open("GET", path + "/cars/"+id, true);
   xhr.send(null);
 };
 
@@ -103,6 +103,6 @@ Car.getAll = function(arr, path){
     }
   };
 
-  xhr.open("GET", "/" + path + "cars.json", true);
+  xhr.open("GET", path + "/cars.json", true);
   xhr.send(null);
 };
