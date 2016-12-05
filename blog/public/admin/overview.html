@@ -6,6 +6,29 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link type="text/css" href="../css/materialize.min.css" rel="stylesheet">
 
+    <style>
+
+  .bar{
+    fill: #B71C1C;
+  }
+
+  .bar:hover{
+    fill: #F44336;
+  }
+
+	.axis {
+	  font: 10px sans-serif;
+	}
+
+	.axis path,
+	.axis line {
+	  fill: none;
+	  stroke: #000;
+	  shape-rendering: crispEdges;
+	}
+
+  </style>
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
   </head>
   <body>
@@ -30,35 +53,102 @@
       </div>
     </nav>
 
-    <div id="latest" class="section red lighten-4">
-      <div class="row container section">
-        <form class="col m12 s12">
-          <div class="row">
-            <div class="col m12 s12 input-field">
-              <input id="clog_post_title" type="text">
-              <label for="clog_post_title">Blog Post Title</label>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col m12 s12 input-field">
-              <textarea id="clog_post_body"></textarea>
-            </div>
-          </div>
-          <div class="row">
-            <button class="btn waves-effect waves-light red darken-4" type="submit" name="action">Save
-              <i class="material-icons right">assignment</i>
-            </button>
-            <button class="btn waves-effect waves-light red darken-4" type="submit" name="action">Publish
-              <i class="material-icons right">send</i>
-            </button>
-          </div>
-        </form>
-      </div>
+    <div id="overview-section" class="section red lighten-4">
+        <div class="row container section">
+          <div id="overview" class="center"></div>
+        </div>
     </div>
 
     <script type="text/javascript" src="../js/jquery-3.1.1.js"></script>
     <script type="text/javascript" src="../js/materialize.min.js"></script>
-    <script src="https://cdn.tinymce.com/4/tinymce.min.js"></script>
-    <script>tinymce.init({ selector:'textarea', height: "500" });</script>
+  	<script type="text/javascript" src="http://d3js.org/d3.v2.js"></script>
+    <script type="text/javascript">
+
+      $( document ).ready(function() {
+        var RealData = [
+          { "type": "posts",
+            "quantity": 33
+          },
+          { "type": "comments",
+            "quantity": 55
+          }
+        ];
+
+        // set the dimensions of the canvas
+        var margin = {top: 80, right: 80, bottom: 80, left: 80},
+        width = 600 - margin.left - margin.right,
+        height = 300 - margin.top - margin.bottom;
+
+
+        // set the ranges
+        var x = d3.scale.ordinal().rangeRoundBands([0, width], .05);
+
+        var y = d3.scale.linear().range([height, 0]);
+
+        // define the axis
+        var xAxis = d3.svg.axis()
+        .scale(x)
+        .orient("bottom")
+
+
+        var yAxis = d3.svg.axis()
+        .scale(y)
+        .orient("left")
+        .ticks(10);
+
+
+        // add the SVG element
+        var svg = d3.select("#overview").append("svg")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+        .attr("transform",
+          "translate(" + margin.left + "," + margin.top + ")");
+
+        (function(data) {
+        data.forEach(function(d) {
+          d.Letter = d.Letter;
+          d.Freq = +d.Freq;
+        });
+
+        // scale the range of the data
+        x.domain(data.map(function(d) { return d.type; }));
+        y.domain([0, d3.max(data, function(d) { return d.quantity; })]);
+
+        // add axis
+        svg.append("g")
+          .attr("class", "x axis")
+          .attr("transform", "translate(0," + height + ")")
+          .call(xAxis)
+          .selectAll("text")
+          .style("text-anchor", "end")
+          .attr("dx", "-.8em")
+          .attr("dy", "-.55em")
+          .attr("transform", "rotate(-90)" );
+
+        svg.append("g")
+          .attr("class", "y axis")
+          .call(yAxis)
+          .append("text")
+          .attr("transform", "rotate(-90)")
+          .attr("y", 5)
+          .attr("dy", ".71em")
+          .style("text-anchor", "end")
+          .text("Quantity");
+
+
+        // Add bar chart
+        svg.selectAll("bar")
+          .data(data)
+          .enter().append("rect")
+          .attr("class", "bar")
+          .attr("x", function(d) { return x(d.type); })
+          .attr("width", x.rangeBand())
+          .attr("y", function(d) { return y(d.quantity); })
+          .attr("height", function(d) { return height - y(d.quantity); });
+
+        }(RealData));
+      });
+    </script>
   </body>
 </html>
