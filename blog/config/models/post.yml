@@ -64,12 +64,19 @@
 #       relationship: true
 #       table: comments
 #       unique: true
+#-
+#  name: auth
+#  fields:
+#    -
+#      name: token
+#      type: MAC.Types.String
+#    -
+#      name: OnwerId
+#      type: Integer
+#
 -
-  name: auth
+  name: subscriber
   fields:
     -
-      name: token
-      type: MAC.Types.String
-    -
-      name: OnwerId
-      type: Integer
+      name: Email
+      type: Email

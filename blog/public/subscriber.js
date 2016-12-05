@@ -1,17 +1,15 @@
-var Post = function(Title, Body, PublishedAt){
-  this.Title = Title;
-  this.Body = Body;
-  this.PublishedAt = PublishedAt;
+var Subscriber = function(Email){
+  this.Email = Email;
   this.id = 0;
   this.CreatedAt = Date.now();
   this.UpdatedAt = Date.now();
 
-  this.save = function(path, success){
+  this.save = function(path){
     var xhr = new XMLHttpRequest();
     if(this.id == 0){
-      xhr.open("POST", "/" + path + "posts/", true);
+      xhr.open("POST", "/" + path + "subscribers/", true);
     } else{
-      xhr.open("PATCH", "/" + path + "posts/"+this.id);
+      xhr.open("PATCH", "/" + path + "subscribers/"+this.id);
     }
 
     xhr.setRequestHeader("Content-type", "application/json");
@@ -26,10 +24,6 @@ var Post = function(Title, Body, PublishedAt){
       }
     };
 
-    if (success !== undefined) {
-      xhr.onreadystatechange = success;
-    }
-
     var data = JSON.stringify(this);
     xhr.send(data);
   };
@@ -40,7 +34,7 @@ var Post = function(Title, Body, PublishedAt){
     }
 
     var xhr = new XMLHttpRequest();
-    xhr.open("DELETE", "/" + path + "posts/"+this.id, true);
+    xhr.open("DELETE", "/" + path + "subscribers/"+this.id, true);
     xhr.setRequestHeader("Content-type", "application/json");
     xhr.onreadystatechange = function() {
       if(xhr.readyState == 4){
@@ -55,18 +49,16 @@ var Post = function(Title, Body, PublishedAt){
     xhr.send(null);
   };
 
-
-
-
+  
 };
 
-Post.get = function(id, ret, path, success){
+Subscriber.get = function(id, ret, path){
   var xhr = new XMLHttpRequest();
 
   xhr.onreadystatechange = function() {
     if(xhr.readyState == 4){
       if(xhr.status == 200){
-        var fields = ["id", "CreatedAt", "UpdatedAt", "Title", "Body", "PublishedAt"];
+        var fields = ["id", "CreatedAt", "UpdatedAt", "Email"];
         var result = JSON.parse(xhr.responseText);
 
         for(var field in result){
@@ -75,31 +67,27 @@ Post.get = function(id, ret, path, success){
           }
         }
 
-        if (success !== undefined) {
-          success();
-        }
-
       } else{
         throw new Error(xhr.statusText);
       }
     }
   };
 
-  xhr.open("GET", "/" + path + "posts/"+id, true);
+  xhr.open("GET", "/" + path + "subscribers/"+id, true);
   xhr.send(null);
 };
 
-Post.getAll = function(arr, path){
+Subscriber.getAll = function(arr, path){
   var xhr = new XMLHttpRequest();
 
   xhr.onreadystatechange = function() {
     if(xhr.readyState == 4){
       if(xhr.status == 200){
-        var fields = ["id", "CreatedAt", "UpdatedAt", "Title", "Body", "PublishedAt"];
+        var fields = ["id", "CreatedAt", "UpdatedAt", "Email"];
         var result = JSON.parse(xhr.responseText);
 
         for(var i = 0; i < result.length; i++){
-          tmp = new Post();
+          tmp = new Subscriber();
           obj = result[i];
           for(var field in obj){
             if(fields.indexOf(field) !== -1){
@@ -115,6 +103,6 @@ Post.getAll = function(arr, path){
     }
   };
 
-  xhr.open("GET", "/" + path + "posts.json", true);
+  xhr.open("GET", "/" + path + "subscribers.json", true);
   xhr.send(null);
 };
