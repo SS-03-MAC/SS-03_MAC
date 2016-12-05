@@ -118,7 +118,7 @@ long long passDataTls(std::istream &tcpIstream,
 
     buffer[tcpIstream.gcount()] = 0;
 
-    client->Write((uint8_t *) buffer, (size_t) tcpIstream.gcount());
+    write(cgiStdin, buffer, (size_t) tcpIstream.gcount());
     requestContentLen -= tcpIstream.gcount();
   }
 
