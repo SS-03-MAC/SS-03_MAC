@@ -7,6 +7,7 @@ var Post = function(Title, Body, PublishedAt){
   this.UpdatedAt = Date.now();
 
   this.save = function(path, successHandler, failureHandler){
+    var ret = this
     var xhr = new XMLHttpRequest();
     if(this.Id == 0){
       xhr.open("POST", path + "/posts/", true);
@@ -20,18 +21,16 @@ var Post = function(Title, Body, PublishedAt){
       if(xhr.readyState == 4){
         if(xhr.status == 200){
           var result = JSON.parse(xhr.responseText);
-          if (result.indexOf('Type') !== -1 && result.indexOf('Response') !== -1) {
-            if (result.Type === 'create' && result.Response === 'success') {
-              this.Id = result.Id;
-            }
+          if(result.Id !== undefined){
+            ret.Id = result.Id;
           }
 
           if(successHandler !== undefined) {
-            successHandler(xhr);
+            successHandler(xhr, ret, result);
           }
         } else{
           if(failureHandler !== undefined) {
-            failureHandler(xhr);
+            failureHandler(xhr, ret, result);
           }
         }
       }
