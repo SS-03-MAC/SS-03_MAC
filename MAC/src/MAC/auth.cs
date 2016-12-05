@@ -26,6 +26,8 @@ namespace MAC.Models
 
         public override bool Save()
         {
+            Token = new Types.String(Guid.NewGuid().ToString());
+            Console.WriteLine("Set-Cookie=" + Token + ";");
             return base.Save();
         }
 
