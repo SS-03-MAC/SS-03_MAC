@@ -201,7 +201,7 @@ bool server::getFileFromPath(httpParsing::AbsPath &path, std::string &outFile) {
   std::string fullPath = settings->basePath + "/" + path.getFullPath();
   std::string fileToServe;
   bool folder = false;
-  if (path.endsInSlash()) {
+  if (path.endsInSlash() || fullPath[fullPath.length() - 1] == '/') {
     folder = true;
   } else {
     eHTTP::utils::filesystemObject_t fInfo = eHTTP::utils::filesystem::info(fullPath);
@@ -288,6 +288,7 @@ void server::serve() {
   int tcp = network::tcp_start(settings->port);
   int tcpTls = network::tcp_start(settings->portTls);
   int client;
+  int clientTls;
   switch (fork()) {
   case -1:
     std::cout << "Error forking TLS listener." << std::endl;
@@ -301,8 +302,8 @@ void server::serve() {
   default:
     std::cout << "Listening for TLS client on port: " << settings->portTls << std::endl;
     while (true) {
-      client = network::tcp_accept(tcpTls);
-      forkHandler(client, &eHTTP::server::server::handleClientTls);
+      clientTls = network::tcp_accept(tcpTls);
+      forkHandler(clientTls, &eHTTP::server::server::handleClientTls);
     }
   }
 }

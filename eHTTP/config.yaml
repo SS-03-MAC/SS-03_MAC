@@ -1,6 +1,8 @@
 port: 8000
 portTls: 8443
-basePath: "."
+basePath: "./blog/public"
+defaultDocuments:
+  - index.html
 cgiEndpoints:
   - pathElement: api
     cgiPath: dotnet
