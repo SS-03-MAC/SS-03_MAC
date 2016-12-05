@@ -6,7 +6,7 @@ var Post = function(Title, Body, PublishedAt){
   this.CreatedAt = Date.now();
   this.UpdatedAt = Date.now();
 
-  this.save = function(path, success){
+  this.save = function(path, success, failure){
     var xhr = new XMLHttpRequest();
     if(this.id == 0){
       xhr.open("POST", path + "/posts/", true);
@@ -19,22 +19,27 @@ var Post = function(Title, Body, PublishedAt){
     xhr.onreadystatechange = function(){
       if(xhr.readyState == 4){
         if(xhr.status == 200){
+
+          if (success !== undefined) {
+            success(xhr);
+          }
+
           console.log(xhr.responseText);
         } else{
+
+          if (failure !== undefined) {
+            failure(xhr);
+          }
           throw new Error(xhr.statusText);
         }
       }
     };
 
-    if (success !== undefined) {
-      xhr.onreadystatechange = success;
-    }
-
     var data = JSON.stringify(this);
     xhr.send(data);
   };
 
-  this.delete = function(path){
+  this.delete = function(path, success, failure){
     if(this.id == 0){
       return; //never saved to database, don't have to do anything
     }
@@ -46,7 +51,17 @@ var Post = function(Title, Body, PublishedAt){
       if(xhr.readyState == 4){
         if(xhr.status == 200){
           console.log(xhr.responseText);
+
+          if (success !== undefined) {
+            success(xhr);
+          }
+
         } else{
+
+          if (failure !== undefined) {
+            failure(xhr);
+          }
+
           throw new Error(xhr.statusText);
         }
       }
@@ -60,7 +75,7 @@ var Post = function(Title, Body, PublishedAt){
 
 };
 
-Post.get = function(id, ret, path, success){
+Post.get = function(id, ret, path, success, failure){
   var xhr = new XMLHttpRequest();
 
   xhr.onreadystatechange = function() {
@@ -80,6 +95,11 @@ Post.get = function(id, ret, path, success){
         }
 
       } else{
+
+        if (failure !== undefined) {
+          failure(xhr);
+        }
+
         throw new Error(xhr.statusText);
       }
     }

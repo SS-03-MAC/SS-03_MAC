@@ -73,10 +73,12 @@
         window.EditPost = new Post();
         var clogPostId = getParameterByName("id");
 
-        Post.get(clogPostId, window.EditPost, MacAPI, function EditPostOnPageLoadFetch(xhr) {
+        Post.get(clogPostId, window.EditPost, MacAPI, function EditPostOnPageLoadFetchSuccess(xhr) {
           $('#clog-post-title').val(window.EditPost.Title);
           $('#clog-post-body').val(window.EditPost.Body);
           console.log("Success!");
+        }, function EditPostOnPageLoadFetchFailure(xhr) {
+           Materialize.toast('Temporary failure to load post with id: ' + clogPostId, 10000);
         });
       });
 
@@ -84,21 +86,21 @@
         window.EditPost.Title = $('#clog-post-title').val();
         window.EditPost.Body = tinyMCE.activeEditor.getContent();;
         window.EditPost.PublishedAt = Date.now().setFullYear(Date.now().getFullYear() + 35);
-        window.EditPost.save(MacAPI);
+        window.EditPost.save(MacAPI, function EditPostPublishSuccess(xhr) {
+           Materialize.toast('Success saving post.', 4000);
+        }, function EditPostFailureHandler(xhr) {
+           Materialize.toast('Temporary failure to save post.', 10000);
+        });
       };
 
       function PublishPost() {
         window.EditPost.Title = $('#clog-post-title').val();
         window.EditPost.Body = tinyMCE.activeEditor.getContent();;
         window.EditPost.PublishedAt = Date.now();
-        window.EditPost.save(MacAPI, function NewPostPublishSuccess(xhr) {
-          if (xhr.readyState == 4) {
-            if (xhr.status == 200) {
-              window.location.href = "posts.html";
-            } else {
-              throw new Error(xhr.statusText);
-            }
-          }
+        window.EditPost.save(MacAPI, function EditPostPublishSuccess(xhr) {
+          window.location.href = "posts.html";
+        }, function EditPostFailureHandler(xhr) {
+           Materialize.toast('Temporary failure to publish post.', 10000);
         });
       };
     </script>

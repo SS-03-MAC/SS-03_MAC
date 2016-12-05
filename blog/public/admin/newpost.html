@@ -67,7 +67,7 @@
     <script src="https://cdn.tinymce.com/4/tinymce.min.js"></script>
     <script>
       $( document ).ready(function() {
-        tinymce.init({ selector:'textarea', height: "500" });
+        tinymce.init({ selector:'textarea', height: "400" });
 
         window.NewPost = new Post();
       });
@@ -76,20 +76,21 @@
         window.NewPost.Title = $('#clog-post-title').val();
         window.NewPost.Body = tinyMCE.activeEditor.getContent();
         window.NewPost.PublishedAt = Date.now().setFullYear(Date.now().getFullYear() + 35);
-        window.NewPost.save(MacAPI);
+        window.NewPost.save(MacAPI, function NewPostPublishSuccess(xhr) {
+           Materialize.toast('Success saving post.', 4000);
+        }, function NewPostFailureHandler(xhr) {
+           Materialize.toast('Temporary failure to save post.', 10000);
+        });
       };
+
       function PublishPost() {
         window.NewPost.Title = $('#clog-post-title').val();
         window.NewPost.Body = tinyMCE.activeEditor.getContent();
         window.NewPost.PublishedAt = Date.now();
         window.NewPost.save(MacAPI, function NewPostPublishSuccess(xhr) {
-          if (xhr.readyState == 4) {
-            if (xhr.status == 200) {
-              window.location.href = "posts.html";
-            } else {
-              throw new Error(xhr.statusText);
-            }
-          }
+          window.location.href = "posts.html";
+        }, function NewPostFailureHandler(xhr) {
+           Materialize.toast('Temporary failure to publish post.', 10000);
         });
       };
     </script>
