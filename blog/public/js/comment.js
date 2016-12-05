@@ -20,6 +20,13 @@ var Comment = function(FullName, Email, Website, Body){
     xhr.onreadystatechange = function(){
       if(xhr.readyState == 4){
         if(xhr.status == 200){
+          var result = JSON.parse(xhr.responseText);
+          if (result.indexOf('Type') !== -1 && result.indexOf('Response') !== -1) {
+            if (result.Type === 'create' && result.Response === 'success') {
+              this.Id = result.Id;
+            }
+          }
+
           if(successHandler !== undefined) {
             successHandler(xhr);
           }
@@ -77,8 +84,8 @@ Comment.get = function(id, ret, path, successHandler, failureHandler){
 
         for(var field in result){
           if(fields.indexOf(field) !== -1){
-            if(obj[field].Value !== undefined) {
-              ret[field] = obj[field].Value;
+            if(result[field].Value !== undefined) {
+              ret[field] = result[field].Value;
             } else {
               ret[field] = result[field];
             }
