@@ -82,11 +82,12 @@
 
         for (var j in clogAllCommentPostRelationships) {
           for (var i in clogAllPosts) {
-            if (clogAllComments[i].Id == clogAllCommentPostRelationships[j].commentsId) {
-              clogAllComments[i].postId = clogAllCommentPostRelationships[j].commentsId;
+            if (clogAllComments[i].Id == clogAllCommentPostRelationships[j].CommentsId) {
+              clogAllComments[i].PostId = clogAllCommentPostRelationships[j].PostIdf;
+              clogAllComments[i].RelationshipID = j;
 
               for (var k in clogAllPosts) {
-                if (clogAllComments[i].postId == clogAllPosts[k].Id) {
+                if (clogAllComments[i].PostId == clogAllPosts[k].Id) {
                   clogAllComments[i].post = clogAllPosts[k];
                   break;
                 }
@@ -101,16 +102,23 @@
         console.log(clogAllComments);
         $('#clog-all-posts').html('');
         for (var i in clogAllComments) {
-          $('#clog-all-posts').append('<tr><td>' + clogAllComments[i].Id + '</td><td>' + clogAllComments[i].post.Title + '</td><td>' + clogAllComments[i].FullName + '</td><td>' + clogAllComments[i].Email + '</td><td>' + clogAllComments[i].Website + '</td><td>' + clogAllComments[i].CreatedAt + '</td><td><a href="#" onclick="EventEditComment(' + clogAllComments[i].Id + ');"><i class="material-icons">mode_edit</i></a><a href="#" onclick="EventDeleteComment(' + clogAllComments[i].Id + ');"><i class="material-icons">delete</i></a></td></tr>');
+          $('#clog-all-posts').append('<tr><td>' + clogAllComments[i].Id + '</td><td>' + clogAllComments[i].post.Title + '</td><td>' + clogAllComments[i].FullName + '</td><td>' + clogAllComments[i].Email + '</td><td>' + clogAllComments[i].Website + '</td><td>' + clogAllComments[i].CreatedAt + '</td><td><a href="#" onclick="EventDeleteComment(' + clogAllComments[i].Id + ', ' + clogAllComments[i].RelationshipID + ');"><i class="material-icons">delete</i></a></td></tr>');
         }
       });
 
-      function EventEditComment(id) {
-        console.log(id);
-      }
-
-      function EventDeleteComment(id) {
-        console.log(id);
+      function EventDeleteComment(id, RelationshipID) {
+        if (confirm("Are you sure you want to delete post id: " + id + "?")) {
+          clogComment = new CommentsPostOwnerships();
+          CommentsPostOwnerships.get(RelationshipID, clogComment, MacAPI, function DeleteCommentGetSuccess(xhr) {
+            clogPost.delete(MacAPI, function DeleteCommentDeleteSuccess(xhr) {
+              window.location.href="comments.html";
+            }, function DeleteCommentDeleteFailure(xhr) {
+              window.location.href="comments.html";
+            });
+          }, function DeleteCommentGetFailure(xhr) {
+            window.location.href="comments.html";
+          });
+        }
       }
     </script>
   </body>
