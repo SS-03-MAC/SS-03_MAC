@@ -19,10 +19,8 @@ var CommentsPostOwnerships = function(post, comments){
       if(xhr.readyState == 4){
         if(xhr.status == 200){
           var result = JSON.parse(xhr.responseText);
-          if (result.indexOf('Type') !== -1 && result.indexOf('Response') !== -1) {
-            if (result.Type === 'create' && result.Response === 'success') {
-              this.Id = result.Id;
-            }
+          if (result.Type === 'create' && result.Response === 'success') {
+            this.Id = result.Id;
           }
 
           if(successHandler !== undefined) {
@@ -65,20 +63,20 @@ var CommentsPostOwnerships = function(post, comments){
     xhr.send(null);
   };
 
-  
+
   this.getPost = function(path, successHandler, failureHandler){
     var ret = new Post();
     Post.get(this.PostId, ret, path, successHandler, failureHandler);
     return ret;
   };
-  
-  
+
+
   this.getComments = function(path, successHandler, failureHandler){
     var ret = new Comments();
     Comments.get(this.CommentsId, ret, path, successHandler, failureHandler);
     return ret;
   };
-  
+
 };
 
 CommentsPostOwnerships.get = function(id, ret, path, successHandler, failureHandler){
