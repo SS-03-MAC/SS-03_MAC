@@ -8,7 +8,7 @@
 
     <script type="text/javascript">
       DomainName = "Clog, a SS-03_MAC production";
-      MacAPI = "/api/";
+      MacAPI = "/api";
     </script>
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -74,13 +74,13 @@
 
       function SavePost() {
         window.NewPost.Title = $('#clog-post-title').val();
-        window.NewPost.Body = $('#clog-post-body').val();
+        window.NewPost.Body = tinyMCE.activeEditor.getContent();
         window.NewPost.PublishedAt = Date.now().setFullYear(Date.now().getFullYear() + 35);
         window.NewPost.save(MacAPI);
       };
       function PublishPost() {
         window.NewPost.Title = $('#clog-post-title').val();
-        window.NewPost.Body = $('#clog-post-body').val();
+        window.NewPost.Body = tinyMCE.activeEditor.getContent();
         window.NewPost.PublishedAt = Date.now();
         window.NewPost.save(MacAPI, function NewPostPublishSuccess(xhr) {
           if (xhr.readyState == 4) {
