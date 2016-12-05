@@ -84,7 +84,7 @@
 
         Post.get(clogPostId, window.EditPost, MacAPI, function EditPostOnPageLoadFetchSuccess(xhr) {
           $('#clog-post-title').val(window.EditPost.Title);
-          $('#clog-post-body').val(window.EditPost.Body);
+          tinyMCE.activeEditor.setContent(window.EditPost.Body);
           console.log("Success!");
         }, function EditPostOnPageLoadFetchFailure(xhr) {
            Materialize.toast('Temporary failure to load post with id: ' + clogPostId, 10000);
