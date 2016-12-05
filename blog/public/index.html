@@ -74,9 +74,6 @@
         clogLatestPost = new Post();
 
         Post.getAll(clogAllPosts, MacAPI, function GetLatestPostSuccess(xhr) {
-          console.log(clogAllPosts);
-          console.log(xhr);
-
           clogAllPosts.sort(function comparePostStructure(a, b) {
             if (Date.parse(a.PublishedAt) > Date.now()) {
               return -1;
@@ -93,12 +90,12 @@
             return 0;
           });
 
-          console.log(clogAllPosts);
           clogAllPosts.reverse();
+
           var current = 0;
           clogLatestPost = clogAllPosts[current];
 
-          while (Date.parse(clogLatestPost.PublishedAt) < Date.now()) {
+          while (Date.parse(clogLatestPost.PublishedAt) > Date.now()) {
             current += 1;
             if (current >= clogAllPosts.length) {
               break;
