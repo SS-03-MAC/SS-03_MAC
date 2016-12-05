@@ -10,9 +10,9 @@ var Auth = function(token, OnwerId, user, password){
   this.save = function(path, success) {
     var xhr = new XMLHttpRequest();
     if (this.id == 0) {
-      xhr.open("POST", "/" + path + "auths/", true);
+      xhr.open("POST", path + "/auths/", true);
     } else{
-      xhr.open("PATCH", "/" + path + "auths/"+this.id);
+      xhr.open("PATCH", path + "/auths/"+this.id);
     }
 
     xhr.setRequestHeader("Content-type", "application/json");
@@ -41,7 +41,7 @@ var Auth = function(token, OnwerId, user, password){
     }
 
     var xhr = new XMLHttpRequest();
-    xhr.open("DELETE", "/" + path + "auths/"+this.id, true);
+    xhr.open("DELETE", path + "/auths/"+this.id, true);
     xhr.setRequestHeader("Content-type", "application/json");
     xhr.onreadystatechange = function() {
       if(xhr.readyState == 4){
@@ -81,7 +81,7 @@ Auth.get = function(id, ret, path){
     }
   };
 
-  xhr.open("GET", "/" + path + "auths/"+id, true);
+  xhr.open("GET", path + "/auths/"+id, true);
   xhr.send(null);
 };
 
@@ -111,6 +111,6 @@ Auth.getAll = function(arr, path){
     }
   };
 
-  xhr.open("GET", "/" + path + "auths.json", true);
+  xhr.open("GET", path + "/auths.json", true);
   xhr.send(null);
 };

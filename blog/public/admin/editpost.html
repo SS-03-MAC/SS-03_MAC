@@ -70,9 +70,9 @@
       $( document ).ready(function() {
         tinymce.init({ selector:'textarea', height: "500" });
 
-        window.EditPost = Post();
+        window.EditPost = new Post();
         var clogPostId = getParameterByName("id");
-        
+
         Post.get(clogPostId, window.EditPost, MacAPI, function EditPostOnPageLoadFetch(xhr) {
           $('#clog-post-title').val(window.EditPost.Title);
           $('#clog-post-body').val(window.EditPost.Body);

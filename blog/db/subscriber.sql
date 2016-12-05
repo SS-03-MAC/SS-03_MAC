@@ -6,4 +6,7 @@ CREATE TABLE subscribers (
       Email nvarchar,
     
   
+
+  CreatedAt DateTime,
+  UpdatedAt DateTime
 );

@@ -7,9 +7,9 @@ var Subscriber = function(Email){
   this.save = function(path){
     var xhr = new XMLHttpRequest();
     if(this.id == 0){
-      xhr.open("POST", "/" + path + "subscribers/", true);
+      xhr.open("POST", path + "/subscribers/", true);
     } else{
-      xhr.open("PATCH", "/" + path + "subscribers/"+this.id);
+      xhr.open("PATCH", path + "/subscribers/"+this.id);
     }
 
     xhr.setRequestHeader("Content-type", "application/json");
@@ -34,7 +34,7 @@ var Subscriber = function(Email){
     }
 
     var xhr = new XMLHttpRequest();
-    xhr.open("DELETE", "/" + path + "subscribers/"+this.id, true);
+    xhr.open("DELETE", path + "/subscribers/"+this.id, true);
     xhr.setRequestHeader("Content-type", "application/json");
     xhr.onreadystatechange = function() {
       if(xhr.readyState == 4){
@@ -73,7 +73,7 @@ Subscriber.get = function(id, ret, path){
     }
   };
 
-  xhr.open("GET", "/" + path + "subscribers/"+id, true);
+  xhr.open("GET", path + "/subscribers/"+id, true);
   xhr.send(null);
 };
 
@@ -103,6 +103,6 @@ Subscriber.getAll = function(arr, path){
     }
   };
 
-  xhr.open("GET", "/" + path + "subscribers.json", true);
+  xhr.open("GET", path + "/subscribers.json", true);
   xhr.send(null);
 };

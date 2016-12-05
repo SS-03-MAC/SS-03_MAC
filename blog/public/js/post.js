@@ -9,9 +9,9 @@ var Post = function(Title, Body, PublishedAt){
   this.save = function(path, success){
     var xhr = new XMLHttpRequest();
     if(this.id == 0){
-      xhr.open("POST", "/" + path + "posts/", true);
+      xhr.open("POST", path + "/posts/", true);
     } else{
-      xhr.open("PATCH", "/" + path + "posts/"+this.id);
+      xhr.open("PATCH", path + "/posts/"+this.id);
     }
 
     xhr.setRequestHeader("Content-type", "application/json");
@@ -40,7 +40,7 @@ var Post = function(Title, Body, PublishedAt){
     }
 
     var xhr = new XMLHttpRequest();
-    xhr.open("DELETE", "/" + path + "posts/"+this.id, true);
+    xhr.open("DELETE", path + "/posts/"+this.id, true);
     xhr.setRequestHeader("Content-type", "application/json");
     xhr.onreadystatechange = function() {
       if(xhr.readyState == 4){
@@ -85,7 +85,7 @@ Post.get = function(id, ret, path, success){
     }
   };
 
-  xhr.open("GET", "/" + path + "posts/"+id, true);
+  xhr.open("GET", path + "/posts/"+id, true);
   xhr.send(null);
 };
 
@@ -115,6 +115,6 @@ Post.getAll = function(arr, path){
     }
   };
 
-  xhr.open("GET", "/" + path + "posts.json", true);
+  xhr.open("GET", path + "/posts.json", true);
   xhr.send(null);
 };
