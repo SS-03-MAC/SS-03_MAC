@@ -141,7 +141,7 @@
              console.log("Loading comment " + i);
              var ReadComment = clogAllCommentRelationships[i].getComment(MacAPI, function GetCommentSuccessHandler(xhr, NewComment) {
                console.log(NewComment);
-               $('#clog-all-comments').append('<div class="row container section"><div class="col m4 s12"><div class="input-field"><p>' + NewComment.FullName + '</p></div><div class="input-field"><p>' + NewComment.Email + '</p></div><div class="input-field"><p><a href="' + NewComment.Website + '">' + NewComment.Website + '</a></p></div></div><div class="col m8 s12"><div class="input-field"><p>' + NewComent.Body + '</p></div></div></div>');
+               $('#clog-all-comments').append('<div class="row container section"><div class="col m4 s12"><div class="input-field"><p>' + NewComment.FullName + '</p></div><div class="input-field"><p>' + NewComment.Email + '</p></div><div class="input-field"><p><a href="' + NewComment.Website + '">' + NewComment.Website + '</a></p></div></div><div class="col m8 s12"><div class="input-field"><p>' + NewComment.Body + '</p></div></div></div>');
              }, function GetCommentFailureHandler() {
                console.log("Error retreiving comment.");
              });
