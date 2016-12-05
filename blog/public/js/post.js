@@ -76,7 +76,7 @@ Post.get = function(id, ret, path, success){
         }
 
         if (success !== undefined) {
-          success();
+          success(xhr);
         }
 
       } else{
@@ -89,7 +89,7 @@ Post.get = function(id, ret, path, success){
   xhr.send(null);
 };
 
-Post.getAll = function(arr, path){
+Post.getAll = function(arr, path, success){
   var xhr = new XMLHttpRequest();
 
   xhr.onreadystatechange = function() {
@@ -108,6 +108,10 @@ Post.getAll = function(arr, path){
           }
 
           arr.push(tmp);
+        }
+
+        if (success !== undefined) {
+          success(xhr);
         }
       } else{
         throw new Error(xhr.statusText);

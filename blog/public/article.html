@@ -69,13 +69,18 @@
     <script type="text/javascript" src="js/utils.js"></script>
     <script type="text/javascript" src="js/post.js"></script>
     <script type="text/javascript">
-      var clogPost = new Post();
-      var clogPostId = getParameterByName("id");
-      Post.get(clogPostid, clogPost, MacAPI);
-      console.log(clogPost);
-      $('.clog-post-link').html(clogLatestPost.Title);
-      $('.clog-post-link').attr('href', 'article.html?id=' + clogLatestPost.id);
-      $('.clog-post-description').html(clogLatestPost.Body);
+      $(document).ready(function() {
+        clogPost = new Post();
+        clogPostId = getParameterByName("id");
+
+        Post.get(clogPostid, clogPost, MacAPI, function CurrentPostSuccess(xhr) {
+          console.log(clogPost);
+
+          $('.clog-post-link').html(clogLatestPost.Title);
+          $('.clog-post-link').attr('href', 'article.html?id=' + clogLatestPost.id);
+          $('.clog-post-description').html(clogLatestPost.Body);
+        });
+      });
     </script>
   </body>
 </html>
