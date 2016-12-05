@@ -1,15 +1,15 @@
 var Subscriber = function(Email){
   this.Email = Email;
-  this.id = 0;
+  this.Id = 0;
   this.CreatedAt = Date.now();
   this.UpdatedAt = Date.now();
 
-  this.save = function(path){
+  this.save = function(path, successHandler, failureHandler){
     var xhr = new XMLHttpRequest();
-    if(this.id == 0){
+    if(this.Id == 0){
       xhr.open("POST", path + "/subscribers/", true);
     } else{
-      xhr.open("PATCH", path + "/subscribers/"+this.id);
+      xhr.open("PATCH", path + "/subscribers/"+this.Id);
     }
 
     xhr.setRequestHeader("Content-type", "application/json");
@@ -17,9 +17,13 @@ var Subscriber = function(Email){
     xhr.onreadystatechange = function(){
       if(xhr.readyState == 4){
         if(xhr.status == 200){
-          console.log(xhr.responseText);
+          if(successHandler !== undefined) {
+            successHandler(xhr);
+          }
         } else{
-          throw new Error(xhr.statusText);
+          if(failureHandler !== undefined) {
+            failureHandler(xhr);
+          }
         }
       }
     };
@@ -28,20 +32,24 @@ var Subscriber = function(Email){
     xhr.send(data);
   };
 
-  this.delete = function(path){
-    if(this.id == 0){
+  this.delete = function(path, successHandler, failureHandler){
+    if(this.Id == 0){
       return; //never saved to database, don't have to do anything
     }
 
     var xhr = new XMLHttpRequest();
-    xhr.open("DELETE", path + "/subscribers/"+this.id, true);
+    xhr.open("DELETE", path + "/subscribers/"+this.Id, true);
     xhr.setRequestHeader("Content-type", "application/json");
     xhr.onreadystatechange = function() {
       if(xhr.readyState == 4){
         if(xhr.status == 200){
-          console.log(xhr.responseText);
+          if(successHandler !== undefined) {
+            successHandler(xhr);
+          }
         } else{
-          throw new Error(xhr.statusText);
+          if(failureHandler !== undefined) {
+            failureHandler(xhr);
+          }
         }
       }
     };
@@ -52,7 +60,7 @@ var Subscriber = function(Email){
   
 };
 
-Subscriber.get = function(id, ret, path){
+Subscriber.get = function(id, ret, path, successHandler, failureHandler){
   var xhr = new XMLHttpRequest();
 
   xhr.onreadystatechange = function() {
@@ -63,12 +71,21 @@ Subscriber.get = function(id, ret, path){
 
         for(var field in result){
           if(fields.indexOf(field) !== -1){
-            ret[field] = result[field];
+            if(obj[field].Value !== undefined) {
+              ret[field] = obj[field].Value;
+            } else {
+              ret[field] = result[field];
+            }
           }
         }
 
+        if(successHandler !== undefined){
+          successHandler(xhr);
+        }
       } else{
-        throw new Error(xhr.statusText);
+        if (failureHandler !== undefined) {
+          failureHandler(xhr);
+        }
       }
     }
   };
@@ -91,14 +108,25 @@ Subscriber.getAll = function(arr, path){
           obj = result[i];
           for(var field in obj){
             if(fields.indexOf(field) !== -1){
-              tmp[field] = obj[field];
+              if (obj[field].Value !== undefined) {
+                tmp[field] = obj[field].Value;
+              }
+              else {
+                tmp[field] = obj[field];
+              }
             }
           }
 
           arr.push(tmp);
         }
+
+        if(successHandler !== undefined) {
+          successHandler(xhr);
+        }
       } else{
-        throw new Error(xhr.statusText);
+        if(failureHandler !== undefined) {
+          failureHandler(xhr);
+        }
       }
     }
   };
