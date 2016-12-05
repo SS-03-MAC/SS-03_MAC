@@ -74,7 +74,7 @@
         clogAllPosts = [];
         clogLatestPost = new Post();
 
-        Post.getAll(clogAllposts, MacAPI, function GetLatestPostSuccess(xhr) {
+        Post.getAll(clogAllPosts, MacAPI, function GetLatestPostSuccess(xhr) {
           console.log(clogAllPosts);
           console.log(xhr);
           clogAllPosts.sort(function comparePostStructure(a, b) {
