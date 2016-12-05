@@ -1,21 +1,21 @@
 CREATE TABLE comments (
-  Id int NOT NULL,
+  Id int IDENTITY(1,1) NOT NULL,
   CONSTRAINT PK_comments_ID PRIMARY KEY CLUSTERED (Id),
   
     
-      FullName nvarchar,
+      FullName nvarchar(MAX),
     
   
     
-      Email nvarchar,
+      Email nvarchar(MAX),
     
   
     
-      Website nvarchar,
+      Website nvarchar(MAX),
     
   
     
-      Body nvarchar,
+      Body nvarchar(MAX),
     
   
 

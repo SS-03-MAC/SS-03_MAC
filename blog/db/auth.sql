@@ -1,9 +1,9 @@
 CREATE TABLE auths (
-  Id int NOT NULL,
+  Id int IDENTITY(1,1) NOT NULL,
   CONSTRAINT PK_auths_ID PRIMARY KEY CLUSTERED (Id),
   
     
-      token nvarchar,
+      token nvarchar(MAX),
     
   
     

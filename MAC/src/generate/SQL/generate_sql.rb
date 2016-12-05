@@ -9,21 +9,21 @@ module Generation
 
     def initialize
       @types = {
-        'MAC.User.Password' => 'nvarchar',
-        'MAC.User.Email' => 'nvarchar',
-        'MAC.Types.String' => 'nvarchar',
+        'MAC.User.Password' => 'nvarchar(MAX)',
+        'MAC.User.Email' => 'nvarchar(MAX)',
+        'MAC.Types.String' => 'nvarchar(MAX)',
         'Boolean' => 'bit',
         'Currency' => 'money',
         'Date' => 'time',
         'DateTime' => 'datetime',
-        'Email' => 'nvarchar',
+        'Email' => 'nvarchar(MAX)',
         'Float' => 'float_t',
-        'MAC.Internet.IPAddress' => 'nvarchar',
+        'MAC.Internet.IPAddress' => 'nvarchar(MAX)',
         'Integer' => 'int_t',
-        'MAC.Internet.MACAddress' => 'nvarchar',
-        'MAC.User.PhoneNummber' => 'nvarchar',
+        'MAC.Internet.MACAddress' => 'nvarchar(MAX)',
+        'MAC.User.PhoneNummber' => 'nvarchar(MAX)',
         'Time' => 'time',
-        'Url' => 'nvarchar'
+        'Url' => 'nvarchar(MAX)'
       }
     end
 

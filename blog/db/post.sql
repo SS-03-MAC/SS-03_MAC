@@ -1,13 +1,13 @@
 CREATE TABLE posts (
-  Id int NOT NULL,
+  Id int IDENTITY(1,1) NOT NULL,
   CONSTRAINT PK_posts_ID PRIMARY KEY CLUSTERED (Id),
   
     
-      Title nvarchar,
+      Title nvarchar(MAX),
     
   
     
-      Body nvarchar,
+      Body nvarchar(MAX),
     
   
     
