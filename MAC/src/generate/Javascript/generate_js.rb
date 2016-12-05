@@ -1,4 +1,5 @@
 require_relative '../hash_generator.rb'
+require 'active_support/inflector'
 
 module Generation
   # This class alows us to generate javascript files for our framework
@@ -30,7 +31,11 @@ module Generation
       fields_str_quoted = ''
       in_hash['fields'].each do |type|
         fields_str += type['name'] + ', '
-        fields_str_quoted += '"' + type['name'] +'", '
+        if type.key?('relationship') and type['relationship'] == true
+          fields_str_quoted += '"' + type['name'].camelize() + 'Id", '
+        else
+          fields_str_quoted += '"' + type['name'] +'", '
+        end
       end
       out_hash = in_hash
       out_hash['fields_str_quoted'] = fields_str_quoted[0..-3]
