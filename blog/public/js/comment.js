@@ -72,7 +72,7 @@ Comment.get = function(id, ret, path, successHandler, failureHandler){
   xhr.onreadystatechange = function() {
     if(xhr.readyState == 4){
       if(xhr.status == 200){
-        var fields = ["id", "CreatedAt", "UpdatedAt", "FullName", "Email", "Website", "Body"];
+        var fields = ["Id", "CreatedAt", "UpdatedAt", "FullName", "Email", "Website", "Body"];
         var result = JSON.parse(xhr.responseText);
 
         for(var field in result){
@@ -106,7 +106,7 @@ Comment.getAll = function(arr, path, successHandler, failureHandler){
   xhr.onreadystatechange = function() {
     if(xhr.readyState == 4){
       if(xhr.status == 200){
-        var fields = ["id", "CreatedAt", "UpdatedAt", "FullName", "Email", "Website", "Body"];
+        var fields = ["Id", "CreatedAt", "UpdatedAt", "FullName", "Email", "Website", "Body"];
         var result = JSON.parse(xhr.responseText);
 
         for(var i = 0; i < result.length; i++){

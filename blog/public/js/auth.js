@@ -68,7 +68,7 @@ Auth.get = function(id, ret, path, successHandler, failureHandler){
   xhr.onreadystatechange = function() {
     if(xhr.readyState == 4){
       if(xhr.status == 200){
-        var fields = ["id", "CreatedAt", "UpdatedAt", "token", "OwnerId"];
+        var fields = ["Id", "CreatedAt", "UpdatedAt", "token", "OwnerId"];
         var result = JSON.parse(xhr.responseText);
 
         for(var field in result){
@@ -102,7 +102,7 @@ Auth.getAll = function(arr, path, successHandler, failureHandler){
   xhr.onreadystatechange = function() {
     if(xhr.readyState == 4){
       if(xhr.status == 200){
-        var fields = ["id", "CreatedAt", "UpdatedAt", "token", "OwnerId"];
+        var fields = ["Id", "CreatedAt", "UpdatedAt", "token", "OwnerId"];
         var result = JSON.parse(xhr.responseText);
 
         for(var i = 0; i < result.length; i++){

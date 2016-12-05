@@ -70,7 +70,7 @@ Post.get = function(id, ret, path, successHandler, failureHandler){
   xhr.onreadystatechange = function() {
     if(xhr.readyState == 4){
       if(xhr.status == 200){
-        var fields = ["id", "CreatedAt", "UpdatedAt", "Title", "Body", "PublishedAt"];
+        var fields = ["Id", "CreatedAt", "UpdatedAt", "Title", "Body", "PublishedAt"];
         var result = JSON.parse(xhr.responseText);
 
         for(var field in result){
@@ -104,7 +104,7 @@ Post.getAll = function(arr, path, successHandler, failureHandler){
   xhr.onreadystatechange = function() {
     if(xhr.readyState == 4){
       if(xhr.status == 200){
-        var fields = ["id", "CreatedAt", "UpdatedAt", "Title", "Body", "PublishedAt"];
+        var fields = ["Id", "CreatedAt", "UpdatedAt", "Title", "Body", "PublishedAt"];
         var result = JSON.parse(xhr.responseText);
 
         for(var i = 0; i < result.length; i++){
