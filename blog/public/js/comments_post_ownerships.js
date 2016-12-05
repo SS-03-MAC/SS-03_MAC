@@ -8,9 +8,9 @@ var CommentsPostOwnerships = function(post, comments){
   this.save = function(path){
     var xhr = new XMLHttpRequest();
     if(this.id == 0){
-      xhr.open("POST", "/" + path + "comments_post_ownerships/", true);
+      xhr.open("POST", path + "/comments_post_ownerships/", true);
     } else{
-      xhr.open("PATCH", "/" + path + "comments_post_ownerships/"+this.id);
+      xhr.open("PATCH", path + "/comments_post_ownerships/"+this.id);
     }
 
     xhr.setRequestHeader("Content-type", "application/json");
@@ -35,7 +35,7 @@ var CommentsPostOwnerships = function(post, comments){
     }
 
     var xhr = new XMLHttpRequest();
-    xhr.open("DELETE", "/" + path + "comments_post_ownerships/"+this.id, true);
+    xhr.open("DELETE", path + "/comments_post_ownerships/"+this.id, true);
     xhr.setRequestHeader("Content-type", "application/json");
     xhr.onreadystatechange = function() {
       if(xhr.readyState == 4){
@@ -50,20 +50,20 @@ var CommentsPostOwnerships = function(post, comments){
     xhr.send(null);
   };
 
-  
+
   this.getPost = function(path){
     var ret = new Post();
     Post.get(this.PostId, ret, path);
     return ret;
   };
-  
-  
+
+
   this.getComments = function(path){
     var ret = new Comments();
     Comments.get(this.CommentsId, ret, path);
     return ret;
   };
-  
+
 };
 
 CommentsPostOwnerships.get = function(id, ret, path){
@@ -87,7 +87,7 @@ CommentsPostOwnerships.get = function(id, ret, path){
     }
   };
 
-  xhr.open("GET", "/" + path + "comments_post_ownerships/"+id, true);
+  xhr.open("GET", path + "/comments_post_ownerships/"+id, true);
   xhr.send(null);
 };
 
@@ -117,6 +117,6 @@ CommentsPostOwnerships.getAll = function(arr, path){
     }
   };
 
-  xhr.open("GET", "/" + path + "comments_post_ownerships.json", true);
+  xhr.open("GET", path + "/comments_post_ownerships.json", true);
   xhr.send(null);
 };

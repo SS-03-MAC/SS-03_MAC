@@ -10,9 +10,9 @@ var Comment = function(FullName, Email, Website, Body){
   this.save = function(path){
     var xhr = new XMLHttpRequest();
     if(this.id == 0){
-      xhr.open("POST", "/" + path + "comments/", true);
+      xhr.open("POST", path + "/comments/", true);
     } else{
-      xhr.open("PATCH", "/" + path + "comments/"+this.id);
+      xhr.open("PATCH", path + "/comments/"+this.id);
     }
 
     xhr.setRequestHeader("Content-type", "application/json");
@@ -37,7 +37,7 @@ var Comment = function(FullName, Email, Website, Body){
     }
 
     var xhr = new XMLHttpRequest();
-    xhr.open("DELETE", "/" + path + "comments/"+this.id, true);
+    xhr.open("DELETE", path + "/comments/"+this.id, true);
     xhr.setRequestHeader("Content-type", "application/json");
     xhr.onreadystatechange = function() {
       if(xhr.readyState == 4){
@@ -52,10 +52,10 @@ var Comment = function(FullName, Email, Website, Body){
     xhr.send(null);
   };
 
-  
-  
-  
-  
+
+
+
+
 };
 
 Comment.get = function(id, ret, path){
@@ -79,7 +79,7 @@ Comment.get = function(id, ret, path){
     }
   };
 
-  xhr.open("GET", "/" + path + "comments/"+id, true);
+  xhr.open("GET", path + "/comments/"+id, true);
   xhr.send(null);
 };
 
@@ -109,6 +109,6 @@ Comment.getAll = function(arr, path){
     }
   };
 
-  xhr.open("GET", "/" + path + "comments.json", true);
+  xhr.open("GET", path + "/comments.json", true);
   xhr.send(null);
 };

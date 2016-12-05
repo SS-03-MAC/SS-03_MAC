@@ -8,9 +8,9 @@ var PostOwnership = function(post, user){
   this.save = function(path){
     var xhr = new XMLHttpRequest();
     if(this.id == 0){
-      xhr.open("POST", "/" + path + "post_ownerships/", true);
+      xhr.open("POST", path + "/post_ownerships/", true);
     } else{
-      xhr.open("PATCH", "/" + path + "post_ownerships/"+this.id);
+      xhr.open("PATCH", path + "/post_ownerships/"+this.id);
     }
 
     xhr.setRequestHeader("Content-type", "application/json");
@@ -35,7 +35,7 @@ var PostOwnership = function(post, user){
     }
 
     var xhr = new XMLHttpRequest();
-    xhr.open("DELETE", "/" + path + "post_ownerships/"+this.id, true);
+    xhr.open("DELETE", path + "/post_ownerships/"+this.id, true);
     xhr.setRequestHeader("Content-type", "application/json");
     xhr.onreadystatechange = function() {
       if(xhr.readyState == 4){
@@ -87,7 +87,7 @@ PostOwnership.get = function(id, ret, path){
     }
   };
 
-  xhr.open("GET", "/" + path + "post_ownerships/"+id, true);
+  xhr.open("GET", path + "/post_ownerships/"+id, true);
   xhr.send(null);
 };
 
@@ -117,6 +117,6 @@ PostOwnership.getAll = function(arr, path){
     }
   };
 
-  xhr.open("GET", "/" + path + "post_ownerships.json", true);
+  xhr.open("GET", path + "/post_ownerships.json", true);
   xhr.send(null);
 };
