@@ -15,21 +15,22 @@ TLSConfiguration *tlsConfig;
 
 int main(int argc, char *argv[]) {
   initTls();
-  std::string basePath;
+  std::string configPath;
   eHTTP::server::server *server;
   eHTTP::server::settings *settings;
+  if (argc > 1) {
+    configPath = argv[1];
+  } else {
+    configPath = "eHTTP/config.yaml";
+  }
   try {
-    settings = new eHTTP::server::settings("eHTTP/config.yaml");
+    settings = new eHTTP::server::settings(configPath);
   } catch (const char *err) {
     std::cout << "Error loading settings: " << err << std::endl;
     return 1;
   }
 
-  if (argc > 1) {
-    basePath = argv[1];
-  } else {
-    basePath = "c:";
-  }
+
   /*server = new eHTTP::server::server(8000, basePath);
   server->addDefaultDocument("test2.txt");
 
