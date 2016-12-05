@@ -14,6 +14,7 @@
 #include <unistd.h>
 #include <iostream>
 #include <cstring>
+#include <errno.h>
 
 #include "pexec.h"
 
@@ -36,6 +37,7 @@ int pexec(const char *file_name, int pipefd[3], char **argv, char **envp) {
   fork_status = fork();
   if (fork_status == -1) {
     // Fork failed
+    std::cout << "Fork failed in pexec. errno: " << errno << std::endl;
     return -1;
   }
   if (fork_status != 0) {
