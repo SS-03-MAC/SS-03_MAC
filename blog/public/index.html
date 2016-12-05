@@ -68,6 +68,7 @@
     <script type="text/javascript" src="js/jquery-3.1.1.js"></script>
     <script type="text/javascript" src="js/materialize.min.js"></script>
     <script type="text/javascript" src="js/post.js"></script>
+    <script type="text/javascript" src="js/subscriber.js"></script>
     <script type="text/javascript">
       $(document).ready(function() {
         clogAllPosts = [];
@@ -115,6 +116,18 @@
           }
         });
       });
+
+      function events_subscribe(event) {
+        event.preventDefault();
+
+        var NewSubscriber = new Subscriber();
+        NewSubscriber.Email = $('#home-email').val();
+        NewSubscriber.save(MacAPI, function successHandler() {
+           Materialize.toast('You have been subscribed!', 4000);
+        }, function failureHandler() {
+           Materialize.toast('Temporary error subscribing.', 4000);
+        });
+      }
     </script>
   </body>
 </html>

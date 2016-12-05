@@ -106,6 +106,18 @@
           }
         });
       });
+
+      function events_subscribe(event) {
+        event.preventDefault();
+
+        var NewSubscriber = new Subscriber();
+        NewSubscriber.Email = $('#home-email').val();
+        NewSubscriber.save(MacAPI, function successHandler() {
+           Materialize.toast('You have been subscribed!', 4000);
+        }, function failureHandler() {
+           Materialize.toast('Temporary error subscribing.', 4000);
+        });
+      }
     </script>
   </body>
 </html>
