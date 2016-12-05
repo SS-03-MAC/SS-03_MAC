@@ -12,32 +12,32 @@ namespace MAC.Models {
     
 
       
-      [DatabaseField("post")]
-      public int PostId { get; set; }
-      public virtual Post A_Post {
-        get {
-          return Post.Get(PostId);
-        }
+      [DatabaseField("PostId")]
+      public Integer PostId { get; set; }
+      //public virtual Post A_Post {
+      //  get {
+      //    return Post.Get(PostId);
+      //  }
 
-        set {
-          PostId = (int) value.Id;
-        }
-      }
+      //  set {
+      //    PostId = (int) value.Id;
+      //  }
+      //}
       
     
 
       
-      [DatabaseField("comments")]
-      public int CommentsId { get; set; }
-      public virtual Comment A_Comments {
-        get {
-          return Comment.Get(CommentsId);
-        }
+      [DatabaseField("CommentsId")]
+      public Integer CommentsId { get; set; }
+      //public virtual Comment A_Comments {
+      //  get {
+      //    return Comment.Get(CommentsId);
+      //  }
 
-        set {
-          CommentsId = (int) value.Id;
-        }
-      }
+      //  set {
+      //    CommentsId = (int) value.Id;
+      //  }
+      //}
       
     
   }

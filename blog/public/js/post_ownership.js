@@ -1,6 +1,6 @@
 var PostOwnership = function(post, user){
-  this.postId = post;
-  this.userId = user;
+  this.PostId = post;
+  this.UserId = user;
   this.Id = 0;
   this.CreatedAt = Date.now();
   this.UpdatedAt = Date.now();
