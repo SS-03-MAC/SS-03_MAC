@@ -108,7 +108,7 @@ var <%= name.camelize %> = function(<%= fields_str %>){
   xhr.send(null);
 };
 
-<%= name.camelize %>.getAll = function(arr, path){
+<%= name.camelize %>.getAll = function(arr, path, successHandler, failureHandler){
   var xhr = new XMLHttpRequest();
 
   xhr.onreadystatechange = function() {

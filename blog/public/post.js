@@ -98,7 +98,7 @@ Post.get = function(id, ret, path, successHandler, failureHandler){
   xhr.send(null);
 };
 
-Post.getAll = function(arr, path){
+Post.getAll = function(arr, path, successHandler, failureHandler){
   var xhr = new XMLHttpRequest();
 
   xhr.onreadystatechange = function() {

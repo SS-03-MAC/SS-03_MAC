@@ -100,7 +100,7 @@ Comment.get = function(id, ret, path, successHandler, failureHandler){
   xhr.send(null);
 };
 
-Comment.getAll = function(arr, path){
+Comment.getAll = function(arr, path, successHandler, failureHandler){
   var xhr = new XMLHttpRequest();
 
   xhr.onreadystatechange = function() {
