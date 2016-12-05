@@ -8,9 +8,9 @@ var CarOwnership = function(car, user){
   this.save = function(path){
     var xhr = new XMLHttpRequest();
     if(this.id == 0){
-      xhr.open("POST", "/" + path + "car_ownerships/", true);
+      xhr.open("POST", path + "/car_ownerships/", true);
     } else{
-      xhr.open("PATCH", "/" + path + "car_ownerships/"+this.id);
+      xhr.open("PATCH", path + "/car_ownerships/"+this.id);
     }
 
     xhr.setRequestHeader("Content-type", "application/json");
@@ -35,7 +35,7 @@ var CarOwnership = function(car, user){
     }
 
     var xhr = new XMLHttpRequest();
-    xhr.open("DELETE", "/" + path + "car_ownerships/"+this.id, true);
+    xhr.open("DELETE", path + "/car_ownerships/"+this.id, true);
     xhr.setRequestHeader("Content-type", "application/json");
     xhr.onreadystatechange = function() {
       if(xhr.readyState == 4){
@@ -87,7 +87,7 @@ CarOwnership.get = function(id, ret, path){
     }
   };
 
-  xhr.open("GET", "/" + path + "car_ownerships/"+id, true);
+  xhr.open("GET", path + "/car_ownerships/"+id, true);
   xhr.send(null);
 };
 
@@ -117,6 +117,6 @@ CarOwnership.getAll = function(arr, path){
     }
   };
 
-  xhr.open("GET", "/" + path + "car_ownerships.json", true);
+  xhr.open("GET", path + "/car_ownerships.json", true);
   xhr.send(null);
 };

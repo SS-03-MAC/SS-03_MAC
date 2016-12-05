@@ -9,9 +9,9 @@ var User = function(Password, FullName, City){
   this.save = function(path){
     var xhr = new XMLHttpRequest();
     if(this.id == 0){
-      xhr.open("POST", "/" + path + "users/", true);
+      xhr.open("POST", path + "/users/", true);
     } else{
-      xhr.open("PATCH", "/" + path + "users/"+this.id);
+      xhr.open("PATCH", path + "/users/"+this.id);
     }
 
     xhr.setRequestHeader("Content-type", "application/json");
@@ -36,7 +36,7 @@ var User = function(Password, FullName, City){
     }
 
     var xhr = new XMLHttpRequest();
-    xhr.open("DELETE", "/" + path + "users/"+this.id, true);
+    xhr.open("DELETE", path + "/users/"+this.id, true);
     xhr.setRequestHeader("Content-type", "application/json");
     xhr.onreadystatechange = function() {
       if(xhr.readyState == 4){
@@ -77,7 +77,7 @@ User.get = function(id, ret, path){
     }
   };
 
-  xhr.open("GET", "/" + path + "users/"+id, true);
+  xhr.open("GET", path + "/users/"+id, true);
   xhr.send(null);
 };
 
@@ -107,6 +107,6 @@ User.getAll = function(arr, path){
     }
   };
 
-  xhr.open("GET", "/" + path + "users.json", true);
+  xhr.open("GET", path + "/users.json", true);
   xhr.send(null);
 };

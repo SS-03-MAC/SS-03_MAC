@@ -13,9 +13,9 @@ var <%= name.camelize %> = function(<%= fields_str %>){
   this.save = function(path){
     var xhr = new XMLHttpRequest();
     if(this.id == 0){
-      xhr.open("POST", <%= "\"/\" + path + \"" + name.pluralize + "/\"" %>, true);
+      xhr.open("POST", <%= "path + \"/" + name.pluralize + "/\"" %>, true);
     } else{
-      xhr.open("PATCH", <%= "\"/\" + path + \"" + name.pluralize + "/\"+"%>this.id);
+      xhr.open("PATCH", <%= "path + \"/" + name.pluralize + "/\"+"%>this.id);
     }
 
     xhr.setRequestHeader("Content-type", "application/json");
@@ -40,7 +40,7 @@ var <%= name.camelize %> = function(<%= fields_str %>){
     }
 
     var xhr = new XMLHttpRequest();
-    xhr.open("DELETE", <%= "\"/\" + path + \"" + name.pluralize + "/\"+" %>this.id, true);
+    xhr.open("DELETE", <%= "path + \"/" + name.pluralize + "/\"+" %>this.id, true);
     xhr.setRequestHeader("Content-type", "application/json");
     xhr.onreadystatechange = function() {
       if(xhr.readyState == 4){
@@ -87,7 +87,7 @@ var <%= name.camelize %> = function(<%= fields_str %>){
     }
   };
 
-  xhr.open("GET", <%= "\"/\" + path + \"" + name.pluralize + "/\"+" %>id, true);
+  xhr.open("GET", <%= "path + \"/" + name.pluralize + "/\"+" %>id, true);
   xhr.send(null);
 };
 
@@ -117,6 +117,6 @@ var <%= name.camelize %> = function(<%= fields_str %>){
     }
   };
 
-  xhr.open("GET", <%="\"/\" + path + \"" + name.pluralize + ".json\"" %>, true);
+  xhr.open("GET", <%="path + \"/" + name.pluralize + ".json\"" %>, true);
   xhr.send(null);
 };
