@@ -107,17 +107,15 @@ public:
     return 0;
   };
 
-  int pbackfail (int c) {
+  int pbackfail(int c) {
     return sputbackc(c);
-    //return EOF;
+    // return EOF;
   }
 };
 
 class TLSServerStream : public std::iostream {
 public:
-
-  TLSServerStream(TLSServer *s) : std::iostream(new TLSServerStreamBuf(s)){
-  };
+  TLSServerStream(TLSServer *s) : std::iostream(new TLSServerStreamBuf(s)){};
 
   ~TLSServerStream(){};
 };

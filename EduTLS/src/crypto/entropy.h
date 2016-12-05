@@ -69,7 +69,7 @@ static inline void edutls_rand_bytes(uint8_t *output, size_t count) {
 #include <syscall.h>
 #include <unistd.h>
 
-#ifdef NOTDEF //SYS_getrandom
+#ifdef NOTDEF // SYS_getrandom
 
 static inline void edutls_rand_check(uint8_t *buffer, int result, int err) {
   if (result == -1) {
