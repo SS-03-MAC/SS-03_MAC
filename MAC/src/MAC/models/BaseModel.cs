@@ -12,7 +12,7 @@ namespace MAC.Models
     /// <summary>
     /// Base model that all MAC models should be dertived from
     /// </summary>
-    public abstract class BaseModel<T> : BaseModel
+    public abstract class BaseModel<T> : BaseModel, IBaseModel
     {
         /// <summary>
         ///  Blank contrustor
@@ -156,7 +156,7 @@ namespace MAC.Models
         /// Saves the record to the database
         /// </summary>
         /// <returns>If the record was saved to the database</returns>
-        public bool Save()
+        public virtual bool Save()
         {
             if (!Validate())
             {

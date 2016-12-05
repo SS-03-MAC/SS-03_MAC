@@ -1,13 +1,15 @@
-var Auth = function(token, OnwerId){
+var Auth = function(token, OnwerId, user, password){
   this.Token = token;
   this.OnwerId = OnwerId;
   this.id = 0;
   this.CreatedAt = Date.now();
   this.UpdatedAt = Date.now();
+  this.User = user;
+  this.Password = password;
 
-  this.save = function(path){
+  this.save = function(path, success) {
     var xhr = new XMLHttpRequest();
-    if(this.id == 0){
+    if (this.id == 0) {
       xhr.open("POST", "/" + path + "auths/", true);
     } else{
       xhr.open("PATCH", "/" + path + "auths/"+this.id);
@@ -24,6 +26,10 @@ var Auth = function(token, OnwerId){
         }
       }
     };
+
+    if (success !== undefined) {
+      xhr.onreadystatechange = success;
+    }
 
     var data = JSON.stringify(this);
     xhr.send(data);
@@ -50,8 +56,8 @@ var Auth = function(token, OnwerId){
     xhr.send(null);
   };
 
-  
-  
+
+
 };
 
 Auth.get = function(id, ret, path){
