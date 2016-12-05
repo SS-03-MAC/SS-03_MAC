@@ -2,16 +2,16 @@ var Post = function(Title, Body, PublishedAt){
   this.Title = Title;
   this.Body = Body;
   this.PublishedAt = PublishedAt;
-  this.id = 0;
+  this.Id = 0;
   this.CreatedAt = Date.now();
   this.UpdatedAt = Date.now();
 
-  this.save = function(path, success, failure){
+  this.save = function(path, successHandler, failureHandler){
     var xhr = new XMLHttpRequest();
-    if(this.id == 0){
+    if(this.Id == 0){
       xhr.open("POST", path + "/posts/", true);
     } else{
-      xhr.open("PATCH", path + "/posts/"+this.id);
+      xhr.open("PATCH", path + "/posts/"+this.Id);
     }
 
     xhr.setRequestHeader("Content-type", "application/json");
@@ -19,18 +19,13 @@ var Post = function(Title, Body, PublishedAt){
     xhr.onreadystatechange = function(){
       if(xhr.readyState == 4){
         if(xhr.status == 200){
-
-          if (success !== undefined) {
-            success(xhr);
+          if(successHandler !== undefined) {
+            successHandler(xhr);
           }
-
-          console.log(xhr.responseText);
         } else{
-
-          if (failure !== undefined) {
-            failure(xhr);
+          if(failureHandler !== undefined) {
+            failureHandler(xhr);
           }
-          throw new Error(xhr.statusText);
         }
       }
     };
@@ -39,30 +34,24 @@ var Post = function(Title, Body, PublishedAt){
     xhr.send(data);
   };
 
-  this.delete = function(path, success, failure){
-    if(this.id == 0){
+  this.delete = function(path, successHandler, failureHandler){
+    if(this.Id == 0){
       return; //never saved to database, don't have to do anything
     }
 
     var xhr = new XMLHttpRequest();
-    xhr.open("DELETE", path + "/posts/"+this.id, true);
+    xhr.open("DELETE", path + "/posts/"+this.Id, true);
     xhr.setRequestHeader("Content-type", "application/json");
     xhr.onreadystatechange = function() {
       if(xhr.readyState == 4){
         if(xhr.status == 200){
-          console.log(xhr.responseText);
-
-          if (success !== undefined) {
-            success(xhr);
+          if(successHandler !== undefined) {
+            successHandler(xhr);
           }
-
         } else{
-
-          if (failure !== undefined) {
-            failure(xhr);
+          if(failureHandler !== undefined) {
+            failureHandler(xhr);
           }
-
-          throw new Error(xhr.statusText);
         }
       }
     };
@@ -70,12 +59,12 @@ var Post = function(Title, Body, PublishedAt){
     xhr.send(null);
   };
 
-
-
-
+  
+  
+  
 };
 
-Post.get = function(id, ret, path, success, failure){
+Post.get = function(id, ret, path, successHandler, failureHandler){
   var xhr = new XMLHttpRequest();
 
   xhr.onreadystatechange = function() {
@@ -86,21 +75,21 @@ Post.get = function(id, ret, path, success, failure){
 
         for(var field in result){
           if(fields.indexOf(field) !== -1){
-            ret[field] = result[field];
+            if(obj[field].Value !== undefined) {
+              ret[field] = obj[field].Value;
+            } else {
+              ret[field] = result[field];
+            }
           }
         }
 
-        if (success !== undefined) {
-          success(xhr);
+        if(successHandler !== undefined){
+          successHandler(xhr);
         }
-
       } else{
-
-        if (failure !== undefined) {
-          failure(xhr);
+        if (failureHandler !== undefined) {
+          failureHandler(xhr);
         }
-
-        throw new Error(xhr.statusText);
       }
     }
   };
@@ -109,7 +98,7 @@ Post.get = function(id, ret, path, success, failure){
   xhr.send(null);
 };
 
-Post.getAll = function(arr, path, success){
+Post.getAll = function(arr, path){
   var xhr = new XMLHttpRequest();
 
   xhr.onreadystatechange = function() {
@@ -123,18 +112,25 @@ Post.getAll = function(arr, path, success){
           obj = result[i];
           for(var field in obj){
             if(fields.indexOf(field) !== -1){
-              tmp[field] = obj[field];
+              if (obj[field].Value !== undefined) {
+                tmp[field] = obj[field].Value;
+              }
+              else {
+                tmp[field] = obj[field];
+              }
             }
           }
 
           arr.push(tmp);
         }
 
-        if (success !== undefined) {
-          success(xhr);
+        if(successHandler !== undefined) {
+          successHandler(xhr);
         }
       } else{
-        throw new Error(xhr.statusText);
+        if(failureHandler !== undefined) {
+          failureHandler(xhr);
+        }
       }
     }
   };
