@@ -13,31 +13,31 @@ namespace MAC.Models {
 
       
       [DatabaseField("post")]
-      public int PostId { get; set; }
-      public virtual Post A_Post {
-        get {
-          return Post.Get(PostId);
-        }
+      public Integer PostId { get; set; }
+      //public virtual Post A_Post {
+      //  get {
+      //    return Post.Get(PostId);
+      //  }
 
-        set {
-          PostId = (int) value.Id;
-        }
-      }
+      //  set {
+      //    PostId = (int) value.Id;
+      //  }
+      //}
       
     
 
       
       [DatabaseField("user")]
-      public int UserId { get; set; }
-      public virtual User A_User {
-        get {
-          return User.Get(UserId);
-        }
+      public Integer UserId { get; set; }
+      //public virtual User A_User {
+      //  get {
+      //    return User.Get(UserId);
+      //  }
 
-        set {
-          UserId = (int) value.Id;
-        }
-      }
+      //  set {
+      //    UserId = (int) value.Id;
+      //  }
+      //}
       
     
   }
