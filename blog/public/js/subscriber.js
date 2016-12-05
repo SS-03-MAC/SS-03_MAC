@@ -103,6 +103,6 @@ Subscriber.getAll = function(arr, path){
     }
   };
 
-  xhr.open("GET", path + "/subscribers.json", true);
+  xhr.open("GET", path + "/subscribers", true);
   xhr.send(null);
 };

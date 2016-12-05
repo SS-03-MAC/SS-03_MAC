@@ -107,6 +107,6 @@ User.getAll = function(arr, path){
     }
   };
 
-  xhr.open("GET", path + "/users.json", true);
+  xhr.open("GET", path + "/users", true);
   xhr.send(null);
 };

@@ -117,6 +117,6 @@ CommentsPostOwnerships.getAll = function(arr, path){
     }
   };
 
-  xhr.open("GET", path + "/comments_post_ownerships.json", true);
+  xhr.open("GET", path + "/comments_post_ownerships", true);
   xhr.send(null);
 };

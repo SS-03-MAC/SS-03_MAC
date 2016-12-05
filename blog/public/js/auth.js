@@ -120,6 +120,6 @@ Auth.getAll = function(arr, path, successHandler){
     }
   };
 
-  xhr.open("GET", path + "/auths.json", true);
+  xhr.open("GET", path + "/auths", true);
   xhr.send(null);
 };

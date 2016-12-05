@@ -139,6 +139,6 @@ Post.getAll = function(arr, path, success){
     }
   };
 
-  xhr.open("GET", path + "/posts.json", true);
+  xhr.open("GET", path + "/posts", true);
   xhr.send(null);
 };

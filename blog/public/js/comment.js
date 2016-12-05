@@ -109,6 +109,6 @@ Comment.getAll = function(arr, path){
     }
   };
 
-  xhr.open("GET", path + "/comments.json", true);
+  xhr.open("GET", path + "/comments", true);
   xhr.send(null);
 };
