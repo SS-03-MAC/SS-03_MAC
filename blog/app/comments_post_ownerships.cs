@@ -13,7 +13,7 @@ namespace MAC.Models {
 
       
       [DatabaseField("post")]
-      public int PostId { get; set; }
+      public Integer PostId { get; set; }
       public virtual Post A_Post {
         get {
           return Post.Get(PostId);
@@ -28,7 +28,7 @@ namespace MAC.Models {
 
       
       [DatabaseField("comments")]
-      public int CommentsId { get; set; }
+      public Integer CommentsId { get; set; }
       public virtual Comments A_Comments {
         get {
           return Comments.Get(CommentsId);
