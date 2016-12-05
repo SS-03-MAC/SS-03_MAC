@@ -95,7 +95,16 @@
 
           console.log(clogAllPosts);
           clogAllPosts.reverse();
-          clogLatestPost = clogAllPosts[0];
+          var current = 0;
+          clogLatestPost = clogAllPosts[current];
+
+          while (Date.parse(clogLatestPost.PublishedAt) < Date.now()) {
+            current += 1;
+            if (current >= clogAllPosts.length) {
+              break;
+            }
+            clogLatestPost = clogAllPosts[current];
+          }
           if (Date.parse(clogLatestPost.PublishedAt) < Date.now()) {
             console.log(clogLatestPost);
             $('.clog-latest-link').html(clogLatestPost.Title);
