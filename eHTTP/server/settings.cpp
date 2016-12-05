@@ -12,7 +12,10 @@
 //===----------------------------------------------------------------------===//
 
 #include <yaml-cpp/yaml.h>
+#include <iostream>
 #include "settings.h"
+#include "../../EduTLS/src/encoding/base64.h"
+#include "../../EduTLS/src/encoding/hex.h"
 
 using namespace eHTTP::server;
 
@@ -91,6 +94,10 @@ settings::settings(std::string yamlConfigPath) {
       throw "defaultDocuments must be a sequence or scalar.";
     }
   }
+  if (config["tls"]) {
+    YAML::Node tlsNode = config["tls"];
+    loadTls(tlsNode);
+  }
 }
 
 bool settings::getScriptForPath(httpParsing::AbsPath &path, cgiEndpoint_t &cgiEndpoint) {
@@ -101,4 +108,66 @@ bool settings::getScriptForPath(httpParsing::AbsPath &path, cgiEndpoint_t &cgiEn
     }
   }
   return false;
+}
+uint32_t settings::getBase64ByteLen(std::string base64) {
+  uint32_t len;
+  if (base64.length() < 4) {
+    return 0;
+  }
+  len = (uint32_t) base64.length() / 4 * 3;
+  if (base64[base64.length() - 1] == '=') {
+    len--;
+  }
+  if (base64[base64.length() - 2] == '=') {
+    len--;
+  }
+  return len;
+}
+void settings::loadTls(YAML::Node &tlsNode) {
+  tlsConfiguration = new TLSConfiguration();
+  std::string certString;
+  uint8_t n[256];
+  std::string nString;
+  uint8_t e[3];
+  std::string eString;
+  uint8_t d[256];
+  std::string dString;
+  if (!tlsNode["cert"]) {
+    throw "TLS config missing cert.";
+  }
+  certString = tlsNode["cert"].as<std::string>();
+  if (!tlsNode["n"]) {
+    throw "TLS config missing n.";
+  }
+  nString = tlsNode["n"].as<std::string>();
+  if (!tlsNode["e"]) {
+    throw "TLS config missing e.";
+  }
+  eString = tlsNode["e"].as<std::string>();
+  if (!tlsNode["d"]) {
+    throw "TLS config missing d.";
+  }
+  dString = tlsNode["d"].as<std::string>();
+
+  tlsConfiguration->debug = true;
+  tlsConfiguration->cert.certificate_length = getBase64ByteLen(certString);
+  tlsConfiguration->cert.certificate_data = (uint8_t *) malloc(sizeof(uint8_t) * tlsConfiguration->cert.certificate_length);
+  fromBase64(tlsConfiguration->cert.certificate_data, (char *) certString.c_str(), certString.length());
+  fromHex((uint8_t *) &n, (char *) nString.c_str(), nString.length());
+  fromHex((uint8_t *) &e, (char *) eString.c_str(), eString.length());
+  fromHex((uint8_t *) &d, (char *) dString.c_str(), dString.length());
+
+  mpz_t key_n;
+  mpz_init(key_n);
+  mpz_import(key_n, 256, 1, sizeof(uint8_t), 0, 0, n);
+  mpz_t key_e;
+  mpz_init(key_e);
+  mpz_import(key_e, 3, 1, sizeof(uint8_t), 0, 0, e);
+  mpz_t key_d;
+  mpz_init(key_d);
+  mpz_import(key_d, 256, 1, sizeof(uint8_t), 0, 0, d);
+
+  tlsConfiguration->key.exponent(key_e);
+  tlsConfiguration->key.priv(key_d);
+  tlsConfiguration->key.modulus(key_n);
 }
