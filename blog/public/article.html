@@ -162,8 +162,8 @@
         NewComment.save(MacAPI, function CommentSuccess() {
           console.log(NewComment.Id);
           NewCommentPostOwnerships = new CommentPostOwnerships();
-          NewCommentPostOwnerships.PostId = clogPostId;
-          NewCommentPostOwnerships.CommentId = NewComment.Id;
+          NewCommentPostOwnerships.PostId = parseInt(clogPostId);
+          NewCommentPostOwnerships.CommentId = parseInt(NewComment.Id);
           NewCommentPostOwnerships.save(MacAPI, function LinkSuccess() {
             window.location.href = window.location.href;
           }, function LinkFailure() {
