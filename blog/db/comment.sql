@@ -18,4 +18,7 @@ CREATE TABLE comments (
       Body nvarchar,
     
   
+
+  CreatedAt DateTime,
+  UpdatedAt DateTime
 );

@@ -5,13 +5,20 @@ CREATE TABLE post_ownerships (
     
       PostId int,
       CONSTRAINT post_ownerships_post FOREIGN KEY (PostId)
-        REFERENCES posts (Id),
+        REFERENCES post (Id)
+          ON DELETE NO ACTION
+          ON UPDATE NO ACTION
     
   
     
       UserId int,
       CONSTRAINT post_ownerships_user FOREIGN KEY (UserId)
-        REFERENCES Users (Id)
+        REFERENCES user (Id)
+          ON DELETE NO ACTION
+          ON UPDATE NO ACTION
     
   
+
+  CreatedAt DateTime,
+  UpdatedAt DateTime
 );

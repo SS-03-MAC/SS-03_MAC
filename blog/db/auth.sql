@@ -10,4 +10,7 @@ CREATE TABLE auths (
       OwnerId int_t,
     
   
+
+  CreatedAt DateTime,
+  UpdatedAt DateTime
 );

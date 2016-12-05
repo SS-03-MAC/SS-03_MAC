@@ -14,4 +14,7 @@ CREATE TABLE posts (
       PublishedAt datetime,
     
   
+
+  CreatedAt DateTime,
+  UpdatedAt DateTime
 );

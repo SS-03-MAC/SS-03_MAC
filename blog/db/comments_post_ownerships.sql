@@ -5,13 +5,20 @@ CREATE TABLE comments_post_ownerships (
     
       PostId int,
       CONSTRAINT comments_post_ownerships_post FOREIGN KEY (PostId)
-        REFERENCES post (Id),
+        REFERENCES post (Id)
+          ON DELETE NO ACTION
+          ON UPDATE NO ACTION
     
   
     
       CommentsId int,
       CONSTRAINT comments_post_ownerships_comments FOREIGN KEY (CommentsId)
         REFERENCES comments (Id)
+          ON DELETE NO ACTION
+          ON UPDATE NO ACTION
     
   
+
+  CreatedAt DateTime,
+  UpdatedAt DateTime
 );
