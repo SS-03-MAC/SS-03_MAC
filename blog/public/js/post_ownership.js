@@ -124,7 +124,7 @@ PostOwnership.getAll = function(arr, path, successHandler, failureHandler){
         var result = JSON.parse(xhr.responseText);
 
         for(var i = 0; i < result.length; i++){
-          tmp = new Post_ownership();
+          tmp = new PostOwnership();
           obj = result[i];
           for(var field in obj){
             if(fields.indexOf(field) !== -1){
