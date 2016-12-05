@@ -13,7 +13,7 @@ namespace MAC.Models {
 
       <% if field.key?("relationship") && field["relationship"] == true  %>
       [DatabaseField("<%= field["name"] %>")]
-      public int <%= field["name"].camelize + "Id" %> { get; set; }
+      public Integer <%= field["name"].camelize + "Id" %> { get; set; }
       public virtual <%= field["name"].camelize %> <%= "A_" + field["name"].camelize %> {
         get {
           return <%= field["name"].camelize %>.Get(<%= field["name"].camelize(:upper) + "Id" %>);

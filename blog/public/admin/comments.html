@@ -59,7 +59,7 @@
     <script type="text/javascript" src="../js/materialize.min.js"></script>
     <script type="text/javascript" src="../js/comment.js"></script>
     <script type="text/javascript" src="../js/post.js"></script>
-    <script type="text/javascript" src="../js/comments_post_ownerships.js"></script>
+    <script type="text/javascript" src="../js/comment_post_ownerships.js"></script>
     <script type="text/javascript">
       $( document ).ready(function() {
         var clogAllComments = [];
@@ -75,14 +75,14 @@
         });
 
         var clogAllCommentPostRelationships = [];
-        CommentsPostOwnerships.getAll(clogAllCommentPostRelationships, MacAPI);
+        CommentPostOwnerships.getAll(clogAllCommentPostRelationships, MacAPI);
 
         var clogAllPosts = [];
         Post.getAll(clogAllPosts, MacAPI);
 
         for (var j in clogAllCommentPostRelationships) {
           for (var i in clogAllPosts) {
-            if (clogAllComments[i].Id == clogAllCommentPostRelationships[j].CommentsId) {
+            if (clogAllComments[i].Id == clogAllCommentPostRelationships[j].CommentId) {
               clogAllComments[i].PostId = clogAllCommentPostRelationships[j].PostIdf;
               clogAllComments[i].RelationshipID = j;
 
@@ -108,8 +108,8 @@
 
       function EventDeleteComment(id, RelationshipID) {
         if (confirm("Are you sure you want to delete post id: " + id + "?")) {
-          clogComment = new CommentsPostOwnerships();
-          CommentsPostOwnerships.get(RelationshipID, clogComment, MacAPI, function DeleteCommentGetSuccess(xhr) {
+          clogComment = new CommentPostOwnerships();
+          CommentPostOwnerships.get(RelationshipID, clogComment, MacAPI, function DeleteCommentGetSuccess(xhr) {
             clogPost.delete(MacAPI, function DeleteCommentDeleteSuccess(xhr) {
               window.location.href="comments.html";
             }, function DeleteCommentDeleteFailure(xhr) {

@@ -6,9 +6,9 @@ using MAC.Models.Attributes;
 using MAC.Models.Attributes.Validations;
 
 namespace MAC.Models {
-  [TableName("comments_post_ownerships")]
-  [UrlName("comments_post_ownerships")]
-  public partial class CommentsPostOwnerships : BaseModel<CommentsPostOwnerships> {
+  [TableName("comment_post_ownerships")]
+  [UrlName("comment_post_ownerships")]
+  public partial class CommentPostOwnerships : BaseModel<CommentPostOwnerships> {
     
 
       
@@ -27,15 +27,15 @@ namespace MAC.Models {
     
 
       
-      [DatabaseField("comments")]
-      public Integer CommentsId { get; set; }
-      public virtual Comments A_Comments {
+      [DatabaseField("comment")]
+      public Integer CommentId { get; set; }
+      public virtual Comment A_Comment {
         get {
-          return Comments.Get(CommentsId);
+          return Comment.Get(CommentId);
         }
 
         set {
-          CommentsId = (int) value.Id;
+          CommentId = (int) value.Id;
         }
       }
       

@@ -52,7 +52,7 @@
       unique: false
 
 -
-  name: comments_post_ownerships
+  name: comment_post_ownerships
   fields:
     -
       name: post
@@ -60,9 +60,9 @@
       table: post
       unique: false
     -
-      name: comments
+      name: comment
       relationship: true
-      table: comments
+      table: comment
       unique: true
 -
  name: auth
