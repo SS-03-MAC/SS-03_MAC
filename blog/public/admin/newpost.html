@@ -69,7 +69,7 @@
       $( document ).ready(function() {
         tinymce.init({ selector:'textarea', height: "500" });
 
-        window.NewPost = Post();
+        window.NewPost = new Post();
       });
 
       function SavePost() {
