@@ -84,7 +84,8 @@
       function SavePost() {
         window.NewPost.Title = $('#clog-post-title').val();
         window.NewPost.Body = tinyMCE.activeEditor.getContent();
-        window.NewPost.PublishedAt = Date.now().setFullYear(Date.now().getFullYear() + 35);
+        window.NewPost.PublishedAt = new Date(Date.now());
+        window.NewPost.PublishedAt .setFullYear(window.NewPost.PublishedAt.getFullYear() + 35);
         window.NewPost.save(MacAPI, function NewPostPublishSuccess(xhr) {
            Materialize.toast('Success saving post.', 4000);
         }, function NewPostFailureHandler(xhr) {
