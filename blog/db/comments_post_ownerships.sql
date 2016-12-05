@@ -1,11 +1,11 @@
 CREATE TABLE comments_post_ownerships (
   Id int NOT NULL,
-  CONSTRAINT PK_comments_post_ownerships_ID PRIMARY KEY CLUSTERED (Id)
+  CONSTRAINT PK_comments_post_ownerships_ID PRIMARY KEY CLUSTERED (Id),
   
     
       PostId int,
       CONSTRAINT comments_post_ownerships_post FOREIGN KEY (PostId)
-        REFERENCES post (Id)
+        REFERENCES post (Id),
     
   
     
