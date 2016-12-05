@@ -23,6 +23,11 @@
     <script type="text/javascript" src="../js/user.js"></script>
     <script type="text/javascript" src="../js/auth.js"></script>
     <script type="text/javascript">
+      AuthRequestArray = [];
+      AuthRequest = new Auth();
+      Auth.getAll(AuthRequestArray, MacAPI, function LogOutSuccessHandler(xhr) {
+        AuthRequestArray[0].delete();
+      })
       window.location.href="login.html";
     </script>
   </body>

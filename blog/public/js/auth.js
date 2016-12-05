@@ -7,7 +7,7 @@ var Auth = function(token, OnwerId, user, password){
   this.User = user;
   this.Password = password;
 
-  this.save = function(path, success) {
+  this.save = function(path, success, failure) {
     var xhr = new XMLHttpRequest();
     if (this.id == 0) {
       xhr.open("POST", path + "/auths/", true);
@@ -20,16 +20,20 @@ var Auth = function(token, OnwerId, user, password){
     xhr.onreadystatechange = function(){
       if(xhr.readyState == 4){
         if(xhr.status == 200){
+          if (success !== undefined) {
+            success(xhr);
+          }
+
           console.log(xhr.responseText);
         } else{
+          if (failure !== undefined) {
+            failure(xhr);
+          }
+
           throw new Error(xhr.statusText);
         }
       }
     };
-
-    if (success !== undefined) {
-      xhr.onreadystatechange = success;
-    }
 
     var data = JSON.stringify(this);
     xhr.send(data);
@@ -85,7 +89,7 @@ Auth.get = function(id, ret, path){
   xhr.send(null);
 };
 
-Auth.getAll = function(arr, path){
+Auth.getAll = function(arr, path, successHandler){
   var xhr = new XMLHttpRequest();
 
   xhr.onreadystatechange = function() {
@@ -105,6 +109,11 @@ Auth.getAll = function(arr, path){
 
           arr.push(tmp);
         }
+
+        if (successHandler !== undefined) {
+          successHandler(xhr);
+        }
+
       } else{
         throw new Error(xhr.statusText);
       }

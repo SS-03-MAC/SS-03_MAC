@@ -21,10 +21,12 @@
         <ul class="right hide-on-med-and-down">
           <li><a href="../index.html">Home</a></li>
           <li><a href="../articles.html">Articles</a></li>
+          <li><a class="clog-admin-only" href="login.html">Admin</a></li>
         </ul>
         <ul class="side-nav" id="nav-mobile">
           <li><a href="../index.html">Home</a></li>
           <li><a href="../articles.html">Articles</a></li>
+          <li><a class="clog-admin-only" href="login.html">Admin</a></li>
         </ul>
       </div>
     </nav>
@@ -62,13 +64,10 @@
 
         var AuthRequest = new Auth("", 0, $('#admin-username').val(), $('#admin-password').val());
         AuthRequest.save(MacAPI, function AuthSuccessHandler(xhr) {
-          if(xhr.readyState == 4){
-            if(xhr.status == 200){
-              window.location.href = "overview.html";
-            } else {
-              throw new Error(xhr.statusText);
-            }
-          }
+          window.location.href = "overview.html";
+        }, function AuthFailureHandler(xhr) {
+          $("#admin-password").addClass("invalid");
+          $("#admin-password").prop("aria-invalid", "true");
         });
 
         return false;
