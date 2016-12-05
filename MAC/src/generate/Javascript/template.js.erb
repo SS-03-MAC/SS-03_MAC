@@ -100,11 +100,11 @@ var <%= name.camelize %> = function(<%= fields_str %>){
         }
 
         if(successHandler !== undefined){
-          successHandler(xhr);
+          successHandler(xhr, ret);
         }
       } else{
         if (failureHandler !== undefined) {
-          failureHandler(xhr);
+          failureHandler(xhr, ret);
         }
       }
     }
@@ -141,11 +141,11 @@ var <%= name.camelize %> = function(<%= fields_str %>){
         }
 
         if(successHandler !== undefined) {
-          successHandler(xhr);
+          successHandler(xhr, ret);
         }
       } else{
         if(failureHandler !== undefined) {
-          failureHandler(xhr);
+          failureHandler(xhr, ret);
         }
       }
     }
