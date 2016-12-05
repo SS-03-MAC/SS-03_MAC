@@ -1,70 +1,64 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Admin | Clog, a SS-03_MAC production</title>
+    <title>Overview | Clog, a SS-03_MAC production</title>
 
-    <link href="//fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link type="text/css" href="css/materialize.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link type="text/css" href="../css/materialize.min.css" rel="stylesheet">
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
   </head>
   <body>
     <nav class="red darken-4" role="navigation" style="z-index: 10000 !important">
       <div class="nav-wrapper container">
-        <a href="index.html" class="brand-logo"><img src="img/logo.png" alt="." width="26" height="26">Clog</a>
+        <a href="../index.html" class="brand-logo"><img src="../img/logo.png" alt="." width="26" height="26">Clog</a>
         <a href="#" data-activates="nav-mobile" class="button-collapse"><i class="material-icons">menu</i></a>
         <ul class="right hide-on-med-and-down">
-          <li><a href="index.html">Home</a></li>
-          <li><a href="search.html">Search <i class="material-icons left">search</i></a></li>
-          <li><a href="articles.html">Articles</a></li>
-          <li><a href="categories.html">Categories</a></li>
-          <li><a class="clog-admin-only" href="admin.html">Admin</a></li>
+          <li><a href="overview.html">Overview<i class="material-icons left">trending_up</i></a></li>
+          <li><a href="posts.html">Articles<i class="material-icons left">library_books</i></a></li>
+          <li><a href="newpost.html">New Article<i class="material-icons left">library_add</i></a></li>
+          <li><a href="comments.html">Comments <i class="material-icons left">message</i></a></li>
+          <li><a class="clog-admin-only" href="logout.html">Logout <i class="material-icons left">lock</i></a></li>
         </ul>
         <ul class="side-nav" id="nav-mobile">
-          <li><a href="index.html">Home</a></li>
-          <li><a href="search.html">Search <i class="material-icons left">search</i></a></li>
-          <li><a href="articles.html">Articles</a></li>
-          <li><a href="categories.html">Categories</a></li>
-          <li><a class="clog-admin-only" href="admin.html">Admin</a></li>
+          <li><a href="overview.html">Overview<i class="material-icons left">trending_up</i></a></li>
+          <li><a href="posts.html">Articles<i class="material-icons left">library_books</i></a></li>
+          <li><a href="newpost.html">New Article<i class="material-icons left">library_add</i></a></li>
+          <li><a href="comments.html">Comments <i class="material-icons left">message</i></a></li>
+          <li><a class="clog-admin-only" href="logout.html">Logout <i class="material-icons left">lock</i></a></li>
         </ul>
       </div>
     </nav>
 
-    <div id="home" class="section grey lighten-4">
-      <div class="row container section">
-        <div class="col m8 s12">
-            <h1 class="header center red-text text-darken-4">Clog</h1>
-            <p>Some paragraph about why ISU needs our COMS 309 MAClog blogging Software.</p>
-        </div>
-        <div class="col m4 s12">
-          <form onsubmit="events_subscribe(event);">
-            <div class="input-field">
-              <input placeholder="jdoe76@iastate.edu" id="home-email" type="email" class="validate">
-              <label for="home-email">Email Address</label>
-            </div>
-            <button class="btn waves-effect waves-light red darken-4" type="submit" name="action">Subscribe
-              <i class="material-icons right">send</i>
-            </button>
-          </form>
-        </div>
-      </div>
-    </div>
-
     <div id="latest" class="section red lighten-4">
       <div class="row container section">
-        <div class="col m5 s12">
-          <h3 class="clog-latest-title"><a class="clog-latest-link red-text text-darken-4" href="articles.html">{clog_latest_title}</a></h3>
-        </div>
-        <div class="col m7 s12">
-          <p class="clog-latest-description">
-            {clog_latest_description}
-          </p>
-          <p>To read more, click <a class="clog-latest-link red-text text-darken-4" href="articles.html"> here</a>.</p>
-        </div>
+        <form class="col m12 s12">
+          <div class="row">
+            <div class="col m12 s12 input-field">
+              <input id="clog_post_title" type="text">
+              <label for="clog_post_title">Blog Post Title</label>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col m12 s12 input-field">
+              <textarea id="clog_post_body"></textarea>
+            </div>
+          </div>
+          <div class="row">
+            <button class="btn waves-effect waves-light red darken-4" type="submit" name="action">Save
+              <i class="material-icons right">assignment</i>
+            </button>
+            <button class="btn waves-effect waves-light red darken-4" type="submit" name="action">Publish
+              <i class="material-icons right">send</i>
+            </button>
+          </div>
+        </form>
       </div>
     </div>
 
-    <script type="text/javascript" src="js/jquery-3.1.1.js"></script>
-    <script type="text/javascript" src="js/materialize.min.js"></script>
+    <script type="text/javascript" src="../js/jquery-3.1.1.js"></script>
+    <script type="text/javascript" src="../js/materialize.min.js"></script>
+    <script src="https://cdn.tinymce.com/4/tinymce.min.js"></script>
+    <script>tinymce.init({ selector:'textarea', height: "500" });</script>
   </body>
 </html>
