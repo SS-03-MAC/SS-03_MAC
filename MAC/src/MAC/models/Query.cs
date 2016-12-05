@@ -10,7 +10,7 @@ namespace MAC.Models
         /// <summary>
         /// A connection string. Should be moved. Here for dev purposes
         /// </summary>
-        private static string ConnectionString = "Server=localhost;Database=MACDevlopment;User Id=macdev;Password=macdev";
+        private static string ConnectionString = "Server=localhost;Database=clog;User Id=macdev;Password=macdev";
 
         /// <summary>
         /// Runs a non-query
