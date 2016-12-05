@@ -46,6 +46,7 @@ namespace ConsoleApplication
 
         private static void ProcessGetAll(Type model)
         {
+            // There might be better way to do auth
             if (model == typeof(Auth))
             {
                 string token = Environment.GetEnvironmentVariable("COOKIE");
@@ -65,6 +66,7 @@ namespace ConsoleApplication
 
         private static void ProcessGetOne(Type model, int id)
         {
+            // The Binding flags are needed get the static inheirted methods
             var method = model.GetMethods(BindingFlags.Public | BindingFlags.Static |
                                           BindingFlags.FlattenHierarchy).
                 Where(x => x.Name == "Get").
@@ -80,7 +82,7 @@ namespace ConsoleApplication
             Console.Write("Content-Encoding: UTF-8\r\n");
             model.Save();
             Console.Write("\r\n");
-            Console.Write("{\"Id\":"+ model.Id + ", \"Type\": \"create\", \"Response\": \"redirect\"}\r\n\r\n");
+            Console.Write("{\"Id\":" + model.Id + ", \"Type\": \"create\", \"Response\": \"redirect\"}\r\n\r\n");
         }
 
         private static void ProcessUpdate(BaseModel model, int id)
@@ -95,6 +97,7 @@ namespace ConsoleApplication
 
         private static void ProcessDelete(Type model, int id)
         {
+            // The Binding flags are needed get the static inheirted methods
             var method = model.GetMethods(BindingFlags.Public | BindingFlags.Static |
                                       BindingFlags.FlattenHierarchy).
             Where(x => x.Name == "Delete").
@@ -105,7 +108,8 @@ namespace ConsoleApplication
 
         private static BaseModel SetupFormInput(string contentString, Type type)
         {
-            return (BaseModel) JsonConvert.DeserializeObject(contentString, type);
+            // Where the magic happens
+            return (BaseModel)JsonConvert.DeserializeObject(contentString, type);
         }
 
         private static int GetIdFromModelPath(string modelPath)
@@ -145,6 +149,12 @@ namespace ConsoleApplication
             {
                 return string.Empty;
             }
+            List<char> contents = GetCharsFromStdIn(contentLength);
+            return ListOfCharsToString(contents);
+        }
+
+        private static List<char> GetCharsFromStdIn(int contentLength)
+        {
             List<char> contents = new List<char>();
             using (Stream stdin = Console.OpenStandardInput())
             {
@@ -152,13 +162,19 @@ namespace ConsoleApplication
                 stdin.Read(buffer, 0, buffer.Length);
                 contents.AddRange(Encoding.UTF8.GetChars(buffer));
             }
+
+            return contents;
+        }
+
+        private static string ListOfCharsToString(List<char> contents)
+        {
             string result = string.Empty;
-            foreach(char c in contents)
+            foreach (char c in contents)
             {
                 result += c;
             }
-            return result;
 
+            return result;
         }
 
         private static Type GetTypeFromString(string urlName)
