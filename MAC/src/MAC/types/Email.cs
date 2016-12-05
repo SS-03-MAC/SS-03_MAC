@@ -126,5 +126,15 @@ namespace MAC.Types.User
         {
             return Data as object;
         }
+
+        public static explicit operator string(MAC.Types.User.Email s)
+        {
+            return s.Data;
+        }
+
+        public static explicit operator MAC.Types.User.Email(string s)
+        {
+            return new Email(s);
+        }
     }
 }

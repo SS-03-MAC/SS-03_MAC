@@ -140,5 +140,15 @@ namespace MAC.Types
         {
             return Data as object;
         }
+
+        public static explicit operator bool(MAC.Types.Boolean s)
+        {
+            return s.Data;
+        }
+
+        public static explicit operator MAC.Types.Boolean(bool s)
+        {
+            return new Boolean(s);
+        }
     }
 }

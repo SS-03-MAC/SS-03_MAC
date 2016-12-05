@@ -34,6 +34,17 @@ namespace MAC.Types
 
         }
 
+        public DateTime(long i)
+        {
+            // Javascript that gives me milliseconds
+            // Thanks Alex Scheel
+            System.DateTime dtDateTime = new System.DateTime(1970, 1, 1, 0, 0, 0, 0, System.DateTimeKind.Utc);
+            dtDateTime = dtDateTime.AddMilliseconds(i).ToLocalTime();
+            Data = dtDateTime;
+
+
+        }
+
         /// <summary>
         /// Initializes aDateTime from SerializationInfo
         /// </summary>
@@ -134,6 +145,21 @@ namespace MAC.Types
         public override object GetRawObject()
         {
             return Data as object;
+        }
+
+        public static explicit operator System.DateTime(MAC.Types.DateTime s)
+        {
+            return s.Data;
+        }
+
+        public static explicit operator MAC.Types.DateTime(System.DateTime s)
+        {
+            return new MAC.Types.DateTime(s);
+        }
+
+        public static explicit operator MAC.Types.DateTime(long s)
+        {
+            return new Types.DateTime(s);
         }
     }
 }

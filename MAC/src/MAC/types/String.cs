@@ -134,5 +134,15 @@ namespace MAC.Types
         {
             return Data as object;
         }
+
+        public static explicit operator string(MAC.Types.String s)
+        {
+            return s.Data;
+        }
+
+        public static explicit operator MAC.Types.String(string s)
+        {
+            return new String(s);
+        }
     }
 }
