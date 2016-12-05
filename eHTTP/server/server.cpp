@@ -42,7 +42,7 @@ void server::forkHandler(int clientFd, void (eHTTP::server::server:: *handler)(i
   int child = fork();
   if (child == -1) {
     std::cout << "Forking a handling thread failed. errno: " << errno << std::endl;
-  } else if (child == 0) {
+  } else if (child != 0) {
     (this->*handler)(clientFd);
     std::cout << "Handling thread exiting." << std::endl;
     exit(0);
