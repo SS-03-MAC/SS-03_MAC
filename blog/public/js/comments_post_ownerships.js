@@ -86,7 +86,7 @@ CommentsPostOwnerships.get = function(id, ret, path, successHandler, failureHand
   xhr.onreadystatechange = function() {
     if(xhr.readyState == 4){
       if(xhr.status == 200){
-        var fields = ["Id", "CreatedAt", "UpdatedAt", "post", "comments"];
+        var fields = ["Id", "CreatedAt", "UpdatedAt", "PostId", "CommentsId"];
         var result = JSON.parse(xhr.responseText);
 
         for(var field in result){
@@ -120,7 +120,7 @@ CommentsPostOwnerships.getAll = function(arr, path, successHandler, failureHandl
   xhr.onreadystatechange = function() {
     if(xhr.readyState == 4){
       if(xhr.status == 200){
-        var fields = ["Id", "CreatedAt", "UpdatedAt", "post", "comments"];
+        var fields = ["Id", "CreatedAt", "UpdatedAt", "PostId", "CommentsId"];
         var result = JSON.parse(xhr.responseText);
 
         for(var i = 0; i < result.length; i++){
