@@ -18,6 +18,7 @@
 #include <string>
 
 #include "../httpParsing/AbsPath.h"
+#include "../../EduTLS/src/tls/states/TLSConfiguration.h"
 
 namespace eHTTP {
 namespace server {
@@ -38,6 +39,9 @@ class settings {
 private:
   /// Parses a yaml map into a \p cgiEndpoint_t
   static cgiEndpoint_t mapToEndpoint(YAML::Node map);
+  /// Gets the length of the bytes encoded in a base64 string.
+  static uint32_t getBase64ByteLen(std::string base64);
+  void loadTls(YAML::Node &tlsNode);
 public:
   /// Constructs a default \p settings object.
   inline settings() {};
@@ -57,6 +61,9 @@ public:
   std::string basePath;
   /// A vector of CGI endpoint mappings.
   std::vector<struct cgiEndpoint_t> cgiEndpoints;
+  TLSConfiguration *tlsConfiguration = NULL;
+
+
   /// Gets the CGI endpoint that \p path maps to, if it does.
   /// \returns true if a CGI endpoint exists for the path.
   bool getScriptForPath(httpParsing::AbsPath &path, eHTTP::server::cgiEndpoint_t &cgiEndpoint);

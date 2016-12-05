@@ -14,7 +14,6 @@ private:
   /// Keeps track of what needs to be deleted in the destructor.
   bool createdSettings = false;
   eHTTP::server::settings *settings;
-  TLSConfiguration *tlsConfig;
 
   /// Forks a thread for handling the client.
   /// \param handler the function to call in the new thread for handling the client. One argument of the \p clientFd.
@@ -53,7 +52,7 @@ public:
   /// Constructs a HTTP server with no TLS.  Default document of index.html only.
   server(uint16_t port, std::string basePath);
   /// Constructs a HTTP(S) server with TLS.  Keeps a pointer to \p settings and \p TlsConfig.
-  server(eHTTP::server::settings &settings, TLSConfiguration &TlsConfig);
+  server(eHTTP::server::settings &settings);
   /// Destructs the server and cleans up any self-created variables.
   ~server();
 
@@ -65,7 +64,7 @@ public:
   void serve();
   /// Sets the TLS configruation.  Keeps a pointer to the provided configuration.
   void setTlsConfiguration(TLSConfiguration *config) {
-    this->tlsConfig = config;
+    this->settings->tlsConfiguration = config;
   }
 };
 

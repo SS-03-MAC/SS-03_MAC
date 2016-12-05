@@ -27,9 +27,8 @@ server::server(uint16_t port, std::string basePath) {
   settings->port = port;
 }
 
-server::server(eHTTP::server::settings &settings, TLSConfiguration &TlsConfig) {
+server::server(eHTTP::server::settings &settings) {
   this->settings = &settings;
-  this->tlsConfig = &TlsConfig;
 }
 
 server::~server() {
@@ -86,7 +85,7 @@ void server::handleClient(int clientFd) {
 }
 
 void server::handleClientTls(int clientFd) {
-  TLSServer *srv = new TLSServer(tlsConfig);
+  TLSServer *srv = new TLSServer(settings->tlsConfiguration);
   srv->AcceptClient(clientFd);
   srv->Handshake();
   TLSServerStream *clientStream = new TLSServerStream(srv);
