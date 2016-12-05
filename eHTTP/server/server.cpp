@@ -125,6 +125,9 @@ long long server::serveFile(int clientFd, httpParsing::AbsPath &path) {
   if (!fileExists || fileStream->fail()) {
     std::cout << "Error opening file: " << fileToServe << std::endl;
     httpResponseHeaderCollection resp("HTTP/1.1", 404, "Not Found");
+    httpHeader noCache("Cache-Control", "no-cache, no-store, must-revalidate");
+    resp.push_back(&noCache);
+
     std::string errorText(resp.toString());
     errorText += "Error opening file";
     write(clientFd, errorText.c_str(), errorText.length());
