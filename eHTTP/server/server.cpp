@@ -165,6 +165,8 @@ long long server::serveFileTls(TLSServer &client, httpParsing::AbsPath &path) {
 
     ssize_t fileSize = eHTTP::utils::filesystem::fileSize(fileToServe);
     resp.push_back(new httpHeader("Content-Length", std::to_string(fileSize)));
+    httpHeader noCache("Cache-Control", "no-cache, no-store, must-revalidate");
+    resp.push_back(&noCache);
 
     std::string headerString(resp.toString());
     client.Write((uint8_t *) headerString.c_str(), headerString.length());
