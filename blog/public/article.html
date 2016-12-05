@@ -135,6 +135,8 @@
           $('#clog-all-comments').html('');
 
           for (var i in clogAllCommentRelationships) {
+            console.log(i);
+              console.log(clogPostId);
            if (clogAllCommentRelationships[i].PostId == clogPostId) {
              console.log("Loading comment " + i);
              var ReadComment = clogAllCommentRelationships[i].getComment(MacAPI, function GetCommentSuccessHandler(xhr, NewComment) {

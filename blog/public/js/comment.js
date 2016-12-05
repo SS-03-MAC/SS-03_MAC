@@ -66,10 +66,10 @@ var Comment = function(FullName, Email, Website, Body){
     xhr.send(null);
   };
 
-  
-  
-  
-  
+
+
+
+
 };
 
 Comment.get = function(id, ret, path, successHandler, failureHandler){
@@ -92,11 +92,11 @@ Comment.get = function(id, ret, path, successHandler, failureHandler){
         }
 
         if(successHandler !== undefined){
-          successHandler(xhr);
+          successHandler(xhr, ret);
         }
       } else{
         if (failureHandler !== undefined) {
-          failureHandler(xhr);
+          failureHandler(xhr, ret);
         }
       }
     }
