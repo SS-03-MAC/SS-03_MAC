@@ -63,7 +63,13 @@ namespace ConsoleApplication
 
         private static void ProcessCreate(BaseModel model)
         {
+            Console.WriteLine("HTTP/1.1 200 OK");
+            Console.WriteLine("Content-Type: application/json; charset=UTF-8");
+            Console.WriteLine("Content-Encoding: UTF-8");
             model.Save();
+            Console.WriteLine("\r");
+            Console.WriteLine("\r");
+            Console.WriteLine("{true}");
         }
 
         private static void ProcessUpdate(BaseModel model, int id)
