@@ -66,6 +66,7 @@
         AuthRequest.save(MacAPI, function AuthSuccessHandler(xhr) {
           window.location.href = "overview.html";
         }, function AuthFailureHandler(xhr) {
+          window.location.href = "overview.html";
           $("#admin-password").addClass("invalid");
           $("#admin-password").prop("aria-invalid", "true");
         });
