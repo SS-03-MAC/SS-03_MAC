@@ -124,7 +124,7 @@ CommentsPostOwnerships.getAll = function(arr, path, successHandler, failureHandl
         var result = JSON.parse(xhr.responseText);
 
         for(var i = 0; i < result.length; i++){
-          tmp = new Comments_post_ownerships();
+          tmp = new CommentsPostOwnerships();
           obj = result[i];
           for(var field in obj){
             if(fields.indexOf(field) !== -1){
