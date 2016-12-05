@@ -127,11 +127,10 @@ namespace ConsoleApplication
 
         private static void BasicHeaders()
         {
-            Console.WriteLine("HTTP/1.1 200 OK");
-            Console.WriteLine("Content-Type: application/json; charset=UTF-8");
-            Console.WriteLine("Content-Encoding: UTF-8");
-            Console.WriteLine("");
-            Console.WriteLine("");
+            Console.Write("HTTP/1.1 200 OK\r\n");
+            Console.Write("Content-Type: application/json; charset=UTF-8\r\n");
+            Console.Write("Content-Encoding: UTF-8\r\n");
+            Console.Write("\r\n");
         }
 
         /// <summary>
