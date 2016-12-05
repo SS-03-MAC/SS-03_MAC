@@ -1,11 +1,8 @@
-var <%= name.camelize %> = function(<%= fields_str %>){
-<% fields.each do |field| %>
-<% if field.key?("relationship") && field["relationship"] == true %>
-  <%= "this." + field["name"].camelize + "Id = " + field["name"] + ";" %>
-<% else %>
-  <%= "this." + field["name"].camelize + " = " + field["name"] + ";" %>
-<% end %>
-<% end %>
+var Comment = function(FullName, Email, Website, Body){
+  this.FullName = FullName;
+  this.Email = Email;
+  this.Website = Website;
+  this.Body = Body;
   this.Id = 0;
   this.CreatedAt = Date.now();
   this.UpdatedAt = Date.now();
@@ -14,9 +11,9 @@ var <%= name.camelize %> = function(<%= fields_str %>){
     var ret = this
     var xhr = new XMLHttpRequest();
     if(this.Id == 0){
-      xhr.open("POST", <%= "path + \"/" + name.pluralize + "/\"" %>, true);
+      xhr.open("POST", path + "/comments/", true);
     } else{
-      xhr.open("PATCH", <%= "path + \"/" + name.pluralize + "/\"+"%>this.Id);
+      xhr.open("PATCH", path + "/comments/"+this.Id);
     }
 
     xhr.setRequestHeader("Content-type", "application/json");
@@ -50,7 +47,7 @@ var <%= name.camelize %> = function(<%= fields_str %>){
     }
 
     var xhr = new XMLHttpRequest();
-    xhr.open("DELETE", <%= "path + \"/" + name.pluralize + "/\"+" %>this.Id, true);
+    xhr.open("DELETE", path + "/comments/"+this.Id, true);
     xhr.setRequestHeader("Content-type", "application/json");
     xhr.onreadystatechange = function() {
       if(xhr.readyState == 4){
@@ -69,24 +66,19 @@ var <%= name.camelize %> = function(<%= fields_str %>){
     xhr.send(null);
   };
 
-<% fields.each do |field| %>
-  <% if field.key?("relationship") && field["relationship"] == true%>
-  this.get<%= field["name"].camelize %> = function(path, successHandler, failureHandler){
-    var ret = new <%= field["name"].camelize %>();
-    <%= field["name"].camelize %>.get(<%= "this." + field["name"].camelize + "Id" %>, ret, path, successHandler, failureHandler);
-    return ret;
-  };
-  <% end %>
-<% end %>
+  
+  
+  
+  
 };
 
-<%= name.camelize %>.get = function(id, ret, path, successHandler, failureHandler){
+Comment.get = function(id, ret, path, successHandler, failureHandler){
   var xhr = new XMLHttpRequest();
 
   xhr.onreadystatechange = function() {
     if(xhr.readyState == 4){
       if(xhr.status == 200){
-        var fields = ["Id", "CreatedAt", "UpdatedAt", <%= fields_str_quoted %>];
+        var fields = ["Id", "CreatedAt", "UpdatedAt", "FullName", "Email", "Website", "Body"];
         var result = JSON.parse(xhr.responseText);
 
         for(var field in result){
@@ -110,21 +102,21 @@ var <%= name.camelize %> = function(<%= fields_str %>){
     }
   };
 
-  xhr.open("GET", <%= "path + \"/" + name.pluralize + "/\"+" %>id, true);
+  xhr.open("GET", path + "/comments/"+id, true);
   xhr.send(null);
 };
 
-<%= name.camelize %>.getAll = function(arr, path, successHandler, failureHandler){
+Comment.getAll = function(arr, path, successHandler, failureHandler){
   var xhr = new XMLHttpRequest();
 
   xhr.onreadystatechange = function() {
     if(xhr.readyState == 4){
       if(xhr.status == 200){
-        var fields = ["Id", "CreatedAt", "UpdatedAt", <%= fields_str_quoted %>];
+        var fields = ["Id", "CreatedAt", "UpdatedAt", "FullName", "Email", "Website", "Body"];
         var result = JSON.parse(xhr.responseText);
 
         for(var i = 0; i < result.length; i++){
-          tmp = new <%= name.camelize %>();
+          tmp = new Comment();
           obj = result[i];
           for(var field in obj){
             if(fields.indexOf(field) !== -1){
@@ -151,6 +143,6 @@ var <%= name.camelize %> = function(<%= fields_str %>){
     }
   };
 
-  xhr.open("GET", <%="path + \"/" + name.pluralize + "\"" %>, true);
+  xhr.open("GET", path + "/comments", true);
   xhr.send(null);
 };
