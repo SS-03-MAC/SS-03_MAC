@@ -1,6 +1,6 @@
 var CommentsPostOwnerships = function(post, comments){
-  this.postId = post;
-  this.commentsId = comments;
+  this.PostId = post;
+  this.CommentsId = comments;
   this.Id = 0;
   this.CreatedAt = Date.now();
   this.UpdatedAt = Date.now();
