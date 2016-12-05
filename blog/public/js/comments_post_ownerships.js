@@ -6,8 +6,8 @@ var CommentsPostOwnerships = function(post, comments){
   this.UpdatedAt = Date.now();
 
   this.save = function(path, successHandler, failureHandler){
+    var ret = this
     var xhr = new XMLHttpRequest();
-    ret = this;
     if(this.Id == 0){
       xhr.open("POST", path + "/comments_post_ownerships/", true);
     } else{
@@ -20,16 +20,16 @@ var CommentsPostOwnerships = function(post, comments){
       if(xhr.readyState == 4){
         if(xhr.status == 200){
           var result = JSON.parse(xhr.responseText);
-          if (result.Type === 'create' && result.Response === 'success') {
+          if(result.Id !== undefined){
             ret.Id = result.Id;
           }
 
           if(successHandler !== undefined) {
-            successHandler(xhr);
+            successHandler(xhr, ret, result);
           }
         } else{
           if(failureHandler !== undefined) {
-            failureHandler(xhr);
+            failureHandler(xhr, ret, result);
           }
         }
       }
@@ -64,20 +64,20 @@ var CommentsPostOwnerships = function(post, comments){
     xhr.send(null);
   };
 
-
+  
   this.getPost = function(path, successHandler, failureHandler){
     var ret = new Post();
     Post.get(this.PostId, ret, path, successHandler, failureHandler);
     return ret;
   };
-
-
+  
+  
   this.getComments = function(path, successHandler, failureHandler){
     var ret = new Comments();
     Comments.get(this.CommentsId, ret, path, successHandler, failureHandler);
     return ret;
   };
-
+  
 };
 
 CommentsPostOwnerships.get = function(id, ret, path, successHandler, failureHandler){

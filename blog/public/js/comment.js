@@ -8,7 +8,7 @@ var Comment = function(FullName, Email, Website, Body){
   this.UpdatedAt = Date.now();
 
   this.save = function(path, successHandler, failureHandler){
-    ret = this;
+    var ret = this
     var xhr = new XMLHttpRequest();
     if(this.Id == 0){
       xhr.open("POST", path + "/comments/", true);
@@ -21,18 +21,17 @@ var Comment = function(FullName, Email, Website, Body){
     xhr.onreadystatechange = function(){
       if(xhr.readyState == 4){
         if(xhr.status == 200){
-          window.result = JSON.parse(xhr.responseText);
-          console.log(result);
-          if (result.Type === 'create' && result.Response === 'success') {
+          var result = JSON.parse(xhr.responseText);
+          if(result.Id !== undefined){
             ret.Id = result.Id;
           }
 
           if(successHandler !== undefined) {
-            successHandler(xhr);
+            successHandler(xhr, ret, result);
           }
         } else{
           if(failureHandler !== undefined) {
-            failureHandler(xhr);
+            failureHandler(xhr, ret, result);
           }
         }
       }
@@ -67,10 +66,10 @@ var Comment = function(FullName, Email, Website, Body){
     xhr.send(null);
   };
 
-
-
-
-
+  
+  
+  
+  
 };
 
 Comment.get = function(id, ret, path, successHandler, failureHandler){
