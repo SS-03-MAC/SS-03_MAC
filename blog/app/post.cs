@@ -13,13 +13,13 @@ namespace MAC.Models {
 
       
       [DatabaseField("Title")]
-      public nvarchar Title { get; set; }
+      public nvarchar(MAX) Title { get; set; }
       
     
 
       
       [DatabaseField("Body")]
-      public nvarchar Body { get; set; }
+      public nvarchar(MAX) Body { get; set; }
       
     
 

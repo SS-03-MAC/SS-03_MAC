@@ -13,25 +13,25 @@ namespace MAC.Models {
 
       
       [DatabaseField("FullName")]
-      public nvarchar FullName { get; set; }
+      public nvarchar(MAX) FullName { get; set; }
       
     
 
       
       [DatabaseField("Email")]
-      public nvarchar Email { get; set; }
+      public nvarchar(MAX) Email { get; set; }
       
     
 
       
       [DatabaseField("Website")]
-      public nvarchar Website { get; set; }
+      public nvarchar(MAX) Website { get; set; }
       
     
 
       
       [DatabaseField("Body")]
-      public nvarchar Body { get; set; }
+      public nvarchar(MAX) Body { get; set; }
       
     
   }

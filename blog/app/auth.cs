@@ -13,13 +13,13 @@ namespace MAC.Models {
 
       
       [DatabaseField("token")]
-      public nvarchar Token { get; set; }
+      public nvarchar(MAX) Token { get; set; }
       
     
 
       
-      [DatabaseField("OnwerId")]
-      public int_t OnwerId { get; set; }
+      [DatabaseField("OwnerId")]
+      public int_t OwnerId { get; set; }
       
     
   }

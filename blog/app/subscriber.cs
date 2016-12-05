@@ -13,7 +13,7 @@ namespace MAC.Models {
 
       
       [DatabaseField("Email")]
-      public nvarchar Email { get; set; }
+      public nvarchar(MAX) Email { get; set; }
       
     
   }
