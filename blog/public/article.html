@@ -64,10 +64,40 @@
       </div>
     </div>
 
+    <div id="comment-area" class="section grey lighten-4">
+      <div class="row container section">
+        <div class="col m4 s12">
+          <div class="input-field">
+            <input placeholder="John Doe" id="comment-fullname" type="text">
+            <label for="comment-fullname">Full Name</label>
+          </div>
+          <div class="input-field">
+            <input placeholder="jdoe76@iastate.edu" id="comment-email" type="email" class="validate">
+            <label for="comment-email">Email Address</label>
+          </div>
+          <div class="input-field">
+            <input placeholder="https://jdoe76.com" id="comment-website" type="url" class="validate">
+            <label for="comment-website">Website</label>
+          </div>
+        </div>
+        <div class="col m8 s12">
+          <div class="input-field">
+            <textarea placeholder="My very intelligent comment goes here." id="comment-body"  class="materialize-textarea"></textarea>
+            <label for="comment-body">Comment</label>
+          </div>
+
+          <button class="btn waves-effect waves-light red darken-4" onclick="CreateComment();" name="action">Comment
+            <i class="material-icons right">message</i>
+          </button>
+        </div>
+      </div>
+    </div>
+
     <script type="text/javascript" src="js/jquery-3.1.1.js"></script>
     <script type="text/javascript" src="js/materialize.min.js"></script>
     <script type="text/javascript" src="js/utils.js"></script>
     <script type="text/javascript" src="js/post.js"></script>
+    <script type="text/javascript" src="js/comment.js"></script>
     <script type="text/javascript">
       $(document).ready(function() {
         clogPost = new Post();
@@ -81,6 +111,20 @@
           $('.clog-post-description').html(clogPost.Body);
         });
       });
+
+      function CreateComment() {
+        var NewComment = new Comment();
+        NewComment.FullName = $('#comment-fullname').val();
+        NewComment.Email = $('#comment-email').val();
+        NewComment.Website = $('#comment-website').val();
+        NewComment.Body = $('#comment-body').val();
+
+        NewComment.save(MacAPI, function CommentSuccess() {
+          window.location.href = window.location.href;
+        }, function CommentFailure() {
+           Materialize.toast('Temporary failure to save comment.', 10000);
+        });
+      }
     </script>
   </body>
 </html>
