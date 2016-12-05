@@ -20,11 +20,10 @@ var Comment = function(FullName, Email, Website, Body){
     xhr.onreadystatechange = function(){
       if(xhr.readyState == 4){
         if(xhr.status == 200){
-          var result = JSON.parse(xhr.responseText);
-          if (result.indexOf('Type') !== -1 && result.indexOf('Response') !== -1) {
-            if (result.Type === 'create' && result.Response === 'success') {
-              this.Id = result.Id;
-            }
+          window.result = JSON.parse(xhr.responseText);
+          console.log(result);
+          if (result.Type === 'create' && result.Response === 'success') {
+            this.Id = result.Id;
           }
 
           if(successHandler !== undefined) {
@@ -67,10 +66,10 @@ var Comment = function(FullName, Email, Website, Body){
     xhr.send(null);
   };
 
-  
-  
-  
-  
+
+
+
+
 };
 
 Comment.get = function(id, ret, path, successHandler, failureHandler){
