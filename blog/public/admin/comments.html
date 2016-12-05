@@ -86,11 +86,12 @@
                     for (var j in clogAllCommentPostRelationships) {
                       for (var i in clogAllPosts) {
                         if (clogAllComments[i].Id == clogAllCommentPostRelationships[j].CommentId) {
-                          clogAllComments[i].PostId = clogAllCommentPostRelationships[j].PostIdf;
+                          clogAllComments[i].PostId = clogAllCommentPostRelationships[j].PostId;
                           clogAllComments[i].RelationshipID = j;
 
                           for (var k in clogAllPosts) {
                             if (clogAllComments[i].PostId == clogAllPosts[k].Id) {
+                              console.log(clogAllPosts[k]);
                               clogAllComments[i].post = clogAllPosts[k];
                               break;
                             }
