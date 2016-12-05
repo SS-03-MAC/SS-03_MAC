@@ -283,6 +283,11 @@ namespace MAC.Models
                 if (kvPair.Value != null)
                 {
                     value = kvPair.Value.GetRawObject() as object;
+                    // TODO: This is just bad. Better way?
+                    if (value.GetType() == typeof(Uri))
+                    {
+                        value = ((Uri)kvPair.Value.GetRawObject()).OriginalString;
+                    }
                 }
                 result.Parameters.AddWithValue(kvPair.Key, value);
             }
