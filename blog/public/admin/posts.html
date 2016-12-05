@@ -54,7 +54,7 @@
     <script type="text/javascript">
       $( document ).ready(function() {
         clogAllPosts = [];
-        Post.getAll(clogAllposts, MacAPI, function GetAllPostSuccess() {
+        Post.getAll(clogAllPosts, MacAPI, function GetAllPostSuccess() {
           clogAllPosts.sort(function comparePostStructure(a, b) {
             if (a.UpdatedAt < b.UpdatedAt) {
               return -1;
