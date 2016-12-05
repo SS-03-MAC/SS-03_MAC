@@ -162,7 +162,7 @@ namespace MAC.Models
             {
                 throw new RecordNotValidException();
             }
-            if (Id == null)
+            if (Id == null || Id.Value == 0)
             {
                 return ProcessCreatedAt();
             }
