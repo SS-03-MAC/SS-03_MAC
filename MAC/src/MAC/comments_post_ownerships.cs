@@ -7,7 +7,7 @@ using MAC.Models.Attributes.Validations;
 
 namespace MAC.Models {
   [TableName("comments_post_ownerships")]
-  [UrlName("comments_post_ownerships")]
+  [UrlName("comment_post_ownerships")]
   public partial class CommentsPostOwnerships : BaseModel<CommentsPostOwnerships> {
     
 
@@ -28,7 +28,7 @@ namespace MAC.Models {
 
       
       [DatabaseField("CommentsId")]
-      public Integer CommentsId { get; set; }
+      public Integer CommentId { get; set; }
       //public virtual Comment A_Comments {
       //  get {
       //    return Comment.Get(CommentsId);

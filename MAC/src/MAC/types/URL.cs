@@ -36,7 +36,13 @@ namespace MAC.Types.Internet
 
         public Url()
         {
+            DatabaseFieldType = DatabaseFieldTypes.nvarchar;
+        }
 
+        public Url(string uri)
+        {
+            Data = new Uri(uri);
+            DatabaseFieldType = DatabaseFieldTypes.nvarchar;
         }
 
         public Url(SerializationInfo info, StreamingContext context)
