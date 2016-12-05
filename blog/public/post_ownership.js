@@ -1,11 +1,6 @@
-var <%= name.camelize %> = function(<%= fields_str %>){
-<% fields.each do |field| %>
-<% if field.key?("relationship") && field["relationship"] == true %>
-  <%= "this." + field["name"] + "Id = " + field["name"] + ";" %>
-<% else %>
-  <%= "this." + field["name"].camelize + " = " + field["name"] + ";" %>
-<% end %>
-<% end %>
+var PostOwnership = function(post, user){
+  this.postId = post;
+  this.userId = user;
   this.Id = 0;
   this.CreatedAt = Date.now();
   this.UpdatedAt = Date.now();
@@ -13,9 +8,9 @@ var <%= name.camelize %> = function(<%= fields_str %>){
   this.save = function(path, successHandler, failureHandler){
     var xhr = new XMLHttpRequest();
     if(this.Id == 0){
-      xhr.open("POST", <%= "path + \"/" + name.pluralize + "/\"" %>, true);
+      xhr.open("POST", path + "/post_ownerships/", true);
     } else{
-      xhr.open("PATCH", <%= "path + \"/" + name.pluralize + "/\"+"%>this.Id);
+      xhr.open("PATCH", path + "/post_ownerships/"+this.Id);
     }
 
     xhr.setRequestHeader("Content-type", "application/json");
@@ -44,7 +39,7 @@ var <%= name.camelize %> = function(<%= fields_str %>){
     }
 
     var xhr = new XMLHttpRequest();
-    xhr.open("DELETE", <%= "path + \"/" + name.pluralize + "/\"+" %>this.Id, true);
+    xhr.open("DELETE", path + "/post_ownerships/"+this.Id, true);
     xhr.setRequestHeader("Content-type", "application/json");
     xhr.onreadystatechange = function() {
       if(xhr.readyState == 4){
@@ -63,24 +58,29 @@ var <%= name.camelize %> = function(<%= fields_str %>){
     xhr.send(null);
   };
 
-<% fields.each do |field| %>
-  <% if field.key?("relationship") && field["relationship"] == true%>
-  this.get<%= field["name"].camelize %> = function(path, successHandler, failureHandler){
-    var ret = new <%= field["name"].camelize %>();
-    <%= field["name"].camelize %>.get(<%= "this." + field["name"].camelize + "Id" %>, ret, path, successHandler, failureHandler);
+  
+  this.getPost = function(path, successHandler, failureHandler){
+    var ret = new Post();
+    Post.get(this.PostId, ret, path, successHandler, failureHandler);
     return ret;
   };
-  <% end %>
-<% end %>
+  
+  
+  this.getUser = function(path, successHandler, failureHandler){
+    var ret = new User();
+    User.get(this.UserId, ret, path, successHandler, failureHandler);
+    return ret;
+  };
+  
 };
 
-<%= name.camelize %>.get = function(id, ret, path, successHandler, failureHandler){
+PostOwnership.get = function(id, ret, path, successHandler, failureHandler){
   var xhr = new XMLHttpRequest();
 
   xhr.onreadystatechange = function() {
     if(xhr.readyState == 4){
       if(xhr.status == 200){
-        var fields = ["Id", "CreatedAt", "UpdatedAt", <%= fields_str_quoted %>];
+        var fields = ["Id", "CreatedAt", "UpdatedAt", "post", "user"];
         var result = JSON.parse(xhr.responseText);
 
         for(var field in result){
@@ -104,21 +104,21 @@ var <%= name.camelize %> = function(<%= fields_str %>){
     }
   };
 
-  xhr.open("GET", <%= "path + \"/" + name.pluralize + "/\"+" %>id, true);
+  xhr.open("GET", path + "/post_ownerships/"+id, true);
   xhr.send(null);
 };
 
-<%= name.camelize %>.getAll = function(arr, path, successHandler, failureHandler){
+PostOwnership.getAll = function(arr, path, successHandler, failureHandler){
   var xhr = new XMLHttpRequest();
 
   xhr.onreadystatechange = function() {
     if(xhr.readyState == 4){
       if(xhr.status == 200){
-        var fields = ["Id", "CreatedAt", "UpdatedAt", <%= fields_str_quoted %>];
+        var fields = ["Id", "CreatedAt", "UpdatedAt", "post", "user"];
         var result = JSON.parse(xhr.responseText);
 
         for(var i = 0; i < result.length; i++){
-          tmp = new <%= name.capitalize %>();
+          tmp = new Post_ownership();
           obj = result[i];
           for(var field in obj){
             if(fields.indexOf(field) !== -1){
@@ -145,6 +145,6 @@ var <%= name.camelize %> = function(<%= fields_str %>){
     }
   };
 
-  xhr.open("GET", <%="path + \"/" + name.pluralize + "\"" %>, true);
+  xhr.open("GET", path + "/post_ownerships", true);
   xhr.send(null);
 };
