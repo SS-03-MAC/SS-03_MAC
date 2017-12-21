@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Edit Post | Clog, a SS-03_MAC production</title>
+
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link type="text/css" href="../css/materialize.min.css" rel="stylesheet">
+
+    <script type="text/javascript">
+      DomainName = "Clog, a SS-03_MAC production";
+      MacAPI = "/api";
+    </script>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  </head>
+  <body>
+    <nav class="red darken-4" role="navigation" style="z-index: 10000 !important">
+      <div class="nav-wrapper container">
+        <a href="../index.html" class="brand-logo"><img src="../img/logo.png" alt="." width="26" height="26">Clog</a>
+        <a href="#" data-activates="nav-mobile" class="button-collapse"><i class="material-icons">menu</i></a>
+        <ul class="right hide-on-med-and-down">
+          <li><a href="overview.html">Overview<i class="material-icons left">trending_up</i></a></li>
+          <li><a href="posts.html">Articles<i class="material-icons left">library_books</i></a></li>
+          <li><a href="newpost.html">New Article<i class="material-icons left">library_add</i></a></li>
+          <li><a href="comments.html">Comments <i class="material-icons left">message</i></a></li>
+          <li><a class="clog-admin-only" href="logout.html">Logout <i class="material-icons left">lock</i></a></li>
+        </ul>
+        <ul class="side-nav" id="nav-mobile">
+          <li><a href="overview.html">Overview<i class="material-icons left">trending_up</i></a></li>
+          <li><a href="posts.html">Articles<i class="material-icons left">library_books</i></a></li>
+          <li><a href="newpost.html">New Article<i class="material-icons left">library_add</i></a></li>
+          <li><a href="comments.html">Comments <i class="material-icons left">message</i></a></li>
+          <li><a class="clog-admin-only" href="logout.html">Logout <i class="material-icons left">lock</i></a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <div id="new-post-wrapper" class="section red lighten-4">
+      <div class="row container section">
+        <div class="col m12 s12">
+          <div class="row">
+            <div class="col m12 s12 input-field">
+              <input id="clog-post-title" type="text">
+              <label for="clog-post-title">Blog Post Title</label>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col m12 s12 input-field">
+              <textarea id="clog-post-body"></textarea>
+            </div>
+          </div>
+          <div class="row">
+            <button class="btn waves-effect waves-light red darken-4" type="submit" name="action" onclick="SavePost();">Save
+              <i class="material-icons right">assignment</i>
+            </button>
+            <button class="btn waves-effect waves-light red darken-4" type="submit" name="action" onclick="PublishPost();">Publish
+              <i class="material-icons right">send</i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script type="text/javascript" src="../js/jquery-3.1.1.js"></script>
+    <script type="text/javascript" src="../js/materialize.min.js"></script>
+    <script type="text/javascript" src="../js/post.js"></script>
+    <script type="text/javascript" src="../js/utils.js"></script>
+    <script src="https://cdn.tinymce.com/4/tinymce.min.js"></script>
+    <script>
+      $( document ).ready(function() {
+        tinymce.init({ selector:'textarea', height: "400",
+
+          plugins: [
+            "advlist autolink lists link image charmap print preview anchor",
+            "searchreplace visualblocks code fullscreen",
+            "insertdatetime media table contextmenu paste"
+          ],
+          toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image",
+          'theme_advanced_buttons3_add': 'code',
+        });
+
+        window.EditPost = new Post();
+        var clogPostId = getParameterByName("id");
+
+        Post.get(clogPostId, window.EditPost, MacAPI, function EditPostOnPageLoadFetchSuccess(xhr) {
+          $('#clog-post-title').val(window.EditPost.Title);
+          tinyMCE.activeEditor.setContent(window.EditPost.Body);
+          console.log("Success!");
+        }, function EditPostOnPageLoadFetchFailure(xhr) {
+           Materialize.toast('Temporary failure to load post with id: ' + clogPostId, 10000);
+        });
+      });
+
+      function SavePost() {
+        window.EditPost.Title = $('#clog-post-title').val();
+        window.EditPost.Body = tinyMCE.activeEditor.getContent();;
+        window.EditPost.PublishedAt = Date.now().setFullYear(Date.now().getFullYear() + 35);
+        window.EditPost.save(MacAPI, function EditPostPublishSuccess(xhr) {
+           Materialize.toast('Success saving post.', 4000);
+        }, function EditPostFailureHandler(xhr) {
+           Materialize.toast('Temporary failure to save post.', 10000);
+        });
+      };
+
+      function PublishPost() {
+        window.EditPost.Title = $('#clog-post-title').val();
+        window.EditPost.Body = tinyMCE.activeEditor.getContent();;
+        window.EditPost.PublishedAt = Date.now();
+        window.EditPost.save(MacAPI, function EditPostPublishSuccess(xhr) {
+          window.location.href = "posts.html";
+        }, function EditPostFailureHandler(xhr) {
+           Materialize.toast('Temporary failure to publish post.', 10000);
+        });
+      };
+    </script>
+  </body>
+</html>

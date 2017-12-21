@@ -1,0 +1,47 @@
+-
+  name: user
+  uses:
+    - MAC.user
+    - MAC.location
+  fields:
+    -
+      name: Password
+      type: MAC.User.Password
+    -
+      name: FullName
+      type: MAC.Types.String
+      validations:
+        required: true
+      acl:
+        read: MAC.self, admin, MAC.signed, MAC.Public
+        write: self, admin
+    -
+      name: City
+      type: MAC.Types.String
+      validations:
+        required: false
+      acl:
+        read: self, admin
+        write: self, admin
+-
+  name: car
+  fields:
+    -
+      name: name
+      type: MAC.Types.String
+      validations:
+        required: true
+
+-
+  name: car_ownership
+  fields:
+    -
+      name: car
+      relationship: true
+      table: car
+      unique: true
+    -
+      name: user
+      relationship: true
+      table: user
+      unique: false

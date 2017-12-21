@@ -1,3 +1,0 @@
-<h1>Welcome to CDC</h1>
-<p>
-</p>

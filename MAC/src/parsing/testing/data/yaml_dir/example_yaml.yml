@@ -1,0 +1,8 @@
+---
+- name: Bob Smith
+  education: Iowa State University
+  ID: 123456789
+  phone: 5125554321
+- name: Kip Thorne
+  education: Caltech
+  occupation: Theoretical Physicist 

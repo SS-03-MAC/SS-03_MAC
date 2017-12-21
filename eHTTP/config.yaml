@@ -3,9 +3,10 @@ portTls: 443
 basePath: "./blog/public"
 defaultDocuments:
   - index.html
-cgiEndpoints: api
-    cgiPath: "./MAC\\MAC.sh"
-    cgiArguments: ""
+cgiEndpoints:
+  - pathElement: api
+    cgiPath: dotnet
+    cgiArguments: "MAC\\src\\MAC\\bin\\Debug\\netcoreapp1.0\\publish\\MAC.dll"
   - pathElement: env
     cgiPath: printenv
 tls:
